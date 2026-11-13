@@ -1,15 +1,25 @@
 /**
  * Loader & filter bank soal Lolosin.
  *
- * Data soal berasal dari `src/data/questions.json` (salinan dari
- * `workspace/cpns/bank-soal/bank-soal.json`). Satu-satunya cara memperbarui
- * bank soal: ganti file itu, lalu rebuild — lihat README.
+ * Data soal berasal dari chunk-chunk `src/data/questions/*.json` (salinan
+ * dari `workspace/cpns/bank-soal/bank-soal.json`, dipecah per materi dengan
+ * `scripts/split-questions.py` — satu file 7,9 MB tidak bisa di-push lewat
+ * konektor GitHub). Satu-satunya cara memperbarui bank soal: jalankan
+ * script itu, lalu rebuild — lihat README.
  *
- * Aturan penting: soal dengan `kunci === null` (102 soal CATBKN tanpa kunci)
+ * Aturan penting: soal dengan `kunci === null` (621 soal tanpa kunci)
  * DIKECUALIKAN dari semua pool kuis. Semua fungsi di sini bekerja di atas
  * `QUIZABLE_QUESTIONS`, bukan `QUESTIONS` mentah.
  */
-import rawQuestions from '../data/questions.json'
+const chunkModules = import.meta.glob<{ default: unknown }>(
+  '../data/questions/*.json',
+  { eager: true },
+)
+
+/** Gabungan semua chunk bank soal (urutan chunk tidak berpengaruh). */
+const rawQuestions: unknown[] = Object.values(chunkModules).flatMap((m) =>
+  Array.isArray(m.default) ? m.default : [],
+)
 
 export type Materi = 'TWK' | 'TIU' | 'TKP'
 export type Opsi = 'A' | 'B' | 'C' | 'D' | 'E'
@@ -57,7 +67,7 @@ export const QUESTIONS: Question[] = rawQuestions as unknown as Question[]
 
 /**
  * Soal yang boleh dipakai di kuis: hanya yang punya kunci jawaban.
- * Soal tanpa kunci (CATBKN, 102 soal) tidak pernah masuk pool ini.
+ * Soal tanpa kunci (621 soal) tidak pernah masuk pool ini.
  */
 export const QUIZABLE_QUESTIONS: Question[] = QUESTIONS.filter(
   (q) => q.kunci !== null,

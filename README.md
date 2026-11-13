@@ -27,7 +27,8 @@ npm run preview    # sajikan hasil build lokal
 ```
 src/
   data/
-    questions.json   # bank soal (SATU file, lihat "Update bank soal")
+    questions/       # bank soal, dipecah jadi chunk maks 1,5 MB
+                     # (lihat "Update bank soal")
     materi/          # 17 dokumen materi belajar, 319 seksi, 124.163 kata
                      # (index.json, inventaris.json, SCHEMA.md, build_materi.py)
   lib/
@@ -57,10 +58,19 @@ Rute: `/` (Beranda), `/belajar`, `/belajar/:materiId`,
 
 ## Update bank soal
 
-**Satu file saja:** ganti `src/data/questions.json` dengan
-`bank-soal.json` terbaru, lalu `npm run build`. Bank soal dibundel ke
-chunk terpisah (`questions-[hash].js`) dan di-precache oleh service
-worker, jadi pengguna mendapat data baru begitu service worker
+Bank soal disimpan sebagai chunk-chunk kecil di `src/data/questions/`
+(maks 1,5 MB per file — satu file 7,9 MB tidak bisa di-push lewat
+konektor GitHub). Untuk memperbarui, jalankan script pemecah dari root
+repo, lalu `npm run build`:
+
+```bash
+python3 scripts/split-questions.py [path/bank-soal.json]
+```
+
+Loader (`src/lib/questions.ts`) memakai `import.meta.glob` sehingga
+jumlah dan nama chunk boleh berubah tanpa mengubah kode. Bank soal
+dibundel ke chunk terpisah (`questions-[hash].js`) dan di-precache oleh
+service worker, jadi pengguna mendapat data baru begitu service worker
 memperbarui diri (`registerType: autoUpdate`).
 
 Skema soal:

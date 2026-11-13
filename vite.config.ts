@@ -52,15 +52,16 @@ export default defineConfig({
     }),
   ],
   build: {
-    // Chunk bank soal memang besar (~2,5 MB); bukan masalah untuk PWA
+    // Chunk bank soal memang besar (~7,3 MB); bukan masalah untuk PWA
     // offline-first, tapi jangan sampai peringatan menenggelamkan log.
-    chunkSizeWarningLimit: 3000,
+    chunkSizeWarningLimit: 8000,
     rollupOptions: {
       output: {
         manualChunks(id) {
           // Pisahkan bank soal ke chunk sendiri agar cache-nya terpisah
           // dari kode aplikasi dan hanya berubah saat datanya berubah.
-          if (id.includes('questions.json')) return 'questions'
+          if (id.includes('/data/questions/') && id.endsWith('.json'))
+            return 'questions'
           return undefined
         },
       },
