@@ -4,8 +4,12 @@ import {
   ORIGINAL_MAX,
   ORIGINAL_PASSING,
   scoreQuestion,
+  SIMULASI_QUESTIONS_PER_SECTION,
+  SIMULASI_TOTAL_QUESTIONS,
   TRYOUT_MAX_PER_SECTION,
   TRYOUT_PASSING_MINI,
+  TRYOUT_QUESTIONS_PER_SECTION,
+  TRYOUT_TOTAL_QUESTIONS,
   type TryoutAnswers,
   type TryoutScore,
 } from '../lib/quiz'
@@ -91,8 +95,10 @@ function normalize(state: unknown): NormalizedResult | null {
 }
 
 /**
- * Halaman hasil tryout: skor per seksi (mini + terskala), status lulus
- * per seksi dan keseluruhan, XP didapat, dan breakdown per soal.
+ * Halaman hasil tryout: skor per seksi, status lulus per seksi dan
+ * keseluruhan, XP didapat, dan breakdown per soal. Mode-aware:
+ * tryout kilat menampilkan skor mini + terskala, simulasi CAT
+ * menampilkan skor asli (maks 150/175/225, total 550).
  */
 export function TryoutHasilPage() {
   const location = useLocation()
@@ -107,8 +113,8 @@ export function TryoutHasilPage() {
           Belum ada hasil tryout nih
         </p>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink/60">
-          Selesaikan satu tryout mini dulu, nanti skor, status lulus per
-          seksi, dan skor terskala CAT muncul di sini.
+          Selesaikan satu tryout kilat atau simulasi CAT dulu, nanti skor,
+          status lulus per seksi, dan perkiraan kelolosanmu muncul di sini.
         </p>
         <Link to="/tryout" className="mt-4 inline-block">
           <Button>Ke halaman Tryout</Button>
@@ -118,6 +124,8 @@ export function TryoutHasilPage() {
   }
 
   const { score, questions, answers, xpEarned, timedOut } = result
+  const isFull = score.mode === 'full'
+  const totalSoal = isFull ? SIMULASI_TOTAL_QUESTIONS : TRYOUT_TOTAL_QUESTIONS
   const totalCorrect = score.correct
     ? score.correct.TWK + score.correct.TIU + score.correct.TKP
     : null
@@ -136,13 +144,27 @@ export function TryoutHasilPage() {
             : 'Belum lulus, terus berlatih ya!'}
         </h1>
         <p className="mt-1 text-sm font-medium text-ink/60">
-          Total mini{' '}
-          <span className="hl-marker font-extrabold">
-            {score.total}/150
-          </span>{' '}
-          · terskala {score.scaledTotal}/550
+          {isFull ? (
+            <>
+              Total{' '}
+              <span className="hl-marker font-extrabold">
+                {score.total}/550
+              </span>
+            </>
+          ) : (
+            <>
+              Total mini{' '}
+              <span className="hl-marker font-extrabold">
+                {score.total}/150
+              </span>{' '}
+              · terskala {score.scaledTotal}/550
+            </>
+          )}
           {totalCorrect !== null && (
-            <> · {totalCorrect} jawaban benar dari 30 soal</>
+            <>
+              {' '}
+              · {totalCorrect} jawaban benar dari {totalSoal} soal
+            </>
           )}
         </p>
         {timedOut && (
@@ -162,6 +184,12 @@ export function TryoutHasilPage() {
           const nilai = score.scores[materi]
           const scaled = score.scaled[materi]
           const passed = score.passed?.[materi] ?? false
+          const maxSeksi = isFull
+            ? ORIGINAL_MAX[materi]
+            : TRYOUT_MAX_PER_SECTION
+          const benarMax = isFull
+            ? SIMULASI_QUESTIONS_PER_SECTION[materi]
+            : TRYOUT_QUESTIONS_PER_SECTION
           return (
             <Card key={materi} className={MATERI_CARD[materi]}>
               <div className="flex items-center justify-between gap-3">
@@ -184,22 +212,33 @@ export function TryoutHasilPage() {
               <p className="mt-3 font-display text-2xl font-bold">
                 {nilai}
                 <span className="text-sm font-semibold text-white/75">
-                  /{TRYOUT_MAX_PER_SECTION} · terskala {scaled}/
-                  {ORIGINAL_MAX[materi]}
+                  /{maxSeksi}
+                  {!isFull && (
+                    <>
+                      {' '}
+                      · terskala {scaled}/{ORIGINAL_MAX[materi]}
+                    </>
+                  )}
                 </span>
               </p>
               <ProgressBar
                 value={nilai}
-                max={TRYOUT_MAX_PER_SECTION}
+                max={maxSeksi}
                 tone="amber"
                 label={`Skor ${materi}`}
                 className="mt-2 bg-white/25"
               />
               <p className="mt-1.5 text-xs font-semibold text-white/85">
-                Passing grade mini: {TRYOUT_PASSING_MINI[materi]} · passing
-                asli: {ORIGINAL_PASSING[materi]}
+                {isFull ? (
+                  <>Passing grade: {ORIGINAL_PASSING[materi]}</>
+                ) : (
+                  <>
+                    Passing grade mini: {TRYOUT_PASSING_MINI[materi]} ·
+                    passing asli: {ORIGINAL_PASSING[materi]}
+                  </>
+                )}
                 {score.correct
-                  ? ` · benar: ${score.correct[materi]}/10`
+                  ? ` · benar: ${score.correct[materi]}/${benarMax}`
                   : ''}
               </p>
             </Card>

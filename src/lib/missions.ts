@@ -18,6 +18,7 @@ export type MissionKind =
   | 'bacaMateri'
   | 'benar'
   | 'tryout'
+  | 'simulasi'
 
 export interface MissionDef {
   /** Id stabil, dipakai sebagai kunci progres di store. */
@@ -111,7 +112,15 @@ export const MISSION_POOL: MissionDef[] = [
     target: 1,
     xp: 25,
     judul: 'Selesaikan 1 tryout mini',
-    deskripsi: 'Rasain deg-degan simulasi CAT 30 soal.',
+    deskripsi: 'Rasain deg-degan tryout mini 30 soal.',
+  },
+  {
+    id: 'simulasi-1',
+    kind: 'simulasi',
+    target: 1,
+    xp: 40,
+    judul: 'Selesaikan 1 simulasi CAT',
+    deskripsi: '110 soal, 100 menit. Rasain ujian beneran.',
   },
 ]
 

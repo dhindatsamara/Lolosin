@@ -28,6 +28,7 @@ import {
   updateStats,
   XP_DRILL_COMPLETE,
   XP_DRILL_CORRECT,
+  XP_SIMULASI_COMPLETE,
   XP_TRYOUT_COMPLETE,
 } from './store'
 
@@ -237,27 +238,31 @@ export function completeReview(): void {
 }
 
 /**
- * Tryout selesai: simpan hasil, +100 XP (aturan lama), hitung jawaban
- * benar, majukan misi tryout, catat aktivitas, cek naik level dan lencana.
+ * Tryout selesai: simpan hasil beserta modenya, beri XP sesuai mode
+ * (mini +100, simulasi +300, aturan lama untuk mini), hitung jawaban
+ * benar, majukan misi tryout (mini) atau misi simulasi (full), catat
+ * aktivitas, cek naik level dan lencana.
  */
 export function completeTryout(score: TryoutScore): void {
   const xpBefore = getStore().xp
   const { stats } = getStore()
+  const full = score.mode === 'full'
   recordTryout({
+    mode: score.mode,
     twk: score.scores.TWK,
     tiu: score.scores.TIU,
     tkp: score.scores.TKP,
     passed: score.passedOverall,
     correct: score.correct,
   })
-  addXp(XP_TRYOUT_COMPLETE)
+  addXp(full ? XP_SIMULASI_COMPLETE : XP_TRYOUT_COMPLETE)
   const correctTotal = score.correct
     ? score.correct.TWK + score.correct.TIU + score.correct.TKP
     : 0
   if (correctTotal > 0) {
     updateStats({ correctAnswers: stats.correctAnswers + correctTotal })
   }
-  bumpMission('tryout')
+  bumpMission(full ? 'simulasi' : 'tryout')
   if (correctTotal > 0) bumpMission('benar', undefined, correctTotal)
   checkLevelUp(xpBefore)
   recordDailyActivity()

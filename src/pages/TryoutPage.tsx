@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import {
   MATERI_LIST,
   MATERI_META,
+  type Materi,
   type Opsi,
   type Question,
 } from '../lib/questions'
@@ -10,7 +11,12 @@ import {
   ORIGINAL_MAX,
   ORIGINAL_PASSING,
   pickTryoutQuestions,
+  scoreFromRecord,
   scoreTryout,
+  SIMULASI_QUESTIONS_PER_SECTION,
+  SIMULASI_TIME_LIMIT_MINUTES,
+  SIMULASI_TIME_LIMIT_SECONDS,
+  SIMULASI_TOTAL_QUESTIONS,
   TRYOUT_MAX_PER_SECTION,
   TRYOUT_PASSING_MINI,
   TRYOUT_QUESTIONS_PER_SECTION,
@@ -19,12 +25,13 @@ import {
   TRYOUT_TIME_LIMIT_SECONDS,
   TRYOUT_TOTAL_QUESTIONS,
   type TryoutAnswers,
-  type TryoutScore,
+  type TryoutMode,
 } from '../lib/quiz'
 import {
   getStore,
   markSeen,
   useStore,
+  XP_SIMULASI_COMPLETE,
   XP_TRYOUT_COMPLETE,
   type TryoutRecord,
 } from '../lib/store'
@@ -40,7 +47,7 @@ import { Card } from '../components/ui/Card'
 import { QuestionCard } from '../components/quiz/QuestionCard'
 import { TimerDisplay } from '../components/quiz/TimerDisplay'
 import { TryoutPalette } from '../components/quiz/TryoutPalette'
-import { ChevronRightIcon, ClockIcon } from '../components/icons'
+import { ChevronRightIcon, ClockIcon, TrophyIcon } from '../components/icons'
 import type { TryoutResultState } from './TryoutHasilPage'
 
 /** Ikon bendera kecil (gaya garis Lucide) untuk tombol ragu-ragu. */
@@ -68,34 +75,93 @@ const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
 type Mode = 'info' | 'running'
 
-/** Rekonstruksi TryoutScore dari satu entri riwayat (tanpa breakdown soal). */
-function scoreFromRecord(record: TryoutRecord): TryoutScore {
-  return {
-    scores: { TWK: record.twk, TIU: record.tiu, TKP: record.tkp },
-    scaled: {
-      TWK: record.twk * TRYOUT_SCALE_TO_ORIGINAL.TWK,
-      TIU: record.tiu * TRYOUT_SCALE_TO_ORIGINAL.TIU,
-      TKP: record.tkp * TRYOUT_SCALE_TO_ORIGINAL.TKP,
-    },
-    passed: {
-      TWK: record.twk >= TRYOUT_PASSING_MINI.TWK,
-      TIU: record.tiu >= TRYOUT_PASSING_MINI.TIU,
-      TKP: record.tkp >= TRYOUT_PASSING_MINI.TKP,
-    },
-    passedOverall: record.passed,
-    correct: record.correct,
-    total: record.twk + record.tiu + record.tkp,
-    scaledTotal:
-      record.twk * TRYOUT_SCALE_TO_ORIGINAL.TWK +
-      record.tiu * TRYOUT_SCALE_TO_ORIGINAL.TIU +
-      record.tkp * TRYOUT_SCALE_TO_ORIGINAL.TKP,
-  }
+/** Label mode yang tampil di kartu pilihan dan header sesi jalan. */
+const MODE_LABEL: Record<TryoutMode, string> = {
+  mini: 'Tryout kilat',
+  full: 'Simulasi CAT',
+}
+
+/** Label mode di tengah kalimat (akronim CAT tetap kapital). */
+const MODE_LABEL_KALIMAT: Record<TryoutMode, string> = {
+  mini: 'tryout kilat',
+  full: 'simulasi CAT',
+}
+
+/** Label mode di riwayat (riwayat lama disebut tryout mini). */
+const HISTORY_LABEL: Record<TryoutMode, string> = {
+  mini: 'Tryout mini',
+  full: 'Simulasi CAT',
+}
+
+/** Total maksimum satu mode: 150 untuk mini, 550 untuk simulasi. */
+const MODE_MAX_TOTAL: Record<TryoutMode, number> = {
+  mini: TRYOUT_MAX_PER_SECTION * 3,
+  full:
+    ORIGINAL_MAX.TWK + ORIGINAL_MAX.TIU + ORIGINAL_MAX.TKP,
+}
+
+function timeLimitSeconds(mode: TryoutMode): number {
+  return mode === 'full'
+    ? SIMULASI_TIME_LIMIT_SECONDS
+    : TRYOUT_TIME_LIMIT_SECONDS
+}
+
+function xpForMode(mode: TryoutMode): number {
+  return mode === 'full' ? XP_SIMULASI_COMPLETE : XP_TRYOUT_COMPLETE
+}
+
+/** Mode satu entri riwayat; riwayat lama (tanpa field mode) = mini. */
+function recordMode(record: TryoutRecord): TryoutMode {
+  return record.mode ?? 'mini'
+}
+
+/** Satu baris passing grade per seksi, dipakai kedua kelompok. */
+function PassingCard({
+  materi,
+  passing,
+  max,
+  note,
+}: {
+  materi: Materi
+  passing: number
+  max: number
+  note?: string
+}) {
+  return (
+    <Card
+      className={cx(
+        'flex items-center justify-between gap-3 py-3',
+        materi === 'TWK'
+          ? 'bg-twk-soft'
+          : materi === 'TIU'
+            ? 'bg-tiu-soft'
+            : 'bg-tkp-soft',
+      )}
+    >
+      <div className="flex items-center gap-2">
+        <Badge tone={MATERI_TONE[materi]}>{materi}</Badge>
+        <span className="text-sm font-semibold">
+          {MATERI_META[materi].nama}
+        </span>
+      </div>
+      <p className="shrink-0 text-sm font-extrabold">
+        ≥ {passing}
+        <span className="ml-1 text-xs font-semibold text-ink/60">
+          dari {max}
+          {note ? `, ${note}` : ''}
+        </span>
+      </p>
+    </Card>
+  )
 }
 
 /**
- * Halaman tryout mini: mode info (aturan, passing grade, riwayat) dan
- * mode jalan (timer 27 menit, palet navigator, navigasi bebas) dalam satu
- * halaman. Saat selesai, hasilnya dikirim ke `/tryout/hasil`.
+ * Halaman tryout: mode info (pilih mode, aturan, passing grade,
+ * riwayat) dan mode jalan (timer, palet navigator, navigasi bebas)
+ * dalam satu halaman. Dua mode tryout: kilat (30 soal, 27 menit)
+ * dan simulasi CAT (110 soal, 100 menit). Sesi jalan
+ * diparameterisasi dari mode yang dipilih, tanpa duplikasi logika.
+ * Saat selesai, hasilnya dikirim ke `/tryout/hasil`.
  */
 export function TryoutPage() {
   const navigate = useNavigate()
@@ -104,6 +170,7 @@ export function TryoutPage() {
   const [startError, setStartError] = useState<string | null>(null)
 
   // State sesi jalan
+  const [tryoutMode, setTryoutMode] = useState<TryoutMode>('mini')
   const [questions, setQuestions] = useState<Question[]>([])
   const [rotated, setRotated] = useState(false)
   const [answers, setAnswers] = useState<TryoutAnswers>({})
@@ -121,6 +188,8 @@ export function TryoutPage() {
   answersRef.current = answers
   const questionsRef = useRef(questions)
   questionsRef.current = questions
+  const tryoutModeRef = useRef(tryoutMode)
+  tryoutModeRef.current = tryoutMode
 
   const finish = useCallback(
     (timedOut: boolean) => {
@@ -128,7 +197,8 @@ export function TryoutPage() {
       finishedRef.current = true
       const qs = questionsRef.current
       const ans = answersRef.current
-      const score = scoreTryout(qs, ans)
+      const sessionMode = tryoutModeRef.current
+      const score = scoreTryout(qs, ans, sessionMode)
       completeTryout(score)
       markSeen(qs.map((q) => q.id))
       // Catat tiap jawaban untuk antrean ulas + tally per subtopik.
@@ -142,7 +212,7 @@ export function TryoutPage() {
         score,
         questions: qs,
         answers: ans,
-        xpEarned: XP_TRYOUT_COMPLETE,
+        xpEarned: xpForMode(sessionMode),
         timedOut,
       }
       navigate('/tryout/hasil', { state })
@@ -166,19 +236,21 @@ export function TryoutPage() {
     }
   }, [mode, secondsLeft, finish])
 
-  function startTryout() {
-    const pick = pickTryoutQuestions(getStore().seenQuestionIds)
+  function startTryout(sessionMode: TryoutMode) {
+    const pick = pickTryoutQuestions(getStore().seenQuestionIds, sessionMode)
     if (pick.questions.length === 0) {
       setStartError('Bank soalnya masih kosong, tryout belum bisa dimulai.')
       return
     }
     setStartError(null)
+    setTryoutMode(sessionMode)
+    tryoutModeRef.current = sessionMode
     setQuestions(pick.questions)
     setRotated(pick.rotated)
     setAnswers({})
     setDoubted(new Set())
     setCurrentIndex(0)
-    setSecondsLeft(TRYOUT_TIME_LIMIT_SECONDS)
+    setSecondsLeft(timeLimitSeconds(sessionMode))
     setShowConfirm(false)
     setShowPalette(true)
     finishedRef.current = false
@@ -224,6 +296,9 @@ export function TryoutPage() {
         <header className="flex flex-wrap items-center justify-between gap-2">
           <TimerDisplay secondsLeft={secondsLeft} />
           <div className="flex items-center gap-2">
+            <span className="rounded-full border-2 border-ink bg-accent-400 px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink shadow-sticker-sm">
+              {MODE_LABEL[tryoutMode]}
+            </span>
             <span className="rounded-full border-2 border-ink bg-white px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink shadow-sticker-sm">
               {answeredCount}/{total} dijawab
             </span>
@@ -316,7 +391,7 @@ export function TryoutPage() {
         {showConfirm ? (
           <Card className="bg-accent-100 shadow-sticker-amber">
             <p className="font-display text-base font-extrabold">
-              Selesaikan tryout?
+              Selesaikan {MODE_LABEL_KALIMAT[tryoutMode]}?
             </p>
             <p className="mt-1 text-sm leading-relaxed text-ink/70">
               {unansweredCount === 0
@@ -347,28 +422,99 @@ export function TryoutPage() {
         <p className="font-script text-2xl leading-none text-primary-700">
           simulasi beneran, deg-degan beneran
         </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold">Tryout Mini</h1>
+        <h1 className="mt-1 font-display text-3xl font-extrabold">
+          Tryout & Simulasi
+        </h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
-          Simulasi SKD singkat: {TRYOUT_TOTAL_QUESTIONS} soal dalam{' '}
-          {TRYOUT_TIME_LIMIT_MINUTES} menit. Skormu nanti diskalakan ke nilai CAT
-          asli.
+          Dua mode, satu tujuan: lolos SKD. Pemanasan kilat 30 soal,
+          atau simulasi CAT 110 soal persis ujian beneran.
         </p>
       </header>
 
-      <Card className="flex items-center gap-4">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-accent-400 text-ink shadow-sticker-sm">
-          <ClockIcon width={22} height={22} />
-        </span>
-        <div className="text-sm">
-          <p className="font-extrabold">
-            {TRYOUT_TOTAL_QUESTIONS} soal · {TRYOUT_TIME_LIMIT_MINUTES} menit
-          </p>
-          <p className="font-medium text-ink/60">
-            {TRYOUT_QUESTIONS_PER_SECTION} soal per seksi · maks{' '}
-            {TRYOUT_MAX_PER_SECTION} poin per seksi
-          </p>
+      <section aria-label="Pilih mode tryout">
+        <h2 className="mb-2 font-display text-base font-extrabold">
+          Pilih modemu
+        </h2>
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={() => startTryout('mini')}
+            className="w-full rounded-2xl border-2 border-ink bg-white p-4 text-left shadow-sticker transition-transform hover:-translate-y-0.5"
+          >
+            <div className="flex items-start gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-primary-100 text-primary-700 shadow-sticker-sm">
+                <ClockIcon width={22} height={22} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-lg font-extrabold">
+                  Tryout kilat
+                </p>
+                <p className="text-xs font-semibold text-ink/60">
+                  Buat pemanasan, cepat dan ringan
+                </p>
+                <p className="mt-1.5 text-sm font-bold">
+                  {TRYOUT_TOTAL_QUESTIONS} soal · {TRYOUT_TIME_LIMIT_MINUTES}{' '}
+                  menit · +{XP_TRYOUT_COMPLETE} XP
+                </p>
+                <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+                  {TRYOUT_QUESTIONS_PER_SECTION} soal per seksi · passing
+                  grade mini TWK ≥{TRYOUT_PASSING_MINI.TWK} · TIU ≥
+                  {TRYOUT_PASSING_MINI.TIU} · TKP ≥{TRYOUT_PASSING_MINI.TKP}{' '}
+                  (maks {TRYOUT_MAX_PER_SECTION} per seksi)
+                </p>
+              </div>
+            </div>
+            <span className="mt-3 inline-flex items-center gap-1 rounded-full border-2 border-ink bg-primary-600 px-4 py-2 text-sm font-extrabold text-white shadow-sticker-sm">
+              Mulai tryout kilat
+              <ChevronRightIcon width={16} height={16} />
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => startTryout('full')}
+            className="w-full rounded-2xl border-2 border-ink bg-accent-100 p-4 text-left shadow-sticker-amber transition-transform hover:-translate-y-0.5"
+          >
+            <div className="flex items-start gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-accent-400 text-ink shadow-sticker-sm">
+                <TrophyIcon width={22} height={22} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="flex flex-wrap items-center gap-2 font-display text-lg font-extrabold">
+                  Simulasi CAT
+                  <span className="rounded-full border-2 border-ink bg-white px-2 py-0.5 font-sans text-[11px] font-extrabold text-ink shadow-sticker-sm">
+                    Suasana ujian beneran
+                  </span>
+                </p>
+                <p className="text-xs font-semibold text-ink/60">
+                  Jumlah soal dan waktu persis SKD asli
+                </p>
+                <p className="mt-1.5 text-sm font-bold">
+                  {SIMULASI_TOTAL_QUESTIONS} soal ·{' '}
+                  {SIMULASI_TIME_LIMIT_MINUTES} menit · +{XP_SIMULASI_COMPLETE}{' '}
+                  XP
+                </p>
+                <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+                  TWK {SIMULASI_QUESTIONS_PER_SECTION.TWK} · TIU{' '}
+                  {SIMULASI_QUESTIONS_PER_SECTION.TIU} · TKP{' '}
+                  {SIMULASI_QUESTIONS_PER_SECTION.TKP} soal · passing grade
+                  asli TWK ≥{ORIGINAL_PASSING.TWK} · TIU ≥
+                  {ORIGINAL_PASSING.TIU} · TKP ≥{ORIGINAL_PASSING.TKP}
+                </p>
+              </div>
+            </div>
+            <span className="mt-3 inline-flex items-center gap-1 rounded-full border-2 border-ink bg-ink px-4 py-2 text-sm font-extrabold text-white shadow-sticker-sm">
+              Mulai simulasi CAT
+              <ChevronRightIcon width={16} height={16} />
+            </span>
+          </button>
         </div>
-      </Card>
+        {startError && (
+          <p className="mt-2 text-center text-sm font-medium text-red-700">
+            {startError}
+          </p>
+        )}
+      </section>
 
       <section aria-label="Aturan tryout">
         <h2 className="mb-2 font-display text-base font-extrabold">Aturan main</h2>
@@ -383,8 +529,9 @@ export function TryoutPage() {
               karakternya.
             </li>
             <li>
-              Timer {TRYOUT_TIME_LIMIT_MINUTES} menit berjalan terus.
-              Jawabanmu tersimpan otomatis kalau waktu habis.
+              Timer berjalan terus: {TRYOUT_TIME_LIMIT_MINUTES} menit untuk
+              tryout kilat, {SIMULASI_TIME_LIMIT_MINUTES} menit untuk
+              simulasi CAT. Jawabanmu tersimpan otomatis kalau waktu habis.
             </li>
             <li>
               Kamu bebas pindah soal lewat navigator, dan boleh menandai soal
@@ -392,7 +539,11 @@ export function TryoutPage() {
             </li>
             <li>
               Selesaikan tryout dan dapat{' '}
-              <strong>+{XP_TRYOUT_COMPLETE} XP</strong>.
+              <strong>
+                +{XP_TRYOUT_COMPLETE} XP (kilat) atau +{XP_SIMULASI_COMPLETE} XP
+                (simulasi CAT)
+              </strong>
+              .
             </li>
           </ul>
         </Card>
@@ -400,35 +551,33 @@ export function TryoutPage() {
 
       <section aria-label="Passing grade">
         <h2 className="mb-2 font-display text-base font-extrabold">
-          Passing grade mini
+          Passing grade
         </h2>
+        <p className="mb-2 text-sm font-bold text-ink/70">
+          Tryout kilat (skor mini)
+        </p>
         <div className="flex flex-col gap-2">
           {MATERI_LIST.map((materi) => (
-            <Card
-              key={materi}
-              className={cx(
-                'flex items-center justify-between gap-3 py-3',
-                materi === 'TWK'
-                  ? 'bg-twk-soft'
-                  : materi === 'TIU'
-                    ? 'bg-tiu-soft'
-                    : 'bg-tkp-soft',
-              )}
-            >
-              <div className="flex items-center gap-2">
-                <Badge tone={MATERI_TONE[materi]}>{materi}</Badge>
-                <span className="text-sm font-semibold">
-                  {MATERI_META[materi].nama}
-                </span>
-              </div>
-              <p className="shrink-0 text-sm font-extrabold">
-                ≥ {TRYOUT_PASSING_MINI[materi]}
-                <span className="ml-1 text-xs font-semibold text-ink/60">
-                  (asli {ORIGINAL_PASSING[materi]}/{ORIGINAL_MAX[materi]},
-                  skala ×{TRYOUT_SCALE_TO_ORIGINAL[materi]})
-                </span>
-              </p>
-            </Card>
+            <PassingCard
+              key={`mini-${materi}`}
+              materi={materi}
+              passing={TRYOUT_PASSING_MINI[materi]}
+              max={TRYOUT_MAX_PER_SECTION}
+              note={`skala ×${TRYOUT_SCALE_TO_ORIGINAL[materi]}`}
+            />
+          ))}
+        </div>
+        <p className="mt-4 mb-2 text-sm font-bold text-ink/70">
+          Simulasi CAT (passing grade asli)
+        </p>
+        <div className="flex flex-col gap-2">
+          {MATERI_LIST.map((materi) => (
+            <PassingCard
+              key={`asli-${materi}`}
+              materi={materi}
+              passing={ORIGINAL_PASSING[materi]}
+              max={ORIGINAL_MAX[materi]}
+            />
           ))}
         </div>
         <p className="mt-2 text-xs leading-relaxed font-medium text-ink/60">
@@ -444,52 +593,51 @@ export function TryoutPage() {
             Riwayat tryout
           </h2>
           <div className="flex flex-col gap-2">
-            {historyNewestFirst.map((record, i) => (
-              <Card key={`${record.date}-${i}`} className="py-3">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="text-sm">
-                    <p className="font-extrabold">
-                      {new Date(record.date).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}{' '}
-                      <span className="font-semibold text-ink/60">
-                        {new Date(record.date).toLocaleTimeString('id-ID', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </span>
-                    </p>
-                    <p className="mt-0.5 font-medium text-ink/60">
-                      TWK {record.twk} · TIU {record.tiu} · TKP {record.tkp} ·
-                      total {record.twk + record.tiu + record.tkp}/150
-                    </p>
+            {historyNewestFirst.map((record, i) => {
+              const sessionMode = recordMode(record)
+              const total = record.twk + record.tiu + record.tkp
+              return (
+                <Card key={`${record.date}-${i}`} className="py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm">
+                      <p className="font-extrabold">
+                        {new Date(record.date).toLocaleDateString('id-ID', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        })}{' '}
+                        <span className="font-semibold text-ink/60">
+                          {new Date(record.date).toLocaleTimeString('id-ID', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </span>
+                      </p>
+                      <p className="mt-0.5 font-medium text-ink/60">
+                        <span className="font-extrabold text-ink">
+                          {HISTORY_LABEL[sessionMode]}
+                        </span>{' '}
+                        · TWK {record.twk} · TIU {record.tiu} · TKP{' '}
+                        {record.tkp} · total {total}/
+                        {MODE_MAX_TOTAL[sessionMode]}
+                      </p>
+                    </div>
+                    <Badge tone={record.passed ? 'green' : 'neutral'}>
+                      {record.passed ? 'Lulus' : 'Belum lulus'}
+                    </Badge>
                   </div>
-                  <Badge tone={record.passed ? 'green' : 'neutral'}>
-                    {record.passed ? 'Lulus' : 'Belum lulus'}
-                  </Badge>
-                </div>
-                <Link
-                  to="/tryout/hasil"
-                  state={scoreFromRecord(record)}
-                  className="mt-2 inline-block text-sm font-semibold text-primary-700 hover:underline"
-                >
-                  Lihat hasil
-                </Link>
-              </Card>
-            ))}
+                  <Link
+                    to="/tryout/hasil"
+                    state={scoreFromRecord(record)}
+                    className="mt-2 inline-block text-sm font-semibold text-primary-700 hover:underline"
+                  >
+                    Lihat hasil
+                  </Link>
+                </Card>
+              )
+            })}
           </div>
         </section>
-      )}
-
-      <Button size="lg" fullWidth onClick={startTryout}>
-        Mulai tryout
-      </Button>
-      {startError && (
-        <p className="text-center text-sm font-medium text-red-700">
-          {startError}
-        </p>
       )}
     </div>
   )

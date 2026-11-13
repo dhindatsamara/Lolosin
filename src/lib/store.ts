@@ -8,6 +8,7 @@
  * - +10 per jawaban benar saat drill        (XP_DRILL_CORRECT)
  * - +50 menyelesaikan satu sesi drill       (XP_DRILL_COMPLETE)
  * - +100 menyelesaikan satu tryout          (XP_TRYOUT_COMPLETE)
+ * - +300 menyelesaikan satu simulasi CAT    (XP_SIMULASI_COMPLETE)
  * - +5 per seksi materi yang dibaca         (XP_SECTION_READ, sekali per seksi)
  *
  * Level: level = floor(sqrt(xp / 50)) + 1
@@ -17,6 +18,7 @@
  */
 import { useSyncExternalStore } from 'react'
 import type { Materi } from './questions'
+import type { TryoutMode } from './quiz'
 
 export const STORE_KEY = 'lolosin:v1'
 export const MAKASSAR_TIME_ZONE = 'Asia/Makassar'
@@ -24,6 +26,7 @@ export const MAKASSAR_TIME_ZONE = 'Asia/Makassar'
 export const XP_DRILL_CORRECT = 10
 export const XP_DRILL_COMPLETE = 50
 export const XP_TRYOUT_COMPLETE = 100
+export const XP_SIMULASI_COMPLETE = 300
 export const XP_SECTION_READ = 5
 export const LEVEL_DIVISOR = 50
 
@@ -33,11 +36,13 @@ export const ACTIVITY_HISTORY_LIMIT = 60
 export interface TryoutRecord {
   /** Timestamp ISO saat tryout selesai. */
   date: string
-  /** Skor mini per seksi (maks 50). */
+  /** Mode tryout: 'mini' atau simulasi lengkap 'full'. Riwayat lama tidak punya (dianggap mini). */
+  mode?: TryoutMode
+  /** Skor per seksi: mini maks 50, simulasi maks asli (150/175/225). */
   twk: number
   tiu: number
   tkp: number
-  /** Lulus keseluruhan (ketiga seksi melewati passing grade mini). */
+  /** Lulus keseluruhan (ketiga seksi melewati passing grade mode-nya). */
   passed: boolean
   /** Jumlah jawaban benar per seksi (opsional; riwayat lama tidak punya). */
   correct?: { TWK: number; TIU: number; TKP: number }
@@ -220,6 +225,7 @@ function loadFromStorage(): StoreState {
           typeof r === 'object' &&
           r !== null &&
           typeof r.date === 'string' &&
+          (r.mode === undefined || r.mode === 'mini' || r.mode === 'full') &&
           typeof r.twk === 'number' &&
           typeof r.tiu === 'number' &&
           typeof r.tkp === 'number' &&

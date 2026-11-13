@@ -38,9 +38,14 @@ import {
 } from '../lib/questions'
 import {
   DRILL_DEFAULT_COUNT,
+  ORIGINAL_MAX,
+  ORIGINAL_PASSING,
+  SIMULASI_QUESTIONS_PER_SECTION,
+  SIMULASI_TOTAL_QUESTIONS,
   TRYOUT_MAX_PER_SECTION,
   TRYOUT_PASSING_MINI,
   TRYOUT_QUESTIONS_PER_SECTION,
+  TRYOUT_TOTAL_QUESTIONS,
 } from '../lib/quiz'
 import { todayFocus } from '../lib/plan'
 import { REVIEW_SESSION_MAX, reviewCountDue } from '../lib/review'
@@ -50,6 +55,7 @@ import {
   todayMakassar,
   useStore,
   xpProgress,
+  type TryoutRecord,
 } from '../lib/store'
 import { getRankTitle } from '../lib/ranks'
 import { cx } from '../lib/utils'
@@ -113,11 +119,93 @@ const AKSI_CEPAT = [
   {
     to: '/tryout',
     label: 'Tryout',
-    deskripsi: 'Simulasi CAT 30 soal',
+    deskripsi: 'Tryout kilat & simulasi CAT',
     icon: TrophyIcon,
     tone: 'bg-tkp-soft text-tkp',
   },
 ] as const
+
+/**
+ * Kartu tryout terakhir, mode-aware. Simulasi CAT: total /550, label
+ * "Simulasi CAT 110 soal", passing grade asli, penyebut benar 30/35/45,
+ * dan ProgressBar maks 150/175/225. Tryout mini / riwayat lama: seperti
+ * sebelumnya (total /150, passing grade mini, penyebut 10, maks 50).
+ */
+function TryoutTerakhirCard({ record }: { record: TryoutRecord }) {
+  const isFull = record.mode === 'full'
+  const total = record.twk + record.tiu + record.tkp
+  const maxTotal = isFull
+    ? ORIGINAL_MAX.TWK + ORIGINAL_MAX.TIU + ORIGINAL_MAX.TKP
+    : TRYOUT_MAX_PER_SECTION * 3
+  return (
+    <Card>
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="font-display text-lg font-extrabold">
+            {total.toLocaleString('id-ID')}
+            <span className="text-sm font-semibold text-ink/60">
+              {' '}
+              / {maxTotal}
+            </span>
+          </p>
+          <p className="text-xs font-medium text-ink/60">
+            {formatTanggalTryout(record.date)} ·{' '}
+            {isFull
+              ? `Simulasi CAT ${SIMULASI_TOTAL_QUESTIONS} soal`
+              : `Tryout mini ${TRYOUT_TOTAL_QUESTIONS} soal`}
+          </p>
+        </div>
+        <Badge tone={record.passed ? 'green' : 'neutral'}>
+          {record.passed ? 'Lulus' : 'Belum lulus'}
+        </Badge>
+      </div>
+      <div className="mt-4 space-y-2.5">
+        {MATERI_LIST.map((materi) => {
+          const skor =
+            materi === 'TWK'
+              ? record.twk
+              : materi === 'TIU'
+                ? record.tiu
+                : record.tkp
+          const passing = isFull
+            ? ORIGINAL_PASSING[materi]
+            : TRYOUT_PASSING_MINI[materi]
+          const max = isFull ? ORIGINAL_MAX[materi] : TRYOUT_MAX_PER_SECTION
+          const benarMax = isFull
+            ? SIMULASI_QUESTIONS_PER_SECTION[materi]
+            : TRYOUT_QUESTIONS_PER_SECTION
+          const lulus = skor >= passing
+          const benar = record.correct?.[materi]
+          return (
+            <div key={materi}>
+              <div className="mb-1 flex justify-between text-xs">
+                <span className="font-semibold text-ink/70">
+                  {materi}
+                  {benar !== undefined && ` · ${benar}/${benarMax} benar`}
+                </span>
+                <span className="font-extrabold">
+                  {skor}/{max}
+                  {lulus ? ' · Lulus' : ` · PG ${passing}`}
+                </span>
+              </div>
+              <ProgressBar
+                value={skor}
+                max={max}
+                tone={MATERI_TONE[materi]}
+                label={`Skor ${materi} tryout terakhir`}
+              />
+            </div>
+          )
+        })}
+      </div>
+      <Link to="/tryout" className="mt-4 block">
+        <Button variant="outline" fullWidth>
+          Coba tryout lagi
+        </Button>
+      </Link>
+    </Card>
+  )
+}
 
 export function HomePage() {
   const {
@@ -540,64 +628,7 @@ export function HomePage() {
           Tryout terakhir
         </h2>
         {tryoutTerakhir ? (
-          <Card>
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="font-display text-lg font-extrabold">
-                  {(tryoutTerakhir.twk + tryoutTerakhir.tiu + tryoutTerakhir.tkp).toLocaleString('id-ID')}
-                  <span className="text-sm font-semibold text-ink/60">
-                    {' '}
-                    / {TRYOUT_MAX_PER_SECTION * 3}
-                  </span>
-                </p>
-                <p className="text-xs font-medium text-ink/60">
-                  {formatTanggalTryout(tryoutTerakhir.date)} · Tryout mini 30
-                  soal
-                </p>
-              </div>
-              <Badge tone={tryoutTerakhir.passed ? 'green' : 'neutral'}>
-                {tryoutTerakhir.passed ? 'Lulus' : 'Belum lulus'}
-              </Badge>
-            </div>
-            <div className="mt-4 space-y-2.5">
-              {MATERI_LIST.map((materi) => {
-                const skor =
-                  materi === 'TWK'
-                    ? tryoutTerakhir.twk
-                    : materi === 'TIU'
-                      ? tryoutTerakhir.tiu
-                      : tryoutTerakhir.tkp
-                const lulus = skor >= TRYOUT_PASSING_MINI[materi]
-                const benar = tryoutTerakhir.correct?.[materi]
-                return (
-                  <div key={materi}>
-                    <div className="mb-1 flex justify-between text-xs">
-                      <span className="font-semibold text-ink/70">
-                        {materi}
-                        {benar !== undefined &&
-                          ` · ${benar}/${TRYOUT_QUESTIONS_PER_SECTION} benar`}
-                      </span>
-                      <span className="font-extrabold">
-                        {skor}/{TRYOUT_MAX_PER_SECTION}
-                        {lulus ? ' · Lulus' : ` · PG ${TRYOUT_PASSING_MINI[materi]}`}
-                      </span>
-                    </div>
-                    <ProgressBar
-                      value={skor}
-                      max={TRYOUT_MAX_PER_SECTION}
-                      tone={MATERI_TONE[materi]}
-                      label={`Skor ${materi} tryout terakhir`}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-            <Link to="/tryout" className="mt-4 block">
-              <Button variant="outline" fullWidth>
-                Coba tryout lagi
-              </Button>
-            </Link>
-          </Card>
+          <TryoutTerakhirCard record={tryoutTerakhir} />
         ) : (
           <Card className="text-center">
             <Mascot mood="semangat" size={72} className="mx-auto" />

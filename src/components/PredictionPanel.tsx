@@ -30,8 +30,11 @@ const BAND_PILL: Record<PredictionBand, string> = {
   'masih-jauh': 'bg-red-100 text-red-700',
 }
 
-const KALIMAT_JUJUR =
+const KALIMAT_JUJUR_MINI =
   'Ini perkiraan dari tryout minimu, bukan jaminan lolos. Tryout mini hanya 30 soal, jadi angkanya masih kasar.'
+
+const KALIMAT_JUJUR_SIMULASI =
+  'Ini perkiraan dari simulasi CAT-mu, bukan jaminan lolos. Simulasi CAT pakai 110 soal dan passing grade asli, jadi angkanya lebih dekat ke ujian beneran.'
 
 const BELUM_ADA_TREN =
   'Belum ada tren, ikut tryout lagi untuk melihat perkembanganmu.'
@@ -110,11 +113,12 @@ export function PredictionPanel({
             </p>
           )}
           <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-ink/60">
-            Ikut tryout mini dulu, nanti aku hitung perkiraan kelolosanmu.
+            Ikut tryout kilat atau simulasi CAT dulu, nanti aku hitung
+            perkiraan kelolosanmu.
           </p>
           <Link to="/tryout" className="mt-4 inline-block">
             <Button size="sm">
-              Mulai tryout mini
+              Mulai tryout
               <ChevronRightIcon width={16} height={16} />
             </Button>
           </Link>
@@ -124,7 +128,20 @@ export function PredictionPanel({
   }
 
   const sections = MATERI_LIST.map((m) => prediction.sections[m])
-  const ringkasanRiwayat = `Dari ${prediction.tryoutCount} tryout mini, terakhir ${formatTanggalTryout(prediction.lastDate)}`
+  // Ringkasan sumber riwayat: simulasi saja, campuran, atau mini saja.
+  const simulasiCount = prediction.simulasiCount ?? 0
+  const miniCount = prediction.tryoutCount - simulasiCount
+  const tanggalTerakhir = formatTanggalTryout(prediction.lastDate)
+  const ringkasanRiwayat =
+    simulasiCount > 0 && miniCount > 0
+      ? `Dari ${simulasiCount} simulasi CAT dan ${miniCount} tryout mini, terakhir ${tanggalTerakhir}`
+      : simulasiCount > 0
+        ? `Dari ${simulasiCount} simulasi CAT, terakhir ${tanggalTerakhir}`
+        : `Dari ${prediction.tryoutCount} tryout mini, terakhir ${tanggalTerakhir}`
+  const kalimatJujur =
+    prediction.source === 'simulasi'
+      ? KALIMAT_JUJUR_SIMULASI
+      : KALIMAT_JUJUR_MINI
 
   if (compact) {
     return (
@@ -152,7 +169,7 @@ export function PredictionPanel({
             </p>
           )}
           <p className="mt-3 border-t-2 border-dashed border-ink/10 pt-3 text-xs leading-relaxed font-medium text-ink/60">
-            {KALIMAT_JUJUR}
+            {kalimatJujur}
           </p>
         </Card>
       </section>
@@ -183,7 +200,7 @@ export function PredictionPanel({
         </p>
       )}
       <p className="mt-3 rounded-2xl border-2 border-dashed border-ink/40 bg-paper px-4 py-3 text-sm leading-relaxed font-medium text-ink/70">
-        {KALIMAT_JUJUR}
+        {kalimatJujur}
       </p>
     </section>
   )
@@ -221,7 +238,7 @@ function FullCard({ section: s }: { section: SectionPrediction }) {
         value={s.scaled}
         max={s.max}
         tone="amber"
-        label={`Skor terskala ${s.materi}`}
+        label={`Skor CAT ${s.materi}`}
         className="mt-2 bg-white/25"
       />
       <p className="mt-1.5 text-xs font-semibold text-white/85">
@@ -262,7 +279,7 @@ function CompactRow({ section: s }: { section: SectionPrediction }) {
         value={s.scaled}
         max={s.max}
         tone={MATERI_TONE[s.materi]}
-        label={`Skor terskala ${s.materi}`}
+        label={`Skor CAT ${s.materi}`}
         className="mt-1.5"
       />
     </div>

@@ -1,11 +1,16 @@
 /**
  * Prediksi kelolosan (Fase 3): perkiraan peluang lolos per subtes dari
- * riwayat tryout mini. Murni hitung-hitungan, tanpa akses store.
+ * riwayat tryout mini dan simulasi CAT lengkap. Murni hitung-hitungan,
+ * tanpa akses store.
  *
  * Skor mini per seksi (maks 50) diskalakan ke nilai CAT asli memakai
  * `TRYOUT_SCALE_TO_ORIGINAL`, lalu dibandingkan dengan passing grade
- * asli `ORIGINAL_PASSING`. Semua angka berasal dari `lib/quiz.ts`,
- * tidak ada angka passing grade atau skala yang ditulis ulang di sini.
+ * asli `ORIGINAL_PASSING`. Skor simulasi sudah skala asli, jadi dipakai
+ * mentah. Semua angka berasal dari `lib/quiz.ts`, tidak ada angka
+ * passing grade atau skala yang ditulis ulang di sini.
+ *
+ * Tren membandingkan skor skala asli antar tryout, jadi riwayat mini
+ * dan simulasi boleh dicampur karena sudah satu skala.
  *
  * Label peluang memakai pita (band), bukan satu angka persen yang
  * terkesan pasti, dihitung dari selisih skor terskala terhadap
@@ -16,7 +21,8 @@
  * - 15 atau lebih di bawah passing grade: "Masih jauh, fokus di sini
  *   dulu".
  *
- * Ini perkiraan dari tryout mini (hanya 30 soal), bukan jaminan lolos.
+ * Ini perkiraan dari tryout mini (hanya 30 soal) atau simulasi,
+ * bukan jaminan lolos.
  */
 import type { Materi } from './questions'
 import {
@@ -74,6 +80,10 @@ export interface Prediction {
   tryoutCount: number
   /** Tanggal ISO tryout terakhir. */
   lastDate: string
+  /** Mode rekaman terakhir: simulasi lengkap atau mini. */
+  source: 'simulasi' | 'mini'
+  /** Jumlah simulasi CAT lengkap di riwayat. */
+  simulasiCount: number
 }
 
 /** Pita dari selisih skor terskala terhadap passing grade. */
@@ -84,10 +94,16 @@ export function bandFromDiff(diff: number): PredictionBand {
   return 'masih-jauh'
 }
 
+/**
+ * Skor satu rekaman dalam skala asli CAT. Rekaman simulasi sudah skala
+ * asli, jadi dipakai mentah; rekaman mini atau lama (tanpa mode)
+ * diskalakan dulu.
+ */
 function scaledScore(record: TryoutRecord, materi: Materi): number {
-  const mini =
+  const raw =
     materi === 'TWK' ? record.twk : materi === 'TIU' ? record.tiu : record.tkp
-  return mini * TRYOUT_SCALE_TO_ORIGINAL[materi]
+  if (record.mode === 'full') return raw
+  return raw * TRYOUT_SCALE_TO_ORIGINAL[materi]
 }
 
 /**
@@ -128,5 +144,7 @@ export function predictFromHistory(
     sections,
     tryoutCount: history.length,
     lastDate: last.date,
+    source: last.mode === 'full' ? 'simulasi' : 'mini',
+    simulasiCount: sorted.filter((r) => r.mode === 'full').length,
   }
 }
