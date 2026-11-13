@@ -19,7 +19,7 @@ const NAV_ITEMS = [
 
 function LogoMark() {
   return (
-    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 font-display text-lg font-bold text-white">
+    <span className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-ink bg-primary-600 font-display text-lg font-extrabold text-white shadow-sticker-sm">
       L
       <span className="sr-only">Lolosin</span>
     </span>
@@ -31,17 +31,17 @@ export function Layout() {
   const level = getLevel(xp)
 
   return (
-    <div className="min-h-dvh">
+    <div className="bg-dot-paper min-h-dvh">
       {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b-2 border-ink bg-paper/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-2xl items-center justify-between gap-3 px-4 py-3">
           <NavLink to="/" className="flex items-center gap-2.5">
             <LogoMark />
             <span className="leading-tight">
-              <span className="block font-display text-lg font-bold">
+              <span className="block font-display text-lg font-extrabold">
                 Lolosin
               </span>
-              <span className="block text-xs font-medium text-ink/50">
+              <span className="block text-xs font-medium text-ink/60">
                 Belajar CPNS, jadi menyenangkan
               </span>
             </span>
@@ -49,14 +49,14 @@ export function Layout() {
 
           <div className="flex shrink-0 items-center gap-2">
             <span
-              className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-accent-100 px-2.5 py-1 text-xs font-bold text-accent-700"
+              className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-accent-100 px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-accent-700 shadow-sticker-sm"
               title="XP dan level"
             >
               <ZapIcon width={14} height={14} />
               {xp} XP · Lv {level}
             </span>
             <span
-              className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-twk-soft px-2.5 py-1 text-xs font-bold text-twk"
+              className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-twk-soft px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-twk shadow-sticker-sm"
               title="Streak harian"
             >
               <FlameIcon width={14} height={14} />
@@ -71,9 +71,9 @@ export function Layout() {
         <Outlet />
       </main>
 
-      {/* Bottom nav (mobile-first) */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-white/95 backdrop-blur">
-        <div className="mx-auto grid w-full max-w-2xl grid-cols-4">
+      {/* Bottom nav (mobile-first) — bilah sticker, item aktif jadi pill */}
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-ink bg-white">
+        <div className="mx-auto grid w-full max-w-2xl grid-cols-4 gap-1 px-2 py-2">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
@@ -81,10 +81,10 @@ export function Layout() {
               end={end}
               className={({ isActive }) =>
                 cx(
-                  'flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold transition-colors',
+                  'flex flex-col items-center gap-0.5 rounded-2xl border-2 py-2 text-[11px] font-bold transition-all',
                   isActive
-                    ? 'text-primary-600'
-                    : 'text-ink/45 hover:text-ink/70',
+                    ? 'border-ink bg-primary-600 text-white shadow-sticker-sm'
+                    : 'border-transparent text-ink/60 hover:bg-paper hover:text-ink',
                 )
               }
             >

@@ -74,7 +74,7 @@ export function QuestionCard({
           </Badge>
         )}
         {nomor !== undefined && (
-          <span className="text-xs font-bold tracking-wide text-ink/50 uppercase">
+          <span className="text-xs font-extrabold tracking-wide text-ink/60 uppercase">
             Soal {nomor}
             {total !== undefined ? ` dari ${total}` : ''}
             {showMateriBadge ? ` · ${materiLabel(question.materi)}` : ''}
@@ -87,7 +87,7 @@ export function QuestionCard({
       </p>
 
       {isTkp && (
-        <p className="rounded-xl bg-tkp-soft px-3 py-2 text-xs leading-relaxed font-medium text-tkp">
+        <p className="rounded-xl border-2 border-tkp bg-tkp-soft px-3 py-2 text-xs leading-relaxed font-semibold text-tkp">
           Soal TKP dinilai 1–5 berdasarkan pilihanmu — pilih jawaban yang
           paling mencerminkan karakter ASN.
         </p>

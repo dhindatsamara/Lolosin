@@ -18,6 +18,12 @@ import { CheckIcon } from '../components/icons'
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
+const MATERI_CARD = {
+  TWK: 'border-ink bg-twk text-white',
+  TIU: 'border-ink bg-tiu text-white',
+  TKP: 'border-ink bg-tkp text-white',
+} as const
+
 /**
  * State hasil tryout segar, dikirim halaman tryout saat sesi selesai:
  * skor + soal + jawaban (untuk breakdown) + XP yang didapat.
@@ -118,24 +124,24 @@ export function TryoutHasilPage() {
         <p className="text-4xl" aria-hidden="true">
           {score.passedOverall ? '🏆' : '💪'}
         </p>
-        <h1 className="mt-2 text-2xl font-bold">
+        <h1 className="mt-2 font-display text-3xl font-extrabold">
           {score.passedOverall
             ? 'Selamat, kamu lulus!'
             : 'Belum lulus — terus berlatih!'}
         </h1>
-        <p className="mt-1 text-sm text-ink/60">
+        <p className="mt-1 text-sm font-medium text-ink/60">
           Total mini {score.total}/150 · terskala {score.scaledTotal}/550
           {totalCorrect !== null && (
             <> · {totalCorrect} jawaban benar dari 30 soal</>
           )}
         </p>
         {timedOut && (
-          <p className="mx-auto mt-2 w-fit rounded-full bg-accent-100 px-3 py-1 text-xs font-bold text-accent-700">
+          <p className="mx-auto mt-2 w-fit rounded-full border-2 border-ink bg-accent-400 px-3 py-1 text-xs font-extrabold text-ink shadow-sticker-sm">
             Waktu habis — jawaban tersimpan otomatis
           </p>
         )}
         {xpEarned !== null && (
-          <p className="mx-auto mt-2 w-fit rounded-full bg-primary-100 px-3 py-1 text-sm font-bold text-primary-700">
+          <p className="mx-auto mt-2 w-fit rounded-full border-2 border-ink bg-primary-100 px-3 py-1 text-sm font-extrabold text-primary-700 shadow-sticker-sm">
             +{xpEarned} XP
           </p>
         )}
@@ -147,21 +153,27 @@ export function TryoutHasilPage() {
           const scaled = score.scaled[materi]
           const passed = score.passed?.[materi] ?? false
           return (
-            <Card key={materi}>
+            <Card key={materi} className={MATERI_CARD[materi]}>
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <Badge tone={MATERI_TONE[materi]}>{materi}</Badge>
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-semibold">
                     {MATERI_META[materi].nama}
                   </span>
                 </div>
-                <Badge tone={passed ? 'green' : 'neutral'}>
+                <Badge
+                  tone={passed ? 'green' : 'neutral'}
+                  className={cx(
+                    'shrink-0 border-2 border-ink',
+                    !passed && 'bg-white text-ink',
+                  )}
+                >
                   {passed ? 'Lulus' : 'Belum lulus'}
                 </Badge>
               </div>
               <p className="mt-3 font-display text-2xl font-bold">
                 {nilai}
-                <span className="text-sm font-medium text-ink/50">
+                <span className="text-sm font-semibold text-white/75">
                   /{TRYOUT_MAX_PER_SECTION} · terskala {scaled}/
                   {ORIGINAL_MAX[materi]}
                 </span>
@@ -169,11 +181,11 @@ export function TryoutHasilPage() {
               <ProgressBar
                 value={nilai}
                 max={TRYOUT_MAX_PER_SECTION}
-                tone={MATERI_TONE[materi]}
+                tone="amber"
                 label={`Skor ${materi}`}
-                className="mt-2"
+                className="mt-2 bg-white/25"
               />
-              <p className="mt-1 text-xs text-ink/50">
+              <p className="mt-1.5 text-xs font-semibold text-white/85">
                 Passing grade mini: {TRYOUT_PASSING_MINI[materi]} · passing
                 asli: {ORIGINAL_PASSING[materi]}
                 {score.correct
@@ -187,7 +199,7 @@ export function TryoutHasilPage() {
 
       {questions && answers && (
         <section aria-label="Breakdown per soal">
-          <h2 className="mb-2 text-sm font-bold text-ink/70">
+          <h2 className="mb-2 font-display text-base font-extrabold">
             Breakdown per soal
           </h2>
           <div className="flex flex-col gap-2">
@@ -201,16 +213,16 @@ export function TryoutHasilPage() {
                   <div className="flex items-start gap-3">
                     <span
                       className={cx(
-                        'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold',
+                        'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold',
                         q.materi === 'TKP'
                           ? poin >= 4
                             ? 'bg-primary-100 text-primary-700'
                             : poin >= 2
                               ? 'bg-accent-100 text-accent-700'
-                              : 'bg-red-50 text-red-700'
+                              : 'bg-red-100 text-red-700'
                           : benar
                             ? 'bg-primary-100 text-primary-700'
-                            : 'bg-red-50 text-red-700',
+                            : 'bg-red-100 text-red-700',
                       )}
                     >
                       {q.materi === 'TKP' ? (
@@ -222,8 +234,8 @@ export function TryoutHasilPage() {
                       )}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="flex flex-wrap items-center gap-2 text-sm leading-snug font-medium">
-                        <span className="text-ink/50">Soal {i + 1}</span>
+                      <p className="flex flex-wrap items-center gap-2 text-sm leading-snug font-semibold">
+                        <span className="text-ink/60">Soal {i + 1}</span>
                         <Badge tone={MATERI_TONE[q.materi]}>
                           {q.materi}
                         </Badge>

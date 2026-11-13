@@ -223,13 +223,13 @@ export function TryoutPage() {
         <header className="flex flex-wrap items-center justify-between gap-2">
           <TimerDisplay secondsLeft={secondsLeft} />
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-ink/60">
+            <span className="rounded-full border-2 border-ink bg-white px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink shadow-sticker-sm">
               {answeredCount}/{total} dijawab
             </span>
             <button
               type="button"
               onClick={cancelTryout}
-              className="text-xs font-semibold text-red-700 hover:underline"
+              className="text-xs font-bold text-red-700 hover:underline"
             >
               Batalkan
             </button>
@@ -237,7 +237,7 @@ export function TryoutPage() {
         </header>
 
         {rotated && (
-          <p className="rounded-xl bg-accent-50 px-3 py-2 text-xs font-medium text-accent-700">
+          <p className="rounded-xl border-2 border-ink bg-accent-100 px-3 py-2 text-xs font-bold text-accent-800">
             Soal baru habis — mengulang dari awal.
           </p>
         )}
@@ -249,18 +249,18 @@ export function TryoutPage() {
             aria-expanded={showPalette}
             className="flex w-full items-center justify-between px-4 py-3 text-left"
           >
-            <span className="text-sm font-bold">Navigator soal</span>
+            <span className="text-sm font-extrabold">Navigator soal</span>
             <ChevronRightIcon
               width={18}
               height={18}
               className={cx(
-                'text-ink/50 transition-transform',
+                'text-ink/60 transition-transform',
                 showPalette && 'rotate-90',
               )}
             />
           </button>
           {showPalette && (
-            <div className="border-t border-ink/10 px-4 py-3">
+            <div className="border-t-2 border-ink px-4 py-3">
               <TryoutPalette
                 questions={questions}
                 answers={answers}
@@ -313,8 +313,8 @@ export function TryoutPage() {
         </div>
 
         {showConfirm ? (
-          <Card className="border-amber-600/40 bg-accent-50">
-            <p className="font-display text-base font-bold">
+          <Card className="bg-accent-100 shadow-sticker-amber">
+            <p className="font-display text-base font-extrabold">
               Selesaikan tryout?
             </p>
             <p className="mt-1 text-sm leading-relaxed text-ink/70">
@@ -343,7 +343,10 @@ export function TryoutPage() {
   return (
     <div className="flex flex-col gap-5">
       <header>
-        <h1 className="text-2xl font-bold">Tryout Mini</h1>
+        <p className="font-script text-2xl leading-none text-primary-700">
+          simulasi beneran, deg-degan beneran
+        </p>
+        <h1 className="mt-1 font-display text-3xl font-extrabold">Tryout Mini</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
           Simulasi SKD singkat: {TRYOUT_TOTAL_QUESTIONS} soal dalam{' '}
           {TRYOUT_TIME_LIMIT_MINUTES} menit. Skor diskalakan ke nilai CAT
@@ -352,14 +355,14 @@ export function TryoutPage() {
       </header>
 
       <Card className="flex items-center gap-4">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-100 text-accent-700">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-accent-400 text-ink shadow-sticker-sm">
           <ClockIcon width={22} height={22} />
         </span>
         <div className="text-sm">
-          <p className="font-bold">
+          <p className="font-extrabold">
             {TRYOUT_TOTAL_QUESTIONS} soal · {TRYOUT_TIME_LIMIT_MINUTES} menit
           </p>
-          <p className="text-ink/60">
+          <p className="font-medium text-ink/60">
             {TRYOUT_QUESTIONS_PER_SECTION} soal per seksi · maks{' '}
             {TRYOUT_MAX_PER_SECTION} poin per seksi
           </p>
@@ -367,7 +370,7 @@ export function TryoutPage() {
       </Card>
 
       <section aria-label="Aturan tryout">
-        <h2 className="mb-2 text-sm font-bold text-ink/70">Aturan main</h2>
+        <h2 className="mb-2 font-display text-base font-extrabold">Aturan main</h2>
         <Card>
           <ul className="flex flex-col gap-1.5 text-sm leading-relaxed text-ink/80">
             <li>
@@ -395,24 +398,31 @@ export function TryoutPage() {
       </section>
 
       <section aria-label="Passing grade">
-        <h2 className="mb-2 text-sm font-bold text-ink/70">
+        <h2 className="mb-2 font-display text-base font-extrabold">
           Passing grade mini (proporsional dari passing grade asli)
         </h2>
         <div className="flex flex-col gap-2">
           {MATERI_LIST.map((materi) => (
             <Card
               key={materi}
-              className="flex items-center justify-between gap-3 py-3"
+              className={cx(
+                'flex items-center justify-between gap-3 py-3',
+                materi === 'TWK'
+                  ? 'bg-twk-soft'
+                  : materi === 'TIU'
+                    ? 'bg-tiu-soft'
+                    : 'bg-tkp-soft',
+              )}
             >
               <div className="flex items-center gap-2">
                 <Badge tone={MATERI_TONE[materi]}>{materi}</Badge>
-                <span className="text-sm font-medium">
+                <span className="text-sm font-semibold">
                   {MATERI_META[materi].nama}
                 </span>
               </div>
-              <p className="text-sm font-bold">
+              <p className="shrink-0 text-sm font-extrabold">
                 ≥ {TRYOUT_PASSING_MINI[materi]}
-                <span className="ml-1 text-xs font-medium text-ink/50">
+                <span className="ml-1 text-xs font-semibold text-ink/60">
                   (asli {ORIGINAL_PASSING[materi]}/{ORIGINAL_MAX[materi]},
                   skala ×{TRYOUT_SCALE_TO_ORIGINAL[materi]})
                 </span>
@@ -420,7 +430,7 @@ export function TryoutPage() {
             </Card>
           ))}
         </div>
-        <p className="mt-2 text-xs leading-relaxed text-ink/50">
+        <p className="mt-2 text-xs leading-relaxed font-medium text-ink/60">
           Lulus keseluruhan berarti ketiga seksi melewati passing grade-nya.
           Passing grade asli merujuk KepmenPANRB 406/2026.
         </p>
@@ -428,7 +438,7 @@ export function TryoutPage() {
 
       {historyNewestFirst.length > 0 && (
         <section aria-label="Riwayat tryout">
-          <h2 className="mb-2 text-sm font-bold text-ink/70">
+          <h2 className="mb-2 font-display text-base font-extrabold">
             Riwayat tryout
           </h2>
           <div className="flex flex-col gap-2">
@@ -436,20 +446,20 @@ export function TryoutPage() {
               <Card key={`${record.date}-${i}`} className="py-3">
                 <div className="flex items-center justify-between gap-3">
                   <div className="text-sm">
-                    <p className="font-bold">
+                    <p className="font-extrabold">
                       {new Date(record.date).toLocaleDateString('id-ID', {
                         day: 'numeric',
                         month: 'long',
                         year: 'numeric',
                       })}{' '}
-                      <span className="font-medium text-ink/50">
+                      <span className="font-semibold text-ink/60">
                         {new Date(record.date).toLocaleTimeString('id-ID', {
                           hour: '2-digit',
                           minute: '2-digit',
                         })}
                       </span>
                     </p>
-                    <p className="mt-0.5 text-ink/60">
+                    <p className="mt-0.5 font-medium text-ink/60">
                       TWK {record.twk} · TIU {record.tiu} · TKP {record.tkp} ·
                       total {record.twk + record.tiu + record.tkp}/150
                     </p>

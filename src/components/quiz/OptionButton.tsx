@@ -22,19 +22,23 @@ export interface OptionButtonProps {
 }
 
 const STATE_CLASSES: Record<OptionState, string> = {
-  default: 'border-ink/15 bg-white hover:border-primary-600 hover:bg-primary-50',
-  selected: 'border-primary-600 bg-primary-50 ring-1 ring-primary-600',
-  correct: 'border-green-600 bg-green-50 ring-1 ring-green-600',
-  wrong: 'border-red-500 bg-red-50 ring-1 ring-red-500',
-  muted: 'border-ink/10 bg-white opacity-55',
+  default:
+    'border-ink bg-white shadow-sticker-sm hover:-translate-y-px hover:bg-primary-50',
+  selected:
+    'border-ink bg-primary-600 text-white shadow-sticker-sm',
+  correct:
+    'border-green-600 bg-green-100 text-green-900 shadow-sticker-sm',
+  wrong:
+    'border-red-500 bg-red-100 text-red-900 shadow-sticker-sm',
+  muted: 'border-ink/20 bg-white opacity-60',
 }
 
 const LETTER_CLASSES: Record<OptionState, string> = {
-  default: 'bg-ink/5 text-ink/70',
-  selected: 'bg-primary-600 text-white',
+  default: 'border-2 border-ink bg-white text-ink',
+  selected: 'border-2 border-white bg-white text-primary-700',
   correct: 'bg-green-600 text-white',
   wrong: 'bg-red-500 text-white',
-  muted: 'bg-ink/5 text-ink/50',
+  muted: 'bg-ink/5 text-ink/60',
 }
 
 /**
@@ -56,8 +60,9 @@ export function OptionButton({
       onClick={onClick}
       aria-pressed={state === 'selected'}
       className={cx(
-        'flex w-full items-start gap-3 rounded-xl border-2 px-3 py-3 text-left transition-colors',
+        'flex w-full items-start gap-3 rounded-2xl border-2 px-3 py-3 text-left transition-all',
         'disabled:cursor-default',
+        'enabled:active:translate-x-[2px] enabled:active:translate-y-[2px] enabled:active:shadow-none',
         STATE_CLASSES[state],
       )}
     >
@@ -73,7 +78,7 @@ export function OptionButton({
         {teks}
       </span>
       {badge && (
-        <span className="mt-0.5 shrink-0 rounded-full bg-ink/5 px-2 py-0.5 text-xs font-bold text-ink/70">
+        <span className="mt-0.5 shrink-0 rounded-full border-2 border-ink bg-white px-2 py-0.5 text-xs font-extrabold text-ink">
           {badge}
         </span>
       )}

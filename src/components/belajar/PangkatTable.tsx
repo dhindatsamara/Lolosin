@@ -31,10 +31,10 @@ export function PangkatTable({ pangkat, rows }: PangkatTableProps) {
   return (
     <div className="mt-6">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h3 className="font-display text-lg font-bold">
+        <h3 className="font-display text-lg font-extrabold">
           Tabel Pangkat {pangkat} (1–100)
         </h3>
-        <span className="text-xs font-medium text-ink/50">
+        <span className="text-xs font-semibold text-ink/60">
           {filtered.length} dari {rows.length} bilangan
         </span>
       </div>
@@ -45,16 +45,16 @@ export function PangkatTable({ pangkat, rows }: PangkatTableProps) {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Cari bilangan atau hasil, mis. 7 atau 49…"
         aria-label="Cari bilangan di tabel pangkat"
-        className="mb-3 w-full rounded-xl border border-ink/15 bg-white px-3.5 py-2.5 text-sm outline-none placeholder:text-ink/40 focus:border-primary-600 focus:ring-2 focus:ring-primary-100"
+        className="mb-3 w-full rounded-xl border-2 border-ink bg-white px-3.5 py-2.5 text-sm font-medium outline-none placeholder:text-ink/60 focus:border-primary-600 focus:ring-2 focus:ring-primary-100"
       />
-      <div className="max-h-[420px] overflow-y-auto rounded-xl border border-ink/10 bg-white">
+      <div className="max-h-[420px] overflow-y-auto rounded-2xl border-2 border-ink bg-white shadow-sticker-sm">
         <table className="w-full text-sm">
           <thead className="sticky top-0 z-10">
-            <tr className="bg-primary-50 text-left">
-              <th className="px-4 py-2.5 font-display font-bold text-primary-800">
+            <tr className="bg-primary-800 text-left">
+              <th className="px-4 py-2.5 font-display font-extrabold text-white">
                 Bilangan (n)
               </th>
-              <th className="px-4 py-2.5 font-display font-bold text-primary-800">
+              <th className="px-4 py-2.5 font-display font-extrabold text-white">
                 n{sup}
               </th>
             </tr>
@@ -63,10 +63,10 @@ export function PangkatTable({ pangkat, rows }: PangkatTableProps) {
             {filtered.map(([n, hasil]) => (
               <tr
                 key={n}
-                className="border-t border-ink/5 odd:bg-white even:bg-paper"
+                className="border-t border-ink/10 odd:bg-white even:bg-paper"
               >
-                <td className="px-4 py-2 font-semibold tabular-nums">{n}</td>
-                <td className="px-4 py-2 tabular-nums">
+                <td className="px-4 py-2 font-bold tabular-nums">{n}</td>
+                <td className="px-4 py-2 font-medium tabular-nums">
                   {hasil.toLocaleString('id-ID')}
                 </td>
               </tr>
@@ -75,7 +75,7 @@ export function PangkatTable({ pangkat, rows }: PangkatTableProps) {
               <tr>
                 <td
                   colSpan={2}
-                  className="px-4 py-6 text-center text-ink/50"
+                  className="px-4 py-6 text-center font-medium text-ink/60"
                 >
                   Tidak ada bilangan yang cocok dengan “{q}”.
                 </td>

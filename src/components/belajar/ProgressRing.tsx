@@ -28,7 +28,7 @@ export function ProgressRing({
   value,
   max,
   size = 64,
-  strokeWidth = 7,
+  strokeWidth = 9,
   tone = 'primary',
   label,
   trackClassName = 'stroke-ink/10',
@@ -76,7 +76,7 @@ export function ProgressRing({
           className={cx('transition-all', TONES[tone])}
         />
       </svg>
-      <span className="absolute inset-0 flex items-center justify-center font-display text-sm font-bold">
+      <span className="absolute inset-0 flex items-center justify-center font-display text-sm font-extrabold">
         {label ?? `${Math.round(pct)}%`}
       </span>
     </div>

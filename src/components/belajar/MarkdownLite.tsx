@@ -34,7 +34,7 @@ function renderInline(text: string): ReactNode[] {
       return (
         <code
           key={i}
-          className="rounded bg-ink/5 px-1 py-0.5 font-mono text-[0.85em] text-primary-800"
+          className="rounded-md border border-ink/10 bg-accent-100 px-1 py-0.5 font-mono text-[0.85em] font-semibold text-accent-800"
         >
           {part.slice(1, -1)}
         </code>
@@ -122,7 +122,7 @@ export function MarkdownLite({ konten }: { konten: string }) {
             return (
               <h2
                 key={i}
-                className="pt-3 font-display text-xl font-bold leading-snug text-ink first:pt-0"
+                className="pt-3 font-display text-xl font-extrabold leading-snug text-ink first:pt-0"
               >
                 {renderInline(block.text)}
               </h2>
@@ -131,7 +131,7 @@ export function MarkdownLite({ konten }: { konten: string }) {
             return (
               <h3
                 key={i}
-                className="pt-2 font-display text-lg font-bold leading-snug text-ink first:pt-0"
+                className="pt-2 font-display text-lg font-extrabold leading-snug text-ink first:pt-0"
               >
                 {renderInline(block.text)}
               </h3>

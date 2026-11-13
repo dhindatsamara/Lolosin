@@ -41,8 +41,15 @@ import {
   useStore,
   xpProgress,
 } from '../lib/store'
+import { cx } from '../lib/utils'
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
+
+const MATERI_CARD = {
+  TWK: 'border-ink bg-twk text-white',
+  TIU: 'border-ink bg-tiu text-white',
+  TKP: 'border-ink bg-tkp text-white',
+} as const
 
 function sapaan(): string {
   const hour = Number(
@@ -107,6 +114,8 @@ export function HomePage() {
   const level = getLevel(xp)
   const progress = xpProgress(xp)
   const seenByMateri = countSeenByMateri(seenQuestionIds)
+  const totalSoalDilihat =
+    seenByMateri.TWK + seenByMateri.TIU + seenByMateri.TKP
   const bacaKeseluruhan = overallReadProgress(readSections)
   const streakAmanHariIni = lastActivityDate === todayMakassar()
   const tryoutTerakhir = tryoutHistory[tryoutHistory.length - 1]
@@ -123,93 +132,119 @@ export function HomePage() {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* Sapaan + tanggal */}
-      <header>
-        <p className="text-sm font-medium text-ink/50">{tanggalHariIni()}</p>
-        <h1 className="mt-0.5 text-2xl font-bold leading-snug">
+      {/* Hero hijau tua bertekstur grid: sapaan + XP/streak + angka kunci */}
+      <section className="bg-grid-dark rounded-3xl border-2 border-ink bg-primary-800 p-5 text-white shadow-sticker-lg">
+        <p className="font-script text-2xl leading-none text-accent-300">
+          semangat belajarnya!
+        </p>
+        <p className="mt-1 text-sm font-medium text-primary-100">
+          {tanggalHariIni()}
+        </p>
+        <h1 className="mt-1 font-display text-3xl leading-tight font-extrabold">
           {sapaan()}! Siap lolos CPNS?
         </h1>
-        <p className="mt-1 text-sm leading-relaxed text-ink/60">
+        <p className="mt-2 text-sm leading-relaxed text-primary-100">
           {TOTAL_QUIZABLE.toLocaleString('id-ID')} soal latihan,{' '}
           {TOTAL_SECTIONS} seksi materi, dan tryout mini — semuanya bisa
           dipakai offline.
         </p>
-      </header>
 
-      {/* XP + level dan streak */}
-      <div className="grid grid-cols-2 gap-3">
-        <Card>
-          <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-100 text-accent-700">
-              <ZapIcon width={18} height={18} />
-            </span>
-            <p className="text-xs font-semibold text-ink/50">Level {level}</p>
-          </div>
-          <p className="mt-2 font-display text-2xl font-bold">
-            {xp.toLocaleString('id-ID')}{' '}
-            <span className="text-sm font-semibold text-ink/50">XP</span>
-          </p>
+        {/* Pill XP/level + streak */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-accent-400 px-3 py-1.5 text-sm font-extrabold whitespace-nowrap text-ink shadow-sticker-sm">
+            <ZapIcon width={16} height={16} />
+            {xp.toLocaleString('id-ID')} XP · Level {level}
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-white px-3 py-1.5 text-sm font-extrabold whitespace-nowrap text-ink shadow-sticker-sm">
+            <FlameIcon width={16} height={16} className="text-twk" />
+            Streak harian · {streak} hari
+          </span>
+        </div>
+
+        {/* Progres menuju level berikutnya + status streak */}
+        <div className="mt-4">
           <ProgressBar
             value={progress.current}
             max={progress.needed}
             tone="amber"
             label="Progres menuju level berikutnya"
-            className="mt-2"
+            className="bg-white/25"
           />
-          <p className="mt-1.5 text-[11px] leading-snug text-ink/50">
+          <p className="mt-1.5 text-xs font-medium text-primary-100">
             {progress.needed - progress.current} XP lagi ke Level {level + 1}
           </p>
-        </Card>
-        <Card>
-          <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-twk-soft text-twk">
-              <FlameIcon width={18} height={18} />
-            </span>
-            <p className="text-xs font-semibold text-ink/50">Streak harian</p>
-          </div>
-          <p className="mt-2 font-display text-2xl font-bold">
-            {streak}{' '}
-            <span className="text-sm font-semibold text-ink/50">hari</span>
-          </p>
-          <p className="mt-1.5 flex items-start gap-1 text-[11px] leading-snug text-ink/50">
+          <p className="mt-1 flex items-start gap-1 text-xs leading-snug font-medium text-primary-100">
             {streakAmanHariIni ? (
               <>
-                <CheckIcon width={13} height={13} className="mt-px shrink-0 text-primary-600" />
+                <CheckIcon width={13} height={13} className="mt-px shrink-0 text-accent-300" />
                 Streak aman — kamu sudah belajar hari ini.
               </>
             ) : (
               'Belajar hari ini untuk menjaga streak-mu.'
             )}
           </p>
-        </Card>
-      </div>
+        </div>
 
-      {/* Lanjutkan belajar */}
-      <Card className="border-primary-800 bg-primary-600 p-5 text-white">
+        {/* Strip angka spesifik */}
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="rounded-2xl border-2 border-white/25 bg-white/10 p-3 text-center">
+            <p className="font-display text-xl leading-none font-extrabold">110</p>
+            <p className="mt-1 text-[11px] leading-tight font-semibold text-primary-100">
+              soal SKD asli
+            </p>
+          </div>
+          <div className="rounded-2xl border-2 border-white/25 bg-white/10 p-3 text-center">
+            <p className="font-display text-xl leading-none font-extrabold">
+              {bacaKeseluruhan.percent}%
+            </p>
+            <p className="mt-1 text-[11px] leading-tight font-semibold text-primary-100">
+              materi dibaca
+            </p>
+          </div>
+          <div className="rounded-2xl border-2 border-white/25 bg-white/10 p-3 text-center">
+            <p className="font-display text-xl leading-none font-extrabold">
+              {totalSoalDilihat.toLocaleString('id-ID')}
+            </p>
+            <p className="mt-1 text-[11px] leading-tight font-semibold text-primary-100">
+              soal sudah dilihat
+            </p>
+          </div>
+        </div>
+        <p className="mt-3 border-t-2 border-dashed border-white/25 pt-3 text-xs leading-relaxed font-semibold text-primary-100">
+          Passing grade mini —{' '}
+          <span className="text-white">
+            TWK ≥{TRYOUT_PASSING_MINI.TWK} · TIU ≥{TRYOUT_PASSING_MINI.TIU} ·
+            TKP ≥{TRYOUT_PASSING_MINI.TKP}
+          </span>
+        </p>
+      </section>
+
+      {/* Lanjutkan belajar — kartu amber kontras tinggi (teks gelap) */}
+      <Card className="border-ink bg-accent-400 p-5 text-ink">
         <div className="flex items-center gap-4">
           <ProgressRing
             value={bacaKeseluruhan.read}
             max={bacaKeseluruhan.total}
             size={72}
-            tone="amber"
+            tone="primary"
             label={`${bacaKeseluruhan.percent}%`}
-            trackClassName="stroke-white/20"
-            className="text-white"
+            trackClassName="stroke-ink/15"
+            className="text-ink"
           />
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-primary-200">
+            <p className="text-sm font-bold text-ink/70">
               Progres membaca materi
             </p>
-            <p className="mt-0.5 font-display text-lg font-bold leading-snug">
+            <p className="mt-0.5 font-display text-lg leading-snug font-extrabold">
               {bacaKeseluruhan.read} dari {bacaKeseluruhan.total} seksi sudah
               dibaca
             </p>
             {lanjutBelajar ? (
-              <p className="mt-1 truncate text-sm text-primary-100">
+              <p className="mt-1 truncate text-sm font-medium text-ink/80">
                 Berikutnya: {lanjutBelajar.section.judul}
               </p>
             ) : (
-              <p className="mt-1 text-sm text-primary-100">
+              <p className="mt-1 text-sm font-medium text-ink/80">
                 Semua materi sudah kamu baca. Luar biasa!
               </p>
             )}
@@ -220,7 +255,7 @@ export function HomePage() {
             to={`/belajar/${lanjutBelajar.doc.id}/${lanjutBelajar.section.id}`}
             className="mt-4 block"
           >
-            <Button variant="secondary" fullWidth>
+            <Button fullWidth>
               Lanjutkan membaca
               <ChevronRightIcon width={16} height={16} />
             </Button>
@@ -230,18 +265,20 @@ export function HomePage() {
 
       {/* Aksi cepat */}
       <section>
-        <h2 className="mb-3 text-lg font-bold">Mau ngapain hari ini?</h2>
+        <h2 className="mb-3 font-display text-xl font-extrabold">
+          Mau ngapain hari ini?
+        </h2>
         <div className="grid grid-cols-3 gap-3">
           {AKSI_CEPAT.map(({ to, label, deskripsi, icon: Icon, tone }) => (
             <Link key={to} to={to}>
-              <Card className="flex h-full flex-col items-center gap-1.5 py-4 text-center transition-colors hover:border-primary-300">
+              <Card className="flex h-full flex-col items-center gap-1.5 py-4 text-center transition-transform hover:-translate-y-0.5">
                 <span
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl ${tone}`}
+                  className={`flex h-10 w-10 items-center justify-center rounded-xl border-2 border-ink ${tone}`}
                 >
                   <Icon width={20} height={20} />
                 </span>
-                <span className="font-display text-sm font-bold">{label}</span>
-                <span className="text-[11px] leading-tight text-ink/50">
+                <span className="font-display text-sm font-extrabold">{label}</span>
+                <span className="text-[11px] leading-tight font-medium text-ink/60">
                   {deskripsi}
                 </span>
               </Card>
@@ -250,9 +287,11 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Progres per materi */}
+      {/* Progres per materi — kartu berwarna penuh per subtes */}
       <section>
-        <h2 className="mb-3 text-lg font-bold">Progres per materi</h2>
+        <h2 className="mb-3 font-display text-xl font-extrabold">
+          Progres per materi
+        </h2>
         <div className="flex flex-col gap-3">
           {MATERI_LIST.map((materi) => {
             const totalSoal = countTotalByMateri(materi)
@@ -260,10 +299,17 @@ export function HomePage() {
             const baca = materiReadProgress(materi, readSections)
             return (
               <Link key={materi} to="/belajar">
-                <Card className="transition-colors hover:border-primary-300">
+                <Card
+                  className={cx(
+                    'transition-transform hover:-translate-y-0.5',
+                    MATERI_CARD[materi],
+                  )}
+                >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      <span className="font-display font-bold">{materi}</span>
+                      <span className="font-display text-lg font-extrabold">
+                        {materi}
+                      </span>
                       <Badge tone={MATERI_TONE[materi]}>
                         {MATERI_META[materi].nama}
                       </Badge>
@@ -271,32 +317,33 @@ export function HomePage() {
                     <ChevronRightIcon
                       width={20}
                       height={20}
-                      className="shrink-0 text-ink/30"
+                      className="shrink-0 text-white/70"
                     />
                   </div>
                   <div className="mt-3 space-y-2.5">
                     <div>
                       <div className="mb-1 flex justify-between text-xs">
-                        <span className="font-medium text-ink/60">
+                        <span className="font-semibold text-white/80">
                           Materi dibaca
                         </span>
-                        <span className="font-bold">
+                        <span className="font-extrabold">
                           {baca.read}/{baca.total} seksi · {baca.percent}%
                         </span>
                       </div>
                       <ProgressBar
                         value={baca.read}
                         max={baca.total}
-                        tone={MATERI_TONE[materi]}
+                        tone="amber"
                         label={`Progres baca ${materi}`}
+                        className="bg-white/25"
                       />
                     </div>
                     <div>
                       <div className="mb-1 flex justify-between text-xs">
-                        <span className="font-medium text-ink/60">
+                        <span className="font-semibold text-white/80">
                           Soal dilihat
                         </span>
-                        <span className="font-bold">
+                        <span className="font-extrabold">
                           {seen}/{totalSoal} soal ·{' '}
                           {totalSoal - seen} soal baru tersisa
                         </span>
@@ -304,8 +351,9 @@ export function HomePage() {
                       <ProgressBar
                         value={seen}
                         max={totalSoal}
-                        tone={MATERI_TONE[materi]}
+                        tone="amber"
                         label={`Progres soal ${materi}`}
+                        className="bg-white/25"
                       />
                     </div>
                   </div>
@@ -318,19 +366,21 @@ export function HomePage() {
 
       {/* Tryout terakhir */}
       <section>
-        <h2 className="mb-3 text-lg font-bold">Tryout terakhir</h2>
+        <h2 className="mb-3 font-display text-xl font-extrabold">
+          Tryout terakhir
+        </h2>
         {tryoutTerakhir ? (
           <Card>
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="font-display text-lg font-bold">
+                <p className="font-display text-lg font-extrabold">
                   {(tryoutTerakhir.twk + tryoutTerakhir.tiu + tryoutTerakhir.tkp).toLocaleString('id-ID')}
-                  <span className="text-sm font-semibold text-ink/50">
+                  <span className="text-sm font-semibold text-ink/60">
                     {' '}
                     / {TRYOUT_MAX_PER_SECTION * 3}
                   </span>
                 </p>
-                <p className="text-xs text-ink/50">
+                <p className="text-xs font-medium text-ink/60">
                   {formatTanggalTryout(tryoutTerakhir.date)} · Tryout mini 30
                   soal
                 </p>
@@ -352,12 +402,12 @@ export function HomePage() {
                 return (
                   <div key={materi}>
                     <div className="mb-1 flex justify-between text-xs">
-                      <span className="font-medium text-ink/60">
+                      <span className="font-semibold text-ink/70">
                         {materi}
                         {benar !== undefined &&
                           ` · ${benar}/${TRYOUT_QUESTIONS_PER_SECTION} benar`}
                       </span>
-                      <span className="font-bold">
+                      <span className="font-extrabold">
                         {skor}/{TRYOUT_MAX_PER_SECTION}
                         {lulus ? ' · Lulus' : ` · PG ${TRYOUT_PASSING_MINI[materi]}`}
                       </span>
@@ -380,10 +430,10 @@ export function HomePage() {
           </Card>
         ) : (
           <Card className="text-center">
-            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-tkp-soft text-tkp">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-ink bg-tkp-soft text-tkp">
               <TrophyIcon width={24} height={24} />
             </span>
-            <p className="mt-3 font-display text-lg font-bold">
+            <p className="mt-3 font-display text-lg font-extrabold">
               Belum ada tryout yang diselesaikan
             </p>
             <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-ink/60">

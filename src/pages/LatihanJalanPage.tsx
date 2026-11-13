@@ -166,32 +166,32 @@ export function LatihanJalanPage() {
           <p className="text-4xl" aria-hidden="true">
             🎉
           </p>
-          <h1 className="mt-2 text-2xl font-bold">Sesi selesai!</h1>
-          <p className="mt-1 text-sm text-ink/60">
+          <h1 className="mt-2 font-display text-3xl font-extrabold">Sesi selesai!</h1>
+          <p className="mt-1 text-sm font-medium text-ink/60">
             Drill {materi}
             {subtopik ? ` · ${subtopik}` : ''}
           </p>
         </header>
 
         <Card className="text-center">
-          <p className="font-display text-4xl font-bold">
+          <p className="font-display text-4xl font-extrabold">
             {correctCount}
-            <span className="text-lg font-medium text-ink/50">/{total}</span>
+            <span className="text-lg font-semibold text-ink/60">/{total}</span>
           </p>
-          <p className="mt-1 text-sm font-medium text-ink/60">
+          <p className="mt-1 text-sm font-semibold text-ink/60">
             jawaban benar
           </p>
-          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-accent-100 px-3 py-1 text-sm font-bold text-accent-700">
+          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-accent-400 px-3 py-1 text-sm font-extrabold text-ink shadow-sticker-sm">
             +{xpEarned} XP
           </p>
-          <p className="mt-2 text-xs text-ink/50">
+          <p className="mt-2 text-xs font-medium text-ink/60">
             {correctCount} jawaban benar × {XP_DRILL_CORRECT} XP = {correctXp}{' '}
             XP + bonus selesai {XP_DRILL_COMPLETE} XP
           </p>
         </Card>
 
         <section aria-label="Ringkasan jawaban">
-          <h2 className="mb-2 text-sm font-bold text-ink/70">
+          <h2 className="mb-2 font-display text-base font-extrabold">
             Ringkasan jawaban
           </h2>
           <div className="flex flex-col gap-2">
@@ -204,22 +204,22 @@ export function LatihanJalanPage() {
                 <Card key={q.id} className="flex items-start gap-3 py-3">
                   <span
                     className={cx(
-                      'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold',
+                      'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold',
                       benar
                         ? 'bg-primary-100 text-primary-700'
-                        : 'bg-red-50 text-red-700',
+                        : 'bg-red-100 text-red-700',
                     )}
                   >
                     {benar ? <CheckIcon width={15} height={15} /> : '✕'}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm leading-snug font-medium">
-                      <span className="text-ink/50">Soal {i + 1} · </span>
+                    <p className="text-sm leading-snug font-semibold">
+                      <span className="text-ink/60">Soal {i + 1} · </span>
                       {q.soal.length > 90
                         ? `${q.soal.slice(0, 90)}…`
                         : q.soal}
                     </p>
-                    <p className="mt-0.5 text-xs text-ink/60">
+                    <p className="mt-0.5 text-xs font-medium text-ink/60">
                       {poin !== null
                         ? `Kamu dapat ${poin}/5 poin`
                         : benar
@@ -262,7 +262,7 @@ export function LatihanJalanPage() {
         >
           ← Akhiri sesi & pilih sesi lain
         </Link>
-        <h1 className="mt-2 flex flex-wrap items-center gap-2 text-2xl font-bold">
+        <h1 className="mt-2 flex flex-wrap items-center gap-2 font-display text-3xl font-extrabold">
           Drill {materi}
           {subtopik && (
             <span className="text-base font-semibold text-ink/60">
@@ -278,12 +278,12 @@ export function LatihanJalanPage() {
             label="Progres drill"
             className="flex-1"
           />
-          <span className="shrink-0 text-xs font-bold text-ink/60">
+          <span className="shrink-0 text-xs font-extrabold whitespace-nowrap text-ink/60">
             Soal {index + 1} dari {total}
           </span>
         </div>
         {session.rotated && (
-          <p className="mt-2 rounded-xl bg-accent-50 px-3 py-2 text-xs font-medium text-accent-700">
+          <p className="mt-2 rounded-xl border-2 border-ink bg-accent-100 px-3 py-2 text-xs font-bold text-accent-800">
             Soal baru habis — mengulang dari awal.
           </p>
         )}
@@ -310,7 +310,7 @@ export function LatihanJalanPage() {
         <ChevronRightIcon width={18} height={18} />
       </Button>
       {!revealed && (
-        <p className="-mt-3 text-center text-xs text-ink/50">
+        <p className="-mt-3 text-center text-xs font-medium text-ink/60">
           Pilih satu jawaban untuk melihat pembahasannya.
         </p>
       )}

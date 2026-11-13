@@ -16,7 +16,7 @@ export function Card({ padding = 'md', className, ...props }: CardProps) {
   return (
     <div
       className={cx(
-        'rounded-2xl border border-ink/10 bg-white shadow-[0_1px_2px_rgba(27,30,28,0.05)]',
+        'rounded-2xl border-2 border-ink bg-white shadow-sticker',
         PADDING[padding],
         className,
       )}

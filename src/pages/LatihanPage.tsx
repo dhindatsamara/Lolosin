@@ -18,9 +18,15 @@ import { ProgressBar } from '../components/ui/ProgressBar'
 import { ChevronRightIcon, TargetIcon } from '../components/icons'
 
 const MATERI_BUTTON: Record<Materi, string> = {
-  TWK: 'border-twk bg-twk-soft text-twk',
-  TIU: 'border-tiu bg-tiu-soft text-tiu',
-  TKP: 'border-tkp bg-tkp-soft text-tkp',
+  TWK: 'border-ink bg-twk text-white shadow-sticker-sm',
+  TIU: 'border-ink bg-tiu text-white shadow-sticker-sm',
+  TKP: 'border-ink bg-tkp text-white shadow-sticker-sm',
+}
+
+const MATERI_FEATURED: Record<Materi, string> = {
+  TWK: 'border-ink bg-twk text-white',
+  TIU: 'border-ink bg-tiu text-white',
+  TKP: 'border-ink bg-tkp text-white',
 }
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
@@ -52,7 +58,10 @@ export function LatihanPage() {
   return (
     <div className="flex flex-col gap-5">
       <header>
-        <h1 className="text-2xl font-bold">Latihan</h1>
+        <p className="font-script text-2xl leading-none text-primary-700">
+          latihan terus, biar makin jago
+        </p>
+        <h1 className="mt-1 font-display text-3xl font-extrabold">Latihan</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
           Drill {DRILL_DEFAULT_COUNT} soal per sesi dengan pembahasan langsung.
           Soal yang belum pernah kamu lihat selalu didahulukan — anti-ulang.
@@ -60,7 +69,7 @@ export function LatihanPage() {
       </header>
 
       <section aria-label="Pilih materi">
-        <h2 className="mb-2 text-sm font-bold text-ink/70">Pilih materi</h2>
+        <h2 className="mb-2 font-display text-base font-extrabold">Pilih materi</h2>
         <div className="grid grid-cols-3 gap-2">
           {MATERI_LIST.map((m) => (
             <button
@@ -69,26 +78,26 @@ export function LatihanPage() {
               onClick={() => setMateri(m)}
               aria-pressed={materi === m}
               className={cx(
-                'rounded-2xl border-2 px-2 py-3 text-center transition-colors',
+                'rounded-2xl border-2 px-2 py-3 text-center transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none',
                 materi === m
                   ? MATERI_BUTTON[m]
-                  : 'border-ink/10 bg-white text-ink/60 hover:border-ink/25',
+                  : 'border-ink bg-white text-ink/70 shadow-sticker-sm hover:bg-paper',
               )}
             >
-              <span className="block font-display font-bold">{m}</span>
-              <span className="mt-0.5 block text-[11px] leading-tight font-medium">
+              <span className="block font-display font-extrabold">{m}</span>
+              <span className="mt-0.5 block text-[11px] leading-tight font-semibold">
                 {MATERI_META[m].nama}
               </span>
             </button>
           ))}
         </div>
-        <p className="mt-2 text-xs leading-relaxed text-ink/50">
+        <p className="mt-2 text-xs leading-relaxed font-medium text-ink/60">
           {MATERI_META[materi].deskripsi}
         </p>
       </section>
 
       <section aria-label="Pilih topik">
-        <h2 className="mb-2 text-sm font-bold text-ink/70">
+        <h2 className="mb-2 font-display text-base font-extrabold">
           Pilih topik {materi}
         </h2>
         <div className="flex flex-col gap-2">
@@ -150,32 +159,51 @@ function TopicRow({
       padding="none"
       className={cx(
         'flex flex-col gap-3 p-4',
-        featured && 'border-primary-600/40 bg-primary-50/50',
+        featured && MATERI_FEATURED[materi],
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="flex items-center gap-2 text-sm font-bold">
+          <p className="flex items-center gap-2 text-sm font-extrabold">
             <TargetIcon
               width={16}
               height={16}
               className={cx(
                 'shrink-0',
-                materi === 'TWK'
-                  ? 'text-twk'
-                  : materi === 'TIU'
-                    ? 'text-tiu'
-                    : 'text-tkp',
+                featured
+                  ? 'text-white'
+                  : materi === 'TWK'
+                    ? 'text-twk'
+                    : materi === 'TIU'
+                      ? 'text-tiu'
+                      : 'text-tkp',
               )}
             />
             <span className="leading-snug">{title}</span>
           </p>
           {subtitle && (
-            <p className="mt-0.5 text-xs text-ink/50">{subtitle}</p>
+            <p
+              className={cx(
+                'mt-0.5 text-xs font-medium',
+                featured ? 'text-white/80' : 'text-ink/60',
+              )}
+            >
+              {subtitle}
+            </p>
           )}
-          <p className="mt-1.5 text-xs text-ink/60">
+          <p
+            className={cx(
+              'mt-1.5 text-xs font-medium',
+              featured ? 'text-white/85' : 'text-ink/60',
+            )}
+          >
             {total} soal · {dijawab} sudah dijawab ·{' '}
-            <span className="font-bold text-primary-700">
+            <span
+              className={cx(
+                'font-extrabold',
+                featured ? 'text-white' : 'text-primary-700',
+              )}
+            >
               {baru} baru
             </span>
           </p>
@@ -190,13 +218,14 @@ function TopicRow({
       <ProgressBar
         value={dijawab}
         max={total}
-        tone={MATERI_TONE[materi]}
+        tone={featured ? 'amber' : MATERI_TONE[materi]}
         label={`Progres ${title}`}
+        className={featured ? 'bg-white/25' : undefined}
       />
 
       <Button
         size="sm"
-        variant={featured ? 'primary' : 'outline'}
+        variant={featured ? 'secondary' : 'outline'}
         onClick={onStart}
         disabled={total === 0}
         className="self-start"

@@ -22,15 +22,15 @@ import { cx } from '../lib/utils'
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
 const MATERI_HEADER: Record<Materi, string> = {
-  TWK: 'border-twk/25 bg-twk-soft',
-  TIU: 'border-tiu/25 bg-tiu-soft',
-  TKP: 'border-tkp/25 bg-tkp-soft',
+  TWK: 'border-ink bg-twk text-white',
+  TIU: 'border-ink bg-tiu text-white',
+  TKP: 'border-ink bg-tkp text-white',
 }
 
-const MATERI_TEXT: Record<Materi, string> = {
-  TWK: 'text-twk',
-  TIU: 'text-tiu',
-  TKP: 'text-tkp',
+const MATERI_CHIP: Record<Materi, string> = {
+  TWK: 'bg-twk',
+  TIU: 'bg-tiu',
+  TKP: 'bg-tkp',
 }
 
 function DocCard({ doc, readSections }: { doc: MateriDoc; readSections: string[] }) {
@@ -39,21 +39,32 @@ function DocCard({ doc, readSections }: { doc: MateriDoc; readSections: string[]
 
   return (
     <Link to={`/belajar/${doc.id}`}>
-      <Card className="transition-colors hover:border-primary-300">
+      <Card className="transition-transform hover:-translate-y-0.5">
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="font-display font-bold leading-snug">{doc.judul}</h3>
-            <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink/60">
-              {doc.deskripsi}
-            </p>
+          <div className="flex min-w-0 items-start gap-3">
+            <span
+              className={cx(
+                'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-ink font-display text-xs font-extrabold text-white shadow-sticker-sm',
+                MATERI_CHIP[doc.materi],
+              )}
+              aria-hidden="true"
+            >
+              {doc.materi}
+            </span>
+            <div className="min-w-0">
+              <h3 className="font-display font-extrabold leading-snug">{doc.judul}</h3>
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink/60">
+                {doc.deskripsi}
+              </p>
+            </div>
           </div>
           <ChevronRightIcon
             width={20}
             height={20}
-            className="mt-0.5 shrink-0 text-ink/30"
+            className="mt-0.5 shrink-0 text-ink/50"
           />
         </div>
-        <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium text-ink/50">
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-ink/60">
           <span>{doc.sections.length} seksi</span>
           <span aria-hidden="true">·</span>
           <span>{formatKata(doc.kata)}</span>
@@ -73,7 +84,7 @@ function DocCard({ doc, readSections }: { doc: MateriDoc; readSections: string[]
             tone={MATERI_TONE[doc.materi]}
             label={`Progres baca ${doc.judul}`}
           />
-          <span className="shrink-0 text-xs font-bold text-ink/60">
+          <span className="shrink-0 text-xs font-extrabold text-ink/60">
             {progress.percent}%
           </span>
         </div>
@@ -88,12 +99,15 @@ export function BelajarPage() {
   return (
     <div className="flex flex-col gap-6">
       <header>
-        <h1 className="text-2xl font-bold">Belajar</h1>
+        <p className="font-script text-2xl leading-none text-primary-700">
+          baca dikit-dikit, lama-lama lolos
+        </p>
+        <h1 className="mt-1 font-display text-3xl font-extrabold">Belajar</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
           Materi SKD terstruktur per dokumen. Baca seksi materi untuk
           mengumpulkan XP — 5 XP per seksi yang selesai dibaca.
         </p>
-        <p className="mt-2 text-xs font-semibold text-ink/50">
+        <p className="mt-2 text-xs font-bold text-ink/60">
           {TOTAL_DOKUMEN} dokumen · {TOTAL_SECTIONS} seksi ·{' '}
           {TOTAL_KATA.toLocaleString('id-ID')} kata
         </p>
@@ -107,38 +121,36 @@ export function BelajarPage() {
           <section key={materi}>
             <div
               className={cx(
-                'mb-3 rounded-2xl border p-4',
+                'mb-3 rounded-3xl border-2 p-4 shadow-sticker',
                 MATERI_HEADER[materi],
               )}
             >
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <span
-                    className={cx('font-display text-lg font-bold', MATERI_TEXT[materi])}
-                  >
+                  <span className="font-display text-xl font-extrabold">
                     {materi}
                   </span>
                   <Badge tone={MATERI_TONE[materi]}>
                     {MATERI_META[materi].nama}
                   </Badge>
                 </div>
-                <span className="shrink-0 text-xs font-bold text-ink/60">
+                <span className="shrink-0 rounded-full border-2 border-white/40 bg-white/15 px-2.5 py-0.5 text-xs font-extrabold">
                   {progress.percent}% dibaca
                 </span>
               </div>
-              <p className="mt-1 text-sm leading-relaxed text-ink/60">
+              <p className="mt-1 text-sm leading-relaxed text-white/85">
                 {MATERI_META[materi].deskripsi}
               </p>
-              <p className="mt-2 text-xs font-medium text-ink/50">
+              <p className="mt-2 text-xs font-semibold text-white/75">
                 {docs.length} dokumen · {progress.total} seksi ·{' '}
                 {formatKata(totalKata)}
               </p>
               <ProgressBar
                 value={progress.read}
                 max={progress.total}
-                tone={MATERI_TONE[materi]}
+                tone="amber"
                 label={`Progres baca ${materi}`}
-                className="mt-2.5"
+                className="mt-2.5 bg-white/25"
               />
             </div>
             <div className="flex flex-col gap-3">

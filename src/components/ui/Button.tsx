@@ -13,18 +13,20 @@ export interface ButtonProps
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-sm',
+    'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800',
   secondary:
     'bg-accent-500 text-ink hover:bg-accent-400 active:bg-accent-600',
   outline:
-    'border border-ink/15 bg-white text-ink hover:border-primary-600 hover:text-primary-700',
-  ghost: 'text-primary-700 hover:bg-primary-50',
+    'bg-white text-ink hover:bg-primary-50 hover:text-primary-700',
+  // Ghost: tanpa border & shadow (override base via tailwind-merge).
+  ghost:
+    'border-transparent bg-transparent text-primary-700 shadow-none hover:bg-primary-50 active:translate-x-0 active:translate-y-0',
 }
 
 const SIZES: Record<ButtonSize, string> = {
-  sm: 'rounded-lg px-3 py-1.5 text-sm',
-  md: 'rounded-xl px-4 py-2.5 text-sm',
-  lg: 'rounded-xl px-5 py-3 text-base',
+  sm: 'px-3 py-1.5 text-sm',
+  md: 'px-4 py-2.5 text-sm',
+  lg: 'px-5 py-3 text-base',
 }
 
 export function Button({
@@ -39,7 +41,8 @@ export function Button({
     <button
       type={type}
       className={cx(
-        'inline-flex items-center justify-center gap-2 font-semibold transition-colors',
+        'inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink font-semibold shadow-sticker-sm transition-all duration-100',
+        'active:translate-x-[2px] active:translate-y-[2px] active:shadow-none',
         'disabled:pointer-events-none disabled:opacity-50',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
         VARIANTS[variant],

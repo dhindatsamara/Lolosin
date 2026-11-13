@@ -84,10 +84,10 @@ export function SectionDetailPage() {
             </Badge>
           )}
         </div>
-        <h1 className="mt-2 text-2xl font-bold leading-snug">
+        <h1 className="mt-2 font-display text-3xl leading-tight font-extrabold">
           {section.judul}
         </h1>
-        <p className="mt-1 text-sm text-ink/50">
+        <p className="mt-1 text-sm font-medium text-ink/60">
           Seksi {nav.index + 1} dari {nav.total} · {formatKata(section.kata)}{' '}
           · {formatDurasi(estimasiBacaMenit(section.kata))} baca
         </p>
@@ -98,7 +98,7 @@ export function SectionDetailPage() {
             tone={MATERI_TONE[doc.materi]}
             label={`Progres baca ${doc.judul}`}
           />
-          <span className="shrink-0 text-xs font-bold text-ink/60">
+          <span className="shrink-0 text-xs font-extrabold text-ink/60">
             {progress.percent}%
           </span>
         </div>
@@ -115,7 +115,7 @@ export function SectionDetailPage() {
       {/* Tandai selesai dibaca */}
       <div>
         {isRead ? (
-          <p className="flex items-center justify-center gap-2 rounded-xl bg-primary-50 px-4 py-3 text-sm font-semibold text-primary-700">
+          <p className="flex items-center justify-center gap-2 rounded-xl border-2 border-primary-600 bg-primary-100 px-4 py-3 text-sm font-bold text-primary-700">
             <CheckIcon width={16} height={16} />
             Sudah dibaca · +{XP_SECTION_READ} XP didapat
           </p>
@@ -135,34 +135,34 @@ export function SectionDetailPage() {
         {nav.prev ? (
           <Link
             to={`/belajar/${doc.id}/${nav.prev.id}`}
-            className="rounded-2xl border border-ink/10 bg-white p-3 transition-colors hover:border-primary-300"
+            className="rounded-2xl border-2 border-ink bg-white p-3 shadow-sticker-sm transition-transform hover:-translate-y-px"
           >
-            <span className="text-xs font-semibold text-ink/50">
+            <span className="text-xs font-bold text-ink/60">
               ← Sebelumnya
             </span>
-            <span className="mt-0.5 block truncate text-sm font-bold">
+            <span className="mt-0.5 block truncate text-sm font-extrabold">
               {nav.prev.judul}
             </span>
           </Link>
         ) : (
-          <span className="rounded-2xl border border-ink/5 bg-white/50 p-3 text-xs font-medium text-ink/30">
+          <span className="rounded-2xl border-2 border-dashed border-ink/25 bg-paper p-3 text-xs font-semibold text-ink/60">
             Ini seksi pertama
           </span>
         )}
         {nav.next ? (
           <Link
             to={`/belajar/${doc.id}/${nav.next.id}`}
-            className="rounded-2xl border border-ink/10 bg-white p-3 text-right transition-colors hover:border-primary-300"
+            className="rounded-2xl border-2 border-ink bg-white p-3 text-right shadow-sticker-sm transition-transform hover:-translate-y-px"
           >
-            <span className="text-xs font-semibold text-ink/50">
+            <span className="text-xs font-bold text-ink/60">
               Berikutnya →
             </span>
-            <span className="mt-0.5 block truncate text-sm font-bold">
+            <span className="mt-0.5 block truncate text-sm font-extrabold">
               {nav.next.judul}
             </span>
           </Link>
         ) : (
-          <span className="rounded-2xl border border-ink/5 bg-white/50 p-3 text-right text-xs font-medium text-ink/30">
+          <span className="rounded-2xl border-2 border-dashed border-ink/25 bg-paper p-3 text-right text-xs font-semibold text-ink/60">
             Ini seksi terakhir
           </span>
         )}
@@ -183,7 +183,7 @@ export function SectionDetailPage() {
           showToast ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0',
         )}
       >
-        <p className="rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white shadow-lg">
+        <p className="rounded-full border-2 border-ink bg-ink px-4 py-2.5 text-sm font-bold text-white shadow-sticker-amber">
           +{XP_SECTION_READ} XP · Seksi ditandai sudah dibaca
         </p>
       </div>

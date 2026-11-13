@@ -38,7 +38,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-ink/10 bg-paper p-4">
+    <div className="flex flex-col gap-3 rounded-2xl border-2 border-ink bg-accent-50 p-4 shadow-sticker-sm">
       {/* Ringkasan hasil pilihan */}
       {selected !== undefined && (
         <p
@@ -61,7 +61,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
 
       {/* Verdict per opsi */}
       <div>
-        <p className="mb-2 text-xs font-bold tracking-wide text-ink/50 uppercase">
+        <p className="mb-2 text-xs font-extrabold tracking-wide text-ink/60 uppercase">
           {isTkp ? 'Nilai tiap opsi' : 'Jawaban tiap opsi'}
         </p>
         <ul className="flex flex-col gap-1.5">
@@ -73,12 +73,12 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
               <li
                 key={opsi}
                 className={cx(
-                  'flex items-start gap-2 rounded-lg px-2.5 py-1.5 text-sm',
+                  'flex items-start gap-2 rounded-xl border-2 px-2.5 py-1.5 text-sm',
                   isKunci
-                    ? 'bg-primary-100/70'
+                    ? 'border-primary-600 bg-primary-100'
                     : isPilihan
-                      ? 'bg-red-50'
-                      : 'bg-white/60',
+                      ? 'border-red-500 bg-red-50'
+                      : 'border-ink/10 bg-white',
                 )}
               >
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ink/5 text-xs font-bold">
@@ -89,8 +89,8 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
                 </span>
                 <span
                   className={cx(
-                    'flex shrink-0 items-center gap-1 text-xs font-bold',
-                    isKunci ? 'text-primary-700' : 'text-ink/50',
+                    'flex shrink-0 items-center gap-1 text-xs font-extrabold',
+                    isKunci ? 'text-primary-700' : 'text-ink/60',
                   )}
                 >
                   {isTkp ? (
@@ -114,8 +114,8 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
       </div>
 
       {/* Pembahasan */}
-      <div className="border-t border-ink/10 pt-3">
-        <p className="mb-1.5 text-xs font-bold tracking-wide text-ink/50 uppercase">
+      <div className="border-t-2 border-dashed border-ink/20 pt-3">
+        <p className="mb-1.5 text-xs font-extrabold tracking-wide text-ink/60 uppercase">
           Pembahasan
         </p>
         {pembahasan ? (
