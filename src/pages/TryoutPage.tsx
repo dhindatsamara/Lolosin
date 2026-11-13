@@ -32,6 +32,7 @@ import {
   completeTryout,
   recordDailyActivity,
 } from '../lib/gamification'
+import { recordAnswer } from '../lib/review'
 import { cx } from '../lib/utils'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -130,6 +131,13 @@ export function TryoutPage() {
       const score = scoreTryout(qs, ans)
       completeTryout(score)
       markSeen(qs.map((q) => q.id))
+      // Catat tiap jawaban untuk antrean ulas + tally per subtopik.
+      // Benar = jawaban sama dengan kunci (TKP: opsi terbaik); soal
+      // kosong dihitung salah.
+      for (const q of qs) {
+        const answer = ans[q.id]
+        recordAnswer(q, answer !== undefined && answer === q.kunci)
+      }
       const state: TryoutResultState = {
         score,
         questions: qs,

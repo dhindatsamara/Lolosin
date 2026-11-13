@@ -10,11 +10,13 @@ import {
   type TryoutScore,
 } from '../lib/quiz'
 import { cx } from '../lib/utils'
+import { useStore } from '../lib/store'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { Mascot } from '../components/Mascot'
+import { PredictionPanel } from '../components/PredictionPanel'
 import { CheckIcon } from '../components/icons'
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
@@ -95,6 +97,7 @@ function normalize(state: unknown): NormalizedResult | null {
 export function TryoutHasilPage() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { tryoutHistory } = useStore()
   const result = normalize(location.state)
 
   if (!result) {
@@ -278,6 +281,9 @@ export function TryoutHasilPage() {
           </div>
         </section>
       )}
+
+      {/* Perkiraan kelolosan dari riwayat tryout (termasuk yang baru selesai) */}
+      <PredictionPanel history={tryoutHistory} />
 
       <div className="flex flex-col gap-2">
         <Button size="lg" fullWidth onClick={() => navigate('/tryout')}>

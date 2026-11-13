@@ -55,6 +55,7 @@ function Confetti() {
 /** Confetti hanya untuk momen besar. */
 function withConfetti(celebration: Celebration): boolean {
   if (celebration.kind === 'levelUp') return true
+  if (celebration.kind === 'reviewDone') return true
   if (celebration.kind === 'badge') {
     return celebration.firstBadge || celebration.badge.id === 'lulus-tryout'
   }
@@ -99,6 +100,23 @@ function CelebrationBody({ celebration }: { celebration: Celebration }) {
             Nice! Lencana pertama kamu kebuka.
           </p>
         )}
+      </>
+    )
+  }
+  if (celebration.kind === 'reviewDone') {
+    return (
+      <>
+        <Mascot mood="semangat" size={72} className="mx-auto" />
+        <p className="mt-2 font-script text-2xl leading-none text-primary-700">
+          antrean ulas beres!
+        </p>
+        <h2 className="mt-1 font-display text-2xl leading-tight font-extrabold">
+          Semua ulasan hari ini selesai!
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed font-medium text-ink/70">
+          Soal-soal yang dulu salah sekarang makin nempel. Besok cek lagi
+          ya, siapa tahu ada yang jatuh tempo.
+        </p>
       </>
     )
   }

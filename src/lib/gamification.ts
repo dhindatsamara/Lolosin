@@ -12,6 +12,7 @@
 import { checkNewBadges, type BadgeDef } from './badges'
 import { getDailyMissions, type MissionKind } from './missions'
 import { getRankTitle } from './ranks'
+import { reviewCountDue } from './review'
 import type { Materi } from './questions'
 import type { TryoutScore } from './quiz'
 import {
@@ -38,6 +39,7 @@ export type Celebration =
   | { kind: 'levelUp'; level: number; rankTitle: string }
   | { kind: 'badge'; badge: BadgeDef; firstBadge: boolean }
   | { kind: 'streak'; streak: number }
+  | { kind: 'reviewDone' }
 
 export interface CelebrationItem {
   id: number
@@ -166,14 +168,29 @@ export function recordDailyActivity(date = new Date()): {
 }
 
 /**
- * Jawaban drill benar: +10 XP (aturan lama), hitung jawaban benar,
- * majukan misi "jawab N soal benar". Lencana dicek saat drill selesai.
+ * Satu jawaban benar (drill maupun ulasan): +10 XP (aturan lama),
+ * hitung jawaban benar, majukan misi "jawab N soal benar".
+ * Lencana dicek saat sesi selesai.
  */
-export function recordDrillCorrect(): void {
+function recordCorrectAnswer(): void {
   const { stats } = getStore()
   addXp(XP_DRILL_CORRECT)
   updateStats({ correctAnswers: stats.correctAnswers + 1 })
   bumpMission('benar')
+}
+
+/** Jawaban drill benar: +10 XP, hitung jawaban benar, majukan misi. */
+export function recordDrillCorrect(): void {
+  recordCorrectAnswer()
+}
+
+/**
+ * Jawaban ulasan benar: sama seperti drill (+10 XP, `XP_DRILL_CORRECT`),
+ * karena ulasan adalah jawaban benar juga. Jadwal ulasnya sendiri
+ * dimajukan oleh `answerReview` di `lib/review.ts`.
+ */
+export function recordReviewCorrect(): void {
+  recordCorrectAnswer()
 }
 
 /**
@@ -201,6 +218,22 @@ export function completeDrill(
   checkLevelUp(xpBefore)
   recordDailyActivity()
   checkBadges()
+}
+
+/**
+ * Sesi ulas selesai: tidak ada bonus XP selesai sesi (XP ulasan hanya
+ * +10 per jawaban benar), tapi catat aktivitas, cek naik level dan
+ * lencana (termasuk Pantang Menyerah), lalu rayakan bila antrean
+ * ulas hari ini sudah habis.
+ */
+export function completeReview(): void {
+  const xpBefore = getStore().xp
+  checkLevelUp(xpBefore)
+  recordDailyActivity()
+  checkBadges()
+  if (reviewCountDue(todayMakassar()) === 0) {
+    pushCelebration({ kind: 'reviewDone' })
+  }
 }
 
 /**

@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -8,10 +9,12 @@ import { BadgeShowcase } from '../components/gamifikasi/BadgeShowcase'
 import { DailyMissions } from '../components/gamifikasi/DailyMissions'
 import { WeekStreak } from '../components/gamifikasi/WeekStreak'
 import { Mascot } from '../components/Mascot'
+import { PredictionPanel } from '../components/PredictionPanel'
 import {
   BookIcon,
   CheckIcon,
   ChevronRightIcon,
+  ClockIcon,
   FlameIcon,
   TargetIcon,
   TrophyIcon,
@@ -34,10 +37,13 @@ import {
   TOTAL_QUIZABLE,
 } from '../lib/questions'
 import {
+  DRILL_DEFAULT_COUNT,
   TRYOUT_MAX_PER_SECTION,
   TRYOUT_PASSING_MINI,
   TRYOUT_QUESTIONS_PER_SECTION,
 } from '../lib/quiz'
+import { todayFocus } from '../lib/plan'
+import { REVIEW_SESSION_MAX, reviewCountDue } from '../lib/review'
 import {
   getLevel,
   MAKASSAR_TIME_ZONE,
@@ -114,8 +120,23 @@ const AKSI_CEPAT = [
 ] as const
 
 export function HomePage() {
-  const { xp, streak, lastActivityDate, seenQuestionIds, readSections, tryoutHistory } =
-    useStore()
+  const {
+    xp,
+    streak,
+    lastActivityDate,
+    seenQuestionIds,
+    readSections,
+    tryoutHistory,
+    reviewQueue,
+    topicStats,
+  } = useStore()
+  const navigate = useNavigate()
+  // reviewCountDue dan todayFocus membaca store langsung, jadi
+  // dihitung ulang hanya saat antrean atau tally berubah.
+  const jumlahUlas = useMemo(() => reviewCountDue(), [reviewQueue])
+  const fokus = useMemo(() => todayFocus(), [topicStats])
+  const terlemah = fokus.weakest
+  const belumDicoba = fokus.untried[0]
   const level = getLevel(xp)
   const rankTitle = getRankTitle(level)
   const progress = xpProgress(xp)
@@ -234,6 +255,139 @@ export function HomePage() {
       {/* Streak mingguan + misi harian */}
       <WeekStreak />
       <DailyMissions />
+
+      {/* Ulas soal salah: soal yang jatuh tempo hari ini */}
+      <Card className="p-5">
+        <div className="flex items-start gap-3">
+          <span
+            className={cx(
+              'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-ink',
+              jumlahUlas > 0
+                ? 'bg-accent-400 text-ink'
+                : 'bg-primary-100 text-primary-700',
+            )}
+          >
+            {jumlahUlas > 0 ? (
+              <ClockIcon width={20} height={20} />
+            ) : (
+              <CheckIcon width={20} height={20} />
+            )}
+          </span>
+          <div className="min-w-0 flex-1">
+            <h2 className="font-display text-lg font-extrabold">
+              Ulas soal salah
+            </h2>
+            {jumlahUlas > 0 ? (
+              <>
+                <p className="mt-0.5 text-sm leading-relaxed font-medium text-ink/70">
+                  Soal yang perlu diulas hari ini:{' '}
+                  <span className="font-extrabold text-ink">
+                    {jumlahUlas} soal
+                  </span>
+                </p>
+                <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+                  Soal yang pernah salah dijawab, muncul lagi biar makin
+                  nempel. Satu sesi ulas {REVIEW_SESSION_MAX} soal.
+                </p>
+                <Link to="/latihan/ulas" className="mt-3 inline-block">
+                  <Button size="sm" variant="secondary">
+                    Mulai ulas
+                    <ChevronRightIcon width={16} height={16} />
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <p className="mt-0.5 text-sm leading-relaxed font-medium text-ink/70">
+                Belum ada yang perlu diulas, lanjutkan belajarmu.
+              </p>
+            )}
+          </div>
+        </div>
+      </Card>
+
+      {/* Fokus hari ini: subtopik terlemah + aksi drill dan saran baca */}
+      <section aria-label="Fokus hari ini">
+        <div className="mb-3">
+          <p className="font-script text-2xl leading-none text-primary-700">
+            biar belajarmu nggak ngawang
+          </p>
+          <h2 className="mt-1 font-display text-xl font-extrabold">
+            Fokus hari ini
+          </h2>
+        </div>
+        <Card className="p-5">
+          {terlemah ? (
+            <>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge tone={MATERI_TONE[terlemah.materi]}>
+                  {terlemah.materi}
+                </Badge>
+                <span className="text-sm font-semibold text-ink/70">
+                  {MATERI_META[terlemah.materi].nama}
+                </span>
+              </div>
+              <p className="mt-2 font-display text-lg leading-snug font-extrabold">
+                {terlemah.subtopik}
+              </p>
+              <p className="mt-0.5 text-sm leading-relaxed font-medium text-ink/70">
+                {terlemah.correct} benar dari {terlemah.total} soal (
+                {Math.round(terlemah.accuracy * 100)}%). Topik ini yang
+                paling sering bikin kamu salah, gas kejar yuk.
+              </p>
+              <ProgressBar
+                value={terlemah.correct}
+                max={terlemah.total}
+                tone={MATERI_TONE[terlemah.materi]}
+                label={`Akurasi ${terlemah.subtopik}`}
+                className="mt-2"
+              />
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  onClick={() =>
+                    navigate('/latihan/jalan', {
+                      state: {
+                        materi: terlemah.materi,
+                        subtopik: terlemah.subtopik,
+                      },
+                    })
+                  }
+                >
+                  <TargetIcon width={16} height={16} />
+                  Drill {DRILL_DEFAULT_COUNT} soal topik ini
+                </Button>
+                <Link to="/belajar">
+                  <Button size="sm" variant="outline">
+                    <BookIcon width={16} height={16} />
+                    Baca materi {terlemah.materi}
+                  </Button>
+                </Link>
+              </div>
+              {belumDicoba && (
+                <p className="mt-3 border-t-2 border-dashed border-ink/10 pt-3 text-xs leading-relaxed font-medium text-ink/60">
+                  Belum dicoba: {belumDicoba.materi}{' '}
+                  {belumDicoba.subtopik} ({belumDicoba.questionCount}{' '}
+                  soal). Siapa tahu jadi andalanmu berikutnya.
+                </p>
+              )}
+            </>
+          ) : (
+            <div className="text-center">
+              <Mascot mood="semangat" size={64} className="mx-auto" />
+              <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed font-medium text-ink/70">
+                Ikut drill atau tryout mini dulu, nanti aku susun fokus
+                belajarmu.
+              </p>
+              <Link to="/latihan" className="mt-3 inline-block">
+                <Button size="sm">
+                  Mulai latihan
+                  <ChevronRightIcon width={16} height={16} />
+                </Button>
+              </Link>
+            </div>
+          )}
+        </Card>
+      </section>
 
       {/* Lanjutkan belajar: kartu amber kontras tinggi (teks gelap) */}
       <Card className="border-ink bg-accent-400 p-5 text-ink">
@@ -460,6 +614,9 @@ export function HomePage() {
           </Card>
         )}
       </section>
+
+      {/* Perkiraan kelolosan, ringkas (empty state bila belum tryout) */}
+      <PredictionPanel history={tryoutHistory} compact />
 
       {/* Lencana pencapaian */}
       <BadgeShowcase />

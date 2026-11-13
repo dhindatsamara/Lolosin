@@ -16,6 +16,7 @@
  * ikut berubah saat store berubah.
  */
 import { useSyncExternalStore } from 'react'
+import type { Materi } from './questions'
 
 export const STORE_KEY = 'lolosin:v1'
 export const MAKASSAR_TIME_ZONE = 'Asia/Makassar'
@@ -69,6 +70,27 @@ export interface GameStats {
   correctAnswers: number
   /** Materi yang pernah dicoba lewat drill atau baca: TWK/TIU/TKP. */
   materiTried: string[]
+  /** Jumlah jawaban benar saat ulasan (drill biasa yang menjawab soal antrean ikut terhitung). */
+  reviewsCorrect: number
+}
+
+/** Satu soal yang masuk antrean ulas (spaced repetition). */
+export interface ReviewEntry {
+  questionId: string
+  materi: Materi
+  subtopik: string
+  /** Tanggal jatuh tempo ulasan, YYYY-MM-DD (Asia/Makassar). */
+  due: string
+  /** Interval saat ini dalam hari: 1, 3, 7, 14, atau 30. */
+  intervalDays: number
+  /** Jumlah jawaban benar beruntun di ulasan. */
+  streakCorrect: number
+}
+
+/** Tally jawaban per subtopik: kunci gabungan "MATERI|Subtopik". */
+export interface TopicStat {
+  correct: number
+  total: number
 }
 
 export interface StoreState {
@@ -87,6 +109,10 @@ export interface StoreState {
   missions: MissionProgressState
   /** Statistik kumulatif gamifikasi. */
   stats: GameStats
+  /** Antrean ulas soal yang pernah salah (Fase 3). */
+  reviewQueue: ReviewEntry[]
+  /** Tally benar/total per subtopik (Fase 3). */
+  topicStats: Record<string, TopicStat>
 }
 
 function freshState(): StoreState {
@@ -105,7 +131,10 @@ function freshState(): StoreState {
       drillsPerfect: 0,
       correctAnswers: 0,
       materiTried: [],
+      reviewsCorrect: 0,
     },
+    reviewQueue: [],
+    topicStats: {},
   }
 }
 
@@ -247,11 +276,44 @@ function loadFromStorage(): StoreState {
       if (typeof s.correctAnswers === 'number') {
         state.stats.correctAnswers = s.correctAnswers
       }
+      if (typeof s.reviewsCorrect === 'number') {
+        state.stats.reviewsCorrect = s.reviewsCorrect
+      }
       if (Array.isArray(s.materiTried)) {
         state.stats.materiTried = s.materiTried.filter(
           (m): m is string => typeof m === 'string',
         )
       }
+    }
+    if (Array.isArray(parsed.reviewQueue)) {
+      state.reviewQueue = parsed.reviewQueue.filter(
+        (e): e is ReviewEntry =>
+          typeof e === 'object' &&
+          e !== null &&
+          typeof e.questionId === 'string' &&
+          (e.materi === 'TWK' || e.materi === 'TIU' || e.materi === 'TKP') &&
+          typeof e.subtopik === 'string' &&
+          typeof e.due === 'string' &&
+          typeof e.intervalDays === 'number' &&
+          typeof e.streakCorrect === 'number',
+      )
+    }
+    if (
+      typeof parsed.topicStats === 'object' &&
+      parsed.topicStats !== null
+    ) {
+      const topicStats: Record<string, TopicStat> = {}
+      for (const [k, v] of Object.entries(parsed.topicStats)) {
+        if (
+          typeof v === 'object' &&
+          v !== null &&
+          typeof v.correct === 'number' &&
+          typeof v.total === 'number'
+        ) {
+          topicStats[k] = { correct: v.correct, total: v.total }
+        }
+      }
+      state.topicStats = topicStats
     }
   } catch {
     // localStorage tidak tersedia / data rusak: mulai dari state kosong.
@@ -396,6 +458,35 @@ export function recordTryout(
 export function updateStats(patch: Partial<GameStats>): GameStats {
   const state = getStore()
   return update({ stats: { ...state.stats, ...patch } }).stats
+}
+
+/** Ganti seluruh antrean ulas (dipakai `lib/review.ts`). */
+export function setReviewQueue(queue: ReviewEntry[]): ReviewEntry[] {
+  return update({ reviewQueue: queue }).reviewQueue
+}
+
+/**
+ * Tambah satu hasil jawaban ke tally per subtopik. Kunci gabungan
+ * "MATERI|Subtopik", dipanggil dari pencatatan jawaban (drill, tryout,
+ * dan ulasan) supaya ketiganya terhitung.
+ */
+export function bumpTopicStat(
+  materi: Materi,
+  subtopik: string,
+  correct: boolean,
+): void {
+  const state = getStore()
+  const key = `${materi}|${subtopik}`
+  const prev = state.topicStats[key] ?? { correct: 0, total: 0 }
+  update({
+    topicStats: {
+      ...state.topicStats,
+      [key]: {
+        correct: prev.correct + (correct ? 1 : 0),
+        total: prev.total + 1,
+      },
+    },
+  })
 }
 
 /**

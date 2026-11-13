@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { isMateri, type Materi, type Opsi } from '../lib/questions'
+import {
+  getQuestionById,
+  isMateri,
+  type Materi,
+  type Opsi,
+  type Question,
+} from '../lib/questions'
 import {
   DRILL_DEFAULT_COUNT,
   pickDrillQuestions,
@@ -11,15 +17,25 @@ import {
 import {
   getStore,
   markSeen,
+  todayMakassar,
   XP_DRILL_COMPLETE,
   XP_DRILL_CORRECT,
 } from '../lib/store'
 import {
   completeDrill,
+  completeReview,
   recordDailyActivity,
   recordDrillCorrect,
+  recordReviewCorrect,
 } from '../lib/gamification'
+import {
+  answerReview,
+  dueReviews,
+  recordAnswer,
+  REVIEW_SESSION_MAX,
+} from '../lib/review'
 import { cx } from '../lib/utils'
+import { Mascot } from '../components/Mascot'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -34,12 +50,31 @@ interface DrillState {
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
+/** Ambil soal ulas yang jatuh tempo hari ini (maks 10, paling lama dulu). */
+function pickReviewQuestions(): DrillPick {
+  const questions = dueReviews(todayMakassar())
+    .slice(0, REVIEW_SESSION_MAX)
+    .map((entry) => getQuestionById(entry.questionId))
+    .filter((q): q is Question => q !== undefined)
+  return { questions, rotated: false }
+}
+
 /**
  * Sesi drill 10 soal: satu soal per layar, feedback langsung setelah
  * memilih, lalu pembahasan per opsi. +10 XP per jawaban benar, +50 XP
  * saat sesi selesai. Soal baru selalu didahulukan (anti-ulang).
+ *
+ * Mode `review` memakai ulang layar yang sama untuk ulasan soal yang
+ * pernah salah: soalnya dari antrean yang jatuh tempo (maks 10 per
+ * sesi), jawaban benar +10 XP tanpa bonus selesai sesi, dan jadwal
+ * ulas dimajukan lewat `answerReview`.
  */
-export function LatihanJalanPage() {
+export function LatihanJalanPage({
+  mode = 'drill',
+}: {
+  mode?: 'drill' | 'review'
+}) {
+  const isReview = mode === 'review'
   const location = useLocation()
   const navigate = useNavigate()
   const state = (location.state ?? {}) as DrillState
@@ -54,6 +89,7 @@ export function LatihanJalanPage() {
   // Soal dipilih sekali saat sesi dimulai, bukan per render, supaya
   // markSeen selama sesi tidak mengubah set soal.
   const [session, setSession] = useState<DrillPick | null>(() => {
+    if (isReview) return pickReviewQuestions()
     if (!materi) return null
     return pickDrillQuestions(
       materi,
@@ -84,7 +120,7 @@ export function LatihanJalanPage() {
     return () => clearTimeout(timer)
   }, [xpFlashKey])
 
-  if (!materi || !session) {
+  if (!isReview && (!materi || !session)) {
     return (
       <Card className="p-6 text-center">
         <p className="font-display text-lg font-bold">
@@ -100,7 +136,26 @@ export function LatihanJalanPage() {
     )
   }
 
+  if (!session) return null
+
   if (session.questions.length === 0) {
+    if (isReview) {
+      return (
+        <Card className="p-6 text-center">
+          <Mascot mood="senang" size={72} className="mx-auto" />
+          <p className="mt-2 font-display text-lg font-bold">
+            Antrean ulas hari ini sudah habis
+          </p>
+          <p className="mt-2 text-sm text-ink/60">
+            Nggak ada soal yang jatuh tempo hari ini. Soal yang pernah
+            salah bakal muncul lagi pas jadwalnya tiba.
+          </p>
+          <Link to="/latihan" className="mt-4 inline-block">
+            <Button>Ke halaman Latihan</Button>
+          </Link>
+        </Card>
+      )
+    }
     return (
       <Card className="p-6 text-center">
         <p className="font-display text-lg font-bold">
@@ -129,7 +184,18 @@ export function LatihanJalanPage() {
     setAnswers((prev) => ({ ...prev, [question.id]: opsi }))
     markSeen([question.id])
     // "Benar" = jawaban sama dengan kunci; untuk TKP berarti opsi terbaik.
-    if (opsi === question.kunci) {
+    const benar = opsi === question.kunci
+    if (isReview) {
+      answerReview(question.id, benar)
+      if (benar) {
+        recordReviewCorrect()
+        setXpEarned((xp) => xp + XP_DRILL_CORRECT)
+        setXpFlashKey((k) => k + 1)
+      }
+      return
+    }
+    recordAnswer(question, benar)
+    if (benar) {
       recordDrillCorrect()
       setXpEarned((xp) => xp + XP_DRILL_CORRECT)
       setXpFlashKey((k) => k + 1)
@@ -142,8 +208,14 @@ export function LatihanJalanPage() {
     const correctCount = questions.filter(
       (q) => answers[q.id] !== undefined && answers[q.id] === q.kunci,
     ).length
-    completeDrill(materi as Materi, correctCount, total)
-    setXpEarned((xp) => xp + XP_DRILL_COMPLETE)
+    if (isReview) {
+      // Ulas tidak dapat bonus selesai sesi; XP hanya dari jawaban benar.
+      // completeReview sekaligus merayakan bila antrean hari ini habis.
+      completeReview()
+    } else {
+      completeDrill(materi as Materi, correctCount, total)
+      setXpEarned((xp) => xp + XP_DRILL_COMPLETE)
+    }
     setFinished(true)
   }
 
@@ -157,12 +229,14 @@ export function LatihanJalanPage() {
   }
 
   function handleAgain() {
-    const fresh = pickDrillQuestions(
-      materi as Materi,
-      subtopik,
-      DRILL_DEFAULT_COUNT,
-      getStore().seenQuestionIds,
-    )
+    const fresh = isReview
+      ? pickReviewQuestions()
+      : pickDrillQuestions(
+          materi as Materi,
+          subtopik,
+          DRILL_DEFAULT_COUNT,
+          getStore().seenQuestionIds,
+        )
     setSession(fresh)
     setIndex(0)
     setAnswers({})
@@ -183,10 +257,18 @@ export function LatihanJalanPage() {
           <p className="text-4xl" aria-hidden="true">
             🎉
           </p>
-          <h1 className="mt-2 font-display text-3xl font-extrabold">Sesi selesai!</h1>
+          <h1 className="mt-2 font-display text-3xl font-extrabold">
+            {isReview ? 'Sesi ulas selesai!' : 'Sesi selesai!'}
+          </h1>
           <p className="mt-1 text-sm font-medium text-ink/60">
-            Drill {materi}
-            {subtopik ? ` · ${subtopik}` : ''}
+            {isReview ? (
+              'Ulas soal yang pernah salah'
+            ) : (
+              <>
+                Drill {materi}
+                {subtopik ? ` · ${subtopik}` : ''}
+              </>
+            )}
           </p>
         </header>
 
@@ -203,7 +285,12 @@ export function LatihanJalanPage() {
           </p>
           <p className="mt-2 text-xs font-medium text-ink/60">
             {correctCount} jawaban benar × {XP_DRILL_CORRECT} XP = {correctXp}{' '}
-            XP, plus bonus selesai {XP_DRILL_COMPLETE} XP
+            XP
+            {!isReview && (
+              <>
+                , plus bonus selesai {XP_DRILL_COMPLETE} XP
+              </>
+            )}
           </p>
         </Card>
 
@@ -255,7 +342,7 @@ export function LatihanJalanPage() {
 
         <div className="flex flex-col gap-2">
           <Button size="lg" fullWidth onClick={handleAgain}>
-            Latihan lagi (soal baru)
+            {isReview ? 'Ulas lagi' : 'Latihan lagi (soal baru)'}
           </Button>
           <Button
             size="lg"
@@ -280,19 +367,30 @@ export function LatihanJalanPage() {
           ← Akhiri sesi & pilih sesi lain
         </Link>
         <h1 className="mt-2 flex flex-wrap items-center gap-2 font-display text-3xl font-extrabold">
-          Drill {materi}
-          {subtopik && (
-            <span className="text-base font-semibold text-ink/60">
-              · {subtopik}
-            </span>
+          {isReview ? (
+            'Ulas Soal'
+          ) : (
+            <>
+              Drill {materi}
+              {subtopik && (
+                <span className="text-base font-semibold text-ink/60">
+                  · {subtopik}
+                </span>
+              )}
+            </>
           )}
         </h1>
+        {isReview && (
+          <p className="mt-1 text-sm leading-relaxed text-ink/60">
+            Soal-soal yang pernah salah, diulang pas jadwalnya supaya nempel.
+          </p>
+        )}
         <div className="mt-3 flex items-center gap-3">
           <ProgressBar
             value={answeredCount}
             max={total}
-            tone={MATERI_TONE[materi]}
-            label="Progres drill"
+            tone={isReview || !materi ? 'primary' : MATERI_TONE[materi]}
+            label={isReview ? 'Progres ulasan' : 'Progres drill'}
             className="flex-1"
           />
           <span className="shrink-0 text-xs font-extrabold whitespace-nowrap text-ink/60">

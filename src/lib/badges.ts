@@ -92,6 +92,13 @@ export const BADGES: BadgeDef[] = [
     ikon: '⭐',
     check: (s) => s.xp >= 1000,
   },
+  {
+    id: 'pantang-menyerah',
+    nama: 'Pantang Menyerah',
+    deskripsi: 'Jawab 10 ulasan dengan benar.',
+    ikon: '💪',
+    check: (s) => s.stats.reviewsCorrect >= 10,
+  },
 ]
 
 /** Cari definisi lencana berdasarkan id. */
