@@ -5,6 +5,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Deploy target: GitHub Pages project site di
+  // https://dhindatsamara.github.io/Lolosin/ — semua aset harus memakai
+  // base path /Lolosin/ (kalau pindah hosting ke root domain, hapus baris ini).
+  base: '/Lolosin/',
   plugins: [
     react(),
     tailwindcss(),
@@ -19,25 +23,25 @@ export default defineConfig({
         lang: 'id',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
-        scope: '/',
+        start_url: '/Lolosin/',
+        scope: '/Lolosin/',
         theme_color: '#0E5C43',
         background_color: '#FAF7F2',
+        // Ikon SVG (relatif terhadap manifest, jadi ikut base path).
+        // Ikon PNG (192/512/maskable) belum ada di repo — konektor GitHub
+        // hanya bisa push file teks; kalau sudah di-upload lewat web GitHub,
+        // tambahkan lagi entri PNG-nya di sini.
         icons: [
           {
-            src: '/icons/icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: 'icons/icon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any',
           },
           {
-            src: '/icons/icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: '/icons/maskable-512.png',
-            sizes: '512x512',
-            type: 'image/png',
+            src: 'icons/maskable.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
             purpose: 'maskable',
           },
         ],
@@ -45,7 +49,7 @@ export default defineConfig({
       workbox: {
         // Precache app shell + seluruh aset build, termasuk chunk bank soal.
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        // Bank soal (~2,5 MB) dibundel jadi satu chunk; naikkan batas
+        // Bank soal (~7,3 MB) dibundel jadi satu chunk; naikkan batas
         // default workbox (2 MB) agar chunk itu ikut ter-precache.
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       },

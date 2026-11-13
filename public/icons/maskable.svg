@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Ikon maskable Lolosin: latar full-bleed, isi di dalam safe zone 80%
+       (tengah) supaya tidak terpotong mask bulat/kotak launcher. -->
+  <rect width="512" height="512" fill="#0E5C43"/>
+  <g transform="translate(51.2 51.2) scale(0.8)">
+    <g fill="#FFFFFF">
+      <rect x="148" y="118" width="88" height="276" rx="16"/>
+      <rect x="148" y="306" width="208" height="88" rx="16"/>
+    </g>
+    <path d="M292 316 L332 356 L424 258" fill="none" stroke="#F59E0B" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

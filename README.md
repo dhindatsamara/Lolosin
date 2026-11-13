@@ -22,6 +22,24 @@ npm run build      # type-check (tsc) + build production ke dist/
 npm run preview    # sajikan hasil build lokal
 ```
 
+## Deploy (GitHub Pages)
+
+Live di **https://dhindatsamara.github.io/Lolosin/**. Setiap push ke `main`
+otomatis men-deploy lewat `.github/workflows/deploy.yml` (build Vite →
+upload `dist/` → GitHub Pages). Prasyarat sekali saja: repo Settings →
+Pages → Build and deployment → Source: **GitHub Actions**.
+
+Karena ini project site (bukan root domain), `vite.config.ts` memakai
+`base: '/Lolosin/'` — semua path aset, manifest `start_url`/`scope`, dan
+service worker mengikuti base itu. Kalau pindah hosting ke root domain,
+hapus `base` dan kembalikan `start_url`/`scope` ke `/`.
+
+Ikon PWA saat ini memakai SVG (`public/icons/icon.svg`,
+`maskable.svg`) karena konektor GitHub hanya bisa push file teks — ikon
+PNG (`icon-192.png`, `icon-512.png`, `maskable-512.png`) bisa di-upload
+manual lewat web GitHub, lalu entri PNG-nya ditambahkan lagi ke manifest
+di `vite.config.ts`.
+
 ## Struktur proyek
 
 ```

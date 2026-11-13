@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Ikon Lolosin: huruf L putih + centang amber di hijau tua.
+       Versi SVG dari ikon PNG (public/icons/icon-192.png dll) — dipakai
+       manifest PWA sampai ikon PNG di-upload ke repo. -->
+  <rect width="512" height="512" fill="#0E5C43"/>
+  <!-- Huruf L -->
+  <g fill="#FFFFFF">
+    <rect x="148" y="118" width="88" height="276" rx="16"/>
+    <rect x="148" y="306" width="208" height="88" rx="16"/>
+  </g>
+  <!-- Centang amber -->
+  <path d="M292 316 L332 356 L424 258" fill="none" stroke="#F59E0B" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
