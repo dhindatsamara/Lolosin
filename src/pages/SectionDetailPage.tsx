@@ -18,12 +18,8 @@ import {
   getTabelForSection,
   stripTabelContoh,
 } from '../lib/materi'
-import {
-  markRead,
-  recordActivity,
-  useStore,
-  XP_SECTION_READ,
-} from '../lib/store'
+import { useStore, XP_SECTION_READ } from '../lib/store'
+import { completeSectionRead } from '../lib/gamification'
 import { cx } from '../lib/utils'
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
@@ -59,8 +55,7 @@ export function SectionDetailPage() {
   const konten = tabel ? stripTabelContoh(section.konten) : section.konten
 
   function handleMarkRead() {
-    if (markRead(section!.id)) {
-      recordActivity()
+    if (completeSectionRead(section!.id, doc!.materi)) {
       setShowToast(true)
     }
   }
@@ -117,7 +112,7 @@ export function SectionDetailPage() {
         {isRead ? (
           <p className="flex items-center justify-center gap-2 rounded-xl border-2 border-primary-600 bg-primary-100 px-4 py-3 text-sm font-bold text-primary-700">
             <CheckIcon width={16} height={16} />
-            Sudah dibaca · +{XP_SECTION_READ} XP didapat
+            Sudah dibaca · +{XP_SECTION_READ} XP buatmu
           </p>
         ) : (
           <Button size="lg" fullWidth onClick={handleMarkRead}>
@@ -184,7 +179,7 @@ export function SectionDetailPage() {
         )}
       >
         <p className="rounded-full border-2 border-ink bg-ink px-4 py-2.5 text-sm font-bold text-white shadow-sticker-amber">
-          +{XP_SECTION_READ} XP · Seksi ditandai sudah dibaca
+          +{XP_SECTION_READ} XP! Seksi ini sudah kamu baca
         </p>
       </div>
     </div>

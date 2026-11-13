@@ -9,13 +9,16 @@ import {
   type TryoutAnswers,
 } from '../lib/quiz'
 import {
-  addXp,
   getStore,
   markSeen,
-  recordActivity,
   XP_DRILL_COMPLETE,
   XP_DRILL_CORRECT,
 } from '../lib/store'
+import {
+  completeDrill,
+  recordDailyActivity,
+  recordDrillCorrect,
+} from '../lib/gamification'
 import { cx } from '../lib/utils'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -48,7 +51,7 @@ export function LatihanJalanPage() {
     : null
   const subtopik = typeof state.subtopik === 'string' ? state.subtopik : null
 
-  // Soal dipilih sekali saat sesi dimulai — bukan per render — supaya
+  // Soal dipilih sekali saat sesi dimulai, bukan per render, supaya
   // markSeen selama sesi tidak mengubah set soal.
   const [session, setSession] = useState<DrillPick | null>(() => {
     if (!materi) return null
@@ -64,20 +67,31 @@ export function LatihanJalanPage() {
   const [xpEarned, setXpEarned] = useState(0)
   const [finished, setFinished] = useState(false)
   const finishedRef = useRef(false)
+  // Kilas "+10 XP" saat jawaban benar (angka = kunci animasi ulang).
+  const [xpFlashKey, setXpFlashKey] = useState(0)
+  const [showXpFlash, setShowXpFlash] = useState(false)
 
   // Catat aktivitas (streak) saat sesi dimulai.
   useEffect(() => {
-    recordActivity()
+    recordDailyActivity()
   }, [])
+
+  // Kilas +XP hilang sendiri setelah 1,5 detik.
+  useEffect(() => {
+    if (xpFlashKey === 0) return
+    setShowXpFlash(true)
+    const timer = setTimeout(() => setShowXpFlash(false), 1500)
+    return () => clearTimeout(timer)
+  }, [xpFlashKey])
 
   if (!materi || !session) {
     return (
       <Card className="p-6 text-center">
         <p className="font-display text-lg font-bold">
-          Sesi latihan belum dipilih
+          Ups, sesinya belum dipilih
         </p>
         <p className="mt-2 text-sm text-ink/60">
-          Pilih materi dan topik dulu dari halaman Latihan.
+          Pilih materi dan topik dulu di halaman Latihan, baru mulai drill.
         </p>
         <Link to="/latihan" className="mt-4 inline-block">
           <Button>Ke halaman Latihan</Button>
@@ -90,10 +104,10 @@ export function LatihanJalanPage() {
     return (
       <Card className="p-6 text-center">
         <p className="font-display text-lg font-bold">
-          Tidak ada soal untuk topik ini
+          Nggak ada soal buat topik ini
         </p>
         <p className="mt-2 text-sm text-ink/60">
-          Coba topik lain atau pilih &ldquo;Semua topik&rdquo;.
+          Coba topik lain, atau pilih &ldquo;Semua topik&rdquo; aja.
         </p>
         <Link to="/latihan" className="mt-4 inline-block">
           <Button>Ke halaman Latihan</Button>
@@ -116,17 +130,20 @@ export function LatihanJalanPage() {
     markSeen([question.id])
     // "Benar" = jawaban sama dengan kunci; untuk TKP berarti opsi terbaik.
     if (opsi === question.kunci) {
-      addXp(XP_DRILL_CORRECT)
+      recordDrillCorrect()
       setXpEarned((xp) => xp + XP_DRILL_CORRECT)
+      setXpFlashKey((k) => k + 1)
     }
   }
 
   function handleFinish() {
     if (finishedRef.current) return
     finishedRef.current = true
-    addXp(XP_DRILL_COMPLETE)
+    const correctCount = questions.filter(
+      (q) => answers[q.id] !== undefined && answers[q.id] === q.kunci,
+    ).length
+    completeDrill(materi as Materi, correctCount, total)
     setXpEarned((xp) => xp + XP_DRILL_COMPLETE)
-    recordActivity()
     setFinished(true)
   }
 
@@ -152,7 +169,7 @@ export function LatihanJalanPage() {
     setXpEarned(0)
     setFinished(false)
     finishedRef.current = false
-    recordActivity()
+    recordDailyActivity()
   }
 
   if (finished) {
@@ -175,7 +192,7 @@ export function LatihanJalanPage() {
 
         <Card className="text-center">
           <p className="font-display text-4xl font-extrabold">
-            {correctCount}
+            <span className="hl-marker">{correctCount}</span>
             <span className="text-lg font-semibold text-ink/60">/{total}</span>
           </p>
           <p className="mt-1 text-sm font-semibold text-ink/60">
@@ -186,7 +203,7 @@ export function LatihanJalanPage() {
           </p>
           <p className="mt-2 text-xs font-medium text-ink/60">
             {correctCount} jawaban benar × {XP_DRILL_CORRECT} XP = {correctXp}{' '}
-            XP + bonus selesai {XP_DRILL_COMPLETE} XP
+            XP, plus bonus selesai {XP_DRILL_COMPLETE} XP
           </p>
         </Card>
 
@@ -224,7 +241,7 @@ export function LatihanJalanPage() {
                         ? `Kamu dapat ${poin}/5 poin`
                         : benar
                           ? 'Benar'
-                          : `Jawabanmu ${answer ?? '—'} · kunci ${q.kunci}`}
+                          : `Jawabanmu ${answer ?? 'kosong'} · kunci ${q.kunci}`}
                     </p>
                   </div>
                   <Badge tone={MATERI_TONE[q.materi]} className="shrink-0">
@@ -284,7 +301,7 @@ export function LatihanJalanPage() {
         </div>
         {session.rotated && (
           <p className="mt-2 rounded-xl border-2 border-ink bg-accent-100 px-3 py-2 text-xs font-bold text-accent-800">
-            Soal baru habis — mengulang dari awal.
+            Soal baru habis, jadi mulai mengulang dari awal.
           </p>
         )}
       </header>
@@ -311,9 +328,25 @@ export function LatihanJalanPage() {
       </Button>
       {!revealed && (
         <p className="-mt-3 text-center text-xs font-medium text-ink/60">
-          Pilih satu jawaban untuk melihat pembahasannya.
+          Pilih satu jawaban dulu, pembahasannya langsung muncul.
         </p>
       )}
+
+      {/* Kilas +XP saat jawaban benar */}
+      <div
+        aria-live="polite"
+        className={cx(
+          'pointer-events-none fixed inset-x-0 bottom-24 z-50 flex justify-center px-4 transition-all duration-300',
+          showXpFlash ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0',
+        )}
+      >
+        <p
+          key={xpFlashKey}
+          className="rounded-full border-2 border-ink bg-ink px-4 py-2.5 text-sm font-bold text-white shadow-sticker-amber"
+        >
+          +{XP_DRILL_CORRECT} XP · Jawaban benar!
+        </p>
+      </div>
     </div>
   )
 }

@@ -4,6 +4,10 @@ import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { ProgressRing } from '../components/belajar/ProgressRing'
+import { BadgeShowcase } from '../components/gamifikasi/BadgeShowcase'
+import { DailyMissions } from '../components/gamifikasi/DailyMissions'
+import { WeekStreak } from '../components/gamifikasi/WeekStreak'
+import { Mascot } from '../components/Mascot'
 import {
   BookIcon,
   CheckIcon,
@@ -41,6 +45,7 @@ import {
   useStore,
   xpProgress,
 } from '../lib/store'
+import { getRankTitle } from '../lib/ranks'
 import { cx } from '../lib/utils'
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
@@ -112,6 +117,7 @@ export function HomePage() {
   const { xp, streak, lastActivityDate, seenQuestionIds, readSections, tryoutHistory } =
     useStore()
   const level = getLevel(xp)
+  const rankTitle = getRankTitle(level)
   const progress = xpProgress(xp)
   const seenByMateri = countSeenByMateri(seenQuestionIds)
   const totalSoalDilihat =
@@ -145,7 +151,7 @@ export function HomePage() {
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-primary-100">
           {TOTAL_QUIZABLE.toLocaleString('id-ID')} soal latihan,{' '}
-          {TOTAL_SECTIONS} seksi materi, dan tryout mini — semuanya bisa
+          {TOTAL_SECTIONS} seksi materi, dan tryout mini. Semuanya bisa
           dipakai offline.
         </p>
 
@@ -159,6 +165,10 @@ export function HomePage() {
             <FlameIcon width={16} height={16} className="text-twk" />
             Streak harian · {streak} hari
           </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-primary-100 px-3 py-1.5 text-sm font-extrabold whitespace-nowrap text-primary-800 shadow-sticker-sm">
+            <span aria-hidden="true">🏅</span>
+            {rankTitle}
+          </span>
         </div>
 
         {/* Progres menuju level berikutnya + status streak */}
@@ -167,7 +177,7 @@ export function HomePage() {
             value={progress.current}
             max={progress.needed}
             tone="amber"
-            label="Progres menuju level berikutnya"
+            label="Menuju level berikutnya"
             className="bg-white/25"
           />
           <p className="mt-1.5 text-xs font-medium text-primary-100">
@@ -177,10 +187,10 @@ export function HomePage() {
             {streakAmanHariIni ? (
               <>
                 <CheckIcon width={13} height={13} className="mt-px shrink-0 text-accent-300" />
-                Streak aman — kamu sudah belajar hari ini.
+                Streak aman, kamu sudah belajar hari ini.
               </>
             ) : (
-              'Belajar hari ini untuk menjaga streak-mu.'
+              'Yuk belajar hari ini biar streak-mu tetap nyala.'
             )}
           </p>
         </div>
@@ -188,7 +198,9 @@ export function HomePage() {
         {/* Strip angka spesifik */}
         <div className="mt-4 grid grid-cols-3 gap-2">
           <div className="rounded-2xl border-2 border-white/25 bg-white/10 p-3 text-center">
-            <p className="font-display text-xl leading-none font-extrabold">110</p>
+            <p className="font-display text-xl leading-none font-extrabold">
+              <span className="hl-marker">110</span>
+            </p>
             <p className="mt-1 text-[11px] leading-tight font-semibold text-primary-100">
               soal SKD asli
             </p>
@@ -211,7 +223,7 @@ export function HomePage() {
           </div>
         </div>
         <p className="mt-3 border-t-2 border-dashed border-white/25 pt-3 text-xs leading-relaxed font-semibold text-primary-100">
-          Passing grade mini —{' '}
+          Passing grade mini:{' '}
           <span className="text-white">
             TWK ≥{TRYOUT_PASSING_MINI.TWK} · TIU ≥{TRYOUT_PASSING_MINI.TIU} ·
             TKP ≥{TRYOUT_PASSING_MINI.TKP}
@@ -219,7 +231,11 @@ export function HomePage() {
         </p>
       </section>
 
-      {/* Lanjutkan belajar — kartu amber kontras tinggi (teks gelap) */}
+      {/* Streak mingguan + misi harian */}
+      <WeekStreak />
+      <DailyMissions />
+
+      {/* Lanjutkan belajar: kartu amber kontras tinggi (teks gelap) */}
       <Card className="border-ink bg-accent-400 p-5 text-ink">
         <div className="flex items-center gap-4">
           <ProgressRing
@@ -233,7 +249,7 @@ export function HomePage() {
           />
           <div className="min-w-0 flex-1">
             <p className="text-sm font-bold text-ink/70">
-              Progres membaca materi
+              Progres bacamu
             </p>
             <p className="mt-0.5 font-display text-lg leading-snug font-extrabold">
               {bacaKeseluruhan.read} dari {bacaKeseluruhan.total} seksi sudah
@@ -287,7 +303,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Progres per materi — kartu berwarna penuh per subtes */}
+      {/* Progres per materi: kartu berwarna penuh per subtes */}
       <section>
         <h2 className="mb-3 font-display text-xl font-extrabold">
           Progres per materi
@@ -430,15 +446,13 @@ export function HomePage() {
           </Card>
         ) : (
           <Card className="text-center">
-            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-ink bg-tkp-soft text-tkp">
-              <TrophyIcon width={24} height={24} />
-            </span>
-            <p className="mt-3 font-display text-lg font-extrabold">
-              Belum ada tryout yang diselesaikan
+            <Mascot mood="semangat" size={72} className="mx-auto" />
+            <p className="mt-2 font-display text-lg font-extrabold">
+              Kamu belum pernah tryout nih
             </p>
             <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-ink/60">
-              Uji kesiapanmu dengan tryout mini: 30 soal (10 TWK, 10 TIU, 10
-              TKP) dalam 27 menit, lengkap dengan skor dan prediksi kelolosan.
+              Coba tryout mini dulu yuk: 30 soal (10 TWK, 10 TIU, 10
+              TKP) dalam 27 menit, lengkap dengan skor dan prediksi kelolosanmu.
             </p>
             <Link to="/tryout" className="mt-4 inline-block">
               <Button>Mulai tryout mini</Button>
@@ -446,6 +460,9 @@ export function HomePage() {
           </Card>
         )}
       </section>
+
+      {/* Lencana pencapaian */}
+      <BadgeShowcase />
     </div>
   )
 }

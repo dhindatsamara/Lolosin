@@ -3,9 +3,9 @@
  *
  * Data soal berasal dari chunk-chunk `src/data/questions/*.json` (salinan
  * dari `workspace/cpns/bank-soal/bank-soal.json`, dipecah per materi dengan
- * `scripts/split-questions.py` — satu file 7,9 MB tidak bisa di-push lewat
+ * `scripts/split-questions.py`. Satu file 7,9 MB tidak bisa di-push lewat
  * konektor GitHub). Satu-satunya cara memperbarui bank soal: jalankan
- * script itu, lalu rebuild — lihat README.
+ * script itu, lalu rebuild. Lihat README.
  *
  * Aturan penting: soal dengan `kunci === null` (621 soal tanpa kunci)
  * DIKECUALIKAN dari semua pool kuis. Semua fungsi di sini bekerja di atas

@@ -6,11 +6,11 @@
  * sehingga seluruh materi tersedia offline (PWA).
  *
  * Teks materi sebagian berasal dari OCR dan mengandung artefak kecil
- * (karakter aneh, pemenggalan kata) — ditampilkan apa adanya, tidak
+ * (karakter aneh, pemenggalan kata). Ditampilkan apa adanya, tidak
  * diperbaiki di sini.
  *
  * Progres baca disimpan di store (`readSections`) dengan kunci berupa id
- * seksi (mis. `twk-cheat-sheet-s01`) — id seksi unik secara global karena
+ * seksi (mis. `twk-cheat-sheet-s01`). Id seksi unik secara global karena
  * mengandung id dokumennya.
  */
 import materiIndex from '../data/materi/index.json'
@@ -197,7 +197,7 @@ export function getTabelForSection(
 }
 
 /**
- * Hapus blok contoh (1–10) dari konten seksi tabel — contoh tersebut
+ * Hapus blok contoh (1–10) dari konten seksi tabel. Contoh tersebut
  * redundan karena tabel lengkapnya sudah dirender sebagai tabel rapi.
  * Konten seksi lain tidak disentuh.
  */

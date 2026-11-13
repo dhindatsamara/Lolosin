@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import { registerSW } from 'virtual:pwa-register'
 
-// Font self-hosted via Fontsource — HARUS diimpor SEBELUM './index.css'
+// Font self-hosted via Fontsource, HARUS diimpor SEBELUM './index.css'
 // agar @font-face terdaftar sebelum stylesheet utama dipakai.
 // Poppins (display/heading) 600/700/800 · Plus Jakarta Sans (body/UI)
 // 400/500/600/700/800 · Caveat (aksen script) 600/700.

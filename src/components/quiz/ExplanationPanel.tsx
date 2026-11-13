@@ -55,7 +55,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
             ? `Kamu dapat ${poinDidapat}/5 poin`
             : benar
               ? 'Benar! 🎉'
-              : 'Belum tepat — pelajari pembahasannya di bawah'}
+              : 'Belum tepat, gapapa kok. Cek pembahasannya di bawah ya'}
         </p>
       )}
 
@@ -124,12 +124,11 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
           </p>
         ) : (
           <p className="text-sm leading-relaxed text-ink/60">
-            Pembahasan belum tersedia untuk soal ini.
+            Pembahasan buat soal ini belum ada.
             {kunci !== null && (
               <>
                 {' '}
-                Kunci jawabannya adalah{' '}
-                <strong className="text-ink">{kunci}</strong>.
+                Kuncinya <strong className="text-ink">{kunci}</strong>.
               </>
             )}
           </p>

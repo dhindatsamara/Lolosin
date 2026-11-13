@@ -15,7 +15,7 @@ export interface QuestionCardProps {
   /** Opsi yang dipilih pengguna. */
   selected?: Opsi
   /**
-   * Mode drill: `true` setelah pengguna memilih — opsi disorot benar/salah
+   * Mode drill: `true` setelah pengguna memilih. Opsi disorot benar/salah
    * dan panel pembahasan muncul. Mode tryout: selalu `false`.
    */
   revealed?: boolean
@@ -88,8 +88,8 @@ export function QuestionCard({
 
       {isTkp && (
         <p className="rounded-xl border-2 border-tkp bg-tkp-soft px-3 py-2 text-xs leading-relaxed font-semibold text-tkp">
-          Soal TKP dinilai 1–5 berdasarkan pilihanmu — pilih jawaban yang
-          paling mencerminkan karakter ASN.
+          Soal TKP dinilai 1–5. Pilih jawaban yang paling mencerminkan
+          karakter ASN.
         </p>
       )}
 

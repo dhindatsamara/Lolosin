@@ -22,15 +22,16 @@ import {
   type TryoutScore,
 } from '../lib/quiz'
 import {
-  addXp,
   getStore,
   markSeen,
-  recordActivity,
-  recordTryout,
   useStore,
   XP_TRYOUT_COMPLETE,
   type TryoutRecord,
 } from '../lib/store'
+import {
+  completeTryout,
+  recordDailyActivity,
+} from '../lib/gamification'
 import { cx } from '../lib/utils'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -127,16 +128,8 @@ export function TryoutPage() {
       const qs = questionsRef.current
       const ans = answersRef.current
       const score = scoreTryout(qs, ans)
-      recordTryout({
-        twk: score.scores.TWK,
-        tiu: score.scores.TIU,
-        tkp: score.scores.TKP,
-        passed: score.passedOverall,
-        correct: score.correct,
-      })
+      completeTryout(score)
       markSeen(qs.map((q) => q.id))
-      addXp(XP_TRYOUT_COMPLETE)
-      recordActivity()
       const state: TryoutResultState = {
         score,
         questions: qs,
@@ -168,7 +161,7 @@ export function TryoutPage() {
   function startTryout() {
     const pick = pickTryoutQuestions(getStore().seenQuestionIds)
     if (pick.questions.length === 0) {
-      setStartError('Bank soal masih kosong — tryout belum bisa dimulai.')
+      setStartError('Bank soalnya masih kosong, tryout belum bisa dimulai.')
       return
     }
     setStartError(null)
@@ -181,7 +174,7 @@ export function TryoutPage() {
     setShowConfirm(false)
     setShowPalette(true)
     finishedRef.current = false
-    recordActivity()
+    recordDailyActivity()
     setMode('running')
     window.scrollTo({ top: 0 })
   }
@@ -238,7 +231,7 @@ export function TryoutPage() {
 
         {rotated && (
           <p className="rounded-xl border-2 border-ink bg-accent-100 px-3 py-2 text-xs font-bold text-accent-800">
-            Soal baru habis — mengulang dari awal.
+            Soal baru habis, jadi mulai mengulang dari awal.
           </p>
         )}
 
@@ -291,7 +284,7 @@ export function TryoutPage() {
         >
           <FlagIcon width={16} height={16} />
           {doubted.has(question.id)
-            ? 'Ragu-ragu — ketuk untuk membatalkan'
+            ? 'Ragu-ragu, ketuk untuk membatalkan'
             : 'Tandai ragu-ragu'}
         </Button>
 
@@ -319,8 +312,8 @@ export function TryoutPage() {
             </p>
             <p className="mt-1 text-sm leading-relaxed text-ink/70">
               {unansweredCount === 0
-                ? 'Semua soal sudah dijawab. Skor akan dihitung dan disimpan.'
-                : `Masih ada ${unansweredCount} soal belum dijawab — soal kosong bernilai 0.`}
+                ? 'Semua soal beres! Skor langsung dihitung dan disimpan.'
+                : `Masih ada ${unansweredCount} soal belum dijawab, dan soal kosong bernilai 0.`}
             </p>
             <div className="mt-3 grid grid-cols-2 gap-2">
               <Button variant="outline" onClick={() => setShowConfirm(false)}>
@@ -349,7 +342,7 @@ export function TryoutPage() {
         <h1 className="mt-1 font-display text-3xl font-extrabold">Tryout Mini</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
           Simulasi SKD singkat: {TRYOUT_TOTAL_QUESTIONS} soal dalam{' '}
-          {TRYOUT_TIME_LIMIT_MINUTES} menit. Skor diskalakan ke nilai CAT
+          {TRYOUT_TIME_LIMIT_MINUTES} menit. Skormu nanti diskalakan ke nilai CAT
           asli.
         </p>
       </header>
@@ -382,15 +375,15 @@ export function TryoutPage() {
               karakternya.
             </li>
             <li>
-              Timer {TRYOUT_TIME_LIMIT_MINUTES} menit berjalan terus — jawaban
-              tersimpan otomatis saat waktu habis.
+              Timer {TRYOUT_TIME_LIMIT_MINUTES} menit berjalan terus.
+              Jawabanmu tersimpan otomatis kalau waktu habis.
             </li>
             <li>
               Kamu bebas pindah soal lewat navigator, dan boleh menandai soal
               yang ragu-ragu.
             </li>
             <li>
-              Selesaikan tryout untuk mendapat{' '}
+              Selesaikan tryout dan dapat{' '}
               <strong>+{XP_TRYOUT_COMPLETE} XP</strong>.
             </li>
           </ul>
@@ -399,7 +392,7 @@ export function TryoutPage() {
 
       <section aria-label="Passing grade">
         <h2 className="mb-2 font-display text-base font-extrabold">
-          Passing grade mini (proporsional dari passing grade asli)
+          Passing grade mini
         </h2>
         <div className="flex flex-col gap-2">
           {MATERI_LIST.map((materi) => (
@@ -431,8 +424,9 @@ export function TryoutPage() {
           ))}
         </div>
         <p className="mt-2 text-xs leading-relaxed font-medium text-ink/60">
-          Lulus keseluruhan berarti ketiga seksi melewati passing grade-nya.
-          Passing grade asli merujuk KepmenPANRB 406/2026.
+          Biar lulus keseluruhan, ketiga seksi harus melewati passing
+          grade-nya masing-masing. Passing grade aslinya dari KepmenPANRB
+          406/2026.
         </p>
       </section>
 

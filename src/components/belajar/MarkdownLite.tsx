@@ -1,5 +1,5 @@
 /**
- * Renderer markdown ringan untuk konten materi — tanpa library tambahan.
+ * Renderer markdown ringan untuk konten materi, tanpa library tambahan.
  *
  * Mendukung: heading `##` / `###`, bullet `- ` / `• `, daftar bernomor
  * `1. ` / `1) `, paragraf (baris-baris berurutan digabung dengan spasi),

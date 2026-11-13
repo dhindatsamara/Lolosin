@@ -14,6 +14,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
+import { Mascot } from '../components/Mascot'
 import { CheckIcon } from '../components/icons'
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
@@ -59,8 +60,8 @@ function isTryoutScore(value: unknown): value is TryoutScore {
 
 /**
  * Halaman hasil menerima dua bentuk state:
- * - `TryoutScore` polos (dari riwayat) — tanpa breakdown soal.
- * - `TryoutResultState` (dari sesi segar) — dengan breakdown + XP.
+ * - `TryoutScore` polos (dari riwayat), tanpa breakdown soal.
+ * - `TryoutResultState` (dari sesi segar), dengan breakdown + XP.
  */
 function normalize(state: unknown): NormalizedResult | null {
   if (typeof state !== 'object' || state === null) return null
@@ -100,11 +101,11 @@ export function TryoutHasilPage() {
     return (
       <Card className="p-6 text-center">
         <p className="font-display text-lg font-bold">
-          Belum ada hasil tryout
+          Belum ada hasil tryout nih
         </p>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink/60">
-          Selesaikan satu tryout mini untuk melihat skor, status kelulusan per
-          seksi, dan skor terskala CAT di sini.
+          Selesaikan satu tryout mini dulu, nanti skor, status lulus per
+          seksi, dan skor terskala CAT muncul di sini.
         </p>
         <Link to="/tryout" className="mt-4 inline-block">
           <Button>Ke halaman Tryout</Button>
@@ -121,23 +122,29 @@ export function TryoutHasilPage() {
   return (
     <div className="flex flex-col gap-5">
       <header className="text-center">
-        <p className="text-4xl" aria-hidden="true">
-          {score.passedOverall ? '🏆' : '💪'}
-        </p>
+        <Mascot
+          mood={score.passedOverall ? 'semangat' : 'sedih'}
+          size={80}
+          className="mx-auto"
+        />
         <h1 className="mt-2 font-display text-3xl font-extrabold">
           {score.passedOverall
             ? 'Selamat, kamu lulus!'
-            : 'Belum lulus — terus berlatih!'}
+            : 'Belum lulus, terus berlatih ya!'}
         </h1>
         <p className="mt-1 text-sm font-medium text-ink/60">
-          Total mini {score.total}/150 · terskala {score.scaledTotal}/550
+          Total mini{' '}
+          <span className="hl-marker font-extrabold">
+            {score.total}/150
+          </span>{' '}
+          · terskala {score.scaledTotal}/550
           {totalCorrect !== null && (
             <> · {totalCorrect} jawaban benar dari 30 soal</>
           )}
         </p>
         {timedOut && (
           <p className="mx-auto mt-2 w-fit rounded-full border-2 border-ink bg-accent-400 px-3 py-1 text-xs font-extrabold text-ink shadow-sticker-sm">
-            Waktu habis — jawaban tersimpan otomatis
+            Waktu habis, jawaban tersimpan otomatis
           </p>
         )}
         {xpEarned !== null && (
@@ -200,7 +207,7 @@ export function TryoutHasilPage() {
       {questions && answers && (
         <section aria-label="Breakdown per soal">
           <h2 className="mb-2 font-display text-base font-extrabold">
-            Breakdown per soal
+            Hasil per soal
           </h2>
           <div className="flex flex-col gap-2">
             {questions.map((q, i) => {
@@ -250,12 +257,12 @@ export function TryoutHasilPage() {
                           <>
                             {dijawab
                               ? `Kamu dapat ${poin}/5 poin (jawabanmu ${answer})`
-                              : 'Tidak dijawab — 0 poin'}
+                              : 'Tidak dijawab, 0 poin'}
                             {` · jawaban terbaik: ${q.kunci}`}
                           </>
                         ) : dijawab ? (
                           benar ? (
-                            `Benar — jawabanmu ${answer}`
+                            `Benar, jawabanmu ${answer}`
                           ) : (
                             `Jawabanmu ${answer} · kunci ${q.kunci}`
                           )

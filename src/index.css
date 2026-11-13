@@ -2,7 +2,7 @@
 
 /*
  * Font self-hosted via Fontsource (diimpor di src/main.tsx, SEBELUM file
- * ini) — tanpa CDN font eksternal, agar PWA offline & screenshot selalu
+ * ini), tanpa CDN font eksternal, agar PWA offline & screenshot selalu
  * memakai font asli.
  */
 
@@ -92,4 +92,58 @@
     background-image: radial-gradient(rgba(27, 30, 28, 0.09) 1px, transparent 1px);
     background-size: 18px 18px;
   }
+}
+
+/* Highlight stabilo amber di belakang kata/angka kunci: sapuan marker
+   organik (sedikit miring, tepian tidak rata via clip-path), bukan kotak
+   rapi. Dipakai HEMAT, hanya di momen paling berdampak (angka hero,
+   skor hasil, hasil drill). Teks ink di atas amber menjaga kontras. */
+.hl-marker {
+  position: relative;
+  display: inline-block;
+  padding: 0 0.14em;
+  color: var(--color-ink);
+  white-space: nowrap;
+  isolation: isolate;
+}
+
+.hl-marker::before {
+  content: '';
+  position: absolute;
+  inset: 0.08em -0.1em 0.04em -0.1em;
+  z-index: -1;
+  background: linear-gradient(
+    100deg,
+    var(--color-accent-300) 0%,
+    var(--color-accent-400) 52%,
+    var(--color-accent-300) 100%
+  );
+  transform: rotate(-1.4deg) skewX(-3deg);
+  clip-path: polygon(
+    1.2% 22%, 3% 8%, 12% 3%, 48% 0%, 88% 4%, 97.5% 10%, 99.5% 30%,
+    98.5% 78%, 96% 94%, 88% 99%, 40% 100%, 8% 97%, 2% 88%, 0.5% 55%
+  );
+}
+
+/* Confetti CSS-only untuk momen perayaan besar (naik level, lencana
+   pertama, lulus tryout). Satu potong jatuh sekali lalu menghilang. */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-12px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(340px) rotate(540deg);
+    opacity: 0;
+  }
+}
+
+.confetti-piece {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 12px;
+  animation-name: confetti-fall;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
 }

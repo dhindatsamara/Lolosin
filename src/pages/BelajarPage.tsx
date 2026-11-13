@@ -104,8 +104,8 @@ export function BelajarPage() {
         </p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">Belajar</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
-          Materi SKD terstruktur per dokumen. Baca seksi materi untuk
-          mengumpulkan XP — 5 XP per seksi yang selesai dibaca.
+          Materi SKD yang sudah dirapikan per dokumen. Tiap seksi yang
+          selesai dibaca dapat 5 XP.
         </p>
         <p className="mt-2 text-xs font-bold text-ink/60">
           {TOTAL_DOKUMEN} dokumen · {TOTAL_SECTIONS} seksi ·{' '}

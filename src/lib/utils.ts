@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge'
 
 /**
  * Gabung daftar class CSS, mengabaikan nilai falsy, dan selesaikan
- * konflik class Tailwind (class terakhir menang — mis. `bg-primary-600`
+ * konflik class Tailwind (class terakhir menang, mis. `bg-primary-600`
  * dari call-site mengalahkan `bg-white` dari default komponen).
  */
 export function cx(

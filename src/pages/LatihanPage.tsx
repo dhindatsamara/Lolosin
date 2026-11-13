@@ -63,8 +63,9 @@ export function LatihanPage() {
         </p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">Latihan</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
-          Drill {DRILL_DEFAULT_COUNT} soal per sesi dengan pembahasan langsung.
-          Soal yang belum pernah kamu lihat selalu didahulukan — anti-ulang.
+          Drill {DRILL_DEFAULT_COUNT} soal per sesi, pembahasannya langsung
+          keluar. Soal baru selalu didahulukan, jadi nggak gampang ketemu
+          soal yang sama.
         </p>
       </header>
 
@@ -126,7 +127,7 @@ export function LatihanPage() {
 
         {topics.length === 0 && (
           <p className="mt-2 text-sm text-ink/60">
-            Belum ada soal {materi} di bank soal.
+            Waduh, soal {materi} belum ada di bank soal.
           </p>
         )}
       </section>

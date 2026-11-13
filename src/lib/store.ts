@@ -26,6 +26,9 @@ export const XP_TRYOUT_COMPLETE = 100
 export const XP_SECTION_READ = 5
 export const LEVEL_DIVISOR = 50
 
+/** Riwayat tanggal aktivitas yang disimpan (maks 60 hari terakhir). */
+export const ACTIVITY_HISTORY_LIMIT = 60
+
 export interface TryoutRecord {
   /** Timestamp ISO saat tryout selesai. */
   date: string
@@ -39,6 +42,35 @@ export interface TryoutRecord {
   correct?: { TWK: number; TIU: number; TKP: number }
 }
 
+/** Satu lencana yang sudah diraih beserta tanggal raihnya. */
+export interface EarnedBadge {
+  /** Id lencana (lihat `BADGES` di `lib/badges.ts`). */
+  id: string
+  /** Tanggal diraih, `YYYY-MM-DD` (Asia/Makassar). */
+  date: string
+}
+
+/** Progres misi harian. `date` menandai hari berlakunya (reset tiap hari). */
+export interface MissionProgressState {
+  date: string
+  /** Progres tercapai per id misi. */
+  progress: Record<string, number>
+  /** Id misi yang reward-nya sudah diklaim. */
+  claimed: string[]
+}
+
+/** Statistik kumulatif untuk syarat lencana. */
+export interface GameStats {
+  /** Jumlah sesi drill yang diselesaikan. */
+  drillsCompleted: number
+  /** Jumlah drill sempurna (semua jawaban benar). */
+  drillsPerfect: number
+  /** Jumlah jawaban benar (drill + tryout). */
+  correctAnswers: number
+  /** Materi yang pernah dicoba lewat drill atau baca: TWK/TIU/TKP. */
+  materiTried: string[]
+}
+
 export interface StoreState {
   xp: number
   streak: number
@@ -47,6 +79,14 @@ export interface StoreState {
   seenQuestionIds: string[]
   readSections: string[]
   tryoutHistory: TryoutRecord[]
+  /** Tanggal-tanggal aktivitas, `YYYY-MM-DD`, maks 60 terakhir. */
+  activityDates: string[]
+  /** Lencana yang sudah diraih. */
+  badges: EarnedBadge[]
+  /** Progres misi harian. */
+  missions: MissionProgressState
+  /** Statistik kumulatif gamifikasi. */
+  stats: GameStats
 }
 
 function freshState(): StoreState {
@@ -57,6 +97,15 @@ function freshState(): StoreState {
     seenQuestionIds: [],
     readSections: [],
     tryoutHistory: [],
+    activityDates: [],
+    badges: [],
+    missions: { date: '', progress: {}, claimed: [] },
+    stats: {
+      drillsCompleted: 0,
+      drillsPerfect: 0,
+      correctAnswers: 0,
+      materiTried: [],
+    },
   }
 }
 
@@ -154,6 +203,56 @@ function loadFromStorage(): StoreState {
               typeof r.correct.TKP === 'number')),
       )
     }
+    if (Array.isArray(parsed.activityDates)) {
+      state.activityDates = parsed.activityDates
+        .filter((d): d is string => typeof d === 'string')
+        .slice(-ACTIVITY_HISTORY_LIMIT)
+    }
+    if (Array.isArray(parsed.badges)) {
+      state.badges = parsed.badges.filter(
+        (b): b is EarnedBadge =>
+          typeof b === 'object' &&
+          b !== null &&
+          typeof b.id === 'string' &&
+          typeof b.date === 'string',
+      )
+    }
+    if (
+      typeof parsed.missions === 'object' &&
+      parsed.missions !== null
+    ) {
+      const m = parsed.missions
+      if (typeof m.date === 'string') state.missions.date = m.date
+      if (typeof m.progress === 'object' && m.progress !== null) {
+        const progress: Record<string, number> = {}
+        for (const [k, v] of Object.entries(m.progress)) {
+          if (typeof v === 'number') progress[k] = v
+        }
+        state.missions.progress = progress
+      }
+      if (Array.isArray(m.claimed)) {
+        state.missions.claimed = m.claimed.filter(
+          (id): id is string => typeof id === 'string',
+        )
+      }
+    }
+    if (typeof parsed.stats === 'object' && parsed.stats !== null) {
+      const s = parsed.stats
+      if (typeof s.drillsCompleted === 'number') {
+        state.stats.drillsCompleted = s.drillsCompleted
+      }
+      if (typeof s.drillsPerfect === 'number') {
+        state.stats.drillsPerfect = s.drillsPerfect
+      }
+      if (typeof s.correctAnswers === 'number') {
+        state.stats.correctAnswers = s.correctAnswers
+      }
+      if (Array.isArray(s.materiTried)) {
+        state.stats.materiTried = s.materiTried.filter(
+          (m): m is string => typeof m === 'string',
+        )
+      }
+    }
   } catch {
     // localStorage tidak tersedia / data rusak: mulai dari state kosong.
   }
@@ -213,6 +312,8 @@ export function addXp(n: number): number {
  * - Hari yang sama: streak tidak berubah.
  * - Hari baru & kemarin aktif: streak +1.
  * - Jeda lebih dari 1 hari: streak reset ke 1.
+ * Hari ini juga dicatat di `activityDates` (maks 60 hari terakhir,
+ * tanpa duplikat) untuk tampilan streak mingguan.
  */
 export function recordActivity(date = new Date()): {
   streak: number
@@ -221,11 +322,25 @@ export function recordActivity(date = new Date()): {
   const today = todayMakassar(date)
   const state = getStore()
   if (state.lastActivityDate === today) {
+    // State lama bisa belum punya hari ini di activityDates: lengkapi.
+    if (!state.activityDates.includes(today)) {
+      update({
+        activityDates: [...state.activityDates, today].slice(
+          -ACTIVITY_HISTORY_LIMIT,
+        ),
+      })
+    }
     return { streak: state.streak, isNewDay: false }
   }
   const yesterday = shiftDate(today, -1)
   const streak = state.lastActivityDate === yesterday ? state.streak + 1 : 1
-  update({ streak, lastActivityDate: today })
+  update({
+    streak,
+    lastActivityDate: today,
+    activityDates: [...state.activityDates, today].slice(
+      -ACTIVITY_HISTORY_LIMIT,
+    ),
+  })
   return { streak, isNewDay: true }
 }
 
@@ -251,7 +366,7 @@ export function isSeen(id: string): boolean {
 
 /**
  * Tandai seksi materi sebagai sudah dibaca.
- * Mengembalikan `true` hanya saat pertama kali ditandai — XP +5
+ * Mengembalikan `true` hanya saat pertama kali ditandai. XP +5
  * (`XP_SECTION_READ`) hanya diberikan sekali per seksi.
  */
 export function markRead(sectionId: string): boolean {
@@ -275,6 +390,39 @@ export function recordTryout(
   const state = getStore()
   update({ tryoutHistory: [...state.tryoutHistory, entry] })
   return entry
+}
+
+/** Perbarui sebagian statistik gamifikasi. */
+export function updateStats(patch: Partial<GameStats>): GameStats {
+  const state = getStore()
+  return update({ stats: { ...state.stats, ...patch } }).stats
+}
+
+/**
+ * Tandai lencana-lencana sebagai diraih hari ini.
+ * Mengembalikan id yang baru ditambahkan (yang sudah dimiliki dilewati).
+ */
+export function unlockBadges(ids: string[]): string[] {
+  const state = getStore()
+  const owned = new Set(state.badges.map((b) => b.id))
+  const added = ids.filter((id) => !owned.has(id))
+  if (added.length === 0) return []
+  const today = todayMakassar()
+  update({
+    badges: [
+      ...state.badges,
+      ...added.map((id) => ({ id, date: today })),
+    ],
+  })
+  return added
+}
+
+/** Perbarui sebagian progres misi harian. */
+export function updateMissions(
+  patch: Partial<MissionProgressState>,
+): MissionProgressState {
+  const state = getStore()
+  return update({ missions: { ...state.missions, ...patch } }).missions
 }
 
 /** Hapus seluruh progres (dipakai untuk debugging / reset akun). */

@@ -1,7 +1,7 @@
 /**
  * Mesin kuis Lolosin: pemilihan soal drill & tryout, dan penskoran.
  *
- * Semua pool berasal dari `getQuestions()` — soal tanpa kunci sudah
+ * Semua pool berasal dari `getQuestions()`. Soal tanpa kunci sudah
  * dikecualikan di lapisan itu.
  *
  * Penskoran tryout mini (30 soal, maks 50 per seksi):

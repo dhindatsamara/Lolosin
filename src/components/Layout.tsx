@@ -1,6 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { getLevel, useStore } from '../lib/store'
+import { getRankTitle } from '../lib/ranks'
 import { cx } from '../lib/utils'
+import { CelebrationHost } from './gamifikasi/Celebration'
 import {
   BookIcon,
   FlameIcon,
@@ -29,6 +31,7 @@ function LogoMark() {
 export function Layout() {
   const { xp, streak } = useStore()
   const level = getLevel(xp)
+  const rankTitle = getRankTitle(level)
 
   return (
     <div className="bg-dot-paper min-h-dvh">
@@ -50,7 +53,7 @@ export function Layout() {
           <div className="flex shrink-0 items-center gap-2">
             <span
               className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-accent-100 px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-accent-700 shadow-sticker-sm"
-              title="XP dan level"
+              title={`XP dan level. Gelar: ${rankTitle}`}
             >
               <ZapIcon width={14} height={14} />
               {xp} XP · Lv {level}
@@ -71,7 +74,7 @@ export function Layout() {
         <Outlet />
       </main>
 
-      {/* Bottom nav (mobile-first) — bilah sticker, item aktif jadi pill */}
+      {/* Bottom nav (mobile-first): bilah sticker, item aktif jadi pill */}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-ink bg-white">
         <div className="mx-auto grid w-full max-w-2xl grid-cols-4 gap-1 px-2 py-2">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
@@ -94,6 +97,8 @@ export function Layout() {
           ))}
         </div>
       </nav>
+      {/* Host perayaan gamifikasi (naik level, lencana, milestone streak) */}
+      <CelebrationHost />
     </div>
   )
 }

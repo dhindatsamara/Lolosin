@@ -159,7 +159,7 @@ export function MateriDetailPage() {
           {semuaSelesai ? (
             <p className="flex items-center justify-center gap-2 rounded-xl border-2 border-primary-600 bg-primary-100 px-4 py-2.5 text-sm font-bold text-primary-700">
               <CheckIcon width={16} height={16} />
-              Semua seksi dokumen ini sudah dibaca
+              Semua seksi di dokumen ini sudah kamu baca
             </p>
           ) : (
             nextSection && (

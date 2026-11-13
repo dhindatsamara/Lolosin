@@ -77,7 +77,7 @@ export function PangkatTable({ pangkat, rows }: PangkatTableProps) {
                   colSpan={2}
                   className="px-4 py-6 text-center font-medium text-ink/60"
                 >
-                  Tidak ada bilangan yang cocok dengan “{q}”.
+                  Nggak ada bilangan yang cocok dengan “{q}”.
                 </td>
               </tr>
             )}
