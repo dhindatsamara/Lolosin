@@ -1,4 +1,4 @@
-# Skema JSON Materi Belajar — Lolosin
+# Skema JSON Materi Belajar | Lolosin
 
 Konten belajar terstruktur untuk halaman Belajar. Dibuat 2026-11-13 dari sumber di
 `~/workspace/cpns/materi/` (modul OCR, PDF berteks, DOCX). Teks dibersihkan dan
@@ -159,13 +159,13 @@ UI boleh mem-parse baris `- Level N:` untuk tampilan khusus.
 
 - Semua JSON valid UTF-8, `ensure_ascii=False` (karakter Indonesia/matematika apa adanya).
 - `materi` hanya berisi `TWK`/`TIU`/`TKP` di MVP. SKB, Referensi (KepmenPANRB 406/2026),
-  dan Panduan (JadiASN, BKN) **dikecualikan** — daftarnya ada di
+  dan Panduan (JadiASN, BKN) **dikecualikan**, daftarnya ada di
   `index.json` → `dikecualikan_dari_mvp`.
 - Halaman iklan tryout premium di kedua cheat sheet Analitica (hal. 9) dan
   halaman sampul/daftar isi/promo/disclaimer di ketiga Handbook TIU **tidak**
   dimasukkan (bukan materi belajar).
 - Beberapa judul section terpotong / mengandung artefak OCR (mis. `M. Lufti Ade`,
   `C. Tetap mempertahankan sis`) karena judul sumber terpotong di pergantian kolom
-  saat OCR — isi section tetap utuh. Jangan "memperbaiki" judul dengan menebak.
+  saat OCR, isi section tetap utuh. Jangan "memperbaiki" judul dengan menebak.
 - Handbook TIU Seri 3 (Figural) dan Lampiran soal bergambar sangat bergantung pada
   gambar; teks saja tidak cukup (lihat `catatan_kualitas` dan field `catatan`).

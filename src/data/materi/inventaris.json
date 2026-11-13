@@ -57,7 +57,7 @@
       "catatan_kualitas": "Hasil OCR cheat sheet bergaya kartu/infografis; poin-poin kunci dan kata kunci per tema. Satu-satunya penyebutan 'latihan soal' adalah iklan tryout premium di akhir, bukan soal. File scan sumber: skd_cpns_1/skd cpns 1/Cheat Sheet TWK 2024 by Analitica.id.pdf (10 hal, teks tidak terekstrak)."
     },
     {
-      "judul": "Mastery TWK 2024 — Kang Arya (TWK Bang Arya)",
+      "judul": "Mastery TWK 2024 | Kang Arya (TWK Bang Arya)",
       "file": "skd_cpns_2/skd cpns 2/TWK BANG ARYA.pdf",
       "materi": "TWK",
       "subtopik": [
@@ -72,7 +72,7 @@
       "kata": 40906,
       "mengandung_soal_latihan": true,
       "perkiraan_jumlah_soal": 300,
-      "catatan_kualitas": "PDF berteks, kualitas ekstraksi baik. Buku soal + pembahasan: 6 topik x ~50 soal (sampul mengklaim 'lebih dari 200 soal', 'soal HOTS', 'full soal penalaran mirip asli'); hitungan dari teks: 613 nomor mandiri = ~300 soal + ~300 butir pembahasan. Sebagian soal memakai pola opsi berulang (opsi A-D sama di banyak soal Pancasila) — perlu kurasi sebelum dipakai ulang. Buku dinyatakan bebas dibagikan, tidak untuk diperjualbelikan. Video pembahasan dirujuk ke Telegram/TikTok penulis."
+      "catatan_kualitas": "PDF berteks, kualitas ekstraksi baik. Buku soal + pembahasan: 6 topik x ~50 soal (sampul mengklaim 'lebih dari 200 soal', 'soal HOTS', 'full soal penalaran mirip asli'); hitungan dari teks: 613 nomor mandiri = ~300 soal + ~300 butir pembahasan. Sebagian soal memakai pola opsi berulang (opsi A-D sama di banyak soal Pancasila), perlu kurasi sebelum dipakai ulang. Buku dinyatakan bebas dibagikan, tidak untuk diperjualbelikan. Video pembahasan dirujuk ke Telegram/TikTok penulis."
     },
     {
       "judul": "Rangkuman TWK TemanASN",
@@ -132,7 +132,7 @@
       "kata": 289,
       "mengandung_soal_latihan": false,
       "perkiraan_jumlah_soal": null,
-      "catatan_kualitas": "PDF 2 hal bergaya infografis (@paperlessbyvivi); hanya 289 kata terekstrak dari teks — sebagian isi kemungkinan berupa gambar/tabel sehingga hitungan kata meremehkan isi sebenarnya. Perlu cek visual bila dipakai sebagai konten belajar."
+      "catatan_kualitas": "PDF 2 hal bergaya infografis (@paperlessbyvivi); hanya 289 kata terekstrak dari teks, sebagian isi kemungkinan berupa gambar/tabel sehingga hitungan kata meremehkan isi sebenarnya. Perlu cek visual bila dipakai sebagai konten belajar."
     },
     {
       "judul": "Ringkasan Materi TIU CPNS (Modul TIU)",
@@ -155,7 +155,7 @@
       "catatan_kualitas": "Hasil OCR modul scan; rumus dan notasi matematika kadang kacau (perlu cek manual). Mengandung ~40 contoh soal dengan jawaban + pembahasan (40 kemunculan 'Jawaban:'), bukan bank latihan terpisah. Tidak mencakup materi figural/gambar. File scan sumber: skd_cpns_1/skd cpns 1/Mod-MATERI-TIU-CPNS.pdf (98 hal, teks tidak terekstrak)."
     },
     {
-      "judul": "Handbook TIU SKD CPNS Seri 1 — Kemampuan Verbal",
+      "judul": "Handbook TIU SKD CPNS Seri 1 | Kemampuan Verbal",
       "file": "bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri1_Kemampuan_Verbal_Landscape-1-1.pdf",
       "materi": "TIU",
       "subtopik": [
@@ -174,7 +174,7 @@
       "catatan_kualitas": "PDF berteks landscape (kelasujiantryout.com), ekstraksi baik. 11 soal berlabel: 6 contoh soal di dalam materi + 5 soal Mini Drill, semua dengan jawaban + pembahasan."
     },
     {
-      "judul": "Handbook TIU SKD CPNS Seri 2 — Kemampuan Numerik",
+      "judul": "Handbook TIU SKD CPNS Seri 2 | Kemampuan Numerik",
       "file": "bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri2_Kemampuan_Numerik_Landscape-1-1.pdf",
       "materi": "TIU",
       "subtopik": [
@@ -193,7 +193,7 @@
       "catatan_kualitas": "PDF berteks landscape (kelasujiantryout.com), ekstraksi baik. 8 soal berlabel (Mini Drill) dengan jawaban + pembahasan, plus contoh-contoh dalam materi."
     },
     {
-      "judul": "Handbook TIU SKD CPNS Seri 3 — Kemampuan Figural",
+      "judul": "Handbook TIU SKD CPNS Seri 3 | Kemampuan Figural",
       "file": "bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri3_Kemampuan_Figural_Landscape-1-1.pdf",
       "materi": "TIU",
       "subtopik": [
@@ -209,10 +209,10 @@
       "kata": 11163,
       "mengandung_soal_latihan": true,
       "perkiraan_jumlah_soal": 6,
-      "catatan_kualitas": "PDF berteks landscape (kelasujiantryout.com), ekstraksi baik. 6 soal Mini Latihan Konseptual; materi figural sangat bergantung pada gambar sehingga teks saja tidak cukup — perlu cek visual/gambar saat diolah jadi konten belajar."
+      "catatan_kualitas": "PDF berteks landscape (kelasujiantryout.com), ekstraksi baik. 6 soal Mini Latihan Konseptual; materi figural sangat bergantung pada gambar sehingga teks saja tidak cukup, perlu cek visual/gambar saat diolah jadi konten belajar."
     },
     {
-      "judul": "Materi Analogi Verbal TIU — TemanASN",
+      "judul": "Materi Analogi Verbal TIU | TemanASN",
       "file": "skd_cpns_2/skd cpns 2/tiu-analogi-verbal.pdf",
       "materi": "TIU",
       "subtopik": [
@@ -227,7 +227,7 @@
       "catatan_kualitas": "PDF berteks (TemanASN Batch #4, by Adi), ekstraksi baik. ~10 contoh soal analogi dengan jawaban di dalam materi."
     },
     {
-      "judul": "Hitung Cepat — TemanASN",
+      "judul": "Hitung Cepat | TemanASN",
       "file": "skd_cpns_2/skd cpns 2/tiu-hitung-cepat.pdf",
       "materi": "TIU",
       "subtopik": [
@@ -255,7 +255,7 @@
       "kata": 590,
       "mengandung_soal_latihan": true,
       "perkiraan_jumlah_soal": 10,
-      "catatan_kualitas": "Hasil OCR; digit tabel pangkat ada yang salah baca (mis. '51?' '2.601', '61? SIA') — angka HARUS dihitung ulang (recompute), jangan dipercaya mentah-mentah. Halaman 3 berisi 10 soal latihan volume bangun ruang (kubus, balok, tabung, kerucut, prisma, limas, bola). File scan sumber: skd_cpns_2/skd cpns 2/tabel pangkat 2-3.pdf (3 hal; hanya layer teks 10 soal volume yang terekstrak, 154 kata — tabelnya berupa gambar)."
+      "catatan_kualitas": "Hasil OCR; digit tabel pangkat ada yang salah baca (mis. '51?' '2.601', '61? SIA'), angka HARUS dihitung ulang (recompute), jangan dipercaya mentah-mentah. Halaman 3 berisi 10 soal latihan volume bangun ruang (kubus, balok, tabung, kerucut, prisma, limas, bola). File scan sumber: skd_cpns_2/skd cpns 2/tabel pangkat 2-3.pdf (3 hal; hanya layer teks 10 soal volume yang terekstrak, 154 kata, tabelnya berupa gambar)."
     },
     {
       "judul": "Tabel Bilangan Pangkat 4 dari 1–100",
@@ -268,7 +268,7 @@
       "kata": 108,
       "mengandung_soal_latihan": false,
       "perkiraan_jumlah_soal": null,
-      "catatan_kualitas": "PDF berteks berupa tabel angka murni (hitungan kata rendah karena isinya angka, mis. '14=1' — superscript pangkat hilang saat ekstraksi). Sebaiknya angka diverifikasi/dihitung ulang sebelum dipakai sebagai konten."
+      "catatan_kualitas": "PDF berteks berupa tabel angka murni (hitungan kata rendah karena isinya angka, mis. '14=1', superscript pangkat hilang saat ekstraksi). Sebaiknya angka diverifikasi/dihitung ulang sebelum dipakai sebagai konten."
     },
     {
       "judul": "Ringkasan Materi TKP CPNS (Modul TKP)",
@@ -313,7 +313,7 @@
       "catatan_kualitas": "Hasil OCR cheat sheet bergaya kartu multi-kolom; tata letak kartu kadang mengacaukan urutan baca teks hasil OCR (kata kunci dan ciri soal tercampur). Satu-satunya penyebutan 'latihan soal' adalah iklan tryout premium di akhir, bukan soal. File scan sumber: skd_cpns_2/skd cpns 2/TKP.pdf (10 hal, teks tidak terekstrak)."
     },
     {
-      "judul": "Kartu Sakti TKP — Master",
+      "judul": "Kartu Sakti TKP | Master",
       "file": "skd_cpns_1/skd cpns 1/Kartu Sakti TKP - Master.pdf",
       "materi": "TKP",
       "subtopik": [
@@ -365,10 +365,10 @@
       "kata": 54860,
       "mengandung_soal_latihan": false,
       "perkiraan_jumlah_soal": null,
-      "catatan_kualitas": "Dokumen resmi MenPANRB (4 Nov 2024, ditandatangani elektronik BSrE). Kisi-kisi SKB per jabatan — SKB ditunda ke fase akhir pengembangan aplikasi. PDF berteks, ekstraksi baik; nama jabatan dalam kolom tabel kadang tidak terekstrak rapi sehingga daftar jabatan lengkap perlu dicek visual."
+      "catatan_kualitas": "Dokumen resmi MenPANRB (4 Nov 2024, ditandatangani elektronik BSrE). Kisi-kisi SKB per jabatan, SKB ditunda ke fase akhir pengembangan aplikasi. PDF berteks, ekstraksi baik; nama jabatan dalam kolom tabel kadang tidak terekstrak rapi sehingga daftar jabatan lengkap perlu dicek visual."
     },
     {
-      "judul": "KepmenPANRB 406/2026 — Nilai Ambang Batas SKD",
+      "judul": "KepmenPANRB 406/2026 | Nilai Ambang Batas SKD",
       "file": "2026kepmenpanrb406.pdf",
       "materi": "Referensi",
       "subtopik": [
@@ -383,7 +383,7 @@
       "catatan_kualitas": "Dokumen keputusan resmi (7 hal). Dokumen referensi, bukan materi belajar per subtopik. PDF berteks, ekstraksi baik."
     },
     {
-      "judul": "Buku Panduan Peserta CPNS 2026 — JadiASN",
+      "judul": "Buku Panduan Peserta CPNS 2026 | JadiASN",
       "file": "jadiasn/00_ebook_panduan_cpns2026.pdf",
       "materi": "Panduan",
       "subtopik": [
@@ -402,7 +402,7 @@
       "catatan_kualitas": "E-book gratis dari jadiasn.id (Edisi November 2026). PDF berteks, ekstraksi baik. Panduan proses seleksi, bukan materi SKD per subtopik."
     },
     {
-      "judul": "Buku Petunjuk Pendaftaran CASN 2024 — BKN",
+      "judul": "Buku Petunjuk Pendaftaran CASN 2024 | BKN",
       "file": "jadiasn/00_buku_petunjuk_bkn.pdf",
       "materi": "Panduan",
       "subtopik": [
@@ -416,7 +416,7 @@
       "kata": 4293,
       "mengandung_soal_latihan": false,
       "perkiraan_jumlah_soal": null,
-      "catatan_kualitas": "Buku petunjuk resmi BKN v01.00 (Agustus 2024) untuk CASN 2024 — sebagian langkah bisa berubah untuk seleksi 2026, perlu cek ulang. PDF berteks, ekstraksi baik."
+      "catatan_kualitas": "Buku petunjuk resmi BKN v01.00 (Agustus 2024) untuk CASN 2024, sebagian langkah bisa berubah untuk seleksi 2026, perlu cek ulang. PDF berteks, ekstraksi baik."
     }
   ],
   "bank_soal_terparse": [
@@ -427,10 +427,10 @@
       "catatan": "262 hal. Sudah ter-parse ke JSON (751 soal; angka '1266' di nama file salah). 2 kunci dari analisis isi perlu verifikasi manual (Konstitusi Q13=C, Q50=A)."
     },
     {
-      "judul": "Latihan Soal CPNS 2024 (TWK TIU TKP) — CATBKN",
+      "judul": "Latihan Soal CPNS 2024 (TWK TIU TKP) | CATBKN",
       "file": "skd_cpns_2/skd cpns 2/LATIHAN SOAL CPNS 2024 (TWK TIU TKP) UNTUK PERSIAPAN - CATBKN.pdf",
       "soal": 102,
-      "catatan": "55 hal. Sudah ter-parse (102 soal, tanpa kunci/pembahasan — link kunci mati)."
+      "catatan": "55 hal. Sudah ter-parse (102 soal, tanpa kunci/pembahasan, link kunci mati)."
     },
     {
       "judul": "30 Soal Latihan TIU 2026",
@@ -448,13 +448,13 @@
       "judul": "33 PDF soal JadiASN (TIU)",
       "file": "jadiasn/01_kecukupan_data.pdf s.d. jadiasn/33_memperkuat_memperlemah_menjebak_25.pdf (33 file)",
       "soal": 1014,
-      "catatan": "1.780 hal total. Sudah ter-parse (1.014 soal terverifikasi dari JSON; katalog mengklaim 1.090 soal — kelebihan ~76; angka '1.015' di catatan sebelumnya keliru 1 soal). Per paket: 01–16 @20 soal, 17–20 @30 soal (17 = 29 soal), 21–30 @50 soal, 31–33 @25 soal."
+      "catatan": "1.780 hal total. Sudah ter-parse (1.014 soal terverifikasi dari JSON; katalog mengklaim 1.090 soal, kelebihan ~76; angka '1.015' di catatan sebelumnya keliru 1 soal). Per paket: 01–16 @20 soal, 17–20 @30 soal (17 = 29 soal), 21–30 @50 soal, 31–33 @25 soal."
     },
     {
       "judul": "Katalog Bank Soal CPNS JadiASN (indeks 33 PDF)",
       "file": "Bank_Soal_CPNS_JADIASN_33_PDF_1090_SOAL___PEMBAHASAN.pdf",
       "soal": 0,
-      "catatan": "6 hal. Indeks/katalog 33 PDF JadiASN — bukan soal. Klaim 1.090 soal tidak sesuai hasil parse (1.014)."
+      "catatan": "6 hal. Indeks/katalog 33 PDF JadiASN, bukan soal. Klaim 1.090 soal tidak sesuai hasil parse (1.014)."
     }
   ],
   "file_pendukung_duplikat": [
@@ -505,7 +505,7 @@
       "file": "ocr/ (6 file .searchable.pdf)",
       "halaman": 274,
       "kata": null,
-      "catatan": "Total ~150 MB (146 MB terukur). Isi sama dengan 6 file .txt OCR — bisa dihapus bila tidak perlu."
+      "catatan": "Total ~150 MB (146 MB terukur). Isi sama dengan 6 file .txt OCR, bisa dihapus bila tidak perlu."
     }
   ]
 }

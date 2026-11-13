@@ -84,6 +84,247 @@ HANDBOOK_DROP_RES = [
     re.compile(r"^DAFTAR ISI$"),
 ]
 
+# ------------------------------------------------------------------
+# ------------------------------------------------------------------
+# Pembersih em-dash (U+2014). Disalin dari
+# ~/workspace/cpns/scripts/clean_emdash.py (skrip pembersihan
+# 2026-11-13, teruji via dry-run terhadap semua konteks). Konten OCR
+# memakai em-dash sebagai OCR dari "=" (mis. "2x2 =4"), panah
+# logika (p->q), rentang, dan pemisah klausa. Aturan peka konteks;
+# dipanggil di akhir clean_line() supaya rebuild dari PDF/OCR mentah
+# tetap bersih. Karakter em-dash ditulis sebagai escape \u2014 di
+# bawah ini (bukan literal) supaya file ini bebas literal em-dash.
+# JANGAN ubah logika ini tanpa menjalankan ulang validasi dry-run.
+FUNCTION_WORDS = {
+    "untuk", "dan", "atau", "yang", "dari", "di", "ke", "dalam", "dengan",
+    "adalah", "itu", "ini", "juga", "bagi", "antar", "antara", "atas",
+    "bawah", "oleh", "sebagai", "tentang", "tanpa", "serta", "hingga",
+    "sampai", "maka", "tetapi", "namun", "karena", "jika", "ketika",
+    "saat", "sebelum", "sesudah", "setelah", "merupakan", "yaitu",
+    "yakni", "pun", "lah", "kah",
+}
+MONTHS = {
+    "januari", "februari", "maret", "april", "mei", "juni", "juli",
+    "agustus", "september", "oktober", "november", "desember",
+}
+UNITS = {
+    "km", "hm", "dam", "m", "dm", "cm", "mm", "kg", "hg", "dag", "g",
+    "dg", "cg", "mg", "liter", "l", "dl", "cl", "ml", "hl", "dal",
+    "galon", "barel", "ka", "ha", "daa", "da", "ca", "ma", "cc",
+    "inci", "kaki", "yard", "mil", "ons", "kuintal", "ton", "are",
+    "detik", "menit", "jam", "hari", "minggu", "bulan", "tahun",
+    "rp", "rupiah", "persen", "derajat", "meter", "cm2", "cm3",
+    "m2", "m3", "km2",
+}
+MATH_TERMS = {
+    "bruto", "neto", "tara", "modal", "bunga", "rugi", "untung", "laba",
+    "kpk", "fpb", "luas", "volume", "keliling", "jarak", "kecepatan",
+    "debit", "perbandingan", "persentase", "rabat", "diskon",
+    "penjualan", "pembelian", "diameter", "frekuensi",
+}
+TOKEN_STRIP = ".,;:()\"'«»“”‘’[]{}<>?!*#$@%^&|\\/_+=~`\u2014–"
+def _tok(s):
+    return s.strip(TOKEN_STRIP)
+
+
+def _prev_token(text, pos):
+    # token = run non-spasi tanpa em-dash ("\u20149" -> "9", bukan "\u20149")
+    m = re.search(r"([^\s\u2014]+)[ \t]*$", text[:pos])
+    return _tok(m.group(1)) if m else ""
+
+
+def _prev_tokens(text, pos, n=2):
+    """n token terakhir sebelum pos (sudah strip). Dibatasi 60 karakter."""
+    toks = re.findall(r"[^\s\u2014]+", text[max(0, pos - 60):pos])
+    return [_tok(t) for t in toks[-n:]]
+
+
+def _is_power_token(tok):
+    # "s2", "t2", "x2", "s?2" \u2014 variabel berpangkat hasil OCR (s², t², x²)
+    return bool(re.fullmatch(r"[A-Za-z][^A-Za-z0-9]*\d+", tok or ""))
+
+
+def _next_token(text, pos):
+    m = re.match(r"[ \t\u2014]*([^\s\u2014]+)", text[pos:])
+    return _tok(m.group(1)) if m else ""
+
+
+def _is_numeric_token(tok):
+    if not tok:
+        return False
+    t = tok.replace(".", "").replace(",", "")
+    if t and t[0] in "+-":
+        t = t[1:]
+    if t and t[0].isdigit():
+        return True
+    return tok.lower().startswith("rp") or tok.startswith("%")
+
+
+def _is_pure_int(tok):
+    """Bilangan bulat (boleh pemisah ribuan '.'): '10', '1.850' -> int."""
+    if not tok:
+        return None
+    if re.fullmatch(r"\d{1,3}(\.\d{3})*", tok):
+        return int(tok.replace(".", ""))
+    if re.fullmatch(r"\d+", tok):
+        return int(tok)
+    return None
+
+
+def _is_time_token(tok):
+    return bool(re.fullmatch(r"\d{1,2}[.:]\d{2}", tok or ""))
+
+
+def _is_formula_token(tok):
+    return bool(re.fullmatch(r"[A-Za-z0-9]*[xX×][A-Za-z0-9]+", tok or ""))
+
+
+def _is_single_lower(tok):
+    return len(tok) == 1 and tok.islower() and tok.isalpha()
+
+
+def _window_tokens(text, a, b, n=2):
+    """n token terakhir sebelum a + n token pertama sesudah b (lowercase)."""
+    left = re.findall(r"[^\s\u2014]+", text[max(0, a - 60):a])[-n:]
+    right = re.findall(r"[^\s\u2014]+", text[b:b + 60])[:n]
+    return ([_tok(t).lower() for t in left],
+            [_tok(t).lower() for t in right])
+
+
+def _is_minus_window(text, a, b):
+    """'bruto - tara' / 'harga beli - rugi' / 'pembelian - harga penjualan'."""
+    prev2, next2 = _window_tokens(text, a, b)
+    left = {"bruto", "pembelian", "penjualan"}
+    right = {"tara", "rugi", "penjualan"}
+    if not (left & set(prev2)):
+        return False
+    if right & set(next2):
+        return True
+    # "harga" langsung sesudah dash: "Rugi harga pembelian [dash-dash] harga
+    # penjualan" (kata "penjualan" terpotong ke baris berikut saat build
+    # memproses per-baris, jadi jendela kanan hanya melihat "harga").
+    # Hanya token PERTAMA (bukan 2 token) agar "Harga penjualan [dash-dash]
+    # Rp18.000,00 Harga pembelian ..." tidak ikut terbalik.
+    return bool(next2) and next2[0] == "harga"
+
+
+def clean_materi_text(s, debug=False):
+    """Aturan materi, single-pass (posisi keputusan = koordinat asli)."""
+    if "\u2014" not in s:
+        return (s, []) if debug else s
+    decisions = []
+    out, i, pos, n = [], 0, 0, len(s)
+    while True:
+        m = s.find("\u2014", pos)
+        if m == -1:
+            break
+        # --- run ketat: rentang [-\u2014]+ yang mengandung dash ini ---
+        rs, re_ = m, m + 1
+        while rs > 0 and s[rs - 1] in "-\u2014":
+            rs -= 1
+        while re_ < n and s[re_] in "-\u2014":
+            re_ += 1
+        if re_ - rs >= 2:
+            run_left = s[rs - 1] if rs > 0 else ""
+            run_right = s[re_] if re_ < n else ""
+            prev = _prev_token(s, rs)
+            nxt = _next_token(s, re_)
+            if run_left == "\n" or run_right == "\n":
+                rep, rule = "", "run-tepi-baris-drop"
+            elif _is_time_token(prev) and _is_time_token(nxt):
+                rep, rule = "-", "run-rentang-waktu"
+            elif _is_minus_window(s, rs, re_):
+                rep, rule = "-", "run-minus-rumus"
+            else:
+                rep, rule = "=", "run-dash->="
+            decisions.append((rs, rule, rep, prev, nxt))
+            out.append(s[i:rs]); out.append(rep); i = re_; pos = re_
+            continue
+        # --- run berspasi: "\u2014 \u2014" ---
+        m2 = re.match(r"\u2014(?:[ \t]+\u2014)+", s[m:])
+        if m2:
+            prev = _prev_token(s, m)
+            nxt = _next_token(s, m + len(m2.group(0)))
+            decisions.append((m, "run-spasi->=", "=", prev, nxt))
+            out.append(s[i:m]); out.append("="); i = m + len(m2.group(0))
+            pos = i
+            continue
+        # --- dash tunggal ---
+        a = m
+        while a > 0 and s[a - 1] in " \t":
+            a -= 1
+        b = m + 1
+        while b < n and s[b] in " \t":
+            b += 1
+        left = s[a - 1] if a > 0 else ""
+        right = s[b] if b < n else ""
+        prev = _prev_token(s, a)
+        nxt = _next_token(s, b)
+        prev_l, nxt_l = prev.lower(), nxt.lower()
+        had_space = (a < m) or (b > m + 1)
+        # ellipsis "..." bukan akhir kalimat / bukan simbol
+        left_dot = left == "." and not (a >= 2 and s[a - 2] == ".")
+        right_dot = right == "." and not (b + 1 < n and s[b + 1] == ".")
+        if left in "!?," or left_dot:
+            rep, rule = " ", "drop-setelah-titik/koma"
+        elif right == ",":
+            rep, rule = "", "drop-koma-sudah-ada"
+        elif left in "\n" or right in "\n" or left == "" or right == "":
+            rep, rule = "", "drop-tepi-baris"
+        elif right_dot:
+            rep, rule = (" -" if a < m else "-"), "simbol-sebelum-titik"
+        elif left in "»«" or right in "»«":
+            rep, rule = (" - " if had_space else "-"), "simbol-antara-»«"
+        elif (re.fullmatch(r"(19|20)\d\d", prev)
+              and any(mn in s[b:b + 20].lower() for mn in MONTHS)):
+            rep, rule = "-", "rentang-tanggal"
+        elif _is_time_token(prev) and _is_time_token(nxt):
+            rep, rule = " - ", "rentang-waktu"
+        elif _is_single_lower(prev) and _is_single_lower(nxt):
+            rep, rule = " → ", "panah-logika"
+        elif _is_minus_window(s, a, b):
+            rep, rule = " - ", "minus-rumus"
+        elif nxt_l not in FUNCTION_WORDS and (
+            _is_numeric_token(nxt)
+            or nxt_l.strip("?") in UNITS
+            or _is_formula_token(nxt)
+            or prev_l in MATH_TERMS
+            or _is_single_lower(prev)
+            or _is_single_lower(nxt)
+            or (_is_power_token(nxt) and not _is_power_token(prev))
+            or (_is_numeric_token(prev)
+                and _prev_tokens(s, a, 2)[:1] in (["x"], ["X"], ["×"]))
+        ):
+            # deret bilangan berurutan (10, 9, 8, ...) bukan persamaan,
+            # KECUALI ekspresi dalam kurung / jumlah dua suku ("(2+2) = 4")
+            pv, nv = _is_pure_int(prev), _is_pure_int(nxt)
+            if pv is not None and nv is not None and abs(pv - nv) <= 2:
+                is_sum = False
+                if s[a - 1] == ")":
+                    is_sum = True  # "(2+2) = 4"
+                else:
+                    nums = [_is_pure_int(t) for t in _prev_tokens(s, a, 4)]
+                    nums = [x for x in nums if x is not None][-2:]
+                    if len(nums) == 2 and nums[0] + nums[1] == nv:
+                        is_sum = True  # "2 + 2 = 4"
+                if is_sum:
+                    rep, rule = " = ", "sama-dengan"
+                else:
+                    rep, rule = ", ", "koma-deret"
+            else:
+                rep, rule = " = ", "sama-dengan"
+        elif prev and prev[-1].isdigit() and nxt and nxt[0].isdigit():
+            rep, rule = "-", "digit-digit"
+        else:
+            rep, rule = ", ", "koma"
+        decisions.append((m, rule, rep, prev, nxt))
+        out.append(s[i:a]); out.append(rep); i = b; pos = b
+    out.append(s[i:])
+    res = "".join(out)
+    return (res, decisions) if debug else res
+
+
+
 def clean_line(ln):
     ln = ln.replace("\u00a0", " ")
     ln = despace(ln)
@@ -98,7 +339,8 @@ def clean_line(ln):
     # "e Definisi: ..." -> "Definisi: ..." (ikon 'e' hasil OCR)
     if ":" in ln:
         ln = re.sub(r"^e\s+(?=[A-Z])", "", ln)
-    ln = re.sub(r"\s+", " ", ln).strip(" -–—")
+    ln = re.sub(r"\s+", " ", ln).strip(" -–\u2014")
+    ln = clean_materi_text(ln)  # hapus em-dash (aturan peka konteks)
     return ln
 
 def find_repeated_edge_lines(pages, min_count=3, min_frac=0.15):
@@ -238,7 +480,7 @@ def is_heading(ln, pdf_source, subtopik_keywords):
     m = re.match(r"^([A-Z])\.\s+(.+)$", ln)
     if m and len(m.group(2)) >= 8 and m.group(2)[0].isupper():
         return True
-    # bernomor "1. Judul ..." (tanpa titik akhir) — hanya sumber PDF yang rapi;
+    # bernomor "1. Judul ..." (tanpa titik akhir), hanya sumber PDF yang rapi;
     # di OCR, butir bernomor hampir selalu item daftar, bukan judul.
     # Batas 40 karakter + tanpa '=' / nomor bersarang agar soal contoh tidak jadi judul.
     m = re.match(r"^\d{1,2}\.\s+(.+)$", ln)
@@ -463,14 +705,14 @@ def clean_heading_text(t):
     # bukan judul bab. Ekor sampah simbol ("PROLOG »« ....") juga dibuang.
     m = re.match(r"^(Ringkas\s+\d+)\s*:\s*(.+)$", t)
     if m:
-        tail = m.group(2).strip().rstrip("/-–— ").strip()
+        tail = m.group(2).strip().rstrip("/-–\u2014 ").strip()
         if not re.search(r"[A-Z]", tail):
             return m.group(1)
         nonalnum = sum(1 for c in tail if not c.isalnum() and c != " ")
         if "»" in tail or "«" in tail or (tail and nonalnum / len(tail) > 0.4):
             return m.group(1)
         return m.group(1) + ": " + tail
-    if re.match(r"^(BAB|BAGIAN)\s+[IVXL0-9]+\s*[-–—]?\s*$", t):
+    if re.match(r"^(BAB|BAGIAN)\s+[IVXL0-9]+\s*[-–\u2014]?\s*$", t):
         return t
     alpha = [c for c in t if c.isalpha()]
     if alpha and sum(1 for c in alpha if c.isupper()) / len(alpha) >= 0.8 and len(alpha) >= 4:
@@ -518,7 +760,7 @@ def build_sections(blocks, doc_id, subtopik, max_words=1500, target=1100,
                 cur_title = clean_heading_text(b["text"])
             elif cur_title is not None and not cur_blocks:
                 # judul berurutan -> gabung
-                cur_title = cur_title + " — " + clean_heading_text(b["text"])
+                cur_title = cur_title + ": " + clean_heading_text(b["text"])
             else:
                 raw.append((cur_title or default_title, cur_blocks))
                 cur_title, cur_blocks = clean_heading_text(b["text"]), []
@@ -753,13 +995,13 @@ DOCS = [
                    "Silogisme","Aritmetika dan aljabar","Deret angka","Kecepatan berhitung",
                    "Pecahan dan perbandingan"],
          catatan_kualitas="Hasil OCR modul scan; rumus dan notasi matematika kadang kacau (perlu cek manual). Mengandung ~40 contoh soal dengan jawaban + pembahasan. Tidak mencakup materi figural/gambar."),
-    dict(id="tiu-analogi-verbal", judul="Materi Analogi Verbal TIU — TemanASN",
+    dict(id="tiu-analogi-verbal", judul="Materi Analogi Verbal TIU | TemanASN",
          materi="TIU", kind="pdf", file="skd_cpns_2/skd cpns 2/tiu-analogi-verbal.pdf", halaman=4,
          deskripsi="Materi analogi verbal: definisi, bentuk-bentuk soal, dan contoh analogi beserta pembahasan.",
          subtopik=["Definisi analogi verbal","Bentuk-bentuk soal analogi (dua kata, kalimat)",
                    "Contoh analogi profesi dan tempat kerja"],
          catatan_kualitas="PDF berteks, ekstraksi baik. ~10 contoh soal analogi dengan jawaban di dalam materi."),
-    dict(id="tiu-hitung-cepat", judul="Hitung Cepat — TemanASN",
+    dict(id="tiu-hitung-cepat", judul="Hitung Cepat | TemanASN",
          materi="TIU", kind="pdf", file="skd_cpns_2/skd cpns 2/tiu-hitung-cepat.pdf", halaman=10,
          deskripsi="Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
          subtopik=["Jenis bilangan (ABCSIROPP)","Sifat-sifat bilangan","Pecahan","Teknik hitung cepat"],
@@ -793,7 +1035,7 @@ DOCS = [
 # Halaman sampul, daftar isi, disclaimer, dan promosi (video/buku) dilewati.
 HANDBOOKS = {
     "tiu-handbook-verbal": dict(
-        judul="Handbook TIU SKD CPNS Seri 1 — Kemampuan Verbal",
+        judul="Handbook TIU SKD CPNS Seri 1 | Kemampuan Verbal",
         file="bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri1_Kemampuan_Verbal_Landscape-1-1.pdf",
         halaman=46,
         deskripsi="Handbook kemampuan verbal: analogi, silogisme, penalaran analitis, teknik eliminasi, error pattern, dan mini drill.",
@@ -807,7 +1049,7 @@ HANDBOOKS = {
                 "VIII": "Mini Drill", "IX": "Checklist Sebelum Memilih Jawaban",
                 "X": "Cheat Sheet TIU Verbal", "XI": "Pola Penguasaan Materi"}),
     "tiu-handbook-numerik": dict(
-        judul="Handbook TIU SKD CPNS Seri 2 — Kemampuan Numerik",
+        judul="Handbook TIU SKD CPNS Seri 2 | Kemampuan Numerik",
         file="bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri2_Kemampuan_Numerik_Landscape-1-1.pdf",
         halaman=44,
         deskripsi="Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, hitung cepat, dan mini drill.",
@@ -820,13 +1062,13 @@ HANDBOOKS = {
                 "VII": "Jebakan TIU Numerik", "VIII": "Mini Drill", "IX": "Cheat Sheet",
                 "X": "Materi Pengayaan", "XI": "Prioritas Belajar"}),
     "tiu-handbook-figural": dict(
-        judul="Handbook TIU SKD CPNS Seri 3 — Kemampuan Figural",
+        judul="Handbook TIU SKD CPNS Seri 3 | Kemampuan Figural",
         file="bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri3_Kemampuan_Figural_Landscape-1-1.pdf",
         halaman=57,
         deskripsi="Handbook kemampuan figural: analogi gambar, ketidaksamaan, serial gambar, dan strategi mengerjakan soal gambar.",
         subtopik=["Analogi gambar","Ketidaksamaan","Serial gambar","Strategi mengerjakan figural",
                   "Jebakan figural","Formula pemeriksaan cepat","Mini latihan konseptual"],
-        catatan_kualitas="PDF berteks landscape, ekstraksi baik. Materi figural sangat bergantung pada gambar sehingga teks saja tidak cukup — perlu cek visual/gambar saat dipakai sebagai konten belajar.",
+        catatan_kualitas="PDF berteks landscape, ekstraksi baik. Materi figural sangat bergantung pada gambar sehingga teks saja tidak cukup, perlu cek visual/gambar saat dipakai sebagai konten belajar.",
         pengantar="Catatan Acuan", penutup="Rangkuman Satu Halaman",
         bagian={"I": "Dasar Kemampuan Figural", "II": "Analogi Gambar", "III": "Ketidaksamaan",
                 "IV": "Serial Gambar", "V": "Strategi Mengerjakan Figural",
@@ -894,20 +1136,20 @@ def process_handbook(doc_id):
     n = 0
     for lb, idxs in groups:
         if lb[0] == "bagian":
-            judul = f"Bagian {lb[1]} — {cfg['bagian'][lb[1]]}"
+            judul = f"Bagian {lb[1]}: {cfg['bagian'][lb[1]]}"
             sub = match_subtopik(cfg["bagian"][lb[1]], cfg["subtopik"], cfg["subtopik"][0])
             catatan = None
         elif lb[0] == "pengantar":
-            judul = f"Pengantar — {cfg['pengantar']}"
+            judul = f"Pengantar: {cfg['pengantar']}"
             sub = cfg["subtopik"][0]
             catatan = None
         elif lb[0] == "penutup":
-            judul = f"Penutup — {cfg['penutup']}"
+            judul = f"Penutup: {cfg['penutup']}"
             sub = cfg["subtopik"][0]
             catatan = None
         else:  # lampiran
-            judul = ("Lampiran — Kunci Jawaban dan Pembahasan" if lb[1] == "kunci"
-                     else "Lampiran — Latihan Soal Bergambar")
+            judul = ("Lampiran: Kunci Jawaban dan Pembahasan" if lb[1] == "kunci"
+                     else "Lampiran: Latihan Soal Bergambar")
             sub = "Mini latihan konseptual"
             catatan = ("Soal-soal ini bergambar; teks hanya memuat instruksi dan pembahasan, "
                        "gambar soalnya tidak tersedia dalam teks.")
@@ -953,7 +1195,7 @@ KARTU_FOOTER = {"PROFESIONALISME", "JEJARING KERJA", "SOSIAL BUDAYA",
                 "PELAYANAN PUBLIK", "TIK"}
 
 def process_kartu_sakti():
-    cfg = dict(id="tkp-kartu-sakti", judul="Kartu Sakti TKP — Master", materi="TKP",
+    cfg = dict(id="tkp-kartu-sakti", judul="Kartu Sakti TKP | Master", materi="TKP",
                deskripsi="Referensi cepat TKP: definisi kompetensi, deskripsi level 0–6, dan kata kunci per aspek.",
                sumber="skd_cpns_1/skd cpns 1/Kartu Sakti TKP - Master.pdf", halaman=7,
                subtopik=["Profesionalisme","Jejaring kerja","Pelayanan publik","Sosial budaya",
@@ -1109,7 +1351,7 @@ def process_kartu_sakti():
         if kw:
             parts.append(f"Kata kunci: {kw}")
         konten = "\n\n".join(parts)
-        judul = f"{e['aspek']} — {e['kompetensi']}" + (f" ({e['kode']})" if e["kode"] else "")
+        judul = f"{e['aspek']}: {e['kompetensi']}" + (f" ({e['kode']})" if e["kode"] else "")
         sections.append({"id": f"tkp-kartu-sakti-s{i:02d}", "nomor": e["nomor"],
                          "subtopik": st, "judul": judul,
                          "konten": konten, "kata": len(konten.split())})
@@ -1154,13 +1396,13 @@ BANG_ARYA_DROP = {
 }
 
 def process_bang_arya():
-    cfg = dict(id="twk-bang-arya", judul="Mastery TWK 2024 — Kang Arya (TWK Bang Arya)",
+    cfg = dict(id="twk-bang-arya", judul="Mastery TWK 2024 | Kang Arya (TWK Bang Arya)",
                materi="TWK",
                deskripsi="Buku soal TWK + pembahasan per topik: Pancasila, Bela Negara, Integritas, Bahasa Indonesia, Nasionalisme & Bhinneka Tunggal Ika, dan Pilar Negara (~300 soal).",
                sumber="skd_cpns_2/skd cpns 2/TWK BANG ARYA.pdf", halaman=121,
                subtopik=["Pancasila","Bela Negara","Pilar Negara","Integritas",
                          "Nasionalisme dan Bhinneka Tunggal Ika","Bahasa Indonesia"],
-               catatan_kualitas="PDF berteks, kualitas ekstraksi baik. Buku soal + pembahasan: 6 topik x ~50 soal. Sebagian soal memakai pola opsi berulang (opsi A-D sama di banyak soal Pancasila) — perlu kurasi sebelum dipakai ulang. Buku dinyatakan bebas dibagikan, tidak untuk diperjualbelikan.")
+               catatan_kualitas="PDF berteks, kualitas ekstraksi baik. Buku soal + pembahasan: 6 topik x ~50 soal. Sebagian soal memakai pola opsi berulang (opsi A-D sama di banyak soal Pancasila), perlu kurasi sebelum dipakai ulang. Buku dinyatakan bebas dibagikan, tidak untuk diperjualbelikan.")
     pages = extract_pdf_pages(os.path.join(SRC, cfg["sumber"]))
     assert len(pages) == 121, f"Bang Arya: {len(pages)} halaman, perkiraan 121"
     sections = []
@@ -1197,7 +1439,7 @@ def process_bang_arya():
 
 # ---------------------------------------------------------------- Tabel pangkat (khusus)
 def process_tabel_pangkat():
-    # Hitung ulang secara programatis — digit OCR TIDAK dipercaya.
+    # Hitung ulang secara programatis, digit OCR TIDAK dipercaya.
     t2 = [[n, n ** 2] for n in range(1, 101)]
     t3 = [[n, n ** 3] for n in range(1, 101)]
     t4 = [[n, n ** 4] for n in range(1, 101)]
@@ -1334,11 +1576,11 @@ def main():
         "dikecualikan_dari_mvp": [
             {"judul": "Materi Pokok SKB dengan CAT Pengadaan CPNS TA 2024",
              "materi": "SKB", "alasan": "SKB ditunda ke fase akhir pengembangan aplikasi."},
-            {"judul": "KepmenPANRB 406/2026 — Nilai Ambang Batas SKD",
+            {"judul": "KepmenPANRB 406/2026 | Nilai Ambang Batas SKD",
              "materi": "Referensi", "alasan": "Dokumen referensi passing grade, bukan materi belajar per subtopik."},
-            {"judul": "Buku Panduan Peserta CPNS 2026 — JadiASN",
+            {"judul": "Buku Panduan Peserta CPNS 2026 | JadiASN",
              "materi": "Panduan", "alasan": "Panduan proses seleksi, bukan materi SKD per subtopik."},
-            {"judul": "Buku Petunjuk Pendaftaran CASN 2024 — BKN",
+            {"judul": "Buku Petunjuk Pendaftaran CASN 2024 | BKN",
              "materi": "Panduan", "alasan": "Panduan pendaftaran SSCASN, bukan materi SKD per subtopik."},
         ],
     }

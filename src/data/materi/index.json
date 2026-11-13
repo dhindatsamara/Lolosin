@@ -1,13 +1,13 @@
 {
   "dibuat": "2026-11-13",
   "total_dokumen": 17,
-  "total_kata": 124163,
+  "total_kata": 124085,
   "total_halaman": 591,
   "dokumen": [
     {
       "id": "twk-bang-arya",
       "file": "twk-bang-arya.json",
-      "judul": "Mastery TWK 2024 — Kang Arya (TWK Bang Arya)",
+      "judul": "Mastery TWK 2024 | Kang Arya (TWK Bang Arya)",
       "materi": "TWK",
       "deskripsi": "Buku soal TWK + pembahasan per topik: Pancasila, Bela Negara, Integritas, Bahasa Indonesia, Nasionalisme & Bhinneka Tunggal Ika, dan Pilar Negara (~300 soal).",
       "halaman": 121,
@@ -66,7 +66,7 @@
       "materi": "TWK",
       "deskripsi": "Ringkasan materi TWK lengkap: Pancasila, UUD 1945, Bhinneka Tunggal Ika, tata negara, HAM, sejarah nasional, dan hubungan internasional.",
       "halaman": 93,
-      "kata": 19532,
+      "kata": 19498,
       "subtopik": [
         "Pancasila",
         "UUD 1945",
@@ -127,11 +127,11 @@
     {
       "id": "tiu-analogi-verbal",
       "file": "tiu-analogi-verbal.json",
-      "judul": "Materi Analogi Verbal TIU — TemanASN",
+      "judul": "Materi Analogi Verbal TIU | TemanASN",
       "materi": "TIU",
       "deskripsi": "Materi analogi verbal: definisi, bentuk-bentuk soal, dan contoh analogi beserta pembahasan.",
       "halaman": 4,
-      "kata": 873,
+      "kata": 871,
       "subtopik": [
         "Definisi analogi verbal",
         "Bentuk-bentuk soal analogi (dua kata, kalimat)",
@@ -142,11 +142,11 @@
     {
       "id": "tiu-handbook-figural",
       "file": "tiu-handbook-figural.json",
-      "judul": "Handbook TIU SKD CPNS Seri 3 — Kemampuan Figural",
+      "judul": "Handbook TIU SKD CPNS Seri 3 | Kemampuan Figural",
       "materi": "TIU",
       "deskripsi": "Handbook kemampuan figural: analogi gambar, ketidaksamaan, serial gambar, dan strategi mengerjakan soal gambar.",
       "halaman": 57,
-      "kata": 4954,
+      "kata": 4927,
       "subtopik": [
         "Analogi gambar",
         "Ketidaksamaan",
@@ -161,11 +161,11 @@
     {
       "id": "tiu-handbook-numerik",
       "file": "tiu-handbook-numerik.json",
-      "judul": "Handbook TIU SKD CPNS Seri 2 — Kemampuan Numerik",
+      "judul": "Handbook TIU SKD CPNS Seri 2 | Kemampuan Numerik",
       "materi": "TIU",
       "deskripsi": "Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, hitung cepat, dan mini drill.",
       "halaman": 44,
-      "kata": 4638,
+      "kata": 4633,
       "subtopik": [
         "Berhitung",
         "Deret angka",
@@ -180,11 +180,11 @@
     {
       "id": "tiu-handbook-verbal",
       "file": "tiu-handbook-verbal.json",
-      "judul": "Handbook TIU SKD CPNS Seri 1 — Kemampuan Verbal",
+      "judul": "Handbook TIU SKD CPNS Seri 1 | Kemampuan Verbal",
       "materi": "TIU",
       "deskripsi": "Handbook kemampuan verbal: analogi, silogisme, penalaran analitis, teknik eliminasi, error pattern, dan mini drill.",
       "halaman": 46,
-      "kata": 4997,
+      "kata": 4989,
       "subtopik": [
         "Analogi",
         "Silogisme",
@@ -199,7 +199,7 @@
     {
       "id": "tiu-hitung-cepat",
       "file": "tiu-hitung-cepat.json",
-      "judul": "Hitung Cepat — TemanASN",
+      "judul": "Hitung Cepat | TemanASN",
       "materi": "TIU",
       "deskripsi": "Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
       "halaman": 10,
@@ -219,7 +219,7 @@
       "materi": "TIU",
       "deskripsi": "Ringkasan materi TIU: penalaran verbal, analitis, logis, silogisme, aritmetika, deret angka, dan hitung cepat, lengkap dengan contoh soal dan pembahasan.",
       "halaman": 98,
-      "kata": 18461,
+      "kata": 18481,
       "subtopik": [
         "Penalaran verbal: sinonim, antonim, analogi",
         "Penalaran analitis",
@@ -269,7 +269,7 @@
     {
       "id": "tkp-kartu-sakti",
       "file": "tkp-kartu-sakti.json",
-      "judul": "Kartu Sakti TKP — Master",
+      "judul": "Kartu Sakti TKP | Master",
       "materi": "TKP",
       "deskripsi": "Referensi cepat TKP: definisi kompetensi, deskripsi level 0–6, dan kata kunci per aspek.",
       "halaman": 7,
@@ -294,7 +294,7 @@
       "materi": "TKP",
       "deskripsi": "Ringkasan materi TKP per aspek: integritas, adaptasi, pengendalian diri, semangat berprestasi, pelayanan, dan lainnya, dengan contoh soal situasional dan skor.",
       "halaman": 60,
-      "kata": 13948,
+      "kata": 13926,
       "subtopik": [
         "Integritas",
         "Kejujuran",
@@ -337,17 +337,17 @@
       "alasan": "SKB ditunda ke fase akhir pengembangan aplikasi."
     },
     {
-      "judul": "KepmenPANRB 406/2026 — Nilai Ambang Batas SKD",
+      "judul": "KepmenPANRB 406/2026 | Nilai Ambang Batas SKD",
       "materi": "Referensi",
       "alasan": "Dokumen referensi passing grade, bukan materi belajar per subtopik."
     },
     {
-      "judul": "Buku Panduan Peserta CPNS 2026 — JadiASN",
+      "judul": "Buku Panduan Peserta CPNS 2026 | JadiASN",
       "materi": "Panduan",
       "alasan": "Panduan proses seleksi, bukan materi SKD per subtopik."
     },
     {
-      "judul": "Buku Petunjuk Pendaftaran CASN 2024 — BKN",
+      "judul": "Buku Petunjuk Pendaftaran CASN 2024 | BKN",
       "materi": "Panduan",
       "alasan": "Panduan pendaftaran SSCASN, bukan materi SKD per subtopik."
     }

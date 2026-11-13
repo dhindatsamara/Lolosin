@@ -1,6 +1,6 @@
 {
   "id": "tiu-hitung-cepat",
-  "judul": "Hitung Cepat — TemanASN",
+  "judul": "Hitung Cepat | TemanASN",
   "materi": "TIU",
   "deskripsi": "Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
   "sumber": "skd_cpns_2/skd cpns 2/tiu-hitung-cepat.pdf",
@@ -77,7 +77,7 @@
     {
       "id": "tiu-hitung-cepat-s09",
       "subtopik": "Pecahan",
-      "judul": "Besaran Berdimensi Satu — Tangga Satuan Panjang Tangga Satuan Massa — Besaran Berdimensi Dua dan Tiga — Tangga Satuan Luas Tangga Satuan Volume",
+      "judul": "Besaran Berdimensi Satu: Tangga Satuan Panjang Tangga Satuan Massa: Besaran Berdimensi Dua dan Tiga: Tangga Satuan Luas Tangga Satuan Volume",
       "konten": "Contoh Soal:\n\n1. Panjang papan tulis adalah 1,75m. Lebar papan tulis adalah 1m.\n\nTuliskan luas papan tulis! Jawab : 𝐿 = 𝑝𝑥𝑙 = 1,75𝑚 𝑥 1𝑚 = 1,75𝑚2\n\n2. Sebuah lapangan dengan panjang 20m dan lebar 15m. Tentukan luas lapangan dalam satuan cm2!\n\nJawab: 𝐿 = 𝑝𝑥𝑙 = 20𝑚 𝑥 15𝑚 = 300𝑚2 300𝑚2 = 300𝑥10000 = 3.000.000 𝑐𝑚2 𝑑𝑎𝑟𝑖 𝑚2 𝑘𝑒 𝑐𝑚2 𝑝𝑒𝑟𝑙𝑢 𝑚𝑒𝑛𝑢𝑟𝑢𝑛𝑖 2 𝑏𝑢𝑎ℎ 𝑎𝑛𝑎𝑘 𝑡𝑎𝑛𝑔𝑔𝑎. 𝑗𝑖𝑘𝑎 𝑚𝑒𝑛𝑢𝑟𝑢𝑛𝑖 𝑠𝑒𝑏𝑢𝑎ℎ 𝑎𝑛𝑎𝑘 𝑡𝑎𝑛𝑔𝑔𝑎 𝑑𝑖𝑘𝑎𝑙𝑖 100 𝑚𝑎𝑘𝑎 𝑑𝑢𝑎 𝑎𝑛𝑎𝑘 𝑡𝑎𝑛𝑔𝑔𝑎 𝑑𝑖𝑘𝑎𝑙𝑖 10.000",
       "kata": 82,
       "catatan": "Hasil OCR bagian ini kurang rapi (tata letak dua kolom/kartu atau karakter salah baca); isi dipertahankan apa adanya."

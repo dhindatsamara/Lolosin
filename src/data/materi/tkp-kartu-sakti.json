@@ -1,6 +1,6 @@
 {
   "id": "tkp-kartu-sakti",
-  "judul": "Kartu Sakti TKP — Master",
+  "judul": "Kartu Sakti TKP | Master",
   "materi": "TKP",
   "deskripsi": "Referensi cepat TKP: definisi kompetensi, deskripsi level 0–6, dan kata kunci per aspek.",
   "sumber": "skd_cpns_1/skd cpns 1/Kartu Sakti TKP - Master.pdf",
@@ -22,7 +22,7 @@
       "id": "tkp-kartu-sakti-s01",
       "nomor": 1,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Fleksibilitas Berpikir (FB)",
+      "judul": "Profesionalisme: Fleksibilitas Berpikir (FB)",
       "konten": "Kelompok: Kemampuan Berfikir (KB)\n\nDefinisi: Kemampuan menggunakan berbagai sudut pandang dalam menghadapi tuntutan perubahan.\n\n- Level 0: Mengetahui adanya perbedaan sudut pandang.\n- Level 1: Mengenali sudut pandang orang lain yang berbeda.\n- Level 2: Menyadari sudut pandang orang lain yang berbeda.\n- Level 3: Menyelaraskan sudut pandang pribadinya dengan sudut pandang orang lain.\n- Level 4: Mengakui kebenaran sudut pandang orang Lain.\n- Level 5: Mengakomodir berbagai perbedaan sudut pandang sesuai dengan tuntutan perubahan.\n- Level 6: Mendayagunakan berbagai sudut pandang orang lain untuk mengoptimalkan kemampuan berfikir.\n\nKata kunci: Mampu menggunakan berbagai sudut pandang.",
       "kata": 95
     },
@@ -30,7 +30,7 @@
       "id": "tkp-kartu-sakti-s02",
       "nomor": 2,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Inovasi (lnov)",
+      "judul": "Jejaring Kerja: Inovasi (lnov)",
       "konten": "Kelompok: Kemampuan Berfikir (KB)\n\nDefinisi: Kemampuan memunculkan ide lgagasan dan pemikiran baru dalam rangka meningkatkan efektivitas kerja.\n\n- Level 0: Menggunakan gagasan / pemikiran yang sudah ada.\n- Level 1: Mengenali adanya gagasan baru.\n- Level 2: Mengidentifikasi alternatif ide & gagasan baru yang mungkin dapat diterapkan.\n- Level 3: Menentukan alternatif ide yang mungkin dapat diterapkan.\n- Level 4: Mengadopsi ide lpemikiran yang cocok diterapkan dalam lingkungan kerja.\n- Level 5: Mengadaptasi ide / pemikiran untuk efektivitas organisasi.\n- Level 6: Menciptakan ide pemikiran yang orisinil yang bermanfaat bagi organisasi.\n\nKata kunci: Mampu membuat ide/ gagasan dan pemikiran baru.",
       "kata": 100
     },
@@ -38,7 +38,7 @@
       "id": "tkp-kartu-sakti-s03",
       "nomor": 3,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Berpikir Analitis (BA)",
+      "judul": "Jejaring Kerja: Berpikir Analitis (BA)",
       "konten": "Kelompok: Kemampuan Berfikir (KB)\n\nDefinisi: Kemampuan menguraikan permasalahan berdasarkan informasi yang relevan dari berbagai sumber secara komprehensif untuk mengidentifikasi penyebab dan dampak terhadap organisasi.\n\n- Level 0: Mengetahui permasalahan yang terjadi dalam pekerjaan.\n- Level 1: Memahami permasalahan yang terjadi dalam pekerjaannya\n- Level 2: Menguraikan faktor-faktor penyebab dan dampak dari permasalahan terkait dengan pekerjaannya.\n- Level 3: Mengidentifikasi faktor- faktor potensial permasalahan yang berdampak kepada keberlangsungan organisasi.\n- Level 4: Menguraikan dampak jangka panjang dari permasalahan yang muncul terhadap kelangsungan kegiatan organisasi.\n- Level 5: Merumuskan pendekatan komprehensif yang dapat dilakukan organisasi untuk mengatasi permasalahan organisasi\n- Level 6: Memproyeksikan situasi / dampak jangka panjang dari suatu fenomena umum dari sudut pandang kepentingan organisasi.\n\nKata kunci: Mampu menganalisis permasalahan atau mengurai permasalahan.",
       "kata": 123
     },
@@ -46,7 +46,7 @@
       "id": "tkp-kartu-sakti-s04",
       "nomor": 4,
       "subtopik": "Pelayanan publik",
-      "judul": "Pelayanan Publik — Berpikir Konseptual (BK)",
+      "judul": "Pelayanan Publik: Berpikir Konseptual (BK)",
       "konten": "Kelompok: Kemampuan Berfikir (KB)\n\nDefinisi: pola menjadi hubungan dalam suatu rangkaian informasi untuk membentuk pemahaman baru terhadap informasi tersebut. Mengidentifikasi pola/ hubungan dari data / informasi yang sudah tersedia berdasarkan suatu konsep yang konkret dan sederhana. Menyimpulkan keterkaitan pola / hubungan dari informasi yang ada menjadi suatu rumusan yang jelas dan komprehensif.\n\n- Level 0: Membuat kesimpulan dari suatu hal berdasarkan informasi parsial.\n- Level 3: Mengkaji proses pengambilan kesimpulan / formulasi - formulasi pola hubungan informasi.\n- Level 4: Merumuskan konsep berdasarkan pola hubungan informasi yang ada.\n- Level 5: Mengembangkan suatu konsep baru sesuai dengan kebutuhan nyata organisasi.\n- Level 6: Mengembangkan suatu konsep baru sesuai dengan kebutuhan organisasi ke depan.\n\nKata kunci: Mampu menghubungkan pola menjadi hubungan suatu informasi.",
       "kata": 122
     },
@@ -54,7 +54,7 @@
       "id": "tkp-kartu-sakti-s05",
       "nomor": 5,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Adaptasi terhadap Perubahan (AtP)",
+      "judul": "Profesionalisme: Adaptasi terhadap Perubahan (AtP)",
       "konten": "Kelompok: Mengelola Diri (MD)\n\nDefinisi: Kemampuan menyesuaikan diri terhadap perubahan sehingga tetap dapat mempertahankan efektivitas kerja.\n\n- Level 0: Menganggap perubahan bukan suatu hal yang penting.\n- Level 1: Mengikuti perubahan sesuai dengan tuntutan kebijakan organisasi.\n- Level 2: Menyesuaikan diri terhadap perubahan yang terjadi atas kesadaran dan inisiatif sendiri.\n- Level 3: Mencari alternatif dan pendekatan diri untuk memenuhi kebutuhan dari situasi yang berbedaf baru.\n- Level 4: Mengembangkan kemampuan diri untuk menghadapi tuntutan atau dinamika perubahan\n- Level 5: Mengantisipasi perubahan dan membuat penyesuaian jangka panjang dalam organisasi sebagai respon terhadap situasi.\n\nKata kunci: Mampu menyesuaikan terhadap perubahan situasi dalam lingkungan kerja. Membuat pola-pola atau pendekatan baru dalam penyesuaian dirinya dengan dinamika tuntutan perubahan baik jangka pendek maupun jangka panjang.",
       "kata": 122
     },
@@ -62,7 +62,7 @@
       "id": "tkp-kartu-sakti-s06",
       "nomor": 6,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Integritas (lnt)",
+      "judul": "Profesionalisme: Integritas (lnt)",
       "konten": "Kelompok: Mengelola Diri (MD)\n\nDefinisi: Kemampuan bertindak secara konsisten dan transparan dalam segala situasi dan kondisi sesuai dengan nilai-nilai, norma atau etika yang berlaku di lingkungan kerja.\n\n- Level 0: Menyadari tentang pentingnya norma dan etika bagi organisasi\n- Level 1: Menerapkan norma-dan etika organisasi sebatas memenuhi kewajiban.\n- Level 2: Menerapkan norma dan etika organisasi sebatas pada dirinya dalam segala situasi dan kondisi.\n- Level 3: Mengingatkan orang lain untuk bertindak sesuai dengan nilai, norma dan etika organisasi dalam segala situasi dan kondisi. Mengupayakan orang lain untuk bertindak sesuai dengan nilai, norma dan etika organisasi dalam segala situasi dan kondisi.\n- Level 5: Menciptakan situasi kerja yang membuat rekan kerja mematuhi nilai, norma dan etika organisasi dalam segala situasi dan kondisi.\n- Level 6: Memberi teladan dalam menerapkan nilai, norma dan etika organisasi pada segala situasi dan kondisi.\n\nKata kunci: Mampu bertindak secara konsisten.",
       "kata": 145
     },
@@ -70,7 +70,7 @@
       "id": "tkp-kartu-sakti-s07",
       "nomor": 7,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Keuletan (Keu)",
+      "judul": "Profesionalisme: Keuletan (Keu)",
       "konten": "Kelompok: Mengelola Diri (MD)\n\nDefinisi: Kemampuan untuk mau bekerja keras dan tidak mudah putus asa dalam berusaha mencapai tujuan dan mampu mempertahankannya.\n\n- Level 0: Mengubah tujuan karena adanya hambatan.\n- Level 1: Mempertahankan untuk tetap fokus pada pencapaian tujuan walaupun harus berhadapan dengan berbagai kesulitan.\n- Level 2: Mencari upaya-upaya untuk mengatasi rintangan dengan mengubah strategi / pendekatan cara.\n- Level 3: Mencoba alternatif lain sampai tujuan utama tercapai atau tidak mungkin lagi dapat dicapai.\n- Level 4: Mempertahankan irama kerja untuk mencapai tujuan pekerjaan meskipun hanya memiliki sedikit kemajuan.\n- Level 5: Menelaah kegagalan-kegagalan untuk perbaikan dalam pelaksanaan pekerjaan.\n- Level 6: Mencari alternatif lain dalam menghadapi kegagalan pelaksanaan pencapaian tujuan.\n\nKata kunci: Mampu bekerja keras dan tidak mudah putus asa.",
       "kata": 123
     },
@@ -78,7 +78,7 @@
       "id": "tkp-kartu-sakti-s08",
       "nomor": 8,
       "subtopik": "Pelayanan publik",
-      "judul": "Pelayanan Publik — Pengendalian Diri (PD)",
+      "judul": "Pelayanan Publik: Pengendalian Diri (PD)",
       "konten": "Kelompok: Mengelola Diri (MD)\n\nDefinisi: Kemampuan untuk mengendalikan diri pada saat menghadapi masalah yang sulit, kritik dari orang lain atau pada saat bekerja di bawah tekanan dengan sikap yang positif.\n\n- Level 0: Melakukan tindakan yang sesuai dengan suasana hatinya.\n- Level 1: Menjauhi hal-hal yang menimbulkan emosi negatif.\n- Level 2: Mengekspresikan perasaan atau emosi negatif melalui tindakan yang tidak merugikan orang lain.\n- Level 3: Menghadapi tekanan dengan tindakan yang tenang.\n- Level 4: Menggunakan cara-cara tertentu untuk mengatasi reaksi yang berlebihan terhadap tekanan.\n- Level 5: Menghadapi situasi tekanan atau permasalahan dengan berpikir positif.\n- Level 6: Melakukan tindakan-tindakan untuk mencairkan suasana yang penuh tekanan.\n\nKata kunci: Mampu mengendalikan diri pada saat bekerja di bawah tekanan.",
       "kata": 119
     },
@@ -86,7 +86,7 @@
       "id": "tkp-kartu-sakti-s09",
       "nomor": 9,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Komitmen terhadap Organisasi (KtO)",
+      "judul": "Profesionalisme: Komitmen terhadap Organisasi (KtO)",
       "konten": "Kelompok: Mengelola Diri (MD)\n\nDefinisi: Kemampuan untuk menyelaraskan perilaku pribadi dengan kepentingan organisasi dalam rangka mewujudkan visi dan misi.\n\n- Level 0: Melaksanakan tugas-tugas sesuai dengan keinginan dan kepentingan diri sendiri.\n- Level 1: Memahami pentingnya pelaksanaan pekerjaan sesuai tugas dan tanggung jawab.\n- Level 2: Melaksanakan pekerjaan sebatas tuntutan tugas dan tanggungjawabnya.\n- Level 3: Melaksanakan tugas yang melebihi tanggung jawabnya.\n- Level 4: Mengambil peran aktif ketika terjadi hambatan agar tujuan organisasi tetap tercapai.\n- Level 5: Mengorbankan kepentingan diri sendiri untuk tercapainya visi dan misi organisasi.\n- Level 6: Melakukan berbagai upaya untuk menjaga citra organisasi.\n\nKata kunci: Mampu menyelaraskan perilaku diri dengan melibatkan diri dalam kepentingan organisasi.",
       "kata": 111
     },
@@ -94,7 +94,7 @@
       "id": "tkp-kartu-sakti-s10",
       "nomor": 10,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Inisiatif (Ini)",
+      "judul": "Jejaring Kerja: Inisiatif (Ini)",
       "konten": "Kelompok: Mengelola Diri (MD)\n\nDefinisi: Kemampuan mengambil langkah langkah aktif tanpa menunggu perintah untuk tujuan organisasi.\n\n- Level 0: Melakukan pekerjaan dengan menunggu perintah.\n- Level 1: Menyelesaikan tugas sebagai rutinitas sesuai dengan prosedur apa adanya.\n- Level 2: Melakukan langkah aktif dalam proses penyelesaian pekerjaan.\n- Level 3: Melakukan tindakan konstruktif untuk mendukung situasi kerja yang kondusif.\n- Level 4: Melakukan berbagai tindakan penyelesaian masalah yang dihadapi.\n- Level 5: Mengidentifikasi upaya penyelesaian masalah yang akan muncul di masa depan.\n- Level 6: Mengembangkan ide baru untuk menyelesaikan tugas yang lebih baik.\n\nKata kunci: Mampu mengambil langkah aktif tanpa menunggu perintah.",
       "kata": 102
     },
@@ -102,7 +102,7 @@
       "id": "tkp-kartu-sakti-s11",
       "nomor": 11,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Semangat Berprestasi (SB)",
+      "judul": "Profesionalisme: Semangat Berprestasi (SB)",
       "konten": "Kelompok: Mengelola Diri (MD)\n\nDefinisi: Kemampuan untuk selalu meningkatkan kinerja dengan lebih baik di atas standar secara terus-menerus.\n\n- Level 0: Melaksanakan tugas tanpa mempertimbangkan tuntutan standar.\n- Level 1: Menyelesaikan tugas berdasarkan standar rata-rata.\n- Level 2: Menyelesaikan tugas dengan standar di atas rata-rata.\n- Level 3: Melakukan pembelaj aran terhadap proses dan hasil pekerjaan untuk pencapaian hasil kerja lebih baik.\n- Level 4: Melakukan langkah-langkah perbaikan untuk mencapai kinerja yang optimal.\n- Level 5: Melakukan monitoring terhadap proses kerja untuk pencapaian efektivitas kerja.\n- Level 6: Membuat cara atau pendekatan baru dalam meningkatkan kualitas dan kuantitas hasil pekerjaan.\n\nKata kunci: Mampu meningkatkan Kinerja.",
       "kata": 105
     },
@@ -110,7 +110,7 @@
       "id": "tkp-kartu-sakti-s12",
       "nomor": 12,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Kerja Sama (KS)",
+      "judul": "Jejaring Kerja: Kerja Sama (KS)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan menyelesaikan pekerjaan secara bersama-sama dengan menjadi bagian dari suatu kelompok untuk mencapai tujuan unit / organisasi.\n\n- Level 0: Menanggapi penyelesaian pekerjaan dalam kelompok dengan sikap yang pasif.\n- Level 1: Menjaga hubungan kerja yang baik tanpa melibatkan perasaan suka atau tidak suka yang bersifat personal.\n- Level 2: Menghargai masukan dan keahlian orang lain dan bersedia untuk belajar dari orang lain.\n- Level 3: Menjunjung tinggi keputusan kelompok dengan cara menyelesaikan pekerjaan yang menjadi bebannya.\n- Level 4: Memberikan pujian yang obyektif secara terbuka kepada orang lain yang berkinerja baik dalam kelompok.\n- Level 5: Membantu rekan kerja / anggota tim yang mengalami kesulitan.\n- Level 6: Menciptakan suasana kerjasama yang akrab dengan menanamkan moral kerja yang baik dalam kelompok.\n\nKata kunci: Mampu bekerja dalam kelompok untuk mencapai tujuan organisasi.",
       "kata": 138
     },
@@ -118,7 +118,7 @@
       "id": "tkp-kartu-sakti-s13",
       "nomor": 13,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Mengembangkan Orang Lain (MOL)",
+      "judul": "Jejaring Kerja: Mengembangkan Orang Lain (MOL)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan melakukan upaya untuk mendorong pengembangan potensi orang lain agar dapat bekerja lebih baik.\n\n- Level 0: Menganggap semua orang mampu melakukan pekerjaan apapun.\n- Level 1: Menggali potensi orang lain untuk pemanfaatan dalam pekerjaan.\n- Level 2: Memanfaatkan potensi orang lain untuk mengoptimalkan pelaksanaan pekerjaan.\n- Level 3: Memberikan umpan balik kepada orang lain untuk pengembangan diri.\n- Level 4: Membimbing orang lain untuk melakukan pengembangan diri sesuai minat dan keahlian.\n- Level 5: Memberi peluang / kesempatan pada orang lain untuk melakukan pekerjaan yang menantang.\n- Level 6: Menginspirasi seluruh komponen sumber daya manusia dalam organisasi untuk mampu mengembangkan diri secara mandiri.\n\nKata kunci: Mampu mengembangkan potensi orang lain.",
       "kata": 117
     },
@@ -126,7 +126,7 @@
       "id": "tkp-kartu-sakti-s14",
       "nomor": 14,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Kepemimpinan (Kp)",
+      "judul": "Jejaring Kerja: Kepemimpinan (Kp)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan meyakinkan, mempengaruhi dan memotivasi orang lain dengan tujuan agar mereka mengikuti dan melaksanakan rencana kerja unit / organisasi.\n\n- Level 0: Membiarkan keadaan setiap orang bekerja tanpa pengarahan.\n- Level 1: Meyakinkan orang lain tentang pentingnya pencapaian tujuan organisasi.\n- Level 2: Membina bawahan dalam penyelesaian pekerjaan.\n- Level 3: Mendelegasikan peker;aan dan wewenang sesuai kompetensi dan potensi bawahan.\n- Level 4: Mengorganisir sumber daya yang tersedia untuk optimalisasi pencapaian tujuan organisasi.\n- Level 5: Membangun situasi kerja yang kondusif.\n- Level 6: Menggunakan strategi atau perilaku tertentu yang dapat mempengaruhi orang lain untuk mencapai tujuan.\n\nKata kunci: Mampu meyakinkan, mempengaruhi dan memotivasi orang.",
       "kata": 111
     },
@@ -134,7 +134,7 @@
       "id": "tkp-kartu-sakti-s15",
       "nomor": 15,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Membimbing (M)",
+      "judul": "Jejaring Kerja: Membimbing (M)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan memberikan bimbingan dan umpan balik secara teratur terhadap bawahan agar bekerja secara terarah sesuai dengan rencana.\n\n- Level 0: Menginformasikan tugas-tugas yang harus dilakukan oleh bawahan secara tersirat.\n- Level 1: Menjelaskan tugas secara rlncl agar bawahan dapat melakukan tugastugasnya dengan baik.\n- Level 2: Menentukan target kerja yang harus dicapai oleh bawahan.\n- Level 3: Mengkomunikasikan hal-hal yang harus dilakukan bawahan agar target kerja yang telah ditentukan dapat tercapai.\n- Level 4: Membantu bawahan saat menghadapi kendala sehingga pelaksanaan tugas dapat berjalan optimal.\n- Level 5: Memberikan umpan balik terhadap hasil pekerjaan bawahan sebagai upaya untuk meningkatkan kinerja.\n- Level 6: Menentukan faktor-faktor potensial yang berpengaruh pada pencapaian dan kegagalan pekerjaan.\n\nKata kunci: Mampu membimbing dan memberikan umpan balik kepada bawahan.",
       "kata": 129
     },
@@ -142,7 +142,7 @@
       "id": "tkp-kartu-sakti-s16",
       "nomor": 16,
       "subtopik": "Pelayanan publik",
-      "judul": "Pelayanan Publik — Berorientasi Pada Pelayanan (BpP)",
+      "judul": "Pelayanan Publik: Berorientasi Pada Pelayanan (BpP)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan melakukan upaya untuk mengetahui, memahami, dan memenuhi kebutuhan pelanggan dalam setiap aktivitas pekerjaannya.\n\n- Level 0: Memberikan pelayanan tergantung pada situasi dan kondisi pribadinya.\n- Level 1: Mengidentifikasi faktor-faktor yang menjadi kebutuhan pelanggan.\n- Level 2: Memenuhi kebutuhan pelanggan sesuai sumber daya organisasi yang tersedia.\n- Level 3: Meningkatkan kemampuan organlsasl untuk memenuhi kebutuhan pelanggan.\n- Level 4: Melakukan upaya perbaikan pelayanan kepada pelanggan secara terus menerus.\n- Level 5: Mencari alternatif pelayanan terbaik untuk memuaskan kebutuhan pelanggan.\n- Level 6: Menginternalisasikan nilai dan semangat pelayanan ke setiap individu di lingkungan organisasi.\n\nKata kunci: Mampu memberikan kepuasan pelanggan.",
       "kata": 105
     },
@@ -150,7 +150,7 @@
       "id": "tkp-kartu-sakti-s17",
       "nomor": 17,
       "subtopik": "Pelayanan publik",
-      "judul": "Pelayanan Publik — Kesadaran Akan Keselamatan Kerja (K3)",
+      "judul": "Pelayanan Publik: Kesadaran Akan Keselamatan Kerja (K3)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan untuk sadar dan tanggap, serta perduli terhadap kondisi-kondisi yang dapat mempengaruhi keselamatan pegawai.\n\n- Level 0: Menentukan pentingnya faktor dan prosedur keselamatan Kerja.\n- Level 1: Mematuhi prosedur K3 karena adanya tuntutan dari organisasi.\n- Level 2: Mematuhi prosedur K3 atas kesadaran diri sendiri.\n- Level 3: Menggunakan peralatan atau perlengkapan K3 tambahan yang dirasakan perlu.\n- Level 4: Melaporkan kondisi-kondisi yang berpengaruh terhadap Keselamatan kerja.\n- Level 5: Mengajak orang lain untuk bekerja sesuai dengan prosedur keselamatan kerja.\n- Level 6: Mengusulkan sistem keselamatan kerja yang sesuai dengan kondisi dan lingkungan kerja.\n\nKata kunci: Mampu untuk tanggap, sadar dan perduli terhadap keselamatan kerja.",
       "kata": 111
     },
@@ -158,7 +158,7 @@
       "id": "tkp-kartu-sakti-s18",
       "nomor": 18,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Membangun Hubungan Kerja (MHK)",
+      "judul": "Jejaring Kerja: Membangun Hubungan Kerja (MHK)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan menjalin dan membina hubungan kerja dengan pihak-pihak yang terkait dalam rangka pencapaian tujuan organisasi.\n\n- Level 0: Menanggapi tawaran kerja sama dengan sikap yang pasif.\n- Level 1: Menjalin hubungan kerja antar unit dalam satu organisasi yang berdampak pada pencapaian tujuan organisasi.\n- Level 2: Menjalin hubungan kerja antar instansi dan antar daerah dalam rangka efektifitas kerja organisasi.\n- Level 3: Membentuk jaringan kerjasama yang bersifat bilateral yang dapat meningkatkan keberhasilan organisasi.\n- Level 4: Membentuk jaringan kerjasama yang bersifat multilateral yang dapat meningkatkan keberhasilan organisasi.\n- Level 5: Mengevaluasi bentuk kerjasama yang bersifat bilateral dan multilateral yang ada dalam rangka memelihara efektivitasnya.\n- Level 6: Mengembangkan hubungan kerjasama, bilateral dan multilateral yang berdampak jangka panjang bagi kepentingan nasional.\n\nKata kunci: Mampu menjalin dan membina hubungan kerja.",
       "kata": 134
     },
@@ -166,7 +166,7 @@
       "id": "tkp-kartu-sakti-s19",
       "nomor": 19,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Negosiasi (Nego)",
+      "judul": "Profesionalisme: Negosiasi (Nego)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan untuk menemukan berbagai alternatif dalam rangka membuat kesepakatan dengan mengakomodir kepentingan semua pihak.\n\n- Level 0: Menerima tawaran apa adanya sesual dengan usulan pihak lain\n- Level 1: Menerima tawaran kerjasama berdasarkan informasi parsial.\n- Level 2: Mengumpulkan informasi yang relevan terkait dengan tujuan yang ingin dicapai dengan pihak-pihak yang terlibat.\n- Level 3: Mengajukan alternatif penawaran dengan mempelajari risiko yang mungkin timbul.\n- Level 4: Melakukan tawar menawar kepentingan dengan mempertimbangkan fakta, data, dan risiko.\n- Level 5: Membangun dukungan bagi alternatif pilihan dengan cara bertukar pikiran dan menggunakan strategi yang relevan / tertentu.\n- Level 6: Membuat kesepakatan yang saling menguntungkan dan mengakomodir kepentingan semua pihak.\n\nKata kunci: Mampu membuat kesepakatan yang menguntungkan.",
       "kata": 122
     },
@@ -174,7 +174,7 @@
       "id": "tkp-kartu-sakti-s20",
       "nomor": 20,
       "subtopik": "Teknologi Informasi dan Komunikasi",
-      "judul": "Teknologi Informasi dan Komunikasi — Kewirausahaan (Ke)",
+      "judul": "Teknologi Informasi dan Komunikasi: Kewirausahaan (Ke)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan mencari, menciptakan serta menerapkan cara kerja, teknologi dan produk baru untuk memberdayakan organisasi dalam rangka meningkatkan kualitas pelayanan.\n\n- Level 0: Menerima kondisi organisasi apa adanya.\n- Level 1: Mempelajari setiap kondisi untuk melihat kemungkinan optimalisasi organisasi.\n- Level 2: Memanfaatkan peluang dalam rangka optimalisasi organisasi.\n- Level 3: Merumuskan konsep dasar optimalisasi organisasi.\n- Level 4: Mendorong dan mengembangkan sumber daya yang ada untuk mendukung konsep optimalisasi organisasi.\n- Level 5: Melakukan upaya untuk mencarl sumber daya yang dibutuhkan guna mewujudkan idenya.\n- Level 6: Membangun budaya kemandirian dalam organisasi.\n\nKata kunci: Mampu memberdayakan organisasi.",
       "kata": 103
     },
@@ -182,7 +182,7 @@
       "id": "tkp-kartu-sakti-s21",
       "nomor": 21,
       "subtopik": "Teknologi Informasi dan Komunikasi",
-      "judul": "Teknologi Informasi dan Komunikasi — Pencarian Informasi (PI)",
+      "judul": "Teknologi Informasi dan Komunikasi: Pencarian Informasi (PI)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan mengumpulkan data / informasi yang dibutuhkan secara sistematik untuk menunjang kelancaran pelaksanaan pekerjaan dan pengambilan keputusan.\n\n- Level 0: Mengumpulkan data I informasi tanpa mempertimbangkan ke sahihannya.\n- Level 1: Melakukan upaya untuk mengumpulkan informasi dari orang lain atau berbagai media yang terpercaya. Menggali informasi melalui pertanyaan pada orang lain yang terlibat baik secara langsung maupun tidak langsung untuk menemukan akar permasalahan.\n- Level 3: Menguji kesahihan datal informasi yang terkumpul.\n- Level 4: Menyusun data atau informasi dalam suatu paparan informasi yang baru.\n- Level 5: Menentukan data / informasi yang relevan untuk mendukung pengambilan kesimpulan maupun penyelesaian pekerjaan.\n- Level 6: Membuat kesimpulan berdasarkan informasi yang relevan dan akurat.\n\nKata kunci: Mampu menggali berbagai data / informasi secara sistematik.",
       "kata": 128
     },
@@ -190,7 +190,7 @@
       "id": "tkp-kartu-sakti-s22",
       "nomor": 22,
       "subtopik": "Teknologi Informasi dan Komunikasi",
-      "judul": "Teknologi Informasi dan Komunikasi — Perhatian terhadap Keteraturan (PtK)",
+      "judul": "Teknologi Informasi dan Komunikasi: Perhatian terhadap Keteraturan (PtK)",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan untuk memastikan/ mengurangi ketidakpastian khususnya berkaitan dengan penugasan, kualitas, dan ketepatan/ketelitian data serta informasi di tempat kerja.\n\n- Level 0: Mengabaikan pelaksanaan tugas sesuai dengan standar pelaksanaan pekerjaan\n- Level 1: Mempelajari prosedur kerja yang terkait dengan pelaksanaan pekerjaan diri sendiri.\n- Level 2: Memelihara lingkungan kerja seperti meja, berkas-berkas, perkakas, dan lain-lain dalam susunan yang baik dan teratur.\n- Level 3: Memeriksa ulang akurasi pelaksanaan tugas dan hasil yang diharapkan dan standar yang ditetapkan.\n- Level 4: Menggunakan sistem untuk mengelola dan melacak setiap informasi secara sistimatis.\n- Level 5: Memantau kualitas pekerjaan untuk meyakinkan bahwa pelaksanaan tugas telah sesuai prosedur.\n\nKata kunci: Mampu melaksanakan keteraturan sesuai dengan standar pekerjaan. Mengembangkan suatu sistem yang baru untuk meningkatkan keteraturan untuk meningkatkan kualitas pelaksanaan pekerjaan.",
       "kata": 131
     },
@@ -198,7 +198,7 @@
       "id": "tkp-kartu-sakti-s23",
       "nomor": 23,
       "subtopik": "Teknologi Informasi dan Komunikasi",
-      "judul": "Teknologi Informasi dan Komunikasi — Komunikasi Lisan",
+      "judul": "Teknologi Informasi dan Komunikasi: Komunikasi Lisan",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan menyampaikan pendapat / ide / informasi secara lisan dengan menggunakan kata/kalimat yang mudah dimengerti.\n\n- Level 0: Menanggapi secara pasif kegiatan komunikasi lisan/ diskusi.\n- Level 1: Menjelaskan suatu hal I permasalahan dengan bahasa yang kurang runtut / sistimatis.\n- Level 2: Memberikan tanggapan atas pertanyaan orang lain dengan menggunakan kalimat sederhana.\n- Level 3: Mengungkapkan pendapat / ide / informasi dengan kalimat yang sistematis dan dimengerti orang lain.\n- Level 4: Mengajukan pertanyaan untuk menggali informasi dari orang lain.\n- Level 5: Menggunakan gaya bahasa yang dapat dimengerti orang lain secara sistematis kepada orang lain yang berbeda latar belakangnya.\n- Level 6: Mengarahkan orang lain untuk memahami maksud pembicaraan agar mendukung idenya.\n\nKata kunci: Mampu berkomunikasi lisan yang mudah dimengerti.",
       "kata": 128
     },
@@ -206,7 +206,7 @@
       "id": "tkp-kartu-sakti-s24",
       "nomor": 24,
       "subtopik": "Teknologi Informasi dan Komunikasi",
-      "judul": "Teknologi Informasi dan Komunikasi — Komunikasi Tertulis",
+      "judul": "Teknologi Informasi dan Komunikasi: Komunikasi Tertulis",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan menyampaikan pendapat / ide / informasi secara jelas dengan menggunakan tulisan dan tata bahasa dengan baik dan benar.\n\n- Level 0: Menuangkan ide dan gagasan dalam bentuk tulisan yang susah dipahami.\n- Level 1: Menyampaikan ide dan gagasan dengan menerapkan kaidah atau tatacara menulis dengan benar dan terstruktur.\n- Level 2: Menuangkan ide dan gagasan ke dalam bentuk tulisan dengan alur berpikir yang logis.\n- Level 3: Menyederhanakan permasalahan yang rumit dengan menggunakan bahasa tulis yang efisien.\n- Level 4: Menkontekstualisasikan gagasan dan ide dalam bentuk tulisan dengan data dan contoh yang aplikatif.\n- Level 5: Membuat tulisan yang dapat dijadikan rujukan bagi penyelesaian permasalahan.\n- Level 6: Membuat tulisan yang dapat menginspirasi orang untuk mengikuti gagasannya.\n\nKata kunci: Mampu menyampaikan gagasan yang mudah diterima pembaca. Mampu menyampaikan gagasan yang mudah diterima pembaca.",
       "kata": 140
     },
@@ -214,7 +214,7 @@
       "id": "tkp-kartu-sakti-s25",
       "nomor": 25,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Pengambilan Keputusan",
+      "judul": "Profesionalisme: Pengambilan Keputusan",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan mengambil tindakan secara cepat dan tepat dengan mempertimbangkan dampak serta bertanggung jawab dengan keputusannya.\n\n- Level 0: Membuat keputusan yang bersifat subyektif.\n- Level 1: Mengidentifikasi permasalahan yang terjadi sebelum pengambilan keputusan.\n- Level 2: Membuat keputusan yang responsif berdasarkan datal informasi dan sesuai keadaan lingkungan.\n- Level 3: Membuat keputusan yang dapat mengakomodir kepentingan semua pihak.\n- Level 4: Membuat keputusan yang sulit/dilematis dan cepat dengan me mpertimbangkan kon sekuen sinya.\n- Level 5: Memastikan pelaksanaan keputusan dengan memantau hasilnya dengan membuat penyesuaian - penyesuaian yang diperlukan.\n- Level 6: Membuat keputusan strategis dan berdampak jangka panjang dengan didukung data inforrnasi yang komprehensif dan akurat.\n\nKata kunci: Mampu bertindak cepat dan tepat dalam keputusan",
       "kata": 122
     },
@@ -222,7 +222,7 @@
       "id": "tkp-kartu-sakti-s26",
       "nomor": 26,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Pengorganisasian",
+      "judul": "Jejaring Kerja: Pengorganisasian",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan mengkoordinasikan pelaksanaan pekerjaan agar berjalan sesuai dengan rencana yang telah ditetapkan.\n\n- Level 0: Menyerahkan penyelesaian pekerjaan kepada orang lain.\n- Level 1: Membagi tugas sesuai kemampuan pegawai.\n- Level 2: Melakukan monitoring dan evaluasi secara berkala selama kegiatan berlangsung.\n- Level 3: Mengkoordinasikan penggunaan sumber daya yang terbatas secara efektif.\n- Level 4: Mengkoordinasikan aktivitas yang beragam antar unit kerja / kelompok kerja secara berkala.\n- Level 5: Menyiapkan penyelesaian permasalahan secara efesien sesuai dengan prediksi permasalahan yang mungkin timbul dalam pelaksanaan suatu kegiatan / program.\n- Level 6: Menentukan sumber daya yang dibutuhkan dalam jangka panjang sesuai dengan rencana strategis organisasi.\n\nKata kunci: Mampu mengkoordinasikan kegiatan",
       "kata": 115
     },
@@ -230,7 +230,7 @@
       "id": "tkp-kartu-sakti-s27",
       "nomor": 27,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Perencanaan",
+      "judul": "Profesionalisme: Perencanaan",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan menlrusun rencana kerja yang spesifik, realistis, dan terukur sesuai dengan visi, misi dan tujuan jangka panjang organlsasl.\n\n- Level 0: Melaksanakan kegiatan kerja tanpa perencanaan.\n- Level 1: Mengidentitikasi efektivitas pelaksanaan tugas sebagai bahan perencanaan ke depan.\n- Level 2: Menyusun rencana kegiatan sesuai dengan rencana operasional.\n- Level 3: Menyusun rencana operasional sesuai program kerja.\n- Level 4: Menyusun program kerja sesuai dengan rencana strategis.\n- Level 5: Menyusun rencana strategis sesuai dengan visi, misi, nilai- nilai dan tujuan organisasi.\n- Level 6: Menyusun visi, misi, nilai-nilai dan tujuan unit kerja / organisasi.\n\nKata kunci: Mampu menyusun rencana kerja.",
       "kata": 107
     },
@@ -238,7 +238,7 @@
       "id": "tkp-kartu-sakti-s28",
       "nomor": 28,
       "subtopik": "Jejaring kerja",
-      "judul": "Jejaring Kerja — Manajemen Perubahan",
+      "judul": "Jejaring Kerja: Manajemen Perubahan",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan mengelola sumber daya untuk menghadapi tuntutan perubahan dalam rangka mencapai tujuan organisasi dengan kinerja yang lebih baik.\n\n- Level 0: Melakukan pekerjaan tanpa mempertimbangkan dinamika tuntutan perubahan.\n- Level 1: Mengidentifikasi tuntutan perubahan yang dihadapi organisasi.\n- Level 2: Mengkomunikasikan perubahan yang terjadi kepada seluruh komponen organisasi.\n- Level 3: Melakukan berbagai upaya yang dibutuhkan organisasi dalam menghadapi perubahan.\n- Level 4: Mengevaluasi pelaksanaan programprogram perubahan organisasi untuk jangka panjang.\n- Level 5: Menanamkan nilai-nilai, sikap dan budaya sesuai dengan dinamika perubahan.\n- Level 6: Mengembangkan sistem nilai dan budaya organisasi sesuai dengan kecenderungan tuntutan organisasi ke depan.\n\nKata kunci: Mampu merespon dinamika perubahan",
       "kata": 111
     },
@@ -246,7 +246,7 @@
       "id": "tkp-kartu-sakti-s29",
       "nomor": 29,
       "subtopik": "Pelayanan publik",
-      "judul": "Pelayanan Publik — Berorientasi pada Kualitas",
+      "judul": "Pelayanan Publik: Berorientasi pada Kualitas",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan melaksanakan tugas-tugas dengan mempertimbangkan semua aspek pekerjaan secara detil untuk mencapai mutu yang lebih baik.\n\n- Level 0: Melaksanakan pekerjaan dengan mengabaikan prosedur yang ditentukan.\n- Level 1: Melakukan pelaksanaan tugas sesuai prosedur dan sumberdaya yang standar.\n- Level 2: Mengamati proses kerja untuk mengantisipasi masalah yang tidak sesuai standar kerja.\n- Level 3: Memperbaiki / menelaah ulang proses kerja untuk mendapatkan hasil kerja lebih baik. Melakukan telahaan terhadap seluruh sumber daya dan standar yang ada serta aspek lain yang terkait secara komprehensif untuk hasil kerja yang inovatif.\n- Level 5: Menentukan sumberdaya dan standar yang sesuai untuk mendapatkan mutu kerja yang diharapkan.\n- Level 6: Menentukan proses kerja dan standar kerja baru sesuai dengan kecenderungan tuntutan mutu ke depan.\n\nKata kunci: Mampu mencapai mutu pada semua aspek pekerjaan.",
       "kata": 136
     },
@@ -254,7 +254,7 @@
       "id": "tkp-kartu-sakti-s30",
       "nomor": 30,
       "subtopik": "Profesionalisme",
-      "judul": "Profesionalisme — Manajemen Konflik",
+      "judul": "Profesionalisme: Manajemen Konflik",
       "konten": "Kelompok: Mengelola Orang Lain (MO)\n\nDefinisi: Kemampuan mengambil langkahlangkah untuk mengelola perselisihan menuju arah yang produktif.\n\n- Level 0: Menyelesaikan konflik dengan Menghindarkan konflik sebagai tindakan negatif.\n- Level 1: Mengidentifikasi sumber- sumber konflik berdasarkan jenis konflik.\n- Level 2: Meletakan berbagai sudut pandang / kepentingan dalam konteks yang tepat.\n- Level 3: Mengupayakan berbagai pihak untuk bersikap terbuka dan objektif dalam penyelesaian konflik.\n- Level 4: Memberikan alternatif solusi dengan berbagai konsekuensinya.\n- Level 5: Menyelesaikan konflik menjadi hal yang positif dan produktif.\n- Level 6: Menumbuhkan kondisi yang kondusif untuk berbagi pandangan yang terbuka dan objektif serta kreatif.\n\nKata kunci: Mampu penyelesaian konflik.",
       "kata": 105
     },
@@ -262,7 +262,7 @@
       "id": "tkp-kartu-sakti-s31",
       "nomor": 31,
       "subtopik": "Sosial budaya",
-      "judul": "Sosial Budaya — Tanggap Terhadap Pengaruh Budaya",
+      "judul": "Sosial Budaya: Tanggap Terhadap Pengaruh Budaya",
       "konten": "Kelompok: Mengelola Sosial dan Budaya (SB)\n\nDefinisi: Kemampuan menghargai keragaman budaya dan perbedaannya yang menjadi latar belakang individu pegawai dan lingkungan masyarakat di sekitarnya. Menentukan perbedaan budaya dapat mempengaruhi efektivitas pencapaian tujuan organisasi dan harmoni masyarakat.\n\n- Level 0: Menganggap perbedaan latar belakang budaya dan hidup berdampingan dengan masyarakat tidak memiliki relevansi dengan keberhasilan organisasi.\n- Level 2: Menghimpun masukan berbagai sudut pandang yang berbeda sesuai dengan latar belakang budaya yang ada.\n- Level 3: Melakukan tindakan yang sesuai dengan norma budaya yang berlaku.\n- Level 4: Mengarahkan orang lain untuk menghargai perbedaan budaya.\n- Level 5: Mendayagunakan perbedaan budaya untuk menunjang kelancaran pencapaian tujuan organisasi dan penerimaan organisasi di lingkungan masyarakat sekitarnya.\n\nKata kunci: Mampu menghargai keragaman budaya pegawai dan lingkungan masyarakat. Menciptakan suasana interaksi setiap individu untuk bekerjasama dalam lingkungan internal organsisasi dan lingkungan eksternal di masyarakat sehingga dirasakan keberadaannya secara positif.",
       "kata": 144
     },
@@ -270,7 +270,7 @@
       "id": "tkp-kartu-sakti-s32",
       "nomor": 32,
       "subtopik": "Sosial budaya",
-      "judul": "Sosial Budaya — Empati",
+      "judul": "Sosial Budaya: Empati",
       "konten": "Kelompok: Mengelola Sosial dan Budaya (SB)\n\nDefinisi: Kemampuan untuk mendengarkan dan memahami pikiran, perasaan, atau masalah orang lain yang tidak terucapkan atau tidak sepenr.rhnya disampaikan.\n\n- Level 0: Mengabaikan pikiran, perasaan, dan permasalahan orang lain.\n- Level 1: Mendengarkan keluhan / ungkapan perasaan orang lain.\n- Level 2: Menyediakan diri untuk selalu mendengarkan keluhan / ungkapan perasaan orang lain.\n- Level 3: Merasakan perasaan dan permasalahan orang lain yang tidak terungkapkan.\n- Level 4: Menolong orang lain pada saat seseorang mengalami kesulitarr lkesusahan.\n- Level 5: Mengajak orang lain untuk turut serta dalam membantu orang lain yang dalam kesusahan.\n- Level 6: Melakukan tindakan secara aktif untuk membantu orang- orang yang berkesusahan & kurang beruntung.\n\nKata kunci: Mampu perduli terhadap orang lain.",
       "kata": 122
     },
@@ -278,7 +278,7 @@
       "id": "tkp-kartu-sakti-s33",
       "nomor": 33,
       "subtopik": "Sosial budaya",
-      "judul": "Sosial Budaya — Interaksi Sosial",
+      "judul": "Sosial Budaya: Interaksi Sosial",
       "konten": "Kelompok: Mengelola Sosial dan Budaya (SB)\n\nDefinisi: Kemampuan Membangun kontak atau hubungan timbal balik yang menghasilkan suatu proses pengaruh mempengaruhi atau individu, antara kelompok atau antar individu dan kelompok.\n\n- Level 0: Mengabaikan hubungan dengan lingkungan sekitar.\n- Level 1: Menerima perbedaan adanya pola pikir, perilaku adat yang berbeda.\n- Level 2: Membangun keterbukaan dalam menjalin hubungan antar individu maupun kelompok.\n- Level 3: Menghargai dengan melakukan toleransi antar individu maupun antar kelompok.\n- Level 4: Menyesuaikan diri dengan pola pikir, perilaku dan adat yang berbeda dengan dirinva.\n- Level 5: Membangun keterikatan atas dasar saling percaya antar individu maupun kelompok.\n- Level 6: Memadukan perbedaan dengan membentuk kebiasaan baru tanpa menghilangkan ciri kepribadian / adat masing-masing.\n\nKata kunci: Mampu membangun keterikatan dan hubungan timbal balik.",
       "kata": 126
     }
