@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&family=Sora:wght@400..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Sora", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Kertas hangat & tinta */
+  --color-paper: #FAF7F2;
+  --color-ink: #1B1E1C;
+
+  /* Primer: hijau tua (#0E5C43) */
+  --color-primary-50: #EDF6F2;
+  --color-primary-100: #D8EBE2;
+  --color-primary-200: #B3D7C6;
+  --color-primary-300: #84BCA6;
+  --color-primary-400: #529E83;
+  --color-primary-500: #2B8266;
+  --color-primary-600: #0E5C43;
+  --color-primary-700: #0B4A36;
+  --color-primary-800: #093B2C;
+  --color-primary-900: #072E22;
+  --color-primary-950: #041F17;
+
+  /* Aksen: amber (#F2A900) */
+  --color-accent-50: #FEF8E7;
+  --color-accent-100: #FDF0C8;
+  --color-accent-200: #FAE08A;
+  --color-accent-300: #F7CC4D;
+  --color-accent-400: #F5B921;
+  --color-accent-500: #F2A900;
+  --color-accent-600: #D18F00;
+  --color-accent-700: #A66E00;
+  --color-accent-800: #7D5200;
+  --color-accent-900: #5C3D00;
+
+  /* Warna seksi */
+  --color-twk: #C2410C;
+  --color-twk-soft: #FDEDE3;
+  --color-tiu: #1E40AF;
+  --color-tiu-soft: #E3EAFB;
+  --color-tkp: #7E22CE;
+  --color-tkp-soft: #F3E8FB;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-500);
+    color: var(--color-ink);
+  }
+}

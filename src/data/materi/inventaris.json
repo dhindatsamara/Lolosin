@@ -1,0 +1,511 @@
+{
+  "dibuat": "2026-11-13",
+  "ringkasan": {
+    "total_materi": 22,
+    "per_materi": {
+      "TWK": 6,
+      "TIU": 8,
+      "TKP": 4,
+      "SKB": 1,
+      "Referensi": 1,
+      "Panduan": 2
+    },
+    "total_kata": 208631,
+    "total_halaman": 756
+  },
+  "materi": [
+    {
+      "judul": "Ringkasan Materi TWK CPNS (Modul TWK)",
+      "file": "ocr/Mod-TWK-Ringkasan.txt",
+      "materi": "TWK",
+      "subtopik": [
+        "Pancasila",
+        "UUD 1945",
+        "Bhinneka Tunggal Ika",
+        "Sistem Tata Negara Indonesia",
+        "Hak Asasi Manusia (HAM)",
+        "Sejarah Nasional Indonesia",
+        "Hubungan Internasional Indonesia Semasa Perjuangan",
+        "Politik Luar Negeri Indonesia",
+        "Kemampuan Berbahasa Indonesia",
+        "Pemahaman Bacaan"
+      ],
+      "halaman": 93,
+      "kata": 20284,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "Hasil OCR modul scan; tata letak dua kolom kadang mengacaukan urutan baca dan ada karakter salah baca. File scan sumber: skd_cpns_2/skd cpns 2/Mod-TWK-Ringkasan.pdf (93 hal, teks tidak terekstrak). Versi searchable PDF: ocr/Mod-TWK-Ringkasan.searchable.pdf."
+    },
+    {
+      "judul": "Cheat Sheet TWK 2024 by Analitica.id",
+      "file": "ocr/Cheat-Sheet-TWK-2024-Analitica.txt",
+      "materi": "TWK",
+      "subtopik": [
+        "Nasionalisme",
+        "Pilar Negara",
+        "Bela Negara",
+        "Integritas",
+        "Bahasa Indonesia",
+        "Pancasila",
+        "UUD 1945",
+        "NKRI"
+      ],
+      "halaman": 10,
+      "kata": 1700,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "Hasil OCR cheat sheet bergaya kartu/infografis; poin-poin kunci dan kata kunci per tema. Satu-satunya penyebutan 'latihan soal' adalah iklan tryout premium di akhir, bukan soal. File scan sumber: skd_cpns_1/skd cpns 1/Cheat Sheet TWK 2024 by Analitica.id.pdf (10 hal, teks tidak terekstrak)."
+    },
+    {
+      "judul": "Mastery TWK 2024 — Kang Arya (TWK Bang Arya)",
+      "file": "skd_cpns_2/skd cpns 2/TWK BANG ARYA.pdf",
+      "materi": "TWK",
+      "subtopik": [
+        "Pancasila",
+        "Bela Negara",
+        "Pilar Negara",
+        "Integritas",
+        "Nasionalisme dan Bhinneka Tunggal Ika",
+        "Bahasa Indonesia"
+      ],
+      "halaman": 121,
+      "kata": 40906,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 300,
+      "catatan_kualitas": "PDF berteks, kualitas ekstraksi baik. Buku soal + pembahasan: 6 topik x ~50 soal (sampul mengklaim 'lebih dari 200 soal', 'soal HOTS', 'full soal penalaran mirip asli'); hitungan dari teks: 613 nomor mandiri = ~300 soal + ~300 butir pembahasan. Sebagian soal memakai pola opsi berulang (opsi A-D sama di banyak soal Pancasila) — perlu kurasi sebelum dipakai ulang. Buku dinyatakan bebas dibagikan, tidak untuk diperjualbelikan. Video pembahasan dirujuk ke Telegram/TikTok penulis."
+    },
+    {
+      "judul": "Rangkuman TWK TemanASN",
+      "file": "skd_cpns_2/skd cpns 2/rangkuman TWK-temanASN.pdf",
+      "materi": "TWK",
+      "subtopik": [
+        "Sejarah Perumusan Pancasila",
+        "Pancasila (lima sila)",
+        "Bangsa dan Negara",
+        "Bela Negara",
+        "Pancasila sebagai Ideologi Terbuka",
+        "Pokok Pikiran Pembukaan UUD 1945",
+        "Prosedur pemberhentian Presiden"
+      ],
+      "halaman": 11,
+      "kata": 3565,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "PDF berteks, ekstraksi baik. Rangkuman ringkas berorientasi hafalan (tokoh, tanggal, rumusan)."
+    },
+    {
+      "judul": "Rangkuman TWK dari Tryout",
+      "file": "skd_cpns_2/skd cpns 2/RANGKUMAN TWK DARI TRYOUT.docx",
+      "materi": "TWK",
+      "subtopik": [
+        "Nasionalisme",
+        "Gratifikasi dan anti-korupsi (9 nilai anti-korupsi)",
+        "Bela Negara",
+        "Integritas",
+        "Bhinneka Tunggal Ika",
+        "Pergerakan Nasional",
+        "Pancasila dan UUD 1945 (hubungan kausal organis)",
+        "Wawasan Nusantara",
+        "Fungsi DPR",
+        "Kewarganegaraan (ius soli)",
+        "Deklarasi Juanda",
+        "Tujuan NKRI"
+      ],
+      "halaman": 3,
+      "kata": 1212,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "DOCX (16 KB) dibaca via LibreOffice; halaman = perkiraan (~3 hal dari 1.212 kata). Rangkuman catatan dari soal-soal tryout (materi, bukan bank soal)."
+    },
+    {
+      "judul": "Implementasi Keyword: Bela Negara, Patriotisme, Nasionalisme",
+      "file": "skd_cpns_1/skd cpns 1/ImplementasiKeyword_penerapan_Bela_Negara,_Patriotisme,_Nasionalisme.pdf",
+      "materi": "TWK",
+      "subtopik": [
+        "Bela Negara",
+        "Patriotisme",
+        "Nasionalisme",
+        "Cinta Tanah Air",
+        "Perbedaan keyword keempat konsep"
+      ],
+      "halaman": 2,
+      "kata": 289,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "PDF 2 hal bergaya infografis (@paperlessbyvivi); hanya 289 kata terekstrak dari teks — sebagian isi kemungkinan berupa gambar/tabel sehingga hitungan kata meremehkan isi sebenarnya. Perlu cek visual bila dipakai sebagai konten belajar."
+    },
+    {
+      "judul": "Ringkasan Materi TIU CPNS (Modul TIU)",
+      "file": "ocr/Mod-MATERI-TIU-CPNS.txt",
+      "materi": "TIU",
+      "subtopik": [
+        "Penalaran verbal: sinonim, antonim, analogi",
+        "Penalaran analitis",
+        "Penalaran logis",
+        "Silogisme",
+        "Aritmetika dan aljabar",
+        "Deret angka",
+        "Kecepatan berhitung",
+        "Pecahan dan perbandingan"
+      ],
+      "halaman": 98,
+      "kata": 19501,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 40,
+      "catatan_kualitas": "Hasil OCR modul scan; rumus dan notasi matematika kadang kacau (perlu cek manual). Mengandung ~40 contoh soal dengan jawaban + pembahasan (40 kemunculan 'Jawaban:'), bukan bank latihan terpisah. Tidak mencakup materi figural/gambar. File scan sumber: skd_cpns_1/skd cpns 1/Mod-MATERI-TIU-CPNS.pdf (98 hal, teks tidak terekstrak)."
+    },
+    {
+      "judul": "Handbook TIU SKD CPNS Seri 1 — Kemampuan Verbal",
+      "file": "bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri1_Kemampuan_Verbal_Landscape-1-1.pdf",
+      "materi": "TIU",
+      "subtopik": [
+        "Analogi",
+        "Silogisme",
+        "Penalaran analitis",
+        "Teknik eliminasi",
+        "Error pattern",
+        "Sistem cepat verbal",
+        "Mini drill"
+      ],
+      "halaman": 46,
+      "kata": 10006,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 11,
+      "catatan_kualitas": "PDF berteks landscape (kelasujiantryout.com), ekstraksi baik. 11 soal berlabel: 6 contoh soal di dalam materi + 5 soal Mini Drill, semua dengan jawaban + pembahasan."
+    },
+    {
+      "judul": "Handbook TIU SKD CPNS Seri 2 — Kemampuan Numerik",
+      "file": "bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri2_Kemampuan_Numerik_Landscape-1-1.pdf",
+      "materi": "TIU",
+      "subtopik": [
+        "Berhitung",
+        "Deret angka",
+        "Perbandingan kuantitatif",
+        "Soal cerita",
+        "Hitung cepat",
+        "Jebakan TIU numerik",
+        "Mini drill"
+      ],
+      "halaman": 44,
+      "kata": 9920,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 8,
+      "catatan_kualitas": "PDF berteks landscape (kelasujiantryout.com), ekstraksi baik. 8 soal berlabel (Mini Drill) dengan jawaban + pembahasan, plus contoh-contoh dalam materi."
+    },
+    {
+      "judul": "Handbook TIU SKD CPNS Seri 3 — Kemampuan Figural",
+      "file": "bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri3_Kemampuan_Figural_Landscape-1-1.pdf",
+      "materi": "TIU",
+      "subtopik": [
+        "Analogi gambar",
+        "Ketidaksamaan",
+        "Serial gambar",
+        "Strategi mengerjakan figural",
+        "Jebakan figural",
+        "Formula pemeriksaan cepat",
+        "Mini latihan konseptual"
+      ],
+      "halaman": 57,
+      "kata": 11163,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 6,
+      "catatan_kualitas": "PDF berteks landscape (kelasujiantryout.com), ekstraksi baik. 6 soal Mini Latihan Konseptual; materi figural sangat bergantung pada gambar sehingga teks saja tidak cukup — perlu cek visual/gambar saat diolah jadi konten belajar."
+    },
+    {
+      "judul": "Materi Analogi Verbal TIU — TemanASN",
+      "file": "skd_cpns_2/skd cpns 2/tiu-analogi-verbal.pdf",
+      "materi": "TIU",
+      "subtopik": [
+        "Definisi analogi verbal",
+        "Bentuk-bentuk soal analogi (dua kata, kalimat)",
+        "Contoh analogi profesi dan tempat kerja"
+      ],
+      "halaman": 4,
+      "kata": 892,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 10,
+      "catatan_kualitas": "PDF berteks (TemanASN Batch #4, by Adi), ekstraksi baik. ~10 contoh soal analogi dengan jawaban di dalam materi."
+    },
+    {
+      "judul": "Hitung Cepat — TemanASN",
+      "file": "skd_cpns_2/skd cpns 2/tiu-hitung-cepat.pdf",
+      "materi": "TIU",
+      "subtopik": [
+        "Jenis bilangan (ABCSIROPP)",
+        "Sifat-sifat bilangan",
+        "Pecahan",
+        "Teknik hitung cepat"
+      ],
+      "halaman": 10,
+      "kata": 2204,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 6,
+      "catatan_kualitas": "PDF berteks (TemanASN), ekstraksi cukup baik meski ada kata yang menempel tanpa spasi di beberapa bagian (artefak layout). 6 blok 'Contoh Soal'."
+    },
+    {
+      "judul": "Tabel Bilangan Pangkat 2 dan 3 dari 1–100",
+      "file": "ocr/tabel-pangkat-2-3.txt",
+      "materi": "TIU",
+      "subtopik": [
+        "Tabel pangkat 2 (1–100)",
+        "Tabel pangkat 3 (1–100)",
+        "Volume bangun ruang (soal latihan hal. 3)"
+      ],
+      "halaman": 3,
+      "kata": 590,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 10,
+      "catatan_kualitas": "Hasil OCR; digit tabel pangkat ada yang salah baca (mis. '51?' '2.601', '61? SIA') — angka HARUS dihitung ulang (recompute), jangan dipercaya mentah-mentah. Halaman 3 berisi 10 soal latihan volume bangun ruang (kubus, balok, tabung, kerucut, prisma, limas, bola). File scan sumber: skd_cpns_2/skd cpns 2/tabel pangkat 2-3.pdf (3 hal; hanya layer teks 10 soal volume yang terekstrak, 154 kata — tabelnya berupa gambar)."
+    },
+    {
+      "judul": "Tabel Bilangan Pangkat 4 dari 1–100",
+      "file": "skd_cpns_2/skd cpns 2/tabel-bilangan-pangkat-4-dari-1_compress.pdf",
+      "materi": "TIU",
+      "subtopik": [
+        "Tabel pangkat 4 (1–100)"
+      ],
+      "halaman": 2,
+      "kata": 108,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "PDF berteks berupa tabel angka murni (hitungan kata rendah karena isinya angka, mis. '14=1' — superscript pangkat hilang saat ekstraksi). Sebaiknya angka diverifikasi/dihitung ulang sebelum dipakai sebagai konten."
+    },
+    {
+      "judul": "Ringkasan Materi TKP CPNS (Modul TKP)",
+      "file": "ocr/Mod-MATERI-TKP-CPNS.txt",
+      "materi": "TKP",
+      "subtopik": [
+        "Integritas",
+        "Kejujuran",
+        "Kemampuan beradaptasi",
+        "Pengendalian diri",
+        "Semangat berprestasi",
+        "Inisiatif",
+        "Kreativitas dan inovasi",
+        "Ketekunan",
+        "Orientasi pelayanan",
+        "Toleransi",
+        "Kepedulian lingkungan",
+        "Efisiensi kerja"
+      ],
+      "halaman": 60,
+      "kata": 14269,
+      "mengandung_soal_latihan": true,
+      "perkiraan_jumlah_soal": 40,
+      "catatan_kualitas": "Hasil OCR modul scan; tata letak dua kolom kadang mengacaukan urutan baca. Mengandung ~40 contoh soal situasional TKP dengan jawaban + pembahasan dan skor (40 kemunculan 'Jawaban:'). File scan sumber: skd_cpns_2/skd cpns 2/Mod-MATERI-TKP-CPNS.pdf (60 hal, teks tidak terekstrak)."
+    },
+    {
+      "judul": "Cheat Sheet TKP 2024 by Analitica.id",
+      "file": "ocr/TKP.txt",
+      "materi": "TKP",
+      "subtopik": [
+        "Profesionalisme",
+        "Pelayanan publik",
+        "Jejaring kerja",
+        "Sosial budaya",
+        "Teknologi informasi dan komunikasi",
+        "Anti radikalisme"
+      ],
+      "halaman": 10,
+      "kata": 2545,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "Hasil OCR cheat sheet bergaya kartu multi-kolom; tata letak kartu kadang mengacaukan urutan baca teks hasil OCR (kata kunci dan ciri soal tercampur). Satu-satunya penyebutan 'latihan soal' adalah iklan tryout premium di akhir, bukan soal. File scan sumber: skd_cpns_2/skd cpns 2/TKP.pdf (10 hal, teks tidak terekstrak)."
+    },
+    {
+      "judul": "Kartu Sakti TKP — Master",
+      "file": "skd_cpns_1/skd cpns 1/Kartu Sakti TKP - Master.pdf",
+      "materi": "TKP",
+      "subtopik": [
+        "Profesionalisme",
+        "Jejaring kerja",
+        "Pelayanan publik",
+        "Sosial budaya",
+        "Teknologi informasi",
+        "Integritas",
+        "Adaptasi",
+        "Pengendalian diri",
+        "Kerja sama"
+      ],
+      "halaman": 7,
+      "kata": 3691,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "PDF berteks berupa tabel aspek-kompetensi-level (definisi kompetensi + deskripsi level 0–6 + kata kunci). Referensi cepat, bukan materi narasi; tanpa soal latihan."
+    },
+    {
+      "judul": "Rangkuman TKP TemenASN",
+      "file": "skd_cpns_2/skd cpns 2/RANGKUMAN TKP TemenASN.pdf",
+      "materi": "TKP",
+      "subtopik": [
+        "Anti radikalisme",
+        "Jejaring kerja",
+        "Pelayanan publik dan etiket pelayanan",
+        "Profesionalisme",
+        "Teknologi informasi dan komunikasi (TIK)",
+        "Sosial budaya"
+      ],
+      "halaman": 10,
+      "kata": 1988,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "PDF berteks, ekstraksi baik. Rangkuman narasi per aspek TKP (ciri-ciri, prinsip, cara). Tanpa soal latihan."
+    },
+    {
+      "judul": "Materi Pokok SKB dengan CAT Pengadaan CPNS TA 2024 (Surat MenPANRB B/5457/2024)",
+      "file": "5457_Materi-Pokok-SKB-dengan-CAT-Pengadaan-CPNS-TA-2024.pdf",
+      "materi": "SKB",
+      "subtopik": [
+        "Materi pokok SKB per jabatan (tabel NO - Nama Jabatan - Materi Pokok: Pengetahuan Umum/Khusus, Kemampuan Umum/Khusus)",
+        "Contoh klaster jabatan: Administrasi Kependudukan & Pencatatan Sipil, Kesehatan (Adminkes)",
+        "Pariwisata & Ekonomi Kreatif, Hukum, Perdagangan (BMAD/BMI/BMTP), Kebencanaan",
+        "Analis Kebijakan, Kekayaan Intelektual, Analis Kerja Sama, Pangan, dan ratusan jabatan lainnya"
+      ],
+      "halaman": 104,
+      "kata": 54860,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "Dokumen resmi MenPANRB (4 Nov 2024, ditandatangani elektronik BSrE). Kisi-kisi SKB per jabatan — SKB ditunda ke fase akhir pengembangan aplikasi. PDF berteks, ekstraksi baik; nama jabatan dalam kolom tabel kadang tidak terekstrak rapi sehingga daftar jabatan lengkap perlu dicek visual."
+    },
+    {
+      "judul": "KepmenPANRB 406/2026 — Nilai Ambang Batas SKD",
+      "file": "2026kepmenpanrb406.pdf",
+      "materi": "Referensi",
+      "subtopik": [
+        "Passing grade SKD: TWK 65, TIU 80, TKP 156",
+        "Nilai maksimal: TWK 150, TIU 175, TKP 225",
+        "Ketentuan kelulusan SKD"
+      ],
+      "halaman": 7,
+      "kata": 1046,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "Dokumen keputusan resmi (7 hal). Dokumen referensi, bukan materi belajar per subtopik. PDF berteks, ekstraksi baik."
+    },
+    {
+      "judul": "Buku Panduan Peserta CPNS 2026 — JadiASN",
+      "file": "jadiasn/00_ebook_panduan_cpns2026.pdf",
+      "materi": "Panduan",
+      "subtopik": [
+        "CPNS 2026 dan pelajaran dari CPNS 2024",
+        "Syarat umum pelamar dan dokumen",
+        "Alur seleksi dan akun SSCASN",
+        "13 penyebab gugur berkas (TMS)",
+        "Mengenal SKD, passing grade, dan strategi",
+        "SKB dan hitung nilai akhir",
+        "Rencana belajar 30 hari (bonus)"
+      ],
+      "halaman": 20,
+      "kata": 3599,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "E-book gratis dari jadiasn.id (Edisi November 2026). PDF berteks, ekstraksi baik. Panduan proses seleksi, bukan materi SKD per subtopik."
+    },
+    {
+      "judul": "Buku Petunjuk Pendaftaran CASN 2024 — BKN",
+      "file": "jadiasn/00_buku_petunjuk_bkn.pdf",
+      "materi": "Panduan",
+      "subtopik": [
+        "Alur pendaftaran seleksi CASN 2024",
+        "Tata cara pendaftaran SSCASN",
+        "Pemilihan formasi dan unggah dokumen",
+        "Hasil seleksi administrasi dan masa sanggah",
+        "Cetak kartu ujian"
+      ],
+      "halaman": 34,
+      "kata": 4293,
+      "mengandung_soal_latihan": false,
+      "perkiraan_jumlah_soal": null,
+      "catatan_kualitas": "Buku petunjuk resmi BKN v01.00 (Agustus 2024) untuk CASN 2024 — sebagian langkah bisa berubah untuk seleksi 2026, perlu cek ulang. PDF berteks, ekstraksi baik."
+    }
+  ],
+  "bank_soal_terparse": [
+    {
+      "judul": "1266 Bank Soal HOTS SKD (TWK, TIU, TKP)",
+      "file": "skd_cpns_1/skd cpns 1/1266-bank soal-hots-SKD.pdf",
+      "soal": 751,
+      "catatan": "262 hal. Sudah ter-parse ke JSON (751 soal; angka '1266' di nama file salah). 2 kunci dari analisis isi perlu verifikasi manual (Konstitusi Q13=C, Q50=A)."
+    },
+    {
+      "judul": "Latihan Soal CPNS 2024 (TWK TIU TKP) — CATBKN",
+      "file": "skd_cpns_2/skd cpns 2/LATIHAN SOAL CPNS 2024 (TWK TIU TKP) UNTUK PERSIAPAN - CATBKN.pdf",
+      "soal": 102,
+      "catatan": "55 hal. Sudah ter-parse (102 soal, tanpa kunci/pembahasan — link kunci mati)."
+    },
+    {
+      "judul": "30 Soal Latihan TIU 2026",
+      "file": "skd_cpns_1/skd cpns 1/30 SOAL LATIHAN TIU 2026.pdf",
+      "soal": 27,
+      "catatan": "17 hal. Sudah ter-parse (27 soal; 3 soal figural dilewati)."
+    },
+    {
+      "judul": "8 paket latihan TIU (50 soal per paket)",
+      "file": "latihan_soal/2. Latihan Soal ( updated )/ (8 file PDF)",
+      "soal": 400,
+      "catatan": "178 hal total (31+18+20+19+13+26+28+23). Sudah ter-parse (8 x 50 soal): hubungan kuantitas X-Y, perbandingan kuantitatif cerita, deret angka model tabel, deret angka, hitung cepat kesetaraan bilangan, kecukupan data, pecahan desimal, silogisme."
+    },
+    {
+      "judul": "33 PDF soal JadiASN (TIU)",
+      "file": "jadiasn/01_kecukupan_data.pdf s.d. jadiasn/33_memperkuat_memperlemah_menjebak_25.pdf (33 file)",
+      "soal": 1014,
+      "catatan": "1.780 hal total. Sudah ter-parse (1.014 soal terverifikasi dari JSON; katalog mengklaim 1.090 soal — kelebihan ~76; angka '1.015' di catatan sebelumnya keliru 1 soal). Per paket: 01–16 @20 soal, 17–20 @30 soal (17 = 29 soal), 21–30 @50 soal, 31–33 @25 soal."
+    },
+    {
+      "judul": "Katalog Bank Soal CPNS JadiASN (indeks 33 PDF)",
+      "file": "Bank_Soal_CPNS_JADIASN_33_PDF_1090_SOAL___PEMBAHASAN.pdf",
+      "soal": 0,
+      "catatan": "6 hal. Indeks/katalog 33 PDF JadiASN — bukan soal. Klaim 1.090 soal tidak sesuai hasil parse (1.014)."
+    }
+  ],
+  "file_pendukung_duplikat": [
+    {
+      "judul": "Scan sumber Modul TIU (sudah di-OCR)",
+      "file": "skd_cpns_1/skd cpns 1/Mod-MATERI-TIU-CPNS.pdf",
+      "halaman": 98,
+      "kata": null,
+      "catatan": "Scan gambar, 0 kata terekstrak. Isi sama dengan ocr/Mod-MATERI-TIU-CPNS.txt."
+    },
+    {
+      "judul": "Scan sumber Modul TWK (sudah di-OCR)",
+      "file": "skd_cpns_2/skd cpns 2/Mod-TWK-Ringkasan.pdf",
+      "halaman": 93,
+      "kata": null,
+      "catatan": "Scan gambar, 0 kata terekstrak. Isi sama dengan ocr/Mod-TWK-Ringkasan.txt."
+    },
+    {
+      "judul": "Scan sumber Modul TKP (sudah di-OCR)",
+      "file": "skd_cpns_2/skd cpns 2/Mod-MATERI-TKP-CPNS.pdf",
+      "halaman": 60,
+      "kata": null,
+      "catatan": "Scan gambar, 0 kata terekstrak. Isi sama dengan ocr/Mod-MATERI-TKP-CPNS.txt."
+    },
+    {
+      "judul": "Scan sumber Cheat Sheet TKP Analitica (sudah di-OCR)",
+      "file": "skd_cpns_2/skd cpns 2/TKP.pdf",
+      "halaman": 10,
+      "kata": null,
+      "catatan": "Scan gambar, 0 kata terekstrak. Isi sama dengan ocr/TKP.txt."
+    },
+    {
+      "judul": "Scan sumber Cheat Sheet TWK Analitica (sudah di-OCR)",
+      "file": "skd_cpns_1/skd cpns 1/Cheat Sheet TWK 2024 by Analitica.id.pdf",
+      "halaman": 10,
+      "kata": null,
+      "catatan": "Scan gambar, 0 kata terekstrak. Isi sama dengan ocr/Cheat-Sheet-TWK-2024-Analitica.txt."
+    },
+    {
+      "judul": "Scan sumber Tabel Pangkat 2–3 (sudah di-OCR)",
+      "file": "skd_cpns_2/skd cpns 2/tabel pangkat 2-3.pdf",
+      "halaman": 3,
+      "kata": 154,
+      "catatan": "Hanya layer teks 10 soal volume (154 kata) yang terekstrak; tabel pangkat berupa gambar. Isi sama dengan ocr/tabel-pangkat-2-3.txt."
+    },
+    {
+      "judul": "6 PDF searchable hasil OCR (ocr/*.searchable.pdf)",
+      "file": "ocr/ (6 file .searchable.pdf)",
+      "halaman": 274,
+      "kata": null,
+      "catatan": "Total ~150 MB (146 MB terukur). Isi sama dengan 6 file .txt OCR — bisa dihapus bila tidak perlu."
+    }
+  ]
+}

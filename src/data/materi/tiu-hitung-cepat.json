@@ -1,0 +1,87 @@
+{
+  "id": "tiu-hitung-cepat",
+  "judul": "Hitung Cepat — TemanASN",
+  "materi": "TIU",
+  "deskripsi": "Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
+  "sumber": "skd_cpns_2/skd cpns 2/tiu-hitung-cepat.pdf",
+  "halaman": 10,
+  "kata": 1908,
+  "subtopik": [
+    "Jenis bilangan (ABCSIROPP)",
+    "Sifat-sifat bilangan",
+    "Pecahan",
+    "Teknik hitung cepat"
+  ],
+  "sections": [
+    {
+      "id": "tiu-hitung-cepat-s01",
+      "subtopik": "Jenis bilangan (ABCSIROPP)",
+      "judul": "Pengantar",
+      "konten": "HITUNGCEPAT jbeberapamenjadidibagiBilangan enis Untuk. kitabilangan,jenismengingatmemudahkan dapat akronimdenganmengingatnya ABCSIROPP yang merupakan singkatan dari Sifat bilangan Irasional, Rasional, Prima, Pecahan, Asli, Bulat, Cacah. Ada beberapa bentuk pecahan, yaitu pecahan biasa, campuran, desimal, masingPerbedaanpersen.dan - bilanganjenismasing tersebut dapat diamati dalam tabel berikut: Jenis Bilangan",
+      "kata": 41
+    },
+    {
+      "id": "tiu-hitung-cepat-s02",
+      "subtopik": "Jenis bilangan (ABCSIROPP)",
+      "judul": "Keterangan Contoh",
+      "konten": "Irasional Bilangan yang tidak dapat diubah me njadi bentuk pecahan lain √2,√3, √5, √7, … Rasional Gabungan bilangan bulat yang membentuk pecahan ¾,½, 5 6⁄ , 7 8⁄ Prima Bilangan yang hanya memiliki faktor 1 dan bilangan itu sendiri 2, 3, 5, 7, … Pecahan dibentukdapatBilangan rasional yang menjadi biasa,pecahan campuran, desimal, dan persen ½, 0,5, 50% Asli Bilangan bulat positif tanpa angka nol 1, 2, 3, 4, … Bulat Bilangan negatif, angka nol, dan bilangan positif …, -2, -1, 0, 1, 2, … Cacah Bilangan bulat positif dengan angka nol 0, 1, 2, 3, …\n\n## A. Sifat-Sifat Bilangan\n\nSifat-sifat pada penjumlahan dan pengurangan\n\n## 1. Komutatif (Pertukaran)\n\n𝑎 + 𝑏 = 𝑏 + 𝑎",
+      "kata": 116
+    },
+    {
+      "id": "tiu-hitung-cepat-s03",
+      "subtopik": "Jenis bilangan (ABCSIROPP)",
+      "judul": "2. Asosiatif (Pengelompokan)",
+      "konten": "(𝑎 + 𝑏) + 𝑐 = 𝑎 + (𝑏 + 𝑐)\n\n3. Identitas 𝑎 + 0 = 0 + 𝑎 = 𝑎\n\n4. Tertutup Bila a dan b merupakan bilangan bulat maka 𝑎 + 𝑏 = bilangan bulat Dalam penjumlahan dan pengurangan juga berlaku:\n\n2. −a + − b = −(a + b) Sifat-sifat pada perkalian dan pembagian Sifat-sifat pada pembagian\n\n1. Bilangan yang dibagi 1 (satu) hasilnya adalah bilangan itu sendiri 𝑎: 1 = 𝑎\n\n2. Bilangan yang dibagi dengan bilangan itu sendiri hasilnya adalah 1 (satu) 𝑎: 𝑎 = 1\n\n3. Bilangan 0 (nol) dibagi dengan bilangan apa saja hasilnya adalah 0 (nol) 0: 𝑎 = 0\n\n4. Bilangan apa saja dibagi dengan 0 (nol), hasilnya tidak terdefinisi 𝑎: 0 = 𝑡𝑖𝑑𝑎𝑘 𝑡𝑒𝑟𝑑𝑒𝑓𝑖𝑛𝑖𝑠𝑖 Sifat-sifat pada perkalian\n\n1. Bilangan yang dikali 1 (satu) hasilnya adalah bilangan itu sendiri 𝑎𝑥1 = 𝑎\n\n2. Bilangan yang dikali dengan bilangan itu sendiri hasilnya adalah pangkat 2 (dua) bilangan itu sendiri 𝑎𝑥𝑎 = 𝑎2\n\n3. Bilangan 0 (nol) dikali dengan bilangan apa saja hasilnya adalah 0 (nol) 𝑎𝑥0 = 0 Dalam perkalian dan pembagian juga berlaku:\n\n1. a x (−b) = −ab 4. A ∶ (−b) = − a b\n\n2. (−a)x b = −ab 5. (−a): b = − a b\n\n3. (−a)x (−b) = ab 6. (−a): (− b) = a b Hasil perkalian dan pembagian bilangan bulat dapat dilihat pada tabel berikut + 𝑥 + = + + ÷ + = + + 𝑥 − = − + ÷ − = − − 𝑥 + = − − ÷ + = − − 𝑥 − = + − ÷ − = + Contoh Soal\n\n1. Hitunglah penjumlahan dan pengurangan berikut ini!\n\na. −2 + −5 Jawab:\n\nBerdasarkan sifat-sifat yang berlaku pada penjumlahan dan pengurangan maka\n\na. −2 + −5 = − (2 + 5) = −7\n\nb. 8 – (−4) = 8 + 4 = 12\n\nc. −6 – (−9) = −6 + 9 = 3\n\n2. Hitunglah perkalian berikut ini!\n\nd. 1 3 𝑥 2 Jawab:\n\nBerdasarkan sifat-sifat yang berlaku pada perkalian maka\n\nd. 1 3 𝑥 2 4 jadikan kedua pecahan campuran menjadi pecahan biasa 3 𝑥 4 kalikan pembilang dengan pembilang dan penyebut dengan penyebut = 55 12\n\n3. Hitunglah pembagian berikut ini!\n\nd. 2 : Jawab: Berdasarkan sifat-sifat yang berlaku pada pembagian maka d. 2 : 3 ubah tanda bagi menjadi tanda kali disertai dengan bertukarnya posisi penyebut dan pembilang pada salah satu pecahan 2 𝑥 2 pembilang kali dengan pembilang dan penyebut kali dengan penyebut",
+      "kata": 420,
+      "catatan": "Hasil OCR bagian ini kurang rapi (tata letak dua kolom/kartu atau karakter salah baca); isi dipertahankan apa adanya."
+    },
+    {
+      "id": "tiu-hitung-cepat-s04",
+      "subtopik": "Teknik hitung cepat",
+      "judul": "B. Operasi Hitung",
+      "konten": "Dalam menyelesaikan operasi campuran pada bilangan bulat yang terdiri dari campuran penjumlaha, pengurangan, perkalian, dan pembagian, aturan yang berlaku adalah sebagai berikut:\n\n1. Operasi penjumlahan dan pengurangan sama kuatnya\n\n2. Operasi perkalian dan pembagian sama kuatnya\n\n3. Operasi perkalian dan pembagian memiliki kedudukan yang lebih kuat daripada operasi penjumlahan dan pengurangan. Untuk itu, kita perlu mendahulukan perk alian dan pembagian kemudian penjumlahan dan pengurangan.\n\n4. Jika terdapat operasi campuran yang disertai dengan tanda kurung maka kerjakan yang berada di dalam kurung terlebih dahulu, kemudian ikuti kembali aturan ke-3 Contoh Soal\n\n1. Hitunglah operasi campuran berikut ini!\n\nb. 150 + (−110) 𝑥 9 ∶ 11 ∶ 10 + 89\n\nc. (6: 2) + (9 𝑥 − 4) − (−2) Jawab:\n\nSesuai aturan yang berlaku pada operasi campuran maka\n\na. (−100) 𝑥 8 ∶ 25 = (−800): 25 = −32\n\nb. 150 + (−110) 𝑥 9 ∶ 11 ∶ 10 + 89 = 150 + (−990) ∶ 11 ∶ 10 + 89 = 150 + (−90) ∶ 10 + 89 = 141 + 89 = 230\n\nc. (6: 2) + (9 𝑥 − 4) − (−2) = −31\n\n2. Pada siang hari suhu di sebuah daerah dapat mencapai 35°C sementara suhu pada malam hari 11°C lebih rendah. Berapa suhu udara di daerah tersebut pada malam hari?\n\nJawab: Suhu pada siang hari = 35°C Suhu pada malam hari = 11°C lebih rendah dari suhu pada siang hari Jadi suhu pada siang hari = 35°C - 11°C = 24°C\n\n3. Di kota Semarang Jawa Tengah suhu rata -rata pada siang hari dapat mencapai 24°C sementara dataran tinggi Dieng yang juga berada di Jawa Tengah suhu rata -rata apda siang hari -1°C.\n\nBerapa perbedaan suhu kedua daerah tersebut?\n\nJawab: (Cari selisih suhu keduanya. Suhu yang tinggi kurang suhu yang rendah) Suhu di Kota Semarang 24°C Suhu di Dieng -1°C Maka selisih suhu kedua daerah tersebut adalah = 25°C",
+      "kata": 313,
+      "catatan": "Hasil OCR bagian ini kurang rapi (tata letak dua kolom/kartu atau karakter salah baca); isi dipertahankan apa adanya."
+    },
+    {
+      "id": "tiu-hitung-cepat-s05",
+      "subtopik": "Pecahan",
+      "judul": "C. Pecahan Istimewa",
+      "konten": "Ada empat belas pecahan istimewa, dikatakan pecahan istimewa karena sering digunakan dalam soal. Berikut ini tabel pecahan istimewa. Berpenyebut 3 Berpenyebut 4 𝟑 = 𝟎, 𝟑𝟑𝟑 1 4 = 0,250 𝟑 = 𝟎, 𝟔𝟔𝟕 3 4 = 0,750 Berpenyebut 5 Berpenyebut 6 𝟓 = 𝟎, 𝟔𝟎𝟎 1 6 = 0,167 𝟓 = 𝟎, 𝟖𝟎𝟎 5 6 = 0,833 Berpenyebut 8 Berpenyebut 9 𝟖 = 𝟎, 𝟏𝟐𝟓 1 9 = 0,111 𝟖 = 𝟎, 𝟑𝟕𝟓 2 9 = 0,222 𝟖 = 𝟎, 𝟔𝟐𝟓 3 9 = 0,333 𝟖 = 𝟎, 𝟖𝟕𝟓 4 9 = 0,444\n\nCara perhitungan secara setiap pecahan dapat dilihat pada tabel berikut. Berpenyebut 1 Berpenyebut 5 7 = 0,429=42,9% 9 = 0,333=33,3% 1 = 0 0 5 = 0 4 7 = 0,571=57,1% 4 9 = 0,444=44,4% 1 = 1=100% 5 = 0,200 = 20% 5 7 = 0,714=71,4% 5 9 = 0,556 = 55,6% Berpenyebut 2 5 = 0,400 = 40% 7 = 0,857=85,7% 9 = 0,667=66,7% 2 = 0 5 = 0,600 = 60% 7 = 1=100% 9 = 0,778=77,8% 2 = 0,5=50% 5 = 0,800 = 80% Berpenyebut 8 9 = 0,889=88,9% 2 = 1=100% 5 = 1=100% 0 8 = 0 9 9 = 1=100% Berpenyebut 3 Berpenyebut 6 8 = 0,125=12,5% Berpenyebut 10 3 = 0 0 6 = 0 2 8 = 0,250=25% 0 10 = 0 3 = 0,333=33,3% 6 = 0,167=16,7% 8 = 0,375=37,5% 10 = 0,100 = 10% 3 = 0,667=66,7% 6 = 0,333=33,3% 8 = 0,500=50% 10 = 0,200 = 20% 3 = 1=100% 6 = 0,500=50% 8 = 0,625=62,5% 10 = 0,300 = 30% Berpenyebut 4 6 = 0,667=66,7% 8 = 0,750=75% 10 = 0,400 = 40% 4 = 0 6 = 0,833=83,3% 8 = 0,875=87,5% 10 = 0,500 = 50% 4 = 0,250=25% 6 = 1=100% 8 = 1=100% 10 = 0,600 = 60% 4 = 0,500=50% Berpenyebut 7 Berpenyebut 9 10 = 0,700 = 70% 4 = 0,750=75% 0 7 = 0 0 9 = 0 8 10 = 0,800 = 80% 4 = 1=100% 7 = 0,143=14,3% 9 = 0,111=11,1% 10 = 0,900 = 90%\n\n7 = 0,286=28,6% 9 = 0,222=22,2% 10 = 1=100%\n\nHal-hal yang perlu diperhatikan dalam penjumlahan dan pengurangan pecahan adalah sebagai berikut:\n\n1. Untuk pecahan biasa, menyamakan penyebut terlebih dahulu menggunakan KPK\n\n2. Untuk pecahan desimal, mengurutkan komanya terlebih dahulu sebelum menjumlahkan/menguranginya\n\n3. Untuk pecahan campuran, mengubah bentuknya ke pecahan biasa terlebih dahulu lalu menyamakannya penyebutnya Contoh Soal\n\n## 1. Ubahlah pecahan\n\n4 menjadi pecahan campuran! Jawab: 4 = 4|12 1 − 13 = 3 1 4 Dimana 3 sebagai hasil, 1 sebagai sisa pembagian, dan 4 sebagai penyebut.",
+      "kata": 439,
+      "catatan": "Hasil OCR bagian ini kurang rapi (tata letak dua kolom/kartu atau karakter salah baca); isi dipertahankan apa adanya."
+    },
+    {
+      "id": "tiu-hitung-cepat-s06",
+      "subtopik": "Pecahan",
+      "judul": "2. Ubahlah pecahan 5",
+      "konten": "6 menjadi pecahan biasa! Jawab : 5 1 6 = (5𝑥6) + 1 6 = 31 6\n\n3. Urutkanlah pecahan berikut mulai dari yang terbesar 2 4 , 5 , 50%, dan 0,833!\n\nJawab : Untuk mengurutkan pecahan tersebut, langkah pertama yang perlu dilakukan adalah menyamakan bentuknya, misalnya kita menjadikan seluruh pecahan ke dalam bentuk desimal. 4 = 4 = 2,750 5 = 0,800 50% = 0,500 0,833 Urutan dari yang terbesar adalah 2 4 → 0,833 → 5 → 50%",
+      "kata": 81,
+      "catatan": "Hasil OCR bagian ini kurang rapi (tata letak dua kolom/kartu atau karakter salah baca); isi dipertahankan apa adanya."
+    },
+    {
+      "id": "tiu-hitung-cepat-s07",
+      "subtopik": "Pecahan",
+      "judul": "D. Pangkat dan Akar Pangkat",
+      "konten": "Pangkat berfungsi untuk menyederhanakan penulisan, misalnya 𝑎𝑛 = 𝑎𝑥𝑎𝑥𝑎𝑥 … 𝑥𝑎 (𝑠𝑒𝑏𝑎𝑛𝑦𝑎𝑘 𝑛 𝑘𝑎𝑙𝑖) Keterangan a = bilangan pokok n = jumlah pangkat\n\nAda dua jenis bilangan berpangkat, bilangan berpangkat bulat positif dan bilangan berpangkat bulat negatif.\n\nBilangan berpangkat bulat positif memiliki sifat:\n\n1. 𝑎𝑚𝑥𝑎𝑛 = 𝑎𝑚+𝑛\n\n2. 𝑎𝑚 ÷ 𝑎𝑛 = 𝑎𝑚−𝑛\n\n3. (𝑎𝑚)𝑛 = 𝑎𝑚𝑛\n\n4. (𝑎𝑏)𝑚 = 𝑎𝑚𝑥 𝑏𝑚\n\n5. (𝑎 𝑏⁄ )𝑚 = 𝑎𝑚/𝑏𝑚 (dengan 𝑏 ≠ 0) Bilangan berpangkat bulat negatif memiliki sifat:\n\n𝑎−𝑛 = 1 𝑎𝑛 dan 𝑎𝑛 = 1 𝑎−𝑛 Contoh Soal\n\n1. 𝑇𝑒𝑛𝑡𝑢𝑘𝑎𝑛 ℎ𝑎𝑠𝑖𝑙 𝑑𝑎𝑟𝑖 23𝑥24!\n\nJawab: 23𝑥24 = 23+4 = 27 = 2𝑥2𝑥2𝑥2𝑥2𝑥2𝑥2 = 128\n\n2. Jika 10𝑛 = 2, tentukan nilai dari 102𝑛𝑥 9!\n\nJawab : 102𝑛𝑥 9 = (10𝑛)2𝑥9 = (2)2𝑥9 = 4𝑥9 = 36\n\n3. Jika 2−𝑛 = 1 64maka tentukan nilai n!\n\nJawab : 2−𝑛 = 1 64 2𝑛 = 1 64 2𝑛 = 64 𝑛 = 6 Akar pangkat dua adalah nilai suatu bilangan yang berpangkat 1/2 . Sementara akar pangkat tiga adalah nilai suatu bilangan yang berpangkat 1/3. Adapun sifat-sifat akar adalah sebagai berikut: √𝑎 = 𝑎1/𝑛 √𝑎𝑚𝑛 = 𝑎𝑚/𝑛 √𝑎𝑚+𝑛𝑚𝑛 = √𝑎 𝑚 . √𝑎 𝑛 = 𝑎 1 𝑚+1 𝑛 = 𝑎 1 𝑚. 𝑎 1 𝑛 √𝑎𝑚−𝑛𝑚𝑛 = √𝑎 𝑚 ÷ √𝑎 𝑛 = 𝑎 1 𝑚−1 𝑛 = 𝑎 1 𝑚 ÷ 𝑎 1 𝑛 √𝑎 𝑚𝑛 = 𝑎 𝑚 . 1 𝑛 = (𝑎 1 𝑚) 1 𝑛 √𝑎 . √𝑏 = √𝑎𝑏 = 𝑎 𝑛.𝑏\n\n√𝑎 √𝑏 𝑛 = √𝑎 𝑏 𝑛 = 𝑎\n\n√𝑎 𝑛 = 1 = 𝑎−1 𝑛 Contoh Soal:\n\n1. Jika √𝑎 + √𝑏 = 8 𝑑𝑎𝑛 √𝑎 − √𝑏 = 9 𝑚𝑎𝑘𝑎 𝑡𝑒𝑛𝑡𝑢𝑘𝑎𝑛 𝑛𝑖𝑙𝑎𝑖 𝑎 − 𝑏!\n\nJawab: 𝑎 − 𝑏 = (√𝑎 + √𝑏)( √𝑎 − √𝑏) 𝑎 − 𝑏 = 8 𝑥 9 = 72\n\n2. Nilai x = (22𝑥23𝑥25) 2 dan y = √823 . Tentukan hubungan x dan y!\n\nJawab : 𝑥 = (22𝑥23𝑥25) 1 2 = (22+3+5) 1 2 = (210) 1 2 = 25 = 32 y =√823 = 8 2 3 = (23) 2 3 = 22 = 4 𝑦 = 4 = 8 → x = 8y",
+      "kata": 361,
+      "catatan": "Hasil OCR bagian ini kurang rapi (tata letak dua kolom/kartu atau karakter salah baca); isi dipertahankan apa adanya."
+    },
+    {
+      "id": "tiu-hitung-cepat-s08",
+      "subtopik": "Pecahan",
+      "judul": "E. Konversi Satuan",
+      "konten": "Satuan adalah unit yang digunakan sebagai nilai standar bagi pembanding alat ukur. Ada satuan yang digunakan untuk satu dimensi seperti panjang , massa, dan waktu. A da satuan yang digunakan untuk dua dimensi seperti luas dan ada satuan yang digunakan untuk tiga dimensi seperti volume. Dua atau lebih nilai dapat dijumlahkan jika satuannya sudah sama.",
+      "kata": 55
+    },
+    {
+      "id": "tiu-hitung-cepat-s09",
+      "subtopik": "Pecahan",
+      "judul": "Besaran Berdimensi Satu — Tangga Satuan Panjang Tangga Satuan Massa — Besaran Berdimensi Dua dan Tiga — Tangga Satuan Luas Tangga Satuan Volume",
+      "konten": "Contoh Soal:\n\n1. Panjang papan tulis adalah 1,75m. Lebar papan tulis adalah 1m.\n\nTuliskan luas papan tulis! Jawab : 𝐿 = 𝑝𝑥𝑙 = 1,75𝑚 𝑥 1𝑚 = 1,75𝑚2\n\n2. Sebuah lapangan dengan panjang 20m dan lebar 15m. Tentukan luas lapangan dalam satuan cm2!\n\nJawab: 𝐿 = 𝑝𝑥𝑙 = 20𝑚 𝑥 15𝑚 = 300𝑚2 300𝑚2 = 300𝑥10000 = 3.000.000 𝑐𝑚2 𝑑𝑎𝑟𝑖 𝑚2 𝑘𝑒 𝑐𝑚2 𝑝𝑒𝑟𝑙𝑢 𝑚𝑒𝑛𝑢𝑟𝑢𝑛𝑖 2 𝑏𝑢𝑎ℎ 𝑎𝑛𝑎𝑘 𝑡𝑎𝑛𝑔𝑔𝑎. 𝑗𝑖𝑘𝑎 𝑚𝑒𝑛𝑢𝑟𝑢𝑛𝑖 𝑠𝑒𝑏𝑢𝑎ℎ 𝑎𝑛𝑎𝑘 𝑡𝑎𝑛𝑔𝑔𝑎 𝑑𝑖𝑘𝑎𝑙𝑖 100 𝑚𝑎𝑘𝑎 𝑑𝑢𝑎 𝑎𝑛𝑎𝑘 𝑡𝑎𝑛𝑔𝑔𝑎 𝑑𝑖𝑘𝑎𝑙𝑖 10.000",
+      "kata": 82,
+      "catatan": "Hasil OCR bagian ini kurang rapi (tata letak dua kolom/kartu atau karakter salah baca); isi dipertahankan apa adanya."
+    }
+  ],
+  "catatan_kualitas": "PDF berteks, ekstraksi cukup baik meski ada kata yang menempel tanpa spasi di beberapa bagian (artefak layout). 6 blok 'Contoh Soal'."
+}
