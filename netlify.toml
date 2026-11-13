@@ -1,0 +1,13 @@
+# Netlify — deploy Lolosin dari repo GitHub dhindatsamara/Lolosin (privat).
+# Dipakai kalau GitHub Pages tidak bisa (Pages gratis hanya untuk repo publik).
+# Build command + publish dir dibaca Netlify dari file ini, jadi tidak perlu
+# diisi manual di dashboard. Base path '/' adalah default di vite.config.ts
+# (via env VITE_BASE_PATH); baris di bawah menegaskan itu untuk build Netlify.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  VITE_BASE_PATH = "/"

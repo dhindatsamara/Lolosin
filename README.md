@@ -22,17 +22,20 @@ npm run build      # type-check (tsc) + build production ke dist/
 npm run preview    # sajikan hasil build lokal
 ```
 
-## Deploy (GitHub Pages)
+## Deploy (Netlify)
 
-Live di **https://dhindatsamara.github.io/Lolosin/**. Setiap push ke `main`
-otomatis men-deploy lewat `.github/workflows/deploy.yml` (build Vite →
-upload `dist/` → GitHub Pages). Prasyarat sekali saja: repo Settings →
-Pages → Build and deployment → Source: **GitHub Actions**.
+Live di Netlify (URL `*.netlify.app`). Setiap push ke `main` otomatis
+men-deploy: Netlify membaca `netlify.toml` (build `npm run build`,
+publish `dist`, Node 20). Deploy target utama adalah Netlify karena
+gratis untuk repo privat — tidak seperti GitHub Pages yang butuh
+repo publik atau GitHub Pro.
 
-Karena ini project site (bukan root domain), `vite.config.ts` memakai
-`base: '/Lolosin/'` — semua path aset, manifest `start_url`/`scope`, dan
-service worker mengikuti base itu. Kalau pindah hosting ke root domain,
-hapus `base` dan kembalikan `start_url`/`scope` ke `/`.
+Base path diputuskan dari env saat build (`VITE_BASE_PATH` di
+`vite.config.ts`, default `/` untuk Netlify/root domain). Untuk
+GitHub Pages project site, build dengan `VITE_BASE_PATH='/Lolosin/'`
+(workflow-nya ada di `.github/workflows/deploy.yml`, tapi file itu
+tidak bisa di-push lewat konektor GitHub — harus dibuat manual di web
+GitHub karena App Muse tidak punya izin workflows).
 
 Ikon PWA saat ini memakai SVG (`public/icons/icon.svg`,
 `maskable.svg`) karena konektor GitHub hanya bisa push file teks — ikon

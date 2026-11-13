@@ -4,11 +4,17 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
+//
+// Base path diputuskan dari env saat build, supaya satu repo bisa
+// dipakai di dua hosting:
+// - Netlify / root domain: default '/', tanpa perlu set apa-apa.
+// - GitHub Pages project site (https://dhindatsamara.github.io/Lolosin/):
+//   build dengan VITE_BASE_PATH='/Lolosin/'.
+// PWA manifest (start_url/scope) ikut base yang sama.
+const basePath = process.env.VITE_BASE_PATH ?? '/'
+
 export default defineConfig({
-  // Deploy target: GitHub Pages project site di
-  // https://dhindatsamara.github.io/Lolosin/ — semua aset harus memakai
-  // base path /Lolosin/ (kalau pindah hosting ke root domain, hapus baris ini).
-  base: '/Lolosin/',
+  base: basePath,
   plugins: [
     react(),
     tailwindcss(),
@@ -23,8 +29,8 @@ export default defineConfig({
         lang: 'id',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/Lolosin/',
-        scope: '/Lolosin/',
+        start_url: basePath,
+        scope: basePath,
         theme_color: '#0E5C43',
         background_color: '#FAF7F2',
         // Ikon SVG (relatif terhadap manifest, jadi ikut base path).

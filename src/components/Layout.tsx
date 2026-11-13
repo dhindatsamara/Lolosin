@@ -47,16 +47,16 @@ export function Layout() {
             </span>
           </NavLink>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <span
-              className="inline-flex items-center gap-1 rounded-full bg-accent-100 px-2.5 py-1 text-xs font-bold text-accent-700"
+              className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-accent-100 px-2.5 py-1 text-xs font-bold text-accent-700"
               title="XP dan level"
             >
               <ZapIcon width={14} height={14} />
               {xp} XP · Lv {level}
             </span>
             <span
-              className="inline-flex items-center gap-1 rounded-full bg-twk-soft px-2.5 py-1 text-xs font-bold text-twk"
+              className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-twk-soft px-2.5 py-1 text-xs font-bold text-twk"
               title="Streak harian"
             >
               <FlameIcon width={14} height={14} />
