@@ -17,10 +17,9 @@ const VARIANTS: Record<ButtonVariant, string> = {
   secondary:
     'bg-accent-500 text-ink hover:bg-accent-400 active:bg-accent-600',
   outline:
-    'bg-white text-ink hover:bg-primary-50 hover:text-primary-700',
-  // Ghost: tanpa border & shadow (override base via tailwind-merge).
+    'border border-line bg-white text-ink hover:border-primary-300 hover:text-primary-700',
   ghost:
-    'border-transparent bg-transparent text-primary-700 shadow-none hover:bg-primary-50 active:translate-x-0 active:translate-y-0',
+    'bg-transparent text-primary-700 hover:bg-primary-50 active:scale-100',
 }
 
 const SIZES: Record<ButtonSize, string> = {
@@ -41,8 +40,8 @@ export function Button({
     <button
       type={type}
       className={cx(
-        'inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink font-semibold shadow-sticker-sm transition-all duration-100',
-        'active:translate-x-[2px] active:translate-y-[2px] active:shadow-none',
+        'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-100',
+        'active:scale-[0.98]',
         'disabled:pointer-events-none disabled:opacity-50',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
         VARIANTS[variant],

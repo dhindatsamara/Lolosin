@@ -67,9 +67,7 @@ function CelebrationBody({ celebration }: { celebration: Celebration }) {
     return (
       <>
         <Mascot mood="semangat" size={72} className="mx-auto" />
-        <p className="mt-2 font-script text-2xl leading-none text-primary-700">
-          level up!
-        </p>
+        <p className="kicker mt-2">level up!</p>
         <h2 className="mt-1 font-display text-2xl leading-tight font-extrabold">
           Naik ke Level {celebration.level}!
         </h2>
@@ -86,9 +84,7 @@ function CelebrationBody({ celebration }: { celebration: Celebration }) {
         <p className="text-4xl" aria-hidden="true">
           {celebration.badge.ikon}
         </p>
-        <p className="mt-2 font-script text-2xl leading-none text-primary-700">
-          lencana baru!
-        </p>
+        <p className="kicker mt-2">lencana baru!</p>
         <h2 className="mt-1 font-display text-2xl leading-tight font-extrabold">
           {celebration.badge.nama}
         </h2>
@@ -107,9 +103,7 @@ function CelebrationBody({ celebration }: { celebration: Celebration }) {
     return (
       <>
         <Mascot mood="semangat" size={72} className="mx-auto" />
-        <p className="mt-2 font-script text-2xl leading-none text-primary-700">
-          antrean ulas beres!
-        </p>
+        <p className="kicker mt-2">antrean ulas beres!</p>
         <h2 className="mt-1 font-display text-2xl leading-tight font-extrabold">
           Semua ulasan hari ini selesai!
         </h2>
@@ -123,9 +117,7 @@ function CelebrationBody({ celebration }: { celebration: Celebration }) {
   return (
     <>
       <Mascot mood="senang" size={72} className="mx-auto" />
-      <p className="mt-2 font-script text-2xl leading-none text-primary-700">
-        apinya nyala terus!
-      </p>
+      <p className="kicker mt-2">apinya nyala terus!</p>
       <h2 className="mt-1 font-display text-2xl leading-tight font-extrabold">
         {celebration.streak} hari beruntun!
       </h2>
@@ -163,13 +155,13 @@ export function CelebrationHost() {
         onClick={() => dismissCelebration(current.id)}
         className="absolute inset-0 bg-ink/50"
       />
-      <div className="relative w-full max-w-sm overflow-hidden rounded-2xl border-2 border-ink bg-white p-6 text-center shadow-sticker-lg">
+      <div className="relative w-full max-w-sm overflow-hidden rounded-2xl border border-line bg-white p-6 text-center shadow-soft-lg">
         {withConfetti(current.celebration) && <Confetti />}
         <button
           type="button"
           aria-label="Tutup"
           onClick={() => dismissCelebration(current.id)}
-          className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border-2 border-ink bg-white text-base font-extrabold text-ink/70 hover:bg-paper"
+          className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-ink/5 text-base font-extrabold text-ink/70 hover:bg-ink/10"
         >
           ✕
         </button>

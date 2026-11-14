@@ -12,9 +12,9 @@ export interface TryoutPaletteProps {
 }
 
 const SECTION_STYLE: Record<Materi, { label: string; answered: string }> = {
-  TWK: { label: 'text-twk', answered: 'bg-twk text-white border-ink shadow-sticker-sm' },
-  TIU: { label: 'text-tiu', answered: 'bg-tiu text-white border-ink shadow-sticker-sm' },
-  TKP: { label: 'text-tkp', answered: 'bg-tkp text-white border-ink shadow-sticker-sm' },
+  TWK: { label: 'text-twk', answered: 'border-transparent bg-twk text-white' },
+  TIU: { label: 'text-tiu', answered: 'border-transparent bg-tiu text-white' },
+  TKP: { label: 'text-tkp', answered: 'border-transparent bg-tkp text-white' },
 }
 
 /**
@@ -48,15 +48,15 @@ export function TryoutPalette({
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold text-ink/70">
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded border-2 border-ink bg-white" />
+          <span className="h-3 w-3 rounded border border-line-strong bg-white" />
           Belum dijawab
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded border-2 border-ink bg-primary-600" />
+          <span className="h-3 w-3 rounded bg-primary-600" />
           Dijawab
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded border-2 border-ink bg-accent-400" />
+          <span className="h-3 w-3 rounded bg-accent-400" />
           Ragu-ragu
         </span>
       </div>
@@ -85,12 +85,12 @@ export function TryoutPalette({
                   aria-label={`Soal ${index + 1}${answered ? ', sudah dijawab' : ''}${isDoubted ? ', ragu-ragu' : ''}`}
                   aria-current={isCurrent}
                   className={cx(
-                    'flex aspect-square items-center justify-center rounded-xl border-2 text-sm font-extrabold transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none',
+                    'flex aspect-square items-center justify-center rounded-xl border text-sm font-extrabold transition-all active:scale-[0.98]',
                     isDoubted
-                      ? 'border-ink bg-accent-400 text-ink shadow-sticker-sm'
+                      ? 'border-transparent bg-accent-400 text-ink'
                       : answered
                         ? SECTION_STYLE[materi].answered
-                        : 'border-ink bg-white text-ink shadow-sticker-sm hover:bg-paper',
+                        : 'border-line bg-white text-ink hover:bg-paper',
                     isCurrent && 'ring-2 ring-ink ring-offset-1',
                   )}
                 >

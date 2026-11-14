@@ -29,7 +29,7 @@ export function ProgressBar({
   return (
     <div
       className={cx(
-        'h-3 w-full overflow-hidden rounded-full border-2 border-ink bg-white',
+        'h-3 w-full overflow-hidden rounded-full bg-ink/10',
         className,
       )}
       role="progressbar"

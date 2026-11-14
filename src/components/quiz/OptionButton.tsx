@@ -23,19 +23,19 @@ export interface OptionButtonProps {
 
 const STATE_CLASSES: Record<OptionState, string> = {
   default:
-    'border-ink bg-white shadow-sticker-sm hover:-translate-y-px hover:bg-primary-50',
+    'border-line bg-white shadow-soft hover:border-primary-300 hover:bg-primary-50',
   selected:
-    'border-ink bg-primary-600 text-white shadow-sticker-sm',
+    'border-primary-600 bg-primary-600 text-white shadow-soft',
   correct:
-    'border-green-600 bg-green-100 text-green-900 shadow-sticker-sm',
+    'border-green-600 bg-green-100 text-green-900 shadow-soft',
   wrong:
-    'border-red-500 bg-red-100 text-red-900 shadow-sticker-sm',
-  muted: 'border-ink/20 bg-white opacity-60',
+    'border-red-500 bg-red-100 text-red-900 shadow-soft',
+  muted: 'border-line bg-white opacity-60',
 }
 
 const LETTER_CLASSES: Record<OptionState, string> = {
-  default: 'border-2 border-ink bg-white text-ink',
-  selected: 'border-2 border-white bg-white text-primary-700',
+  default: 'bg-ink/5 text-ink',
+  selected: 'bg-white text-primary-700',
   correct: 'bg-green-600 text-white',
   wrong: 'bg-red-500 text-white',
   muted: 'bg-ink/5 text-ink/60',
@@ -60,9 +60,9 @@ export function OptionButton({
       onClick={onClick}
       aria-pressed={state === 'selected'}
       className={cx(
-        'flex w-full items-start gap-3 rounded-2xl border-2 px-3 py-3 text-left transition-all',
+        'flex w-full items-start gap-3 rounded-2xl border px-3 py-3 text-left transition-all',
         'disabled:cursor-default',
-        'enabled:active:translate-x-[2px] enabled:active:translate-y-[2px] enabled:active:shadow-none',
+        'enabled:active:scale-[0.98]',
         STATE_CLASSES[state],
       )}
     >
@@ -78,7 +78,7 @@ export function OptionButton({
         {teks}
       </span>
       {badge && (
-        <span className="mt-0.5 shrink-0 rounded-full border-2 border-ink bg-white px-2 py-0.5 text-xs font-extrabold text-ink">
+        <span className="mt-0.5 shrink-0 rounded-full bg-ink/5 px-2 py-0.5 text-xs font-extrabold text-ink">
           {badge}
         </span>
       )}

@@ -43,13 +43,13 @@ function LeaderboardRow({
     <Card
       className={cx(
         'py-3',
-        isMe && 'border-primary-600 bg-primary-100 shadow-sticker',
+        isMe && 'border-primary-600 bg-primary-50',
       )}
     >
       <div className="flex items-center gap-3">
         <span
           className={cx(
-            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-ink font-display text-base font-extrabold shadow-sticker-sm',
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line font-display text-base font-extrabold',
             rankCircleClass(entry.rank),
           )}
         >
@@ -148,9 +148,7 @@ export function LeaderboardPage() {
   return (
     <div className="flex flex-col gap-5">
       <header>
-        <p className="font-script text-2xl leading-none text-primary-700">
-          siapa paling rajin minggu ini
-        </p>
+        <p className="kicker">siapa paling rajin minggu ini</p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">
           Leaderboard
         </h1>
@@ -184,7 +182,7 @@ export function LeaderboardPage() {
       {configured && (
         <>
           {myUserId === null && !loading && (
-            <Card className="bg-accent-100 py-3 shadow-sticker-amber">
+            <Card className="bg-accent-100 py-3">
               <p className="text-sm leading-relaxed font-bold">
                 Kamu lagi lihat sebagai tamu.{' '}
                 <Link
@@ -200,13 +198,14 @@ export function LeaderboardPage() {
           )}
 
           {pendingSent > 0 && (
-            <p className="rounded-xl border-2 border-ink bg-primary-100 px-3 py-2 text-xs font-bold text-primary-700">
+            <p className="rounded-xl bg-primary-100 px-3 py-2 text-xs font-bold text-primary-700">
               {pendingSent} skor yang sempat tertunda berhasil dikirim ke
               leaderboard.
             </p>
           )}
 
-          <section aria-label="Juara minggu lalu">
+          <div className="grid gap-5 lg:grid-cols-5">
+            <section aria-label="Juara minggu lalu" className="lg:col-span-2">
             <h2 className="mb-2 font-display text-base font-extrabold">
               Juara minggu lalu
             </h2>
@@ -233,7 +232,7 @@ export function LeaderboardPage() {
                     <div className="flex items-center gap-3">
                       <span
                         className={cx(
-                          'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-ink shadow-sticker-sm',
+                          'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line',
                           rankCircleClass(entry.rank),
                         )}
                       >
@@ -266,7 +265,7 @@ export function LeaderboardPage() {
             )}
           </section>
 
-          <section aria-label="Ranking minggu ini">
+          <section aria-label="Ranking minggu ini" className="lg:col-span-3">
             <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
               <h2 className="font-display text-base font-extrabold">
                 Ranking minggu ini
@@ -292,7 +291,7 @@ export function LeaderboardPage() {
                 id="filter-formasi"
                 value={selectedFormasi}
                 onChange={(e) => setSelectedFormasi(e.target.value)}
-                className="min-w-0 flex-1 rounded-full border-2 border-ink bg-white px-3 py-2 text-sm font-bold shadow-sticker-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="min-w-0 flex-1 rounded-xl border border-line bg-white px-3 py-2 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 <option value={FILTER_SEMUA}>Semua formasi</option>
                 {myFormasi && (
@@ -309,7 +308,7 @@ export function LeaderboardPage() {
             </div>
 
             {myEntry && (
-              <p className="mb-3 w-fit rounded-full border-2 border-ink bg-primary-100 px-3 py-1 text-xs font-extrabold text-primary-700 shadow-sticker-sm">
+              <p className="mb-3 w-fit rounded-full bg-primary-100 px-3 py-1 text-xs font-extrabold text-primary-700">
                 Kamu peringkat #{myEntry.rank} minggu ini dengan total{' '}
                 {myEntry.total}/550
               </p>
@@ -355,7 +354,8 @@ export function LeaderboardPage() {
               Leaderboard dihitung dari simulasi CAT (110 soal). Tryout
               kilat tidak masuk ranking. Ranking reset tiap Senin.
             </p>
-          </section>
+            </section>
+          </div>
         </>
       )}
     </div>

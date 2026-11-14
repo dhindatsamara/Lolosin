@@ -33,15 +33,15 @@ function SectionRow({
     <Link to={`/belajar/${docId}/${section.id}`}>
       <div
         className={cx(
-          'flex items-center gap-3 rounded-2xl border-2 px-3 py-2.5 transition-all',
+          'flex items-center gap-3 rounded-2xl border px-3 py-2.5 transition-all',
           isRead
-            ? 'border-primary-600 bg-primary-50'
-            : 'border-ink bg-white hover:-translate-y-px hover:shadow-sticker-sm',
+            ? 'border-primary-200 bg-primary-50'
+            : 'border-line bg-white hover:-translate-y-px hover:border-line-strong hover:shadow-soft',
         )}
       >
         <span
           className={cx(
-            'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2',
+            'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border',
             isRead
               ? 'border-primary-600 bg-primary-600 text-white'
               : 'border-ink/40 text-transparent',
@@ -150,14 +150,14 @@ export function MateriDetailPage() {
           </span>
         </div>
         {doc.catatan_kualitas && (
-          <p className="mt-3 rounded-xl border-2 border-ink bg-accent-100 px-3 py-2 text-xs leading-relaxed font-medium text-accent-800">
+          <p className="mt-3 rounded-xl border border-accent-200 bg-accent-100 px-3 py-2 text-xs leading-relaxed font-medium text-accent-800">
             <span className="font-extrabold">Catatan kualitas: </span>
             {doc.catatan_kualitas}
           </p>
         )}
         <div className="mt-4">
           {semuaSelesai ? (
-            <p className="flex items-center justify-center gap-2 rounded-xl border-2 border-primary-600 bg-primary-100 px-4 py-2.5 text-sm font-bold text-primary-700">
+            <p className="flex items-center justify-center gap-2 rounded-xl border border-primary-200 bg-primary-100 px-4 py-2.5 text-sm font-bold text-primary-700">
               <CheckIcon width={16} height={16} />
               Semua seksi di dokumen ini sudah kamu baca
             </p>
@@ -184,7 +184,7 @@ export function MateriDetailPage() {
           ).length
           return (
             <section key={group.subtopik}>
-              <div className="mb-2 flex items-baseline justify-between gap-3 border-b-2 border-dashed border-ink/20 pb-2">
+              <div className="mb-2 flex items-baseline justify-between gap-3 border-b border-dashed border-line-strong pb-2">
                 <h2 className="font-display text-lg font-extrabold leading-snug">
                   {group.subtopik}
                 </h2>

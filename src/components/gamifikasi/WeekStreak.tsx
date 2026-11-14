@@ -35,7 +35,7 @@ export function WeekStreak() {
       <Card className="p-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-ink bg-twk-soft text-twk">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-twk-soft text-twk">
               <FlameIcon width={18} height={18} />
             </span>
             <div>
@@ -59,14 +59,14 @@ export function WeekStreak() {
               <div key={date} className="flex flex-col items-center gap-1.5">
                 <span
                   className={cx(
-                    'flex h-9 w-9 items-center justify-center rounded-full border-2 text-sm font-extrabold',
+                    'flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold',
                     isActive
-                      ? 'border-ink bg-primary-600 text-white shadow-sticker-sm'
+                      ? 'bg-primary-600 text-white'
                       : isToday
-                        ? 'border-ink bg-accent-400 text-ink shadow-sticker-sm'
+                        ? 'bg-accent-400 text-ink'
                         : isFuture
-                          ? 'border-dashed border-ink/25 bg-paper text-ink/40'
-                          : 'border-ink/25 bg-white text-ink/40',
+                          ? 'bg-paper text-ink/40'
+                          : 'bg-ink/5 text-ink/40',
                   )}
                   aria-label={`${HARI[i]} ${isActive ? 'belajar' : isFuture ? 'belum tiba' : 'tidak belajar'}`}
                 >

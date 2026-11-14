@@ -14,7 +14,8 @@
  * di user_metadata saat signUp agar bisa dipakai nanti.
  */
 import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
-import { supabase } from './supabase'
+import { useEffect, useState } from 'react'
+import { isSupabaseConfigured, supabase } from './supabase'
 
 /** Baris tabel public.profiles. */
 export interface Profile {
@@ -272,4 +273,41 @@ export function onAuthChange(
   return () => {
     data.subscription.unsubscribe()
   }
+}
+
+/**
+ * Hook status login: user yang sedang masuk + apakah statusnya masih
+ * dimuat. Dipakai beranda (landing vs dashboard) dan widget akun.
+ *
+ * Saat Supabase belum terkonfigurasi, langsung mengembalikan user null
+ * dan loading false (mode lokal: tidak ada sistem akun).
+ */
+export function useAuthUser(): { user: User | null; loading: boolean } {
+  const configured = isSupabaseConfigured()
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(configured)
+
+  useEffect(() => {
+    if (!configured) return
+    let cancelled = false
+
+    getCurrentUser().then((current) => {
+      if (cancelled) return
+      setUser(current)
+      setLoading(false)
+    })
+
+    const unsubscribe = onAuthChange((_event, session) => {
+      if (cancelled) return
+      setUser(session?.user ?? null)
+      setLoading(false)
+    })
+
+    return () => {
+      cancelled = true
+      unsubscribe()
+    }
+  }, [configured])
+
+  return { user, loading }
 }

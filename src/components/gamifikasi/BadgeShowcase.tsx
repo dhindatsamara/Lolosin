@@ -39,9 +39,7 @@ export function BadgeShowcase() {
     <section aria-label="Lencana pencapaian">
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
-          <p className="font-script text-2xl leading-none text-primary-700">
-            koleksi pencapaianmu
-          </p>
+          <p className="kicker">koleksi pencapaianmu</p>
           <h2 className="mt-1 font-display text-xl font-extrabold">
             Lencana
           </h2>
@@ -50,7 +48,7 @@ export function BadgeShowcase() {
           {badges.length}/{BADGES.length} diraih
         </Badge>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {BADGES.map((def) => {
           const tanggal = diraih.get(def.id)
           const earned = tanggal !== undefined
@@ -64,7 +62,7 @@ export function BadgeShowcase() {
             >
               <span
                 className={cx(
-                  'flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-ink text-2xl',
+                  'flex h-12 w-12 items-center justify-center rounded-2xl text-2xl',
                   earned ? 'bg-accent-400' : 'bg-ink/5 grayscale',
                 )}
                 aria-hidden="true"
@@ -78,12 +76,12 @@ export function BadgeShowcase() {
                 {def.deskripsi}
               </span>
               {earned ? (
-                <span className="mt-1 inline-flex items-center gap-1 rounded-full border-2 border-ink bg-primary-100 px-2 py-0.5 text-[11px] font-extrabold text-primary-700">
+                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary-100 px-2 py-0.5 text-[11px] font-extrabold text-primary-700">
                   <CheckIcon width={11} height={11} />
                   Diraih {formatTanggalRaih(tanggal)}
                 </span>
               ) : (
-                <span className="mt-1 rounded-full border-2 border-dashed border-ink/30 px-2 py-0.5 text-[11px] font-bold text-ink/50">
+                <span className="mt-1 rounded-full bg-ink/5 px-2 py-0.5 text-[11px] font-bold text-ink/50">
                   Belum diraih
                 </span>
               )}

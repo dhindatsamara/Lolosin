@@ -28,7 +28,7 @@ export function TimerDisplay({
   return (
     <span
       className={cx(
-        'inline-flex items-center gap-1.5 rounded-full border-2 border-ink px-3 py-1.5 font-display text-sm font-extrabold tabular-nums shadow-sticker-sm',
+        'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-display text-sm font-extrabold tabular-nums shadow-soft',
         urgent ? 'bg-red-100 text-red-800' : 'bg-accent-400 text-ink',
         critical && 'animate-pulse',
       )}

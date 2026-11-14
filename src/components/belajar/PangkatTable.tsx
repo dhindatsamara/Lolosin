@@ -45,9 +45,9 @@ export function PangkatTable({ pangkat, rows }: PangkatTableProps) {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Cari bilangan atau hasil, mis. 7 atau 49…"
         aria-label="Cari bilangan di tabel pangkat"
-        className="mb-3 w-full rounded-xl border-2 border-ink bg-white px-3.5 py-2.5 text-sm font-medium outline-none placeholder:text-ink/60 focus:border-primary-600 focus:ring-2 focus:ring-primary-100"
+        className="mb-3 w-full rounded-xl border border-line-strong bg-white px-3.5 py-2.5 text-sm font-medium outline-none placeholder:text-ink/60 focus:border-primary-600 focus:ring-2 focus:ring-primary-100"
       />
-      <div className="max-h-[420px] overflow-y-auto rounded-2xl border-2 border-ink bg-white shadow-sticker-sm">
+      <div className="max-h-[420px] overflow-y-auto rounded-2xl border border-line bg-white shadow-soft">
         <table className="w-full text-sm">
           <thead className="sticky top-0 z-10">
             <tr className="bg-primary-800 text-left">

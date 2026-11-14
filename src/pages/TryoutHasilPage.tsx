@@ -31,9 +31,9 @@ import { CheckIcon } from '../components/icons'
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
 const MATERI_CARD = {
-  TWK: 'border-ink bg-twk text-white',
-  TIU: 'border-ink bg-tiu text-white',
-  TKP: 'border-ink bg-tkp text-white',
+  TWK: 'border-l-4 border-l-twk',
+  TIU: 'border-l-4 border-l-tiu',
+  TKP: 'border-l-4 border-l-tkp',
 } as const
 
 /**
@@ -230,22 +230,22 @@ export function TryoutHasilPage() {
           )}
         </p>
         {timedOut && (
-          <p className="mx-auto mt-2 w-fit rounded-full border-2 border-ink bg-accent-400 px-3 py-1 text-xs font-extrabold text-ink shadow-sticker-sm">
+          <p className="mx-auto mt-2 w-fit rounded-full bg-accent-400 px-3 py-1 text-xs font-extrabold text-ink">
             Waktu habis, jawaban tersimpan otomatis
           </p>
         )}
         {xpEarned !== null && (
-          <p className="mx-auto mt-2 w-fit rounded-full border-2 border-ink bg-primary-100 px-3 py-1 text-sm font-extrabold text-primary-700 shadow-sticker-sm">
+          <p className="mx-auto mt-2 w-fit rounded-full bg-primary-100 px-3 py-1 text-sm font-extrabold text-primary-700">
             +{xpEarned} XP
           </p>
         )}
         {submitStatus && submitStatus !== 'mini' && (
           <p
             className={cx(
-              'mx-auto mt-2 w-fit rounded-full border-2 border-ink px-3 py-1 text-xs font-extrabold shadow-sticker-sm',
+              'mx-auto mt-2 w-fit rounded-full px-3 py-1 text-xs font-extrabold',
               submitStatus === 'sent'
                 ? 'bg-primary-100 text-primary-700'
-                : 'bg-white text-ink/70',
+                : 'bg-ink/5 text-ink/70',
             )}
           >
             {submitStatus === 'sent' && (
@@ -274,7 +274,7 @@ export function TryoutHasilPage() {
         )}
       </header>
 
-      <div className="flex flex-col gap-3">
+      <div className="grid gap-3 lg:grid-cols-3">
         {MATERI_LIST.map((materi) => {
           const nilai = score.scores[materi]
           const scaled = score.scaled[materi]
@@ -296,17 +296,14 @@ export function TryoutHasilPage() {
                 </div>
                 <Badge
                   tone={passed ? 'green' : 'neutral'}
-                  className={cx(
-                    'shrink-0 border-2 border-ink',
-                    !passed && 'bg-white text-ink',
-                  )}
+                  className="shrink-0"
                 >
                   {passed ? 'Lulus' : 'Belum lulus'}
                 </Badge>
               </div>
               <p className="mt-3 font-display text-2xl font-bold">
                 {nilai}
-                <span className="text-sm font-semibold text-white/75">
+                <span className="text-sm font-semibold text-ink/60">
                   /{maxSeksi}
                   {!isFull && (
                     <>
@@ -319,11 +316,11 @@ export function TryoutHasilPage() {
               <ProgressBar
                 value={nilai}
                 max={maxSeksi}
-                tone="amber"
+                tone={MATERI_TONE[materi]}
                 label={`Skor ${materi}`}
-                className="mt-2 bg-white/25"
+                className="mt-2"
               />
-              <p className="mt-1.5 text-xs font-semibold text-white/85">
+              <p className="mt-1.5 text-xs font-semibold text-ink/60">
                 {isFull ? (
                   <>Passing grade: {ORIGINAL_PASSING[materi]}</>
                 ) : (
@@ -346,7 +343,7 @@ export function TryoutHasilPage() {
           <h2 className="mb-2 font-display text-base font-extrabold">
             Hasil per soal
           </h2>
-          <div className="flex flex-col gap-2">
+          <div className="grid gap-2 lg:grid-cols-2">
             {questions.map((q, i) => {
               const answer = answers[q.id]
               const dijawab = answer !== undefined
@@ -357,7 +354,7 @@ export function TryoutHasilPage() {
                   <div className="flex items-start gap-3">
                     <span
                       className={cx(
-                        'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold',
+                        'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-extrabold',
                         q.materi === 'TKP'
                           ? poin >= 4
                             ? 'bg-primary-100 text-primary-700'

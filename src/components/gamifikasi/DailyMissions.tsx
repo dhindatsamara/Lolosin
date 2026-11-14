@@ -24,9 +24,7 @@ export function DailyMissions() {
     <section aria-label="Misi harian">
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
-          <p className="font-script text-2xl leading-none text-primary-700">
-            tantangan kecil, hadiah nyata
-          </p>
+          <p className="kicker">tantangan kecil, hadiah nyata</p>
           <h2 className="mt-1 font-display text-xl font-extrabold">
             Misi hari ini
           </h2>
@@ -42,12 +40,12 @@ export function DailyMissions() {
             <div className="flex items-start gap-3">
               <span
                 className={cx(
-                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-ink',
+                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
                   claimed
                     ? 'bg-primary-100 text-primary-700'
                     : done
                       ? 'bg-accent-400 text-ink'
-                      : 'bg-white text-ink/70',
+                      : 'bg-ink/5 text-ink/70',
                 )}
               >
                 {claimed ? (
@@ -61,7 +59,7 @@ export function DailyMissions() {
                   <p className="font-display text-sm leading-snug font-extrabold">
                     {def.judul}
                   </p>
-                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full border-2 border-ink bg-accent-100 px-2 py-0.5 text-[11px] font-extrabold text-accent-700">
+                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-accent-100 px-2 py-0.5 text-[11px] font-extrabold text-accent-700">
                     <ZapIcon width={11} height={11} />+{def.xp} XP
                   </span>
                 </div>
@@ -82,7 +80,7 @@ export function DailyMissions() {
                 </div>
                 <div className="mt-2.5">
                   {claimed ? (
-                    <span className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-primary-100 px-3 py-1 text-xs font-extrabold text-primary-700">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-primary-100 px-3 py-1 text-xs font-extrabold text-primary-700">
                       <CheckIcon width={12} height={12} />
                       Diklaim +{def.xp} XP
                     </span>
@@ -108,7 +106,7 @@ export function DailyMissions() {
       </div>
 
       {semuaDiklaim && (
-        <p className="mt-3 rounded-2xl border-2 border-ink bg-primary-100 px-4 py-3 text-center text-sm font-bold text-primary-700 shadow-sticker-sm">
+        <p className="mt-3 rounded-2xl bg-primary-100 px-4 py-3 text-center text-sm font-bold text-primary-700">
           Misi hari ini beres semua. Besok gas lagi!
         </p>
       )}

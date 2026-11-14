@@ -1,77 +1,60 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import type { User } from '@supabase/supabase-js'
 import {
-  getCurrentUser,
   getMyProfile,
-  onAuthChange,
   signOut,
+  useAuthUser,
   type Profile,
 } from '../lib/auth'
 import { isSupabaseConfigured } from '../lib/supabase'
 
 /**
- * Widget status akun untuk top bar (dipasang koordinator di Layout).
+ * Widget status akun untuk top bar (dipasang di Layout).
  *
+ * - Belum login: tombol "Masuk" (outline) + "Daftar" (hijau solid).
  * - Login: pill username + tombol Keluar.
- * - Belum login: tautan pill "Masuk" ke /auth.
  * - Supabase belum terkonfigurasi: tidak menampilkan apa-apa.
  *
- * Mendengarkan perubahan auth lewat onAuthChange, jadi status ter-update
- * tanpa reload. Gaya pill mengikuti pill XP dan streak yang sudah ada.
+ * Status login dibaca lewat useAuthUser, jadi ter-update tanpa reload.
  */
 export function AuthStatus() {
   const configured = isSupabaseConfigured()
-  const [user, setUser] = useState<User | null>(null)
+  const { user, loading } = useAuthUser()
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [loading, setLoading] = useState(true)
   const [signingOut, setSigningOut] = useState(false)
 
   useEffect(() => {
-    if (!configured) return
-    let cancelled = false
-
-    async function refresh() {
-      const current = await getCurrentUser()
-      if (cancelled) return
-      setUser(current)
-      setProfile(current ? await getMyProfile() : null)
-      if (!cancelled) setLoading(false)
+    if (!configured || !user) {
+      setProfile(null)
+      return
     }
-    refresh()
-
-    const unsubscribe = onAuthChange((_event, session) => {
-      if (cancelled) return
-      const nextUser = session?.user ?? null
-      setUser(nextUser)
-      if (!nextUser) {
-        setProfile(null)
-        setLoading(false)
-        return
-      }
-      getMyProfile().then((nextProfile) => {
-        if (cancelled) return
-        setProfile(nextProfile)
-        setLoading(false)
-      })
+    let cancelled = false
+    getMyProfile().then((nextProfile) => {
+      if (!cancelled) setProfile(nextProfile)
     })
-
     return () => {
       cancelled = true
-      unsubscribe()
     }
-  }, [configured])
+  }, [configured, user])
 
   if (!configured || loading) return null
 
   if (!user) {
     return (
-      <Link
-        to="/auth"
-        className="inline-flex items-center rounded-full border-2 border-ink bg-white px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink shadow-sticker-sm transition-all hover:bg-primary-50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
-      >
-        Masuk
-      </Link>
+      <span className="inline-flex shrink-0 items-center gap-2">
+        <Link
+          to="/auth"
+          className="inline-flex items-center rounded-xl border border-line bg-white px-3 py-2 text-sm font-bold whitespace-nowrap text-ink transition-colors hover:border-primary-300 hover:text-primary-700"
+        >
+          Masuk
+        </Link>
+        <Link
+          to="/auth?mode=daftar"
+          className="inline-flex items-center rounded-xl bg-primary-600 px-3 py-2 text-sm font-bold whitespace-nowrap text-white transition-colors hover:bg-primary-700"
+        >
+          Daftar
+        </Link>
+      </span>
     )
   }
 
@@ -89,9 +72,9 @@ export function AuthStatus() {
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span className="inline-flex shrink-0 items-center gap-2">
       <span
-        className="inline-flex max-w-28 items-center truncate rounded-full border-2 border-ink bg-primary-100 px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-primary-700 shadow-sticker-sm"
+        className="inline-flex max-w-28 items-center truncate rounded-full bg-primary-100 px-3 py-2 text-sm font-bold whitespace-nowrap text-primary-700"
         title={displayName}
       >
         {displayName}
@@ -100,7 +83,7 @@ export function AuthStatus() {
         type="button"
         onClick={handleSignOut}
         disabled={signingOut}
-        className="inline-flex items-center rounded-full border-2 border-ink bg-white px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink shadow-sticker-sm transition-all hover:bg-primary-50 disabled:opacity-50"
+        className="inline-flex items-center rounded-xl border border-line bg-white px-3 py-2 text-sm font-bold whitespace-nowrap text-ink transition-colors hover:border-primary-300 hover:text-primary-700 disabled:opacity-50"
       >
         Keluar
       </button>

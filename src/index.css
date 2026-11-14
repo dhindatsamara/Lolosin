@@ -4,16 +4,23 @@
  * Font self-hosted via Fontsource (diimpor di src/main.tsx, SEBELUM file
  * ini), tanpa CDN font eksternal, agar PWA offline & screenshot selalu
  * memakai font asli.
+ *
+ * Bahasa desain v2 "Lapang" (lihat REDESIGN-V2.md): tipografi berani,
+ * ruang lega, kartu lembut. Tanpa font script, tanpa tekstur grid,
+ * tanpa hard shadow.
  */
 
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Poppins", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-script: "Caveat", cursive;
 
   /* Kertas hangat & tinta */
   --color-paper: #FAF7F2;
   --color-ink: #1B1E1C;
+
+  /* Border netral hangat untuk kartu lembut */
+  --color-line: #E8E2D6;
+  --color-line-strong: #D8D0BE;
 
   /* Primer: hijau tua (#0E5C43) */
   --color-primary-50: #EDF6F2;
@@ -40,7 +47,7 @@
   --color-accent-800: #92400E;
   --color-accent-900: #78350F;
 
-  /* Warna seksi */
+  /* Warna seksi (dipakai sebagai aksen kecil, bukan background penuh) */
   --color-twk: #C2410C;
   --color-twk-soft: #FDEDE3;
   --color-tiu: #1E40AF;
@@ -48,17 +55,23 @@
   --color-tkp: #7E22CE;
   --color-tkp-soft: #F3E8FB;
 
-  /* Hard offset shadow (neo-brutalist "sticker", tanpa blur) */
-  --shadow-sticker-sm: 2px 2px 0 0 #1B1E1C;
-  --shadow-sticker: 4px 4px 0 0 #1B1E1C;
-  --shadow-sticker-lg: 6px 6px 0 0 #1B1E1C;
-  --shadow-sticker-amber: 4px 4px 0 0 #F59E0B;
+  /* Soft shadow (blur lembut, tanpa offset keras) */
+  --shadow-soft: 0 1px 2px rgb(27 30 28 / 0.04), 0 10px 30px rgb(27 30 28 / 0.06);
+  --shadow-soft-lg: 0 2px 4px rgb(27 30 28 / 0.05), 0 20px 45px rgb(27 30 28 / 0.09);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    font-size: 16px;
+  }
+
+  /* Tipografi membesar di desktop: seluruh skala rem ikut naik. */
+  @media (min-width: 1024px) {
+    html {
+      font-size: 17px;
+    }
   }
 
   body {
@@ -78,19 +91,10 @@
   }
 }
 
-@layer utilities {
-  /* Tekstur grid halus (garis putih transparan) untuk panel hero hijau tua. */
-  .bg-grid-dark {
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-    background-size: 28px 28px;
-  }
-
-  /* Tekstur dot halus untuk background paper. */
-  .bg-dot-paper {
-    background-image: radial-gradient(rgba(27, 30, 28, 0.09) 1px, transparent 1px);
-    background-size: 18px 18px;
+@layer components {
+  /* Label kecil kapital untuk pembuka seksi (pengganti eyebrow script). */
+  .kicker {
+    @apply text-xs font-extrabold tracking-[0.14em] text-primary-600 uppercase;
   }
 }
 

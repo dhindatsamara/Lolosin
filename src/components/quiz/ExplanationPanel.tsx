@@ -38,7 +38,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border-2 border-ink bg-accent-50 p-4 shadow-sticker-sm">
+    <div className="flex flex-col gap-3 rounded-2xl border border-line bg-accent-50 p-4 shadow-soft">
       {/* Ringkasan hasil pilihan */}
       {selected !== undefined && (
         <p
@@ -73,12 +73,12 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
               <li
                 key={opsi}
                 className={cx(
-                  'flex items-start gap-2 rounded-xl border-2 px-2.5 py-1.5 text-sm',
+                  'flex items-start gap-2 rounded-xl border px-2.5 py-1.5 text-sm',
                   isKunci
                     ? 'border-primary-600 bg-primary-100'
                     : isPilihan
                       ? 'border-red-500 bg-red-50'
-                      : 'border-ink/10 bg-white',
+                      : 'border-line bg-white',
                 )}
               >
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ink/5 text-xs font-bold">
@@ -114,7 +114,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
       </div>
 
       {/* Pembahasan */}
-      <div className="border-t-2 border-dashed border-ink/20 pt-3">
+      <div className="border-t border-dashed border-line-strong pt-3">
         <p className="mb-1.5 text-xs font-extrabold tracking-wide text-ink/60 uppercase">
           Pembahasan
         </p>

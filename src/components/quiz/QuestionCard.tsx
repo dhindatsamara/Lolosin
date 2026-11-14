@@ -87,7 +87,7 @@ export function QuestionCard({
       </p>
 
       {isTkp && (
-        <p className="rounded-xl border-2 border-tkp bg-tkp-soft px-3 py-2 text-xs leading-relaxed font-semibold text-tkp">
+        <p className="rounded-xl border border-tkp/30 bg-tkp-soft px-3 py-2 text-xs leading-relaxed font-semibold text-tkp">
           Soal TKP dinilai 1–5. Pilih jawaban yang paling mencerminkan
           karakter ASN.
         </p>

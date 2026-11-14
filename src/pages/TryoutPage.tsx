@@ -135,12 +135,12 @@ function PassingCard({
   return (
     <Card
       className={cx(
-        'flex items-center justify-between gap-3 py-3',
+        'flex items-center justify-between gap-3 border-l-4 py-3',
         materi === 'TWK'
-          ? 'bg-twk-soft'
+          ? 'border-l-twk'
           : materi === 'TIU'
-            ? 'bg-tiu-soft'
-            : 'bg-tkp-soft',
+            ? 'border-l-tiu'
+            : 'border-l-tkp',
       )}
     >
       <div className="flex items-center gap-2">
@@ -324,10 +324,10 @@ export function TryoutPage() {
         <header className="flex flex-wrap items-center justify-between gap-2">
           <TimerDisplay secondsLeft={secondsLeft} />
           <div className="flex items-center gap-2">
-            <span className="rounded-full border-2 border-ink bg-accent-400 px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink shadow-sticker-sm">
+            <span className="rounded-full bg-accent-400 px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink">
               {MODE_LABEL[tryoutMode]}
             </span>
-            <span className="rounded-full border-2 border-ink bg-white px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink shadow-sticker-sm">
+            <span className="rounded-full bg-ink/5 px-2.5 py-1 text-xs font-extrabold whitespace-nowrap text-ink">
               {answeredCount}/{total} dijawab
             </span>
             <button
@@ -341,103 +341,107 @@ export function TryoutPage() {
         </header>
 
         {rotated && (
-          <p className="rounded-xl border-2 border-ink bg-accent-100 px-3 py-2 text-xs font-bold text-accent-800">
+          <p className="rounded-xl border border-accent-200 bg-accent-100 px-3 py-2 text-xs font-bold text-accent-800">
             Soal baru habis, jadi mulai mengulang dari awal.
           </p>
         )}
 
-        <Card padding="none" className="overflow-hidden">
-          <button
-            type="button"
-            onClick={() => setShowPalette((v) => !v)}
-            aria-expanded={showPalette}
-            className="flex w-full items-center justify-between px-4 py-3 text-left"
-          >
-            <span className="text-sm font-extrabold">Navigator soal</span>
-            <ChevronRightIcon
-              width={18}
-              height={18}
-              className={cx(
-                'text-ink/60 transition-transform',
-                showPalette && 'rotate-90',
-              )}
-            />
-          </button>
-          {showPalette && (
-            <div className="border-t-2 border-ink px-4 py-3">
-              <TryoutPalette
-                questions={questions}
-                answers={answers}
-                doubted={doubted}
-                currentIndex={currentIndex}
-                onSelect={goTo}
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+          <Card padding="none" className="overflow-hidden lg:order-2 lg:sticky lg:top-24">
+            <button
+              type="button"
+              onClick={() => setShowPalette((v) => !v)}
+              aria-expanded={showPalette}
+              className="flex w-full items-center justify-between px-4 py-3 text-left"
+            >
+              <span className="text-sm font-extrabold">Navigator soal</span>
+              <ChevronRightIcon
+                width={18}
+                height={18}
+                className={cx(
+                  'text-ink/60 transition-transform',
+                  showPalette && 'rotate-90',
+                )}
               />
+            </button>
+            {showPalette && (
+              <div className="border-t border-line px-4 py-3">
+                <TryoutPalette
+                  questions={questions}
+                  answers={answers}
+                  doubted={doubted}
+                  currentIndex={currentIndex}
+                  onSelect={goTo}
+                />
             </div>
           )}
-        </Card>
-
-        <Card>
-          <QuestionCard
-            question={question}
-            nomor={currentIndex + 1}
-            total={total}
-            selected={answers[question.id]}
-            revealed={false}
-            onSelect={selectAnswer}
-            showMateriBadge
-          />
-        </Card>
-
-        <Button
-          variant={doubted.has(question.id) ? 'secondary' : 'outline'}
-          fullWidth
-          onClick={toggleDoubt}
-        >
-          <FlagIcon width={16} height={16} />
-          {doubted.has(question.id)
-            ? 'Ragu-ragu, ketuk untuk membatalkan'
-            : 'Tandai ragu-ragu'}
-        </Button>
-
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="outline"
-            onClick={() => goTo(currentIndex - 1)}
-            disabled={currentIndex === 0}
-          >
-            ← Sebelumnya
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => goTo(currentIndex + 1)}
-            disabled={currentIndex === total - 1}
-          >
-            Berikutnya →
-          </Button>
-        </div>
-
-        {showConfirm ? (
-          <Card className="bg-accent-100 shadow-sticker-amber">
-            <p className="font-display text-base font-extrabold">
-              Selesaikan {MODE_LABEL_KALIMAT[tryoutMode]}?
-            </p>
-            <p className="mt-1 text-sm leading-relaxed text-ink/70">
-              {unansweredCount === 0
-                ? 'Semua soal beres! Skor langsung dihitung dan disimpan.'
-                : `Masih ada ${unansweredCount} soal belum dijawab, dan soal kosong bernilai 0.`}
-            </p>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <Button variant="outline" onClick={() => setShowConfirm(false)}>
-                Lanjut mengerjakan
-              </Button>
-              <Button onClick={() => finish(false)}>Ya, selesaikan</Button>
-            </div>
           </Card>
-        ) : (
-          <Button size="lg" fullWidth onClick={() => setShowConfirm(true)}>
-            Selesai & lihat hasil
+
+          <div className="flex flex-col gap-4 lg:order-1">
+            <Card>
+              <QuestionCard
+                question={question}
+                nomor={currentIndex + 1}
+                total={total}
+                selected={answers[question.id]}
+                revealed={false}
+                onSelect={selectAnswer}
+                showMateriBadge
+            />
+          </Card>
+
+          <Button
+            variant={doubted.has(question.id) ? 'secondary' : 'outline'}
+            fullWidth
+            onClick={toggleDoubt}
+          >
+            <FlagIcon width={16} height={16} />
+            {doubted.has(question.id)
+              ? 'Ragu-ragu, ketuk untuk membatalkan'
+              : 'Tandai ragu-ragu'}
           </Button>
-        )}
+
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant="outline"
+              onClick={() => goTo(currentIndex - 1)}
+              disabled={currentIndex === 0}
+            >
+              ← Sebelumnya
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => goTo(currentIndex + 1)}
+              disabled={currentIndex === total - 1}
+            >
+              Berikutnya →
+            </Button>
+          </div>
+
+          {showConfirm ? (
+            <Card className="bg-accent-100">
+              <p className="font-display text-base font-extrabold">
+                Selesaikan {MODE_LABEL_KALIMAT[tryoutMode]}?
+              </p>
+              <p className="mt-1 text-sm leading-relaxed text-ink/70">
+                {unansweredCount === 0
+                  ? 'Semua soal beres! Skor langsung dihitung dan disimpan.'
+                  : `Masih ada ${unansweredCount} soal belum dijawab, dan soal kosong bernilai 0.`}
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <Button variant="outline" onClick={() => setShowConfirm(false)}>
+                  Lanjut mengerjakan
+                </Button>
+                <Button onClick={() => finish(false)}>Ya, selesaikan</Button>
+              </div>
+            </Card>
+          ) : (
+            <Button size="lg" fullWidth onClick={() => setShowConfirm(true)}>
+              Selesai & lihat hasil
+            </Button>
+          )}
+          </div>
+        </div>
       </div>
     )
   }
@@ -447,9 +451,7 @@ export function TryoutPage() {
   return (
     <div className="flex flex-col gap-5">
       <header>
-        <p className="font-script text-2xl leading-none text-primary-700">
-          simulasi beneran, deg-degan beneran
-        </p>
+        <p className="kicker">simulasi beneran, deg-degan beneran</p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">
           Tryout & Simulasi
         </h1>
@@ -463,14 +465,14 @@ export function TryoutPage() {
         <h2 className="mb-2 font-display text-base font-extrabold">
           Pilih modemu
         </h2>
-        <div className="flex flex-col gap-3">
+        <div className="grid gap-3 lg:grid-cols-2">
           <button
             type="button"
             onClick={() => startTryout('mini')}
-            className="w-full rounded-2xl border-2 border-ink bg-white p-4 text-left shadow-sticker transition-transform hover:-translate-y-0.5"
+            className="w-full rounded-2xl border border-line bg-white p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
           >
             <div className="flex items-start gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-primary-100 text-primary-700 shadow-sticker-sm">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
                 <ClockIcon width={22} height={22} />
               </span>
               <div className="min-w-0 flex-1">
@@ -492,7 +494,7 @@ export function TryoutPage() {
                 </p>
               </div>
             </div>
-            <span className="mt-3 inline-flex items-center gap-1 rounded-full border-2 border-ink bg-primary-600 px-4 py-2 text-sm font-extrabold text-white shadow-sticker-sm">
+            <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-primary-600 px-4 py-2 text-sm font-extrabold text-white">
               Mulai tryout kilat
               <ChevronRightIcon width={16} height={16} />
             </span>
@@ -501,16 +503,16 @@ export function TryoutPage() {
           <button
             type="button"
             onClick={() => startTryout('full')}
-            className="w-full rounded-2xl border-2 border-ink bg-accent-100 p-4 text-left shadow-sticker-amber transition-transform hover:-translate-y-0.5"
+            className="w-full rounded-2xl border border-accent-200 bg-accent-50 p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
           >
             <div className="flex items-start gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-accent-400 text-ink shadow-sticker-sm">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-400 text-ink">
                 <TrophyIcon width={22} height={22} />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="flex flex-wrap items-center gap-2 font-display text-lg font-extrabold">
                   Simulasi CAT
-                  <span className="rounded-full border-2 border-ink bg-white px-2 py-0.5 font-sans text-[11px] font-extrabold text-ink shadow-sticker-sm">
+                  <span className="rounded-full bg-white px-2 py-0.5 font-sans text-[11px] font-extrabold text-ink shadow-soft">
                     Suasana ujian beneran
                   </span>
                 </p>
@@ -531,7 +533,7 @@ export function TryoutPage() {
                 </p>
               </div>
             </div>
-            <span className="mt-3 inline-flex items-center gap-1 rounded-full border-2 border-ink bg-ink px-4 py-2 text-sm font-extrabold text-white shadow-sticker-sm">
+            <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-ink px-4 py-2 text-sm font-extrabold text-white">
               Mulai simulasi CAT
               <ChevronRightIcon width={16} height={16} />
             </span>
@@ -581,32 +583,38 @@ export function TryoutPage() {
         <h2 className="mb-2 font-display text-base font-extrabold">
           Passing grade
         </h2>
-        <p className="mb-2 text-sm font-bold text-ink/70">
-          Tryout kilat (skor mini)
-        </p>
-        <div className="flex flex-col gap-2">
-          {MATERI_LIST.map((materi) => (
-            <PassingCard
-              key={`mini-${materi}`}
-              materi={materi}
-              passing={TRYOUT_PASSING_MINI[materi]}
-              max={TRYOUT_MAX_PER_SECTION}
-              note={`skala ×${TRYOUT_SCALE_TO_ORIGINAL[materi]}`}
-            />
-          ))}
-        </div>
-        <p className="mt-4 mb-2 text-sm font-bold text-ink/70">
-          Simulasi CAT (passing grade asli)
-        </p>
-        <div className="flex flex-col gap-2">
-          {MATERI_LIST.map((materi) => (
-            <PassingCard
-              key={`asli-${materi}`}
-              materi={materi}
-              passing={ORIGINAL_PASSING[materi]}
-              max={ORIGINAL_MAX[materi]}
-            />
-          ))}
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div>
+            <p className="mb-2 text-sm font-bold text-ink/70">
+              Tryout kilat (skor mini)
+            </p>
+            <div className="flex flex-col gap-2">
+              {MATERI_LIST.map((materi) => (
+                <PassingCard
+                  key={`mini-${materi}`}
+                  materi={materi}
+                  passing={TRYOUT_PASSING_MINI[materi]}
+                  max={TRYOUT_MAX_PER_SECTION}
+                  note={`skala ×${TRYOUT_SCALE_TO_ORIGINAL[materi]}`}
+                />
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="mb-2 text-sm font-bold text-ink/70">
+              Simulasi CAT (passing grade asli)
+            </p>
+            <div className="flex flex-col gap-2">
+              {MATERI_LIST.map((materi) => (
+                <PassingCard
+                  key={`asli-${materi}`}
+                  materi={materi}
+                  passing={ORIGINAL_PASSING[materi]}
+                  max={ORIGINAL_MAX[materi]}
+                />
+              ))}
+            </div>
+          </div>
         </div>
         <p className="mt-2 text-xs leading-relaxed font-medium text-ink/60">
           Biar lulus keseluruhan, ketiga seksi harus melewati passing

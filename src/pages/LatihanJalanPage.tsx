@@ -252,7 +252,7 @@ export function LatihanJalanPage({
     ).length
     const correctXp = correctCount * XP_DRILL_CORRECT
     return (
-      <div className="flex flex-col gap-5">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
         <header className="text-center">
           <p className="text-4xl" aria-hidden="true">
             🎉
@@ -280,7 +280,7 @@ export function LatihanJalanPage({
           <p className="mt-1 text-sm font-semibold text-ink/60">
             jawaban benar
           </p>
-          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-accent-400 px-3 py-1 text-sm font-extrabold text-ink shadow-sticker-sm">
+          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-accent-400 px-3 py-1 text-sm font-extrabold text-ink">
             +{xpEarned} XP
           </p>
           <p className="mt-2 text-xs font-medium text-ink/60">
@@ -308,7 +308,7 @@ export function LatihanJalanPage({
                 <Card key={q.id} className="flex items-start gap-3 py-3">
                   <span
                     className={cx(
-                      'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold',
+                      'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-extrabold',
                       benar
                         ? 'bg-primary-100 text-primary-700'
                         : 'bg-red-100 text-red-700',
@@ -358,7 +358,7 @@ export function LatihanJalanPage({
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
       <header>
         <Link
           to="/latihan"
@@ -398,7 +398,7 @@ export function LatihanJalanPage({
           </span>
         </div>
         {session.rotated && (
-          <p className="mt-2 rounded-xl border-2 border-ink bg-accent-100 px-3 py-2 text-xs font-bold text-accent-800">
+          <p className="mt-2 rounded-xl border border-accent-200 bg-accent-100 px-3 py-2 text-xs font-bold text-accent-800">
             Soal baru habis, jadi mulai mengulang dari awal.
           </p>
         )}
@@ -440,7 +440,7 @@ export function LatihanJalanPage({
       >
         <p
           key={xpFlashKey}
-          className="rounded-full border-2 border-ink bg-ink px-4 py-2.5 text-sm font-bold text-white shadow-sticker-amber"
+          className="rounded-full bg-ink px-4 py-2.5 text-sm font-bold text-white shadow-soft-lg"
         >
           +{XP_DRILL_CORRECT} XP · Jawaban benar!
         </p>

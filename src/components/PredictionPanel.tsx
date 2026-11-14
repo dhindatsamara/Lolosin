@@ -18,9 +18,9 @@ import { ChevronRightIcon } from './icons'
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
 const MATERI_CARD = {
-  TWK: 'border-ink bg-twk text-white',
-  TIU: 'border-ink bg-tiu text-white',
-  TKP: 'border-ink bg-tkp text-white',
+  TWK: 'border-t-4 border-t-twk',
+  TIU: 'border-t-4 border-t-tiu',
+  TKP: 'border-t-4 border-t-tkp',
 } as const
 
 const BAND_PILL: Record<PredictionBand, string> = {
@@ -93,9 +93,7 @@ export function PredictionPanel({
       <section aria-label="Perkiraan kelolosan">
         {!compact && (
           <div className="mb-3">
-            <p className="font-script text-2xl leading-none text-primary-700">
-              kira kira peluangmu
-            </p>
+            <p className="kicker">kira kira peluangmu</p>
             <h2 className="mt-1 font-display text-xl font-extrabold">
               Perkiraan kelolosan
             </h2>
@@ -147,9 +145,7 @@ export function PredictionPanel({
     return (
       <section aria-label="Perkiraan kelolosan">
         <div className="mb-3">
-          <p className="font-script text-2xl leading-none text-primary-700">
-            kira kira peluangmu
-          </p>
+          <p className="kicker">kira kira peluangmu</p>
           <h2 className="mt-1 font-display text-xl font-extrabold">
             Perkiraan kelolosan
           </h2>
@@ -164,11 +160,11 @@ export function PredictionPanel({
             ))}
           </div>
           {prediction.tryoutCount === 1 && (
-            <p className="mt-4 border-t-2 border-dashed border-ink/10 pt-3 text-xs leading-relaxed font-medium text-ink/60">
+            <p className="mt-4 border-t border-dashed border-line pt-3 text-xs leading-relaxed font-medium text-ink/60">
               {BELUM_ADA_TREN}
             </p>
           )}
-          <p className="mt-3 border-t-2 border-dashed border-ink/10 pt-3 text-xs leading-relaxed font-medium text-ink/60">
+          <p className="mt-3 border-t border-dashed border-line pt-3 text-xs leading-relaxed font-medium text-ink/60">
             {kalimatJujur}
           </p>
         </Card>
@@ -179,9 +175,7 @@ export function PredictionPanel({
   return (
     <section aria-label="Perkiraan kelolosan">
       <div className="mb-3">
-        <p className="font-script text-2xl leading-none text-primary-700">
-          kira kira peluangmu
-        </p>
+        <p className="kicker">kira kira peluangmu</p>
         <h2 className="mt-1 font-display text-xl font-extrabold">
           Perkiraan kelolosan
         </h2>
@@ -195,18 +189,18 @@ export function PredictionPanel({
         ))}
       </div>
       {prediction.tryoutCount === 1 && (
-        <p className="mt-3 rounded-2xl border-2 border-ink bg-white px-4 py-3 text-center text-sm font-bold text-ink/70 shadow-sticker-sm">
+        <p className="mt-3 rounded-2xl border border-line bg-white px-4 py-3 text-center text-sm font-bold text-ink/70 shadow-soft">
           {BELUM_ADA_TREN}
         </p>
       )}
-      <p className="mt-3 rounded-2xl border-2 border-dashed border-ink/40 bg-paper px-4 py-3 text-sm leading-relaxed font-medium text-ink/70">
+      <p className="mt-3 rounded-2xl border border-dashed border-line-strong bg-paper px-4 py-3 text-sm leading-relaxed font-medium text-ink/70">
         {kalimatJujur}
       </p>
     </section>
   )
 }
 
-/** Satu seksi versi penuh: kartu berwarna seperti breakdown hasil tryout. */
+/** Satu seksi versi penuh: kartu putih dengan garis aksen warna subtes. */
 function FullCard({ section: s }: { section: SectionPrediction }) {
   const tren = teksTren(s.trend)
   return (
@@ -220,7 +214,7 @@ function FullCard({ section: s }: { section: SectionPrediction }) {
         </div>
         <span
           className={cx(
-            'shrink-0 rounded-full border-2 border-ink px-2.5 py-0.5 text-xs font-bold',
+            'shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold',
             BAND_PILL[s.band],
           )}
         >
@@ -229,7 +223,7 @@ function FullCard({ section: s }: { section: SectionPrediction }) {
       </div>
       <p className="mt-3 font-display text-2xl font-bold">
         {s.materi} {fmt(s.scaled)}
-        <span className="text-sm font-semibold text-white/75">
+        <span className="text-sm font-semibold text-ink/60">
           {' '}
           dari {fmt(s.max)}
         </span>
@@ -237,15 +231,15 @@ function FullCard({ section: s }: { section: SectionPrediction }) {
       <ProgressBar
         value={s.scaled}
         max={s.max}
-        tone="amber"
+        tone={MATERI_TONE[s.materi]}
         label={`Skor CAT ${s.materi}`}
-        className="mt-2 bg-white/25"
+        className="mt-2"
       />
-      <p className="mt-1.5 text-xs font-semibold text-white/85">
+      <p className="mt-1.5 text-xs font-semibold text-ink/60">
         Passing grade: {fmt(s.passing)} · {teksSelisih(s.diff)}
       </p>
       {tren && (
-        <p className="mt-1 text-xs font-semibold text-white/85">{tren}</p>
+        <p className="mt-1 text-xs font-semibold text-ink/60">{tren}</p>
       )}
     </Card>
   )
@@ -262,7 +256,7 @@ function CompactRow({ section: s }: { section: SectionPrediction }) {
         </p>
         <span
           className={cx(
-            'shrink-0 rounded-full border-2 border-ink px-2 py-0.5 text-[11px] font-bold',
+            'shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold',
             BAND_PILL[s.band],
           )}
         >

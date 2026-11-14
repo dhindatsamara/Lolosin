@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   isUsernameAvailable,
   isValidUsername,
@@ -23,7 +23,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PASSWORD_MIN_LENGTH = 6
 
 const INPUT_CLASS =
-  'w-full rounded-xl border-2 border-ink bg-white px-3.5 py-2.5 text-sm font-medium outline-none placeholder:text-ink/60 focus:border-primary-600 focus:ring-2 focus:ring-primary-100'
+  'w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm font-medium outline-none placeholder:text-ink/60 focus:border-primary-600 focus:ring-2 focus:ring-primary-100'
 
 type FieldErrors = Partial<Record<'email' | 'password' | 'username', string>>
 
@@ -39,9 +39,13 @@ type FieldErrors = Partial<Record<'email' | 'password' | 'username', string>>
  */
 export default function AuthPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const configured = isSupabaseConfigured()
 
-  const [mode, setMode] = useState<Mode>('masuk')
+  // Mode awal mengikuti query param ?mode=daftar (dari CTA landing page).
+  const [mode, setMode] = useState<Mode>(() =>
+    searchParams.get('mode') === 'daftar' ? 'daftar' : 'masuk',
+  )
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
@@ -169,11 +173,9 @@ export default function AuthPage() {
   // tryout tetap jalan tanpa akun. Bukan error, jadi tampilkan penjelasan.
   if (!configured) {
     return (
-      <div className="flex flex-col gap-5">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-5">
         <header>
-          <p className="font-script text-2xl leading-none text-primary-700">
-            akunmu, progresmu
-          </p>
+          <p className="kicker">akunmu, progresmu</p>
           <h1 className="mt-1 font-display text-3xl font-extrabold">Akun</h1>
         </header>
         <Card padding="lg" className="flex flex-col gap-3">
@@ -204,17 +206,15 @@ export default function AuthPage() {
   // Daftar sukses, menunggu konfirmasi email. User BELUM login.
   if (confirmationEmail) {
     return (
-      <div className="flex flex-col gap-5">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-5">
         <header>
-          <p className="font-script text-2xl leading-none text-primary-700">
-            hampir jadi, satu langkah lagi
-          </p>
+          <p className="kicker">hampir jadi, satu langkah lagi</p>
           <h1 className="mt-1 font-display text-3xl font-extrabold">
             Cek emailmu
           </h1>
         </header>
         <Card padding="lg" className="flex flex-col gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-ink bg-primary-100 text-primary-700 shadow-sticker-sm">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary-100 text-primary-700">
             <CheckIcon width={22} height={22} />
           </span>
           <p className="text-sm leading-relaxed text-ink/70">
@@ -229,12 +229,12 @@ export default function AuthPage() {
             ulang tautannya.
           </p>
           {resendSent && (
-            <p className="rounded-xl border-2 border-ink bg-primary-50 px-3.5 py-2.5 text-sm font-semibold text-primary-700 shadow-sticker-sm">
+            <p className="rounded-xl bg-primary-50 px-3.5 py-2.5 text-sm font-semibold text-primary-700">
               Email terkirim, cek inbox ya.
             </p>
           )}
           {resendError && (
-            <p className="rounded-xl border-2 border-ink bg-red-50 px-3.5 py-2.5 text-sm font-semibold text-red-800 shadow-sticker-sm">
+            <p className="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-semibold text-red-800">
               {resendError}
             </p>
           )}
@@ -256,9 +256,9 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="mx-auto flex w-full max-w-md flex-col gap-5">
       <header>
-        <p className="font-script text-2xl leading-none text-primary-700">
+        <p className="kicker">
           {mode === 'masuk'
             ? 'selamat datang kembali'
             : 'gabung dan mulai naik peringkat'}
@@ -276,7 +276,7 @@ export default function AuthPage() {
       <Card padding="lg">
         {/* Toggle mode */}
         <div
-          className="grid grid-cols-2 gap-1 rounded-full border-2 border-ink bg-paper p-1"
+          className="grid grid-cols-2 gap-1 rounded-full bg-ink/5 p-1"
           role="tablist"
           aria-label="Pilih masuk atau daftar"
         >
@@ -295,7 +295,7 @@ export default function AuthPage() {
               className={cx(
                 'rounded-full px-4 py-2 text-sm font-extrabold transition-all',
                 mode === tab.value
-                  ? 'bg-primary-600 text-white shadow-sticker-sm'
+                  ? 'bg-primary-600 text-white shadow-soft'
                   : 'text-ink/60 hover:text-ink',
               )}
             >
@@ -410,7 +410,7 @@ export default function AuthPage() {
           {submitError && (
             <p
               role="alert"
-              className="rounded-xl border-2 border-ink bg-red-50 px-3.5 py-2.5 text-sm font-semibold text-red-800 shadow-sticker-sm"
+              className="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-semibold text-red-800"
             >
               {submitError}
             </p>

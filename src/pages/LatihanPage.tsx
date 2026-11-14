@@ -18,15 +18,15 @@ import { ProgressBar } from '../components/ui/ProgressBar'
 import { ChevronRightIcon, TargetIcon } from '../components/icons'
 
 const MATERI_BUTTON: Record<Materi, string> = {
-  TWK: 'border-ink bg-twk text-white shadow-sticker-sm',
-  TIU: 'border-ink bg-tiu text-white shadow-sticker-sm',
-  TKP: 'border-ink bg-tkp text-white shadow-sticker-sm',
+  TWK: 'border-twk bg-twk-soft text-twk',
+  TIU: 'border-tiu bg-tiu-soft text-tiu',
+  TKP: 'border-tkp bg-tkp-soft text-tkp',
 }
 
 const MATERI_FEATURED: Record<Materi, string> = {
-  TWK: 'border-ink bg-twk text-white',
-  TIU: 'border-ink bg-tiu text-white',
-  TKP: 'border-ink bg-tkp text-white',
+  TWK: 'border-l-4 border-l-twk',
+  TIU: 'border-l-4 border-l-tiu',
+  TKP: 'border-l-4 border-l-tkp',
 }
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
@@ -58,9 +58,7 @@ export function LatihanPage() {
   return (
     <div className="flex flex-col gap-5">
       <header>
-        <p className="font-script text-2xl leading-none text-primary-700">
-          latihan terus, biar makin jago
-        </p>
+        <p className="kicker">latihan terus, biar makin jago</p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">Latihan</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
           Drill {DRILL_DEFAULT_COUNT} soal per sesi, pembahasannya langsung
@@ -79,10 +77,10 @@ export function LatihanPage() {
               onClick={() => setMateri(m)}
               aria-pressed={materi === m}
               className={cx(
-                'rounded-2xl border-2 px-2 py-3 text-center transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none',
+                'rounded-2xl border px-2 py-3 text-center transition-all active:scale-[0.98]',
                 materi === m
                   ? MATERI_BUTTON[m]
-                  : 'border-ink bg-white text-ink/70 shadow-sticker-sm hover:bg-paper',
+                  : 'border-line bg-white text-ink/70 shadow-soft hover:bg-paper',
               )}
             >
               <span className="block font-display font-extrabold">{m}</span>
@@ -101,7 +99,7 @@ export function LatihanPage() {
         <h2 className="mb-2 font-display text-base font-extrabold">
           Pilih topik {materi}
         </h2>
-        <div className="flex flex-col gap-2">
+        <div className="grid gap-2 lg:grid-cols-2">
           {/* Semua topik */}
           <TopicRow
             title={`Semua topik ${materi}`}
@@ -161,6 +159,7 @@ function TopicRow({
       className={cx(
         'flex flex-col gap-3 p-4',
         featured && MATERI_FEATURED[materi],
+        featured && 'lg:col-span-2',
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -171,40 +170,23 @@ function TopicRow({
               height={16}
               className={cx(
                 'shrink-0',
-                featured
-                  ? 'text-white'
-                  : materi === 'TWK'
-                    ? 'text-twk'
-                    : materi === 'TIU'
-                      ? 'text-tiu'
-                      : 'text-tkp',
+                materi === 'TWK'
+                  ? 'text-twk'
+                  : materi === 'TIU'
+                    ? 'text-tiu'
+                    : 'text-tkp',
               )}
             />
             <span className="leading-snug">{title}</span>
           </p>
           {subtitle && (
-            <p
-              className={cx(
-                'mt-0.5 text-xs font-medium',
-                featured ? 'text-white/80' : 'text-ink/60',
-              )}
-            >
+            <p className="mt-0.5 text-xs font-medium text-ink/60">
               {subtitle}
             </p>
           )}
-          <p
-            className={cx(
-              'mt-1.5 text-xs font-medium',
-              featured ? 'text-white/85' : 'text-ink/60',
-            )}
-          >
+          <p className="mt-1.5 text-xs font-medium text-ink/60">
             {total} soal · {dijawab} sudah dijawab ·{' '}
-            <span
-              className={cx(
-                'font-extrabold',
-                featured ? 'text-white' : 'text-primary-700',
-              )}
-            >
+            <span className="font-extrabold text-primary-700">
               {baru} baru
             </span>
           </p>
@@ -219,9 +201,8 @@ function TopicRow({
       <ProgressBar
         value={dijawab}
         max={total}
-        tone={featured ? 'amber' : MATERI_TONE[materi]}
+        tone={MATERI_TONE[materi]}
         label={`Progres ${title}`}
-        className={featured ? 'bg-white/25' : undefined}
       />
 
       <Button

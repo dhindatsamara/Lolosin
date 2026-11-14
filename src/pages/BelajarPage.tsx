@@ -22,15 +22,15 @@ import { cx } from '../lib/utils'
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
 const MATERI_HEADER: Record<Materi, string> = {
-  TWK: 'border-ink bg-twk text-white',
-  TIU: 'border-ink bg-tiu text-white',
-  TKP: 'border-ink bg-tkp text-white',
+  TWK: 'border-t-4 border-t-twk',
+  TIU: 'border-t-4 border-t-tiu',
+  TKP: 'border-t-4 border-t-tkp',
 }
 
 const MATERI_CHIP: Record<Materi, string> = {
-  TWK: 'bg-twk',
-  TIU: 'bg-tiu',
-  TKP: 'bg-tkp',
+  TWK: 'bg-twk-soft text-twk',
+  TIU: 'bg-tiu-soft text-tiu',
+  TKP: 'bg-tkp-soft text-tkp',
 }
 
 function DocCard({ doc, readSections }: { doc: MateriDoc; readSections: string[] }) {
@@ -44,7 +44,7 @@ function DocCard({ doc, readSections }: { doc: MateriDoc; readSections: string[]
           <div className="flex min-w-0 items-start gap-3">
             <span
               className={cx(
-                'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-ink font-display text-xs font-extrabold text-white shadow-sticker-sm',
+                'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-display text-xs font-extrabold',
                 MATERI_CHIP[doc.materi],
               )}
               aria-hidden="true"
@@ -99,9 +99,7 @@ export function BelajarPage() {
   return (
     <div className="flex flex-col gap-6">
       <header>
-        <p className="font-script text-2xl leading-none text-primary-700">
-          baca dikit-dikit, lama-lama lolos
-        </p>
+        <p className="kicker">baca dikit-dikit, lama-lama lolos</p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">Belajar</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
           Materi SKD yang sudah dirapikan per dokumen. Tiap seksi yang
@@ -121,7 +119,7 @@ export function BelajarPage() {
           <section key={materi}>
             <div
               className={cx(
-                'mb-3 rounded-3xl border-2 p-4 shadow-sticker',
+                'mb-3 rounded-2xl border border-line bg-white p-4 shadow-soft',
                 MATERI_HEADER[materi],
               )}
             >
@@ -134,26 +132,31 @@ export function BelajarPage() {
                     {MATERI_META[materi].nama}
                   </Badge>
                 </div>
-                <span className="shrink-0 rounded-full border-2 border-white/40 bg-white/15 px-2.5 py-0.5 text-xs font-extrabold">
+                <span
+                  className={cx(
+                    'shrink-0 rounded-full px-2.5 py-0.5 text-xs font-extrabold',
+                    MATERI_CHIP[materi],
+                  )}
+                >
                   {progress.percent}% dibaca
                 </span>
               </div>
-              <p className="mt-1 text-sm leading-relaxed text-white/85">
+              <p className="mt-1 text-sm leading-relaxed text-ink/60">
                 {MATERI_META[materi].deskripsi}
               </p>
-              <p className="mt-2 text-xs font-semibold text-white/75">
+              <p className="mt-2 text-xs font-semibold text-ink/60">
                 {docs.length} dokumen · {progress.total} seksi ·{' '}
                 {formatKata(totalKata)}
               </p>
               <ProgressBar
                 value={progress.read}
                 max={progress.total}
-                tone="amber"
+                tone={MATERI_TONE[materi]}
                 label={`Progres baca ${materi}`}
-                className="mt-2.5 bg-white/25"
+                className="mt-2.5"
               />
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="grid gap-3 lg:grid-cols-2">
               {docs.map((doc) => (
                 <DocCard key={doc.id} doc={doc} readSections={readSections} />
               ))}
