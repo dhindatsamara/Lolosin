@@ -93,3 +93,93 @@ kartu warna penuh per subtes (warna subtes hanya jadi aksen kecil).
   leaderboard.ts) kecuali penambahan hook `useAuthUser`; copy santai;
   NOL em-dash di seluruh `src/`; maskot Lolo; perayaan dan confetti;
   efek stabilo amber.
+
+---
+
+# Iterasi v2.1 — "Lapang + main" (2026-11-14)
+
+Iterasi dari v2, BUKAN redesign total. Pemicu: user menilai v2 "udah
+lumayan oke, tapi masih kurang menarik", kurang gaya Gen Z yang asik
+dan kurang menonjolkan gamifikasi, desain masih terasa AI slop/template.
+Jawaban v2.1: Lapang diberi kepribadian lewat elemen HUD gamified
+(bar XP, lencana, streak) sebagai motif visual, gerakan halus, dan
+maskot Lolo sebagai wajah brand. Tetap orisinal: tanpa script, tanpa
+grid, tanpa sticker, tanpa meniru LolosPNS/Pejuang NIP.
+
+## Prinsip tambahan
+
+1. **Gamifikasi yang kelihatan, bukan diceritakan.** Landing
+   menampilkan preview visual fitur unggulan (bar XP + gelar, baris
+   lencana, kartu misi, streak, leaderboard, jadwal ulas, simulasi
+   CAT), bukan sekadar daftar teks. Preview memakai data nyata app
+   (fungsi level, daftar lencana, pool misi, jadwal ulas, konstanta
+   simulasi) dengan progres contoh yang diberi label "Contoh tampilan".
+2. **Lolo jadi bintang.** Maskot tampil besar di hero landing (220px,
+   dengan balon ucapan dan chip melayang "+25 XP" / "Streak 12 hari"),
+   di seksi "Kenalan, ini Lolo!" (180px, mood baru `kagum`), di CTA
+   penutup, dan di hero dashboard (160px, dengan balon ucapan
+   kontekstual streak). Namanya "Lolo" selalu terlihat di samping
+   maskot. Karakter TIDAK digambar ulang: blob hijau + topi wisuda
+   amber tetap, variasi hanya mood (`senang`, `semangat`, `sedih`,
+   `kagum`) dan ukuran.
+3. **Gerakan halus, compositor-only.** Semua animasi hanya memakai
+   `transform` dan `opacity` (lihat token di bawah), opt-in lewat
+   `prefers-reduced-motion: no-preference`, dan progressive
+   enhancement: tanpa dukungan browser atau tanpa preferensi gerak,
+   konten tampil statis dalam keadaan akhir, tidak pernah tersembunyi.
+
+## Token baru (src/index.css)
+
+- `.reveal`: reveal saat masuk viewport, scroll-driven
+  (`animation-timeline: view()`, range `entry 0% entry 80%`),
+  tanpa JS, di balik `@supports` + `prefers-reduced-motion`.
+  Dipakai di kartu-kartu landing (bukan seksi setinggi layar, supaya
+  animasi selalu selesai).
+- `.float-soft`: goyang lembut maskot dan chip melayang
+  (translateY -8px, 3.6s, infinite); variasi delay via inline style.
+- `.card-lift`: kartu terangkat 4px + shadow membesar saat hover
+  (umpan balik kecil, 200ms ease-out).
+- `.badge-pop`: lencana membesar 8% saat hover, easing overshoot
+  (back ease-out, cubic-bezier 0.34, 1.56, 0.64, 1).
+- `.xp-fill`: isi bar XP diskala dari kiri (`transform: scaleX`,
+  nilai akhir dari `--xp-fill` 0..1), terisi mengikuti scroll saat
+  masuk viewport; tanpa dukungan, tampil langsung penuh.
+- `.blob-soft`: radius blob organik untuk latar maskot (pengganti
+  dekorasi geometris keras; bukan grid, bukan sticker).
+
+## Landing v2.1 (src/pages/LandingPage.tsx)
+
+Urutan seksi: hero 2 kolom (copy + panggung Lolo) → gamifikasi
+(bento 7 kartu preview, label "Contoh tampilan") → "Kenalan, ini
+Lolo!" → fitur (4 kartu, tanpa angka soal/materi) → cara pakai
+(3 langkah; strip gamifikasi dihapus karena sudah punya seksi
+sendiri) → Free vs Premium (tidak berubah) → CTA penutup (ditambah
+Lolo semangat). Hero tetap tanpa angka total soal/materi; angka 110
+soal hanya muncul di kartu preview simulasi CAT, bukan di hero.
+
+## Dashboard v2.1 (src/pages/HomePage.tsx)
+
+Hero jadi 2 kolom di desktop: konten lama (sapaan, pill XP/streak/
+gelar, progres level, passing grade mini) tidak berubah isinya,
+ditambah kolom Lolo (balon ucapan kontekstual streak + nama "Lolo").
+Empty state "Fokus hari ini" dan "Tryout terakhir" kini menampilkan
+keterangan nama "Lolo" di bawah maskot.
+
+## Larangan v2 tetap berlaku
+
+Font script/Caveat, tekstur grid, kartu sticker neo-brutalist
+(border 2px ink + hard offset shadow), hard shadow, meniru
+LolosPNS/Pejuang NIP, em-dash di `src/`. Catatan: border `border-2`
+ber-gaya dashed dipakai SATU tempat (baris placeholder "Kamu?" di
+preview leaderboard) sebagai affordance slot kosong, tanpa border ink
+dan tanpa shadow, jadi bukan kartu sticker.
+
+## Referensi yang dipakai
+
+Skill: modern-web-guidance (`motion`, `scroll-entry-exit-effects`),
+game-feel (tier feedback kecil, easing overshoot, hormati
+reduce-motion), game-ui-ux (elemen HUD sebagai motif UI, kontras
+teks informatif). Moodboard: designspells.com (micro-interactions:
+angkat kartu 4px saat hover, angka dan bar yang beranimasi),
+supahero.io (hero dua kolom dengan karakter), refero.design (sistem
+warna/tipografi). Semua dipakai sebagai remix, bukan clone.

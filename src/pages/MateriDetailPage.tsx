@@ -5,14 +5,15 @@ import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { CheckIcon, ChevronRightIcon } from '../components/icons'
 import {
-  docReadProgress,
   estimasiBacaMenit,
   formatDurasi,
   formatKata,
-  getDocument,
-  getNextUnreadSection,
-  groupSectionsBySubtopik,
-  type MateriSection,
+  groupEntriesBySubtopik,
+  groupNextUnreadSection,
+  groupReadProgress,
+  groupSections,
+  resolveMateriView,
+  type SectionEntry,
 } from '../lib/materi'
 import { MATERI_META } from '../lib/questions'
 import { useStore } from '../lib/store'
@@ -21,16 +22,15 @@ import { cx } from '../lib/utils'
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
 function SectionRow({
-  docId,
-  section,
+  entry,
   isRead,
 }: {
-  docId: string
-  section: MateriSection
+  entry: SectionEntry
   isRead: boolean
 }) {
+  const { doc, section } = entry
   return (
-    <Link to={`/belajar/${docId}/${section.id}`}>
+    <Link to={`/belajar/${doc.id}/${section.id}`}>
       <div
         className={cx(
           'flex items-center gap-3 rounded-2xl border px-3 py-2.5 transition-all',
@@ -77,17 +77,23 @@ function SectionRow({
 export function MateriDetailPage() {
   const { materiId } = useParams()
   const { readSections } = useStore()
-  const doc = getDocument(materiId)
+  const view = resolveMateriView(materiId)
 
-  if (!doc) {
+  if (!view) {
     return <Navigate to="/belajar" replace />
   }
 
-  const progress = docReadProgress(doc, readSections)
-  const nextSection = getNextUnreadSection(doc, readSections)
-  const groups = groupSectionsBySubtopik(doc)
+  const progress = groupReadProgress(view, readSections)
+  const nextEntry = groupNextUnreadSection(view, readSections)
+  const entries = groupSections(view)
+  const groups = groupEntriesBySubtopik(entries)
   const readSet = new Set(readSections)
   const semuaSelesai = progress.percent === 100
+  const totalHalaman = view.docs.reduce((n, doc) => n + doc.halaman, 0)
+  const totalKata = view.docs.reduce((n, doc) => n + doc.kata, 0)
+  const catatan = view.docs
+    .map((doc) => doc.catatan_kualitas)
+    .filter((c): c is string => Boolean(c))
 
   return (
     <div className="flex flex-col gap-5">
@@ -99,75 +105,77 @@ export function MateriDetailPage() {
           ← Semua materi
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <h1 className="font-display text-3xl leading-tight font-extrabold">{doc.judul}</h1>
+          <h1 className="font-display text-3xl leading-tight font-extrabold">{view.judul}</h1>
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <Badge tone={MATERI_TONE[doc.materi]}>{doc.materi}</Badge>
+          <Badge tone={MATERI_TONE[view.materi]}>{view.materi}</Badge>
           <span className="text-xs font-semibold text-ink/60">
-            {MATERI_META[doc.materi].nama}
+            {MATERI_META[view.materi].nama}
           </span>
         </div>
         <p className="mt-2 text-sm leading-relaxed text-ink/60">
-          {doc.deskripsi}
+          {view.deskripsi}
         </p>
       </header>
 
-      {/* Info dokumen + progres */}
+      {/* Info materi + progres */}
       <Card>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <span className="font-medium text-ink/70">
-            <span className="font-bold text-ink">{doc.sections.length}</span>{' '}
+            <span className="font-bold text-ink">{entries.length}</span>{' '}
             seksi
           </span>
           <span className="font-medium text-ink/70">
             <span className="font-bold text-ink">
-              {doc.halaman.toLocaleString('id-ID')}
+              {totalHalaman.toLocaleString('id-ID')}
             </span>{' '}
             halaman
           </span>
           <span className="font-medium text-ink/70">
             <span className="font-bold text-ink">
-              {doc.kata.toLocaleString('id-ID')}
+              {totalKata.toLocaleString('id-ID')}
             </span>{' '}
             kata
           </span>
           <span className="font-medium text-ink/70">
-            {formatDurasi(estimasiBacaMenit(doc.kata))} baca
+            {formatDurasi(estimasiBacaMenit(totalKata))} baca
           </span>
         </div>
-        <p className="mt-2 truncate text-xs font-medium text-ink/60">
-          Sumber: {doc.sumber}
-        </p>
         <div className="mt-3 flex items-center gap-2">
           <ProgressBar
             value={progress.read}
             max={progress.total}
-            tone={MATERI_TONE[doc.materi]}
-            label={`Progres baca ${doc.judul}`}
+            tone={MATERI_TONE[view.materi]}
+            label={`Progres baca ${view.judul}`}
           />
           <span className="shrink-0 text-xs font-extrabold text-ink/60">
             {progress.read}/{progress.total} · {progress.percent}%
           </span>
         </div>
-        {doc.catatan_kualitas && (
-          <p className="mt-3 rounded-xl border border-accent-200 bg-accent-100 px-3 py-2 text-xs leading-relaxed font-medium text-accent-800">
+        {catatan.map((c, i) => (
+          <p
+            key={i}
+            className="mt-3 rounded-xl border border-accent-200 bg-accent-100 px-3 py-2 text-xs leading-relaxed font-medium text-accent-800"
+          >
             <span className="font-extrabold">Catatan kualitas: </span>
-            {doc.catatan_kualitas}
+            {c}
           </p>
-        )}
+        ))}
         <div className="mt-4">
           {semuaSelesai ? (
             <p className="flex items-center justify-center gap-2 rounded-xl border border-primary-200 bg-primary-100 px-4 py-2.5 text-sm font-bold text-primary-700">
               <CheckIcon width={16} height={16} />
-              Semua seksi di dokumen ini sudah kamu baca
+              Semua seksi di materi ini sudah kamu baca
             </p>
           ) : (
-            nextSection && (
-              <Link to={`/belajar/${doc.id}/${nextSection.id}`}>
+            nextEntry && (
+              <Link
+                to={`/belajar/${nextEntry.doc.id}/${nextEntry.section.id}`}
+              >
                 <Button fullWidth>
                   {progress.read === 0
                     ? 'Mulai membaca'
-                    : `Lanjutkan: ${nextSection.judul}`}
+                    : `Lanjutkan: ${nextEntry.section.judul}`}
                   <ChevronRightIcon width={16} height={16} />
                 </Button>
               </Link>
@@ -179,8 +187,8 @@ export function MateriDetailPage() {
       {/* Daftar seksi per subtopik */}
       <div className="flex flex-col gap-5">
         {groups.map((group) => {
-          const readInGroup = group.sections.filter((s) =>
-            readSet.has(s.id),
+          const readInGroup = group.entries.filter((e) =>
+            readSet.has(e.section.id),
           ).length
           return (
             <section key={group.subtopik}>
@@ -189,16 +197,15 @@ export function MateriDetailPage() {
                   {group.subtopik}
                 </h2>
                 <span className="shrink-0 text-xs font-bold text-ink/60">
-                  {readInGroup}/{group.sections.length} dibaca
+                  {readInGroup}/{group.entries.length} dibaca
                 </span>
               </div>
               <div className="flex flex-col gap-2">
-                {group.sections.map((section) => (
+                {group.entries.map((entry) => (
                   <SectionRow
-                    key={section.id}
-                    docId={doc.id}
-                    section={section}
-                    isRead={readSet.has(section.id)}
+                    key={entry.section.id}
+                    entry={entry}
+                    isRead={readSet.has(entry.section.id)}
                   />
                 ))}
               </div>

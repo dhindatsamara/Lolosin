@@ -246,8 +246,10 @@ function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-5 lg:gap-8">
-      {/* Hero tipografi: sapaan besar + XP/streak + progres level */}
-      <section className="rounded-3xl border border-line bg-white p-6 shadow-soft lg:p-10">
+      {/* Hero tipografi: sapaan besar + XP/streak + progres level,
+          ditemani Lolo (v2.1: maskot tampil besar dengan namanya) */}
+      <section className="flex flex-col gap-6 rounded-3xl border border-line bg-white p-6 shadow-soft lg:flex-row lg:items-start lg:justify-between lg:p-10">
+        <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-ink/60">
           {tanggalHariIni()}
         </p>
@@ -305,6 +307,30 @@ function DashboardPage() {
             TKP ≥{TRYOUT_PASSING_MINI.TKP}
           </span>
         </p>
+        </div>
+
+        {/* Lolo, teman belajarmu: balon ucapan + nama yang terlihat */}
+        <div className="flex shrink-0 flex-col items-center lg:w-52">
+          <div className="relative w-fit rounded-2xl bg-primary-50 px-4 py-2.5 text-center">
+            <p className="text-sm leading-snug font-bold text-primary-800">
+              {streakAmanHariIni
+                ? 'Streak aman! Kamu keren.'
+                : 'Aku nemenin kamu belajar hari ini!'}
+            </p>
+            <span
+              className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-primary-50"
+              aria-hidden="true"
+            />
+          </div>
+          <Mascot
+            mood={streakAmanHariIni ? 'semangat' : 'senang'}
+            size={160}
+            className="float-soft mt-2 h-auto w-32 lg:w-40"
+          />
+          <p className="mt-1 rounded-full bg-primary-100 px-4 py-1 font-display text-base font-extrabold text-primary-800">
+            Lolo
+          </p>
+        </div>
       </section>
 
       {/* Streak mingguan + misi harian */}
@@ -431,6 +457,9 @@ function DashboardPage() {
             ) : (
               <div className="text-center">
                 <Mascot mood="semangat" size={64} className="mx-auto" />
+                <p className="mt-1 text-xs font-extrabold text-ink/50">
+                  Lolo
+                </p>
                 <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed font-medium text-ink/70">
                   Ikut drill atau tryout mini dulu, nanti aku susun fokus
                   belajarmu.
@@ -601,6 +630,9 @@ function DashboardPage() {
           ) : (
             <Card className="text-center">
               <Mascot mood="semangat" size={72} className="mx-auto" />
+              <p className="mt-1 text-xs font-extrabold text-ink/50">
+                Lolo
+              </p>
               <p className="mt-2 font-display text-lg font-extrabold">
                 Kamu belum pernah tryout nih
               </p>

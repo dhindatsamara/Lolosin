@@ -151,3 +151,109 @@
   animation-timing-function: ease-in;
   animation-fill-mode: forwards;
 }
+
+/* ------------------------------------------------------------------ */
+/* Bahasa desain v2.1 "Lapang + main" (lihat REDESIGN-V2.md).          */
+/* Elemen HUD gamified (bar XP, lencana, streak) jadi motif visual,    */
+/* dengan gerakan halus yang semuanya compositor-only (transform dan   */
+/* opacity) dan opt-in lewat prefers-reduced-motion: tanpa dukungan    */
+/* atau tanpa preferensi gerak, konten tampil statis dalam keadaan     */
+/* akhir, jadi tidak pernah ada konten yang tersembunyi.               */
+/* ------------------------------------------------------------------ */
+
+/* Reveal saat masuk viewport: scroll-driven, tanpa JS. Progressive
+   enhancement: browser tanpa dukungan view timeline menampilkan
+   konten langsung (dekoratif, tanpa fallback JS). */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+    scale: 0.985;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .reveal {
+      animation: reveal-in auto linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 80%;
+    }
+  }
+}
+
+/* Goyang lembut maskot dan chip melayang: hanya translateY, jadi
+   tetap di compositor. Durasi/delay diatur per elemen lewat style
+   inline bila perlu variasi. */
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .float-soft {
+    animation: float-soft 3.6s ease-in-out infinite;
+  }
+}
+
+/* Kartu yang terangkat sedikit saat hover: umpan balik kecil
+   (game-feel tier small) untuk kartu yang bisa diklik/dilihat. */
+.card-lift {
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft-lg);
+}
+
+/* Lencana membesar sedikit saat hover, dengan easing overshoot
+   (back ease-out) ala pop game. Hanya transform, tanpa layout shift. */
+.badge-pop {
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.badge-pop:hover {
+  transform: scale(1.08);
+}
+
+/* Isi bar XP: lebar penuh lalu diskala dari kiri (transform, bukan
+   width) supaya animasinya tetap di compositor. Nilai akhir diambil
+   dari --xp-fill (0..1); saat masuk viewport, bar terisi dari 0
+   mengikuti scroll (scroll-driven, tanpa JS). */
+@keyframes xp-fill-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(var(--xp-fill, 1));
+  }
+}
+
+.xp-fill {
+  transform: scaleX(var(--xp-fill, 1));
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .xp-fill {
+      animation: xp-fill-in auto linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+  }
+}
+
+/* Bentuk blob organik untuk latar maskot: bulat tak beraturan yang
+   playful, tanpa grid dan tanpa hard shadow. */
+.blob-soft {
+  border-radius: 58% 42% 55% 45% / 48% 55% 45% 52%;
+}

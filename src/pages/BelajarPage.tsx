@@ -4,16 +4,16 @@ import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { CheckIcon, ChevronRightIcon } from '../components/icons'
 import {
-  docReadProgress,
   estimasiBacaMenit,
   formatDurasi,
   formatKata,
-  getDocumentsByMateri,
+  getMateriGroupsByMateri,
+  groupReadProgress,
   materiReadProgress,
-  TOTAL_DOKUMEN,
   TOTAL_KATA,
+  TOTAL_MATERI,
   TOTAL_SECTIONS,
-  type MateriDoc,
+  type MateriGroup,
 } from '../lib/materi'
 import { MATERI_LIST, MATERI_META, type Materi } from '../lib/questions'
 import { useStore } from '../lib/store'
@@ -33,28 +33,36 @@ const MATERI_CHIP: Record<Materi, string> = {
   TKP: 'bg-tkp-soft text-tkp',
 }
 
-function DocCard({ doc, readSections }: { doc: MateriDoc; readSections: string[] }) {
-  const progress = docReadProgress(doc, readSections)
+function GroupCard({
+  group,
+  readSections,
+}: {
+  group: MateriGroup
+  readSections: string[]
+}) {
+  const progress = groupReadProgress(group, readSections)
   const selesai = progress.percent === 100
+  const totalKata = group.docs.reduce((n, doc) => n + doc.kata, 0)
+  const gabungan = group.docs.length > 1
 
   return (
-    <Link to={`/belajar/${doc.id}`}>
+    <Link to={`/belajar/${group.id}`}>
       <Card className="transition-transform hover:-translate-y-0.5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
             <span
               className={cx(
                 'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-display text-xs font-extrabold',
-                MATERI_CHIP[doc.materi],
+                MATERI_CHIP[group.materi],
               )}
               aria-hidden="true"
             >
-              {doc.materi}
+              {group.materi}
             </span>
             <div className="min-w-0">
-              <h3 className="font-display font-extrabold leading-snug">{doc.judul}</h3>
+              <h3 className="font-display font-extrabold leading-snug">{group.judul}</h3>
               <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink/60">
-                {doc.deskripsi}
+                {group.deskripsi}
               </p>
             </div>
           </div>
@@ -65,11 +73,17 @@ function DocCard({ doc, readSections }: { doc: MateriDoc; readSections: string[]
           />
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-ink/60">
-          <span>{doc.sections.length} seksi</span>
+          <span>{progress.total} seksi</span>
           <span aria-hidden="true">·</span>
-          <span>{formatKata(doc.kata)}</span>
+          <span>{formatKata(totalKata)}</span>
           <span aria-hidden="true">·</span>
-          <span>{formatDurasi(estimasiBacaMenit(doc.kata))} baca</span>
+          <span>{formatDurasi(estimasiBacaMenit(totalKata))} baca</span>
+          {gabungan && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{group.docs.length} bagian digabung</span>
+            </>
+          )}
           {selesai && (
             <Badge tone="green" className="ml-auto">
               <CheckIcon width={12} height={12} className="mr-1" />
@@ -81,8 +95,8 @@ function DocCard({ doc, readSections }: { doc: MateriDoc; readSections: string[]
           <ProgressBar
             value={progress.read}
             max={progress.total}
-            tone={MATERI_TONE[doc.materi]}
-            label={`Progres baca ${doc.judul}`}
+            tone={MATERI_TONE[group.materi]}
+            label={`Progres baca ${group.judul}`}
           />
           <span className="shrink-0 text-xs font-extrabold text-ink/60">
             {progress.percent}%
@@ -102,19 +116,23 @@ export function BelajarPage() {
         <p className="kicker">baca dikit-dikit, lama-lama lolos</p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">Belajar</h1>
         <p className="mt-1 text-sm leading-relaxed text-ink/60">
-          Materi SKD yang sudah dirapikan per dokumen. Tiap seksi yang
+          Materi SKD yang sudah dirapikan per topik. Tiap seksi yang
           selesai dibaca dapat 5 XP.
         </p>
         <p className="mt-2 text-xs font-bold text-ink/60">
-          {TOTAL_DOKUMEN} dokumen · {TOTAL_SECTIONS} seksi ·{' '}
+          {TOTAL_MATERI} materi · {TOTAL_SECTIONS} seksi ·{' '}
           {TOTAL_KATA.toLocaleString('id-ID')} kata
         </p>
       </header>
 
       {MATERI_LIST.map((materi) => {
-        const docs = getDocumentsByMateri(materi)
+        const groups = getMateriGroupsByMateri(materi)
         const progress = materiReadProgress(materi, readSections)
-        const totalKata = docs.reduce((n, doc) => n + doc.kata, 0)
+        const totalKata = groups.reduce(
+          (n, group) =>
+            n + group.docs.reduce((m, doc) => m + doc.kata, 0),
+          0,
+        )
         return (
           <section key={materi}>
             <div
@@ -145,7 +163,7 @@ export function BelajarPage() {
                 {MATERI_META[materi].deskripsi}
               </p>
               <p className="mt-2 text-xs font-semibold text-ink/60">
-                {docs.length} dokumen · {progress.total} seksi ·{' '}
+                {groups.length} materi · {progress.total} seksi ·{' '}
                 {formatKata(totalKata)}
               </p>
               <ProgressBar
@@ -157,8 +175,12 @@ export function BelajarPage() {
               />
             </div>
             <div className="grid gap-3 lg:grid-cols-2">
-              {docs.map((doc) => (
-                <DocCard key={doc.id} doc={doc} readSections={readSections} />
+              {groups.map((group) => (
+                <GroupCard
+                  key={group.id}
+                  group={group}
+                  readSections={readSections}
+                />
               ))}
             </div>
           </section>

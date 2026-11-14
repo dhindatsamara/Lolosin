@@ -1,17 +1,19 @@
 /**
  * Lolo, maskot Lolosin: blob hijau geometris bertopi wisuda amber.
- * Flat, 2-3 bentuk sederhana, garis ink 2-3px sesuai bahasa sticker
- * app (border ink + warna hijau #0E5C43 + amber #F59E0B).
+ * Flat, 2-3 bentuk sederhana, garis ink 2-3px, warna hijau #0E5C43 +
+ * amber #F59E0B sesuai palet app.
  *
- * Dipakai HEMAT, hanya di momen tertentu: empty state tryout,
- * perayaan naik level / milestone streak, dan header hasil tryout.
- * Bukan dekorasi tiap halaman.
+ * Sejak v2.1 Lolo adalah wajah brand: tampil besar di landing (hero
+ * dan seksi "Kenalan, ini Lolo!") dan di dashboard, selalu dengan
+ * namanya yang terlihat. Identitas karakternya JANGAN digambar ulang
+ * jadi karakter lain; variasi hanya lewat mood dan ukuran.
  */
-export type MascotMood = 'senang' | 'semangat' | 'sedih'
+export type MascotMood = 'senang' | 'semangat' | 'sedih' | 'kagum'
 
 interface MascotProps {
   /** Ekspresi: senang (default), semangat (mata tertawa + mulut terbuka),
-      sedih (alis turun, mulut cemberut ringan). */
+      sedih (alis turun, mulut cemberut ringan), kagum (mata membelalak
+      + mulut "o" kecil, untuk momen perkenalan atau kejutan seru). */
   mood?: MascotMood
   /** Ukuran kotak SVG dalam px (default 64). */
   size?: number
@@ -49,6 +51,23 @@ function Eyes({ mood }: { mood: MascotMood }) {
       </g>
     )
   }
+  if (mood === 'kagum') {
+    // Mata membelalak (lebih besar, pupil lebih besar) + alis naik.
+    return (
+      <g>
+        <circle cx="36" cy="52" r="7.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
+        <circle cx="60" cy="52" r="7.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
+        <circle cx="36" cy="52" r="3.6" fill="#1B1E1C" />
+        <circle cx="60" cy="52" r="3.6" fill="#1B1E1C" />
+        <circle cx="37.5" cy="50" r="1.3" fill="#FFFFFF" />
+        <circle cx="61.5" cy="50" r="1.3" fill="#FFFFFF" />
+        <g stroke="#1B1E1C" strokeWidth="2.5" strokeLinecap="round" fill="none">
+          <path d="M29 42 Q36 39 43 42" />
+          <path d="M53 42 Q60 39 67 42" />
+        </g>
+      </g>
+    )
+  }
   // Senang: mata bulat terbuka.
   return (
     <g>
@@ -78,6 +97,10 @@ function Mouth({ mood }: { mood: MascotMood }) {
         strokeLinecap="round"
       />
     )
+  }
+  if (mood === 'kagum') {
+    // Mulut "o" kecil.
+    return <ellipse cx="48" cy="66" rx="5" ry="6.5" fill="#1B1E1C" />
   }
   // Senyum biasa.
   return (

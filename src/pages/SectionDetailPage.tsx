@@ -8,11 +8,13 @@ import { MarkdownLite } from '../components/belajar/MarkdownLite'
 import { PangkatTable } from '../components/belajar/PangkatTable'
 import { CheckIcon, ChevronRightIcon } from '../components/icons'
 import {
+  cleanJudul,
   docReadProgress,
   estimasiBacaMenit,
   formatDurasi,
   formatKata,
   getDocument,
+  getGroupForDocument,
   getSection,
   getSectionNav,
   getTabelForSection,
@@ -53,6 +55,10 @@ export function SectionDetailPage() {
   const progress = docReadProgress(doc, readSections)
   const tabel = getTabelForSection(doc, section)
   const konten = tabel ? stripTabelContoh(section.konten) : section.konten
+  // Kembali ke tampilan grup materi (judul sudah tanpa atribusi sumber).
+  const group = getGroupForDocument(doc.id)
+  const backTarget = group ? `/belajar/${group.id}` : `/belajar/${doc.id}`
+  const backLabel = group ? group.judul : cleanJudul(doc.judul)
 
   function handleMarkRead() {
     if (completeSectionRead(section!.id, doc!.materi)) {
@@ -64,10 +70,10 @@ export function SectionDetailPage() {
     <div className="flex flex-col gap-5">
       <header>
         <Link
-          to={`/belajar/${doc.id}`}
+          to={backTarget}
           className="text-sm font-semibold text-primary-700 hover:underline"
         >
-          ← {doc.judul}
+          ← {backLabel}
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <Badge tone={MATERI_TONE[doc.materi]}>{doc.materi}</Badge>
@@ -91,7 +97,7 @@ export function SectionDetailPage() {
             value={progress.read}
             max={progress.total}
             tone={MATERI_TONE[doc.materi]}
-            label={`Progres baca ${doc.judul}`}
+            label={`Progres baca ${cleanJudul(doc.judul)}`}
           />
           <span className="shrink-0 text-xs font-extrabold text-ink/60">
             {progress.percent}%
@@ -163,9 +169,9 @@ export function SectionDetailPage() {
         )}
       </nav>
 
-      <Link to={`/belajar/${doc.id}`} className="block">
+      <Link to={backTarget} className="block">
         <Button variant="outline" fullWidth>
-          Kembali ke dokumen
+          Kembali ke materi
           <ChevronRightIcon width={16} height={16} />
         </Button>
       </Link>
