@@ -2,11 +2,13 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { getLevel, useStore } from '../lib/store'
 import { getRankTitle } from '../lib/ranks'
 import { cx } from '../lib/utils'
+import { AuthStatus } from './AuthStatus'
 import { CelebrationHost } from './gamifikasi/Celebration'
 import {
   BookIcon,
   FlameIcon,
   HomeIcon,
+  RankingIcon,
   TargetIcon,
   TrophyIcon,
   ZapIcon,
@@ -17,6 +19,7 @@ const NAV_ITEMS = [
   { to: '/belajar', label: 'Belajar', icon: BookIcon, end: false },
   { to: '/latihan', label: 'Latihan', icon: TargetIcon, end: false },
   { to: '/tryout', label: 'Tryout', icon: TrophyIcon, end: false },
+  { to: '/leaderboard', label: 'Peringkat', icon: RankingIcon, end: false },
 ]
 
 function LogoMark() {
@@ -44,7 +47,7 @@ export function Layout() {
               <span className="block font-display text-lg font-extrabold">
                 Lolosin
               </span>
-              <span className="block text-xs font-medium text-ink/60">
+              <span className="hidden text-xs font-medium text-ink/60 sm:block">
                 Belajar CPNS, jadi menyenangkan
               </span>
             </span>
@@ -65,6 +68,7 @@ export function Layout() {
               <FlameIcon width={14} height={14} />
               {streak} hari
             </span>
+            <AuthStatus />
           </div>
         </div>
       </header>
@@ -76,7 +80,7 @@ export function Layout() {
 
       {/* Bottom nav (mobile-first): bilah sticker, item aktif jadi pill */}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-ink bg-white">
-        <div className="mx-auto grid w-full max-w-2xl grid-cols-4 gap-1 px-2 py-2">
+        <div className="mx-auto grid w-full max-w-2xl grid-cols-5 gap-1 px-2 py-2">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}

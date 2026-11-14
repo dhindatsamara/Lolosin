@@ -62,6 +62,16 @@ export function TrophyIcon(props: SVGProps<SVGSVGElement>) {
   )
 }
 
+export function RankingIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Base {...props}>
+      <line x1="6" x2="6" y1="20" y2="14" />
+      <line x1="12" x2="12" y1="20" y2="4" />
+      <line x1="18" x2="18" y1="20" y2="9" />
+    </Base>
+  )
+}
+
 export function FlameIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <Base {...props}>

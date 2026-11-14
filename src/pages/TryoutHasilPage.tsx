@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { MATERI_LIST, MATERI_META, type Question } from '../lib/questions'
 import {
@@ -15,6 +16,10 @@ import {
 } from '../lib/quiz'
 import { cx } from '../lib/utils'
 import { useStore } from '../lib/store'
+import {
+  getLastSubmitPromise,
+  type LeaderboardSubmitStatus,
+} from '../lib/leaderboard'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -42,6 +47,13 @@ export interface TryoutResultState {
   xpEarned: number
   /** `true` bila sesi berakhir karena waktu habis (auto-submit). */
   timedOut?: boolean
+  /**
+   * Status pengiriman skor ke leaderboard (hanya simulasi CAT).
+   * 'sending' berarti pengiriman masih berjalan saat navigasi;
+   * halaman hasil menyelesaikannya lewat getLastSubmitPromise().
+   * Tryout kilat ('mini') tidak punya catatan leaderboard.
+   */
+  leaderboardStatus?: LeaderboardSubmitStatus
 }
 
 interface NormalizedResult {
@@ -50,6 +62,25 @@ interface NormalizedResult {
   answers: TryoutAnswers | null
   xpEarned: number | null
   timedOut: boolean
+  leaderboardStatus: LeaderboardSubmitStatus | null
+}
+
+const LEADERBOARD_STATUSES: readonly LeaderboardSubmitStatus[] = [
+  'sent',
+  'failed',
+  'not-logged-in',
+  'not-configured',
+  'mini',
+  'sending',
+]
+
+function isLeaderboardStatus(
+  value: unknown,
+): value is LeaderboardSubmitStatus {
+  return (
+    typeof value === 'string' &&
+    (LEADERBOARD_STATUSES as readonly string[]).includes(value)
+  )
 }
 
 function isTryoutScore(value: unknown): value is TryoutScore {
@@ -80,6 +111,9 @@ function normalize(state: unknown): NormalizedResult | null {
       xpEarned:
         typeof v.xpEarned === 'number' ? (v.xpEarned as number) : null,
       timedOut: v.timedOut === true,
+      leaderboardStatus: isLeaderboardStatus(v.leaderboardStatus)
+        ? v.leaderboardStatus
+        : null,
     }
   }
   if (isTryoutScore(state)) {
@@ -89,6 +123,7 @@ function normalize(state: unknown): NormalizedResult | null {
       answers: null,
       xpEarned: null,
       timedOut: false,
+      leaderboardStatus: null,
     }
   }
   return null
@@ -105,6 +140,33 @@ export function TryoutHasilPage() {
   const navigate = useNavigate()
   const { tryoutHistory } = useStore()
   const result = normalize(location.state)
+
+  // Status pengiriman skor ke leaderboard. Bila masih 'sending',
+  // selesaikan dari promise pengiriman terakhir (fire-and-forget dari
+  // TryoutPage) begitu janjinya beres.
+  const initialStatus = result?.leaderboardStatus ?? null
+  const [submitStatus, setSubmitStatus] =
+    useState<LeaderboardSubmitStatus | null>(initialStatus)
+  useEffect(() => {
+    if (initialStatus !== 'sending') return
+    let alive = true
+    const promise = getLastSubmitPromise()
+    if (!promise) {
+      setSubmitStatus('failed')
+      return
+    }
+    promise.then(
+      (res) => {
+        if (alive) setSubmitStatus(res.status)
+      },
+      () => {
+        if (alive) setSubmitStatus('failed')
+      },
+    )
+    return () => {
+      alive = false
+    }
+  }, [initialStatus])
 
   if (!result) {
     return (
@@ -175,6 +237,39 @@ export function TryoutHasilPage() {
         {xpEarned !== null && (
           <p className="mx-auto mt-2 w-fit rounded-full border-2 border-ink bg-primary-100 px-3 py-1 text-sm font-extrabold text-primary-700 shadow-sticker-sm">
             +{xpEarned} XP
+          </p>
+        )}
+        {submitStatus && submitStatus !== 'mini' && (
+          <p
+            className={cx(
+              'mx-auto mt-2 w-fit rounded-full border-2 border-ink px-3 py-1 text-xs font-extrabold shadow-sticker-sm',
+              submitStatus === 'sent'
+                ? 'bg-primary-100 text-primary-700'
+                : 'bg-white text-ink/70',
+            )}
+          >
+            {submitStatus === 'sent' && (
+              <>
+                Skormu udah masuk leaderboard minggu ini.{' '}
+                <Link to="/leaderboard" className="underline underline-offset-2">
+                  Lihat leaderboard
+                </Link>
+              </>
+            )}
+            {submitStatus === 'sending' &&
+              'Mengirim skormu ke leaderboard...'}
+            {submitStatus === 'failed' &&
+              'Skormu belum kekirim, dicoba lagi otomatis nanti.'}
+            {submitStatus === 'not-logged-in' && (
+              <>
+                Login dulu biar skormu masuk leaderboard.{' '}
+                <Link to="/auth" className="underline underline-offset-2">
+                  Masuk
+                </Link>
+              </>
+            )}
+            {submitStatus === 'not-configured' &&
+              'Leaderboard online belum aktif, skormu tersimpan di perangkat ini dulu.'}
           </p>
         )}
       </header>

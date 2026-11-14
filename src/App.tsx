@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Layout } from './components/Layout'
+import AuthPage from './pages/AuthPage'
 import { BelajarPage } from './pages/BelajarPage'
 import { HomePage } from './pages/HomePage'
 import { LatihanJalanPage } from './pages/LatihanJalanPage'
 import { LatihanPage } from './pages/LatihanPage'
+import { LeaderboardPage } from './pages/LeaderboardPage'
 import { MateriDetailPage } from './pages/MateriDetailPage'
 import { SectionDetailPage } from './pages/SectionDetailPage'
 import { TryoutHasilPage } from './pages/TryoutHasilPage'
@@ -46,6 +48,8 @@ export default function App() {
         />
         <Route path="tryout" element={<TryoutPage />} />
         <Route path="tryout/hasil" element={<TryoutHasilPage />} />
+        <Route path="leaderboard" element={<LeaderboardPage />} />
+        <Route path="auth" element={<AuthPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

@@ -40,6 +40,11 @@ import {
   recordDailyActivity,
 } from '../lib/gamification'
 import { recordAnswer } from '../lib/review'
+import { isSupabaseConfigured } from '../lib/supabase'
+import {
+  submitTryoutResult,
+  type LeaderboardSubmitStatus,
+} from '../lib/leaderboard'
 import { cx } from '../lib/utils'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -208,12 +213,35 @@ export function TryoutPage() {
         const answer = ans[q.id]
         recordAnswer(q, answer !== undefined && answer === q.kunci)
       }
+      // Kirim skor simulasi CAT ke leaderboard (fire-and-forget, tidak
+      // menghambat navigasi ke halaman hasil). Status awal dicatat di
+      // state navigasi; bila masih 'sending', halaman hasil membaca
+      // hasil akhirnya dari promise yang disimpan leaderboard.ts.
+      let leaderboardStatus: LeaderboardSubmitStatus = 'mini'
+      if (sessionMode === 'full') {
+        if (!isSupabaseConfigured()) {
+          leaderboardStatus = 'not-configured'
+        } else {
+          leaderboardStatus = 'sending'
+          const record: TryoutRecord = {
+            date: new Date().toISOString(),
+            mode: sessionMode,
+            twk: score.scores.TWK,
+            tiu: score.scores.TIU,
+            tkp: score.scores.TKP,
+            passed: score.passedOverall,
+            correct: score.correct,
+          }
+          void submitTryoutResult(record)
+        }
+      }
       const state: TryoutResultState = {
         score,
         questions: qs,
         answers: ans,
         xpEarned: xpForMode(sessionMode),
         timedOut,
+        leaderboardStatus,
       }
       navigate('/tryout/hasil', { state })
     },
