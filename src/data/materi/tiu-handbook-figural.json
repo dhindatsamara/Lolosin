@@ -5,24 +5,16 @@
   "deskripsi": "Handbook kemampuan figural: analogi gambar, ketidaksamaan, serial gambar, dan strategi mengerjakan soal gambar.",
   "sumber": "bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri3_Kemampuan_Figural_Landscape-1-1.pdf",
   "halaman": 57,
-  "kata": 4927,
+  "kata": 3827,
   "subtopik": [
     "Analogi gambar",
     "Ketidaksamaan",
     "Serial gambar",
     "Strategi mengerjakan figural",
     "Jebakan figural",
-    "Formula pemeriksaan cepat",
-    "Mini latihan konseptual"
+    "Formula pemeriksaan cepat"
   ],
   "sections": [
-    {
-      "id": "tiu-handbook-figural-s01",
-      "subtopik": "Analogi gambar",
-      "judul": "Pengantar: Catatan Acuan",
-      "konten": "Catatan Acuan Kemampuan figural merupakan bagian dari Tes Intelegensia Umum (TIU). Dalam acuan SKD CPNS Tahun Anggaran 2024, kemampuan figural terdiri atas tiga ruang lingkup utama: 1 Analogi yaitu kemampuan bernalar melalui perbandingan dua gambar yang memiliki hubungan tertentu, kemudian menggunakan konsep hubungan tersebut pada situasi lain. 2 Ketidaksamaan yaitu kemampuan melihat perbedaan di antara beberapa gambar. 3 Serial yaitu kemampuan melihat pola hubungan dalam bentuk gambar. Handbook ini dikembangkan berdasarkan tiga ruang lingkup tersebut. TEKNIKANALISIS & VA RIASIL AT IHAN, BUKANK AT EGORIRESMI TA MBAHAN rotasi pencerminan jumlah objek arsiran posisi simetri pola selang-seling pola ganda Materi seperti rotasi, pencerminan, jumlah objek, arsiran, posisi, simetri, pola selang-seling, dan pola ganda merupakan teknik analisis serta variasi latihan untuk membantu menyelesaikan soal analogi, ketidaksamaan, dan serial. Materi tersebut bukan kategori resmi tambahan dalam kisi kisi. Ketentuan jumlah soal, waktu pengerjaan, sistem penilaian, dan nilai ambang batas harus selalu mengikuti regulasi pada tahun seleksi yang bersangkutan. ⚠ PENTING",
-      "kata": 156
-    },
     {
       "id": "tiu-handbook-figural-s02",
       "subtopik": "Strategi mengerjakan figural",
@@ -73,13 +65,6 @@
       "kata": 62
     },
     {
-      "id": "tiu-handbook-figural-s09",
-      "subtopik": "Mini latihan konseptual",
-      "judul": "Bagian VIII: Mini Latihan Konseptual",
-      "konten": "Mini Latihan Konseptual Kunci: C. Opsi E juga menghadap kiri, tetapi lingkaran kecilnya berada di sisi yang salah (hasil pencerminan, bukan Soal 1, Analogi Rotasi A: ↑ B: ↓ C: → PEMBAHASAN Transformasi A → B: rotasi 180° Maka: → ⟶ ← Jawaban: ← Kunci: D Soal 2, Analogi Gabungan A: lingkaran putih dengan 1 titik. B: lingkaran hitam dengan 2 titik. C: persegi putih dengan 3 titik. PEMBAHASAN Aturan: Maka D adalah: persegi hitam dengan 4 titik. putih → hitam;✓ titik +1;✓ bentuk luar tetap.✓ Kunci: C Soal 3 Ketidaksamaan Opsi Bangun Sisi A tertutup 4 B tertutup 5 C terbuka 6 D tertutup 3 E tertutup 6 PEMBAHASAN Karakteristik mayoritas: bangun tertutup C melanggar karakteristik tersebut. Jawaban: C Kunci: B Soal 4, Serial Rotasi ↑, → , ↓, ? PEMBAHASAN Setiap tahap: rotasi 90° searah jarum jam Maka: ← Kunci: E Soal 5, Serial Ganda Arah: ↑, → , ↓, ? Jumlah titik: 1, 2, 3, ? PEMBAHASAN Pola arah menghasilkan: ← · Pola jumlah menghasilkan: 4 titik Maka jawaban harus memiliki: arah kiri + 4 titik Kunci: B Soal 6, Serial Selang-seling ↑, ○ , → , ● , ↓, ○ , ? PEMBAHASAN Perhatikan posisi ganjil: ↑, → , ↓, ? Pola: rotasi 90° searah jarum jam. Maka: ← Jawaban: ←",
-      "kata": 215
-    },
-    {
       "id": "tiu-handbook-figural-s10",
       "subtopik": "Strategi mengerjakan figural",
       "judul": "Bagian IX: Level Penguasaan Figural",
@@ -120,22 +105,6 @@
       "judul": "Penutup: Rangkuman Satu Halaman",
       "konten": "Rangkuman Satu Halaman RUANGLINGKUPINTIKEMAMPUANFIGURAL ANALOGI KETIDAKSAMAAN SERIAL VA RIABELANALISISU TA MA JUMLAH ROTASI POSISI ARSIRAN BENTUK SIMETRI RELASI Analogi Temukan: kemudian gunakan transformasi yang sama terhadap C. Ketidaksamaan Cari: karakteristik mayoritas + satu pelanggar Serial Cari pola: 1 → 2 kemudian: verifikasi melalui 2 → 3, baru: prediksi tahap selanjutnya. Jika pola rumit →Pisahkan setiap variabel. Jika perubahan tampak tidak konsisten →Periksa: ganjil–genap / selang-seling Jika gambar tampak hampir sama →Hitung: objek · garis · titik · sudut · daerah · perpotongan Jika bingung antara rotasi dan cermin → Gunakan: ciri asimetris sebagai titik acuan Jika dua opsi sangat mirip → Periksa detail terkecil: orientasi · titik · arsiran · posisi internal · jumlah bagian ★ ATURANEMASFIGURAL JANGAN SEKADAR MENCARI GAMBAR YANG TERLIHAT BENAR. TEMUKAN HUBUNGANNYA. UJI POLANYA. PREDIKSI HASILNYA. BARU PILIH JAWABAN. Catatan Akhir Handbook ini berfokus pada tiga kompetensi inti kemampuan figural: Analogi, Ketidaksamaan, dan Serial. Rotasi, pencerminan, jumlah, posisi, arsiran, simetri, pola ganjil–genap, pola ganda, dan teknik lainnya merupakan pengembangan pembelajaran untuk membantu membaca pola visual, bukan submateri resmi tambahan. Materi visual-spasial seperti jaring-jaring kubus dan rotasi kubus 3D tidak ditempatkan sebagai materi inti dalam handbook ini, karena tidak disebut secara eksplisit sebagai kategori tersendiri dalam ruang lingkup figural yang menjadi acuan. Ketentuan teknis seleksi seperti jumlah soal, nilai ambang batas, dan sistem penilaian harus mengikuti peraturan resmi pada tahun seleksi masing-masing. Dengan struktur ini, fokus belajar tetap berada pada kemampuan yang paling penting: MEMBACA GAMBAR SEBAGAI DATA MENEMUKAN HUBUNGAN MEMVERIFIKASI POLA DAN MENJAWAB SECARA LOGIS Kunjungi sekarang Handbook TIU · SKD CPNS · Seri 3, Kemampuan Figural",
       "kata": 261
-    },
-    {
-      "id": "tiu-handbook-figural-s16",
-      "subtopik": "Mini latihan konseptual",
-      "judul": "Lampiran: Latihan Soal Bergambar",
-      "konten": "Latihan Soal Bergambar Dua belas soal tambahan untuk melatih tiga ruang lingkup figural: empat soal analogi, empat soal ketidaksamaan, dan empat soal serial. Kerjakan terlebih dahulu, lalu cocokkan dengan kunci dan pembahasan di halaman berikutnya. ANALOGI · 4 KETIDAKSAMAAN · 4 SERIAL · 4 ANALOGI Tentukan gambar yang tepat untuk menggantikan tanda tanya. ANALOGI Tentukan gambar yang tepat untuk menggantikan tanda tanya. ANALOGI Tentukan gambar yang tepat untuk menggantikan tanda tanya. ANALOGI Tentukan gambar yang tepat untuk menggantikan tanda tanya. KETIDAKSAMAAN Manakah gambar yang berbeda dari gambar lainnya? KETIDAKSAMAAN Manakah gambar yang berbeda dari gambar lainnya? KETIDAKSAMAAN Manakah gambar yang berbeda dari gambar lainnya? KETIDAKSAMAAN Manakah gambar yang berbeda dari gambar lainnya? SERIAL Tentukan gambar berikutnya dalam rangkaian. SERIAL Tentukan gambar berikutnya dalam rangkaian. SERIAL Tentukan gambar berikutnya dalam rangkaian. SERIAL Tentukan gambar berikutnya dalam rangkaian. Kunci Jawaban dan Pembahasan 1 ✓ Jawaban: B ANALOGI A → B memuat dua perubahan: seluruh susunan berputar 90° searah jarum jam (dua sektor), lalu sektor hitam dan putih bertukar warna. Pola garis dan titik tidak ikut bertukar. Terapkan keduanya pada C → B. Opsi A lupa menukar warna, opsi C berputar ke arah sebaliknya, opsi D hanya berputar 45°. 2 ✓ Jawaban: D ANALOGI Perhatikan dua lapis secara terpisah. Arsiran kuadran bergeser satu kuadran searah jarum jam, sedangkan simbol bergerak satu kuadran berlawanan arah jarum jam. Pada C: arsiran bergeser searah jarum jam, simbol lingkaran dan silang bergeser berlawanan arah → D. Opsi A menggeser keduanya searah jarum jam. 3 ✓ Jawaban: A ANALOGI B adalah bayangan cermin A terhadap sumbu vertikal: sektor kanan dan kiri bertukar, sektor atas dan bawah tetap. Maka D adalah bayangan cermin C. Opsi B (rotasi 180°) dan opsi C (cermin horizontal) tampak mirip, tetapi letak sektor atas dan bawahnya berubah.",
-      "kata": 293,
-      "catatan": "Soal-soal ini bergambar; teks hanya memuat instruksi dan pembahasan, gambar soalnya tidak tersedia dalam teks."
-    },
-    {
-      "id": "tiu-handbook-figural-s17",
-      "subtopik": "Mini latihan konseptual",
-      "judul": "Lampiran: Kunci Jawaban dan Pembahasan",
-      "konten": "4 ✓ Jawaban: E ANALOGI A memiliki 3 sektor hitam dan B berupa segitiga: jumlah sektor hitam menjadi jumlah sisi bangun, sedangkan simbol pusat tetap. Sektor bergaris tidak dihitung. C memiliki 5 sektor hitam dengan simbol silang, jadi D adalah segi lima kosong dengan silang. Opsi D memiliki segi lima yang terisi hitam, dan itu tidak dituntut oleh pola. 5 ✓ Jawaban: C KETIDAKSAMAAN Baca urutan pola searah jarum jam mulai dari sektor hitam. Pada A, B, D, dan E urutannya hitam → garis → putih (dengan panah) → titik, sehingga keempatnya adalah rotasi dari gambar yang sama. Pada C urutannya terbalik, jadi C merupakan hasil pencerminan. 6 ✓ Jawaban: E KETIDAKSAMAAN Sektor bergaris hanya pengecoh karena letaknya acak. Hubungan yang konsisten adalah bintang selalu berada tepat di seberang sektor hitam (berselisih 180°). Pada E bintang hanya berselisih 135° dari sektor hitam. 7 ✓ Jawaban: B KETIDAKSAMAAN Pada A, C, D, dan E sektor kiri dan kanan selalu berpola sama, sehingga gambar simetris terhadap sumbu vertikal. Pada B yang sama justru sektor atas dan bawah (simetri horizontal), sedangkan sektor kiri dan kanannya berbeda. 8 ✓ Jawaban: D KETIDAKSAMAAN Hitung sektor hitam dan titik di luar bingkai; sektor bergaris tidak dihitung. A: 2 dan 2, B: 3 dan 3, C: 1 dan 1, E: 4 dan 4. Hanya D yang tidak sesuai: 3 sektor hitam tetapi 4 titik. 9 ✓ Jawaban: E SERIAL Pisahkan dua sektor. Sektor hitam bergerak 1 langkah searah jarum jam (posisi 0 → 1 → 2 → 3 → 4). Sektor bergaris bergerak 2 langkah berlawanan arah jarum jam (5 → 3 → 1 → 7 → 5). Tahap kelima: hitam di posisi 4 dan bergaris di posisi 5 → E. 10 ✓ Jawaban: B SERIAL Arsiran keempat kuadran berputar satu kuadran searah jarum jam pada setiap tahap, sehingga pada tahap kelima kembali ke susunan awal. Simbol pusat bergantian lingkaran hitam – persegi putih, dan tahap kelima (ganjil) berisi lingkaran hitam. 11 ✓ Jawaban: B SERIAL Ada dua variabel. Jumlah titik luar: 1, 2, 4, 7 (selisih +1, +2, +3), sehingga berikutnya 7 + 4 = 11. Sektor hitam berputar 90° searah jarum jam: atas → kanan → bawah → kiri → kembali ke atas. Jawaban: 11 titik dengan sektor hitam di atas. 12 ✓ Jawaban: E SERIAL Pisahkan posisi ganjil dan genap. Posisi genap berisi segi enam yang sektor hitamnya bertambah satu, sedangkan posisi ganjil berisi susunan panah yang berputar 90° searah jarum jam. Posisi ke-7 adalah posisi ganjil, jadi jawabannya susunan panah menghadap kiri. Opsi D juga menghadap kiri, tetapi lingkaran kecilnya berada di sisi yang salah karena merupakan hasil pencerminan.",
-      "kata": 436,
-      "catatan": "Soal-soal ini bergambar; teks hanya memuat instruksi dan pembahasan, gambar soalnya tidak tersedia dalam teks."
     }
   ],
   "catatan_kualitas": "PDF berteks landscape, ekstraksi baik. Materi figural sangat bergantung pada gambar sehingga teks saja tidak cukup, perlu cek visual/gambar saat dipakai sebagai konten belajar."

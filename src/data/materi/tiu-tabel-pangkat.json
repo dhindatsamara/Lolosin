@@ -2,15 +2,14 @@
   "id": "tiu-tabel-pangkat",
   "judul": "Tabel Bilangan Pangkat 2, 3, dan 4 (1–100)",
   "materi": "TIU",
-  "deskripsi": "Tabel pangkat 2, 3, dan 4 untuk bilangan 1–100 (dihitung ulang secara programatis, bukan dari OCR) plus 10 soal latihan volume bangun ruang.",
-  "sumber": "ocr/tabel-pangkat-2-3.txt (pangkat 2–3 + soal volume) + skd_cpns_2/skd cpns 2/tabel-bilangan-pangkat-4-dari-1_compress.pdf (pangkat 4); semua angka dihitung ulang, digit OCR tidak dipakai",
+  "deskripsi": "Tabel pangkat 2, 3, dan 4 untuk bilangan 1–100 (dihitung ulang secara programatis, bukan dari OCR).",
+  "sumber": "ocr/tabel-pangkat-2-3.txt (pangkat 2–3) + skd_cpns_2/skd cpns 2/tabel-bilangan-pangkat-4-dari-1_compress.pdf (pangkat 4); semua angka dihitung ulang, digit OCR tidak dipakai",
   "halaman": 5,
-  "kata": 396,
+  "kata": 224,
   "subtopik": [
     "Tabel pangkat 2 (1–100)",
     "Tabel pangkat 3 (1–100)",
-    "Tabel pangkat 4 (1–100)",
-    "Volume bangun ruang (soal latihan)"
+    "Tabel pangkat 4 (1–100)"
   ],
   "sections": [
     {
@@ -40,13 +39,6 @@
       "judul": "Tabel Pangkat 4 (1–100)",
       "konten": "Nilai pangkat empat bilangan 1–100. Data lengkap ada di field `tabel.pangkat4` sebagai pasangan [bilangan, hasil].\n\nContoh (1–10):\n\n1^4 = 1\n2^4 = 16\n3^4 = 81\n4^4 = 256\n5^4 = 625\n6^4 = 1.296\n7^4 = 2.401\n8^4 = 4.096\n9^4 = 6.561\n10^4 = 10.000",
       "kata": 47
-    },
-    {
-      "id": "tiu-tabel-pangkat-s05",
-      "subtopik": "Volume bangun ruang (soal latihan)",
-      "judul": "Latihan: Volume Bangun Ruang",
-      "konten": "10 soal latihan volume bangun ruang dari halaman 3 dokumen tabel pangkat (tanpa kunci jawaban di sumber).\n\n1. Tentukan volume sebuah kubus yang memiliki rusuknya 6 m!\n2. Tangki air berbentuk balok memiliki panjang 3 m, lebar 80 cm, dan tingginya 60 cm. Tentukan volume tangki dalam satuan liter!\n3. Tentukan volume tabung dengan diameter 14 cm dan tinggi 21 cm!\n4. Tentukan volume kerucut yang berjari-jari 18 cm dan tinggi 10 cm!\n5. Tentukan volume prisma segitiga sisi dengan panjang sisi alas 10 cm dan tingginya 15 cm!\n6. Tentukan volume limas persegi dengan panjang sisi alas 10 cm dan tingginya 12 cm!\n7. Tentukan volume bola yang berdiameter 40 cm! Jari-jari = 20 cm\n8. Tentukan volume kerucut terpancung jika diameter alasnya 10 dm, diameter atas 4 dm, dan tinggi 4 dm!\n9. Tentukan volume bola terpancung jika jari-jari alas 10 dm, jari-jari atas 7 dm dan tinggi 14 dm!\n10. Berapa volume pipa berongga dengan diameter masing-masing 10 mm dan 18 mm serta tinggi 3.5 cm! (dalam mm persegi)",
-      "kata": 172
     }
   ],
   "tabel": {

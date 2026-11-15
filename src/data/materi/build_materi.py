@@ -990,17 +990,17 @@ DOCS = [
          catatan_kualitas="PDF 2 hal bergaya infografis; sebagian isi berupa gambar/tabel sehingga teks terekstrak hanya sebagian."),
     dict(id="tiu-modul", judul="Ringkasan Materi TIU CPNS (Modul TIU)",
          materi="TIU", kind="ocr", file="ocr/Mod-MATERI-TIU-CPNS.txt", halaman=98,
-         deskripsi="Ringkasan materi TIU: penalaran verbal, analitis, logis, silogisme, aritmetika, deret angka, dan hitung cepat, lengkap dengan contoh soal dan pembahasan.",
+         deskripsi="Ringkasan materi TIU: penalaran verbal, analitis, logis, silogisme, aritmetika, deret angka, dan hitung cepat.",
          subtopik=["Penalaran verbal: sinonim, antonim, analogi","Penalaran analitis","Penalaran logis",
                    "Silogisme","Aritmetika dan aljabar","Deret angka","Kecepatan berhitung",
                    "Pecahan dan perbandingan"],
-         catatan_kualitas="Hasil OCR modul scan; rumus dan notasi matematika kadang kacau (perlu cek manual). Mengandung ~40 contoh soal dengan jawaban + pembahasan. Tidak mencakup materi figural/gambar."),
+         catatan_kualitas="Hasil OCR modul scan; rumus dan notasi matematika kadang kacau (perlu cek manual). Tidak mencakup materi figural/gambar."),
     dict(id="tiu-analogi-verbal", judul="Materi Analogi Verbal TIU | TemanASN",
          materi="TIU", kind="pdf", file="skd_cpns_2/skd cpns 2/tiu-analogi-verbal.pdf", halaman=4,
-         deskripsi="Materi analogi verbal: definisi, bentuk-bentuk soal, dan contoh analogi beserta pembahasan.",
+         deskripsi="Materi analogi verbal: definisi, bentuk-bentuk analogi, dan contoh analogi profesi dan tempat kerja.",
          subtopik=["Definisi analogi verbal","Bentuk-bentuk soal analogi (dua kata, kalimat)",
                    "Contoh analogi profesi dan tempat kerja"],
-         catatan_kualitas="PDF berteks, ekstraksi baik. ~10 contoh soal analogi dengan jawaban di dalam materi."),
+         catatan_kualitas="PDF berteks, ekstraksi baik."),
     dict(id="tiu-hitung-cepat", judul="Hitung Cepat | TemanASN",
          materi="TIU", kind="pdf", file="skd_cpns_2/skd cpns 2/tiu-hitung-cepat.pdf", halaman=10,
          deskripsi="Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
@@ -1008,11 +1008,11 @@ DOCS = [
          catatan_kualitas="PDF berteks, ekstraksi cukup baik meski ada kata yang menempel tanpa spasi di beberapa bagian (artefak layout). 6 blok 'Contoh Soal'."),
     dict(id="tkp-modul", judul="Ringkasan Materi TKP CPNS (Modul TKP)",
          materi="TKP", kind="ocr", file="ocr/Mod-MATERI-TKP-CPNS.txt", halaman=60,
-         deskripsi="Ringkasan materi TKP per aspek: integritas, adaptasi, pengendalian diri, semangat berprestasi, pelayanan, dan lainnya, dengan contoh soal situasional dan skor.",
+         deskripsi="Ringkasan materi TKP per aspek: integritas, adaptasi, pengendalian diri, semangat berprestasi, pelayanan, dan lainnya.",
          subtopik=["Integritas","Kejujuran","Kemampuan beradaptasi","Pengendalian diri",
                    "Semangat berprestasi","Inisiatif","Kreativitas dan inovasi","Ketekunan",
                    "Orientasi pelayanan","Toleransi","Kepedulian lingkungan","Efisiensi kerja"],
-         catatan_kualitas="Hasil OCR modul scan; tata letak dua kolom kadang mengacaukan urutan baca. Mengandung ~40 contoh soal situasional TKP dengan jawaban + pembahasan dan skor."),
+         catatan_kualitas="Hasil OCR modul scan; tata letak dua kolom kadang mengacaukan urutan baca."),
     dict(id="tkp-cheat-sheet", judul="Cheat Sheet TKP 2024 by Analitica.id",
          materi="TKP", kind="ocr", file="ocr/TKP.txt", halaman=10,
          drop_ad_pages=True,
@@ -1038,10 +1038,10 @@ HANDBOOKS = {
         judul="Handbook TIU SKD CPNS Seri 1 | Kemampuan Verbal",
         file="bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri1_Kemampuan_Verbal_Landscape-1-1.pdf",
         halaman=46,
-        deskripsi="Handbook kemampuan verbal: analogi, silogisme, penalaran analitis, teknik eliminasi, error pattern, dan mini drill.",
+        deskripsi="Handbook kemampuan verbal: analogi, silogisme, penalaran analitis, teknik eliminasi, dan error pattern.",
         subtopik=["Analogi","Silogisme","Penalaran analitis","Teknik eliminasi","Error pattern",
-                  "Sistem cepat verbal","Mini drill"],
-        catatan_kualitas="PDF berteks landscape, ekstraksi baik. 11 soal berlabel (6 contoh + 5 mini drill) dengan jawaban + pembahasan.",
+                  "Sistem cepat verbal"],
+        catatan_kualitas="PDF berteks landscape, ekstraksi baik.",
         pengantar="Catatan Acuan Seleksi", penutup="Ringkasan Akhir",
         bagian={"I": "Peta Besar TIU Verbal", "II": "Analogi", "III": "Silogisme",
                 "IV": "Penalaran Analitis", "V": "Teknik Eliminasi",
@@ -1052,10 +1052,10 @@ HANDBOOKS = {
         judul="Handbook TIU SKD CPNS Seri 2 | Kemampuan Numerik",
         file="bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri2_Kemampuan_Numerik_Landscape-1-1.pdf",
         halaman=44,
-        deskripsi="Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, hitung cepat, dan mini drill.",
+        deskripsi="Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, dan hitung cepat.",
         subtopik=["Berhitung","Deret angka","Perbandingan kuantitatif","Soal cerita","Hitung cepat",
-                  "Jebakan TIU numerik","Mini drill"],
-        catatan_kualitas="PDF berteks landscape, ekstraksi baik. 8 soal Mini Drill dengan jawaban + pembahasan, plus contoh-contoh dalam materi.",
+                  "Jebakan TIU numerik"],
+        catatan_kualitas="PDF berteks landscape, ekstraksi baik.",
         pengantar="Catatan Acuan", penutup="Ringkasan Akhir",
         bagian={"I": "Peta Besar TIU Numerik", "II": "Berhitung", "III": "Deret Angka",
                 "IV": "Perbandingan Kuantitatif", "V": "Soal Cerita", "VI": "Hitung Cepat",
@@ -1067,7 +1067,7 @@ HANDBOOKS = {
         halaman=57,
         deskripsi="Handbook kemampuan figural: analogi gambar, ketidaksamaan, serial gambar, dan strategi mengerjakan soal gambar.",
         subtopik=["Analogi gambar","Ketidaksamaan","Serial gambar","Strategi mengerjakan figural",
-                  "Jebakan figural","Formula pemeriksaan cepat","Mini latihan konseptual"],
+                  "Jebakan figural","Formula pemeriksaan cepat"],
         catatan_kualitas="PDF berteks landscape, ekstraksi baik. Materi figural sangat bergantung pada gambar sehingga teks saja tidak cukup, perlu cek visual/gambar saat dipakai sebagai konten belajar.",
         pengantar="Catatan Acuan", penutup="Rangkuman Satu Halaman",
         bagian={"I": "Dasar Kemampuan Figural", "II": "Analogi Gambar", "III": "Ketidaksamaan",
@@ -1396,13 +1396,13 @@ BANG_ARYA_DROP = {
 }
 
 def process_bang_arya():
-    cfg = dict(id="twk-bang-arya", judul="Mastery TWK 2024 | Kang Arya (TWK Bang Arya)",
+    cfg = dict(id="twk-bang-arya", judul="Rangkuman Tabel TWK",
                materi="TWK",
-               deskripsi="Buku soal TWK + pembahasan per topik: Pancasila, Bela Negara, Integritas, Bahasa Indonesia, Nasionalisme & Bhinneka Tunggal Ika, dan Pilar Negara (~300 soal).",
+               deskripsi="Rangkuman tabel TWK: poin setiap sila Pancasila, timeline UUD 1945, sembilan nilai integritas, penggunaan huruf kapital, prinsip nasionalisme, dan NKRI dalam UUD 1945.",
                sumber="skd_cpns_2/skd cpns 2/TWK BANG ARYA.pdf", halaman=121,
                subtopik=["Pancasila","Bela Negara","Pilar Negara","Integritas",
                          "Nasionalisme dan Bhinneka Tunggal Ika","Bahasa Indonesia"],
-               catatan_kualitas="PDF berteks, kualitas ekstraksi baik. Buku soal + pembahasan: 6 topik x ~50 soal. Sebagian soal memakai pola opsi berulang (opsi A-D sama di banyak soal Pancasila), perlu kurasi sebelum dipakai ulang. Buku dinyatakan bebas dibagikan, tidak untuk diperjualbelikan.")
+               catatan_kualitas="PDF berteks, kualitas ekstraksi baik. Hanya tabel dan rangkuman yang dipertahankan; soal latihan dan pembahasan dikeluarkan dari Belajar. Sebagian teks tabel terekstrak berulang (artefak layout PDF).")
     pages = extract_pdf_pages(os.path.join(SRC, cfg["sumber"]))
     assert len(pages) == 121, f"Bang Arya: {len(pages)} halaman, perkiraan 121"
     sections = []
@@ -1448,34 +1448,6 @@ def process_tabel_pangkat():
     assert t3[0] == [1, 1] and t3[9] == [10, 1000] and t3[99] == [100, 1000000]
     assert t4[0] == [1, 1] and t4[1] == [2, 16] and t4[99] == [100, 100000000]
 
-    # Soal latihan volume dari halaman 3 OCR tabel-pangkat-2-3.txt
-    pages = extract_ocr_pages(os.path.join(SRC, "ocr/tabel-pangkat-2-3.txt"))
-    soal_lines = []
-    for ln in pages[2].splitlines():
-        ln = clean_line(ln)
-        if not ln or ln in ("rb", "OLANYU NW"):  # artefak OCR, bukan isi soal
-            continue
-        soal_lines.append(ln)
-    soal_text = " ".join(soal_lines)
-    # pisah per soal: soal 1 & 10 bernomor di OCR; sisanya dipisah manual per kalimat soal
-    items = [
-        "Tentukan volume sebuah kubus yang memiliki rusuknya 6 m!",
-        "Tangki air berbentuk balok memiliki panjang 3 m, lebar 80 cm, dan tingginya 60 cm. Tentukan volume tangki dalam satuan liter!",
-        "Tentukan volume tabung dengan diameter 14 cm dan tinggi 21 cm!",
-        "Tentukan volume kerucut yang berjari-jari 18 cm dan tinggi 10 cm!",
-        "Tentukan volume prisma segitiga sisi dengan panjang sisi alas 10 cm dan tingginya 15 cm!",
-        "Tentukan volume limas persegi dengan panjang sisi alas 10 cm dan tingginya 12 cm!",
-        "Tentukan volume bola yang berdiameter 40 cm! Jari-jari = 20 cm",
-        "Tentukan volume kerucut terpancung jika diameter alasnya 10 dm, diameter atas 4 dm, dan tinggi 4 dm!",
-        "Tentukan volume bola terpancung jika jari-jari alas 10 dm, jari-jari atas 7 dm dan tinggi 14 dm!",
-        "Berapa volume pipa berongga dengan diameter masing-masing 10 mm dan 18 mm serta tinggi 3.5 cm! (dalam mm persegi)",
-    ]
-    # verifikasi tiap soal memang ada di teks OCR (pencocokan longgar, tanpa angka)
-    for it in items:
-        key = re.sub(r"[^a-z ]", "", it.lower().split("!")[0].split(".")[0])[:30]
-        assert key[:18] in re.sub(r"[^a-z ]", "", soal_text.lower()), f"soal tidak cocok OCR: {it[:40]}"
-    soal_md = "\n".join(f"{i + 1}. {it}" for i, it in enumerate(items))
-
     def preview(t, p):
         rows = "\n".join(f"{n}^{p} = {v:,}".replace(",", ".") for n, v in t[:10])
         return rows
@@ -1506,11 +1478,6 @@ def process_tabel_pangkat():
          "konten": ("Nilai pangkat empat bilangan 1–100. Data lengkap ada di field `tabel.pangkat4` "
                     "sebagai pasangan [bilangan, hasil].\n\nContoh (1–10):\n\n" + preview(t4, 4)),
          "kata": 0},
-        {"id": "tiu-tabel-pangkat-s05", "subtopik": "Volume bangun ruang (soal latihan)",
-         "judul": "Latihan: Volume Bangun Ruang",
-         "konten": ("10 soal latihan volume bangun ruang dari halaman 3 dokumen tabel pangkat "
-                    "(tanpa kunci jawaban di sumber).\n\n" + soal_md),
-         "kata": 0},
     ]
     for s in sections:
         s["kata"] = len(s["konten"].split())
@@ -1518,19 +1485,654 @@ def process_tabel_pangkat():
         "id": "tiu-tabel-pangkat",
         "judul": "Tabel Bilangan Pangkat 2, 3, dan 4 (1–100)",
         "materi": "TIU",
-        "deskripsi": "Tabel pangkat 2, 3, dan 4 untuk bilangan 1–100 (dihitung ulang secara programatis, bukan dari OCR) plus 10 soal latihan volume bangun ruang.",
-        "sumber": ("ocr/tabel-pangkat-2-3.txt (pangkat 2–3 + soal volume) + "
+        "deskripsi": "Tabel pangkat 2, 3, dan 4 untuk bilangan 1–100 (dihitung ulang secara programatis, bukan dari OCR).",
+        "sumber": ("ocr/tabel-pangkat-2-3.txt (pangkat 2–3) + "
                    "skd_cpns_2/skd cpns 2/tabel-bilangan-pangkat-4-dari-1_compress.pdf (pangkat 4); "
                    "semua angka dihitung ulang, digit OCR tidak dipakai"),
         "halaman": 5,
         "kata": sum(s["kata"] for s in sections),
         "subtopik": ["Tabel pangkat 2 (1–100)", "Tabel pangkat 3 (1–100)",
-                     "Tabel pangkat 4 (1–100)", "Volume bangun ruang (soal latihan)"],
+                     "Tabel pangkat 4 (1–100)"],
         "sections": sections,
         "tabel": {"pangkat2": t2, "pangkat3": t3, "pangkat4": t4},
         "catatan_kualitas": "Digit tabel hasil OCR ada yang salah baca (mis. '51? 2.601', '61? SIA'), sehingga seluruh angka dihitung ulang secara programatis dan diverifikasi dengan spot check.",
     }
     return doc
+
+# ---------------------------------------------------------------- filter isi (audit 2026-11-15)
+# Kebijakan: Belajar hanya berisi MATERI belajar murni (penjelasan, rangkuman,
+# rumus, tabel, contoh pengerjaan). Soal latihan/tryout (stem + opsi A-E +
+# kunci/pembahasan), pengantar/cover/daftar isi, dan seksi duplikat TIDAK masuk
+# Belajar; soal tempatnya di Latihan/Tryout. Filter berjalan SETELAH semua
+# dokumen dibangun (ID seksi sudah ditetapkan), supaya ID seksi yang
+# dipertahankan tidak bergeser (progres baca tersimpan memakai ID seksi).
+# Laporan lengkap: ~/workspace/cpns/materi/AUDIT-ISI-2026-11-15.md
+OPT_RE = re.compile(r"^[A-E][.)]\s+\S")
+OPT_LOWER_RE = re.compile(r"^[a-e][.)]\s+\S")
+INLINE_OPT_RE = re.compile(r"(?<![A-Za-z0-9])[A-E]\.\s+[A-Z0-9\"(]")
+ANS_RE = re.compile(r"^(jawaban|pembahasan)\s*:", re.I)
+ANS_INLINE_RE = re.compile(r"jawaban\s*:\s*[A-Ea-e0-9]", re.I)
+SCORE_RE = re.compile(r"^skor\s*\d+\s*:?", re.I)
+SCORE_INLINE_RE = re.compile(r"skor\s*\d+\s*:", re.I)
+SCORE_END_RE = re.compile(r"\.\s*skor\s*\d+\s*:?\s*$", re.I)
+CONTOH_RE = re.compile(r"^contoh(\s+soal)?\s*:?\s*$", re.I)
+LETTER_RE = re.compile(r"^[A-E][.)]\s*$")
+CONTOH_NUM_RE = re.compile(r"^contoh\s*:\s*\d+[.)]?\s*$", re.I)
+GUARD_RE = re.compile(r"^(TIPS|TRIK)\s*:|^##\s+\S|^Ringkas\s+\d+\s*:|^(BAB|BAGIAN)\s+[IVXL0-9]+")
+COVER_RE = re.compile(
+    r"^##\s*Pengantar\s*$"
+    r"|^Cheat Sheet (TWK|TKP) 2024\s*(@\s*2024)?\s*$"
+    r"|^\d+\s+Cheat Sheet (TWK|TKP) 2024"
+    r"|^STEM mulai di sini\s*$")
+_EXPLAIN_START = re.compile(
+    r"^(jadi|sehingga|maka|polanya|dengan menggunakan|terlihat|menunjukkan|pembahasan|jawaban|skor)\b", re.I)
+_BARE_STEM_RE = re.compile(r"^\w[\w\s]{0,30}:\s*\.{2,}\s*$")
+SHAPE_RE = re.compile(r"[○□△◇▲▼●■★☆⬜⬛]")
+
+def _clean(p):
+    return p.strip().strip("“”\"'").strip()
+
+def _body(p):
+    """Teks paragraf tanpa awalan markdown heading '## ' (dipakai klasifikasi)."""
+    t = _clean(p)
+    return re.sub(r"^##\s+", "", t)
+
+def _is_stem(p):
+    t = _clean(p)
+    if not t:
+        return False
+    if t.endswith(("....", "...", "?")) and 3 <= len(t.split()) <= 80:
+        return True
+    if " : " in t and len(t) < 200:
+        return True
+    if re.match(r"^Soal\s+\d+\b", t, re.I):
+        return True
+    return False
+    # NOTE: klausul "dimulai angka" dan akhiran ":" SENGAJA tidak ada:
+    # "2. Luas dan volume kubus" / "3. Jaring-jaring tabung" adalah judul
+    # materi bernomor, dan "a. Urutkan pecahan ... Contoh:" berakhir ":".
+    # Stem bernomor yang pendek (< 15 kata) tetap kena aturan fragmen.
+
+def _is_fragment(p, lower_max=10):
+    """Paragraf pendek (fragmen OCR). Fragmen awalan huruf kecil hanya dihitung
+    bila < lower_max kata, supaya kelanjutan kalimat materi tidak ikut
+    terhapus. Jalan maju memakai lower_max=6 (lebih ketat: materi sesudah
+    zona soal lebih sering berupa kelanjutan kalimat)."""
+    t = _clean(p)
+    w = len(t.split())
+    if w >= 15:
+        return False
+    if t and t[0].islower() and w >= lower_max:
+        return False
+    return True
+
+def _is_heading_like(p):
+    """Subjudul materi (mis. 'Kata Kunci Tema Profesionalisme'): pendek,
+    tanpa tanda akhir kalimat, mayoritas kata berawalan kapital."""
+    t = _clean(p)
+    if t.lower().startswith(("contoh soal", "soal ")):
+        return False
+    words = t.split()
+    if not (2 <= len(words) < 12):
+        return False
+    if t[-1] in ".!?…:,":
+        return False
+    caps = sum(1 for w in words if w[:1].isupper())
+    return caps >= len(words) - 1
+
+def strip_question_zones(konten, lowercase_options=False):
+    """Hapus paragraf zona soal (stem + opsi A-E + jawaban/pembahasan + skor).
+    Kembalikan (konten_baru, n_paragraf_dihapus, n_zona)."""
+    paras = konten.split("\n\n")
+    n = len(paras)
+    opt_re = OPT_LOWER_RE if lowercase_options else OPT_RE
+    kind = []
+    for p in paras:
+        t = _clean(p)
+        b = _body(p)
+        if SHAPE_RE.search(t):
+            # contoh gambar figural ("A. ○ B. □ C. △ D. ..."): label gambar,
+            # bukan opsi pilihan ganda -> jangan pernah jadi seed soal.
+            kind.append("OTHER")
+        elif COVER_RE.match(t):
+            kind.append("COVER")
+        elif LETTER_RE.match(b):
+            kind.append("LETTER")
+        elif opt_re.match(b) or OPT_RE.match(b):
+            kind.append("OPT")
+        elif ANS_RE.match(b):
+            kind.append("ANS")
+        elif SCORE_RE.match(b):
+            kind.append("SCORE")
+        elif CONTOH_RE.match(b) or CONTOH_NUM_RE.match(b):
+            kind.append("CONTOH")
+        elif len(t.split()) <= 40 and ANS_INLINE_RE.search(t):
+            # "A. 6 Jawaban: D Pembahasan:" (jawaban inline bernilai huruf/angka)
+            kind.append("ANS_INLINE")
+        elif (len(t.split()) <= 150
+                and (SCORE_INLINE_RE.search(t) or SCORE_END_RE.search(t))):
+            # "Skor 5:" di tengah paragraf fusi dua kolom, atau label di akhir.
+            # "Rahasia Mendapatkan Skor 5" (tanpa titik dua, bukan di akhir)
+            # sengaja TIDAK kena: itu subjudul tips materi.
+            kind.append("SCORE_INLINE")
+        elif len(t.split()) <= 100 and len(INLINE_OPT_RE.findall(t)) >= 3:
+            # INLINE hanya untuk paragraf kecil: paragraf materi handbook bisa
+            # 300-700 kata dan mengandung "A. ..." sebagai notasi, bukan opsi.
+            kind.append("INLINE")
+        elif GUARD_RE.match(b) or (t.startswith("##") and not opt_re.match(b)):
+            kind.append("GUARD")
+        else:
+            kind.append("OTHER")
+    # OPT hanya valid bila bagian dari RANGKAIAN opsi (>= 2 paragraf opsi dalam
+    # jendela +-4), dekat jawaban (<= 4 paragraf), atau setelah stem/Contoh:
+    # "A. Kubus" / "B. Balok" adalah subjudul materi, bukan opsi.
+    opt_idx = [i for i, k in enumerate(kind) if k == "OPT"]
+    ans_idx = [i for i, k in enumerate(kind) if k in ("ANS", "ANS_INLINE", "SCORE", "SCORE_INLINE")]
+    valid_opt = set()
+    for i in opt_idx:
+        if any(0 < abs(j - i) <= 4 for j in opt_idx):
+            valid_opt.add(i)
+        elif any(abs(j - i) <= 4 for j in ans_idx):
+            valid_opt.add(i)
+        elif any(kind[j] == "CONTOH" or _is_stem(paras[j])
+                 for j in range(max(0, i - 2), i)):
+            valid_opt.add(i)
+    seeds = set()
+    # LETTER ("A." telanjang, teks opsi di paragraf berikut) jadi seed bila
+    # ada konteks soal dalam +-4 paragraf (opsi/jawaban/Contoh/stem/"Saya").
+    for i, k in enumerate(kind):
+        if k != "LETTER":
+            continue
+        lo, hi = max(0, i - 4), min(n, i + 5)
+        if any(kind[j] in ("ANS", "ANS_INLINE", "SCORE", "SCORE_INLINE", "CONTOH")
+               or (kind[j] == "OPT" and j in valid_opt)
+               or _is_stem(paras[j]) or " Saya " in f" {_clean(paras[j])} "
+               for j in range(lo, hi) if j != i):
+            seeds.add(i)
+    # CONTOH hanya jadi seed bila ada OPT/ANS/SCORE dalam 4 paragraf berikut
+    for i, k in enumerate(kind):
+        if k in ("ANS", "ANS_INLINE", "SCORE", "SCORE_INLINE", "INLINE", "COVER"):
+            seeds.add(i)
+        elif k == "OPT" and i in valid_opt:
+            seeds.add(i)
+        elif k == "CONTOH":
+            if any(kind[j] in ("ANS", "ANS_INLINE", "SCORE", "SCORE_INLINE", "INLINE") or
+                   (kind[j] == "OPT" and j in valid_opt)
+                   for j in range(i + 1, min(i + 5, n))):
+                seeds.add(i)
+    if not seeds:
+        return konten, 0, 0
+    # gabung seed jadi zona: celah <= 3 paragraf non-seed, tidak melewati GUARD
+    zones = []
+    seed_list = sorted(seeds)
+    start = prev = seed_list[0]
+    for s in seed_list[1:]:
+        gap = list(range(prev + 1, s))
+        if s - prev <= 4 and not any(kind[g] == "GUARD" for g in gap):
+            prev = s
+        else:
+            zones.append((start, prev))
+            start = prev = s
+    zones.append((start, prev))
+    # perluas tiap zona dengan jalan mundur (stem/premis) dan jalan maju
+    # (penjelasan pembahasan), dengan penjaga materi.
+    drop = set()
+    for (a, b) in zones:
+        drop.update(range(a, b + 1))
+    final = []
+    for (a, b) in zones:
+        na, nb = a, b
+        has_letter = any(kind[i] == "LETTER" for i in range(a, b + 1))
+        # --- jalan mundur (maks 10 paragraf) ---
+        seen_numbered = False
+        for _ in range(10):
+            j = na - 1
+            if j < 0 or j in drop:
+                break
+            t = _clean(paras[j])
+            if kind[j] == "GUARD" or "TIPS:" in t or "TRIK:" in t:
+                break
+            if re.match(r"^[a-z][.)]\s", t):
+                break  # sub-daftar materi ("a. Syarat Cukup")
+            if _is_heading_like(paras[j]):
+                break  # subjudul materi ("Kata Kunci Tema ...")
+            if kind[j] == "CONTOH" or t.lower().startswith("contoh"):
+                na = j
+                break  # "Contoh:" = awal blok soal; sebelumnya materi
+            if " Saya " in f" {t} " and len(t.split()) < 30:
+                na = j  # teks opsi TKP orang pertama ("Saya mendelegasikan...")
+                continue
+            if kind[j] in ("OPT", "LETTER") or _is_fragment(paras[j]) or _is_stem(paras[j]):
+                if re.match(r"^\d{1,3}[.)]\s", t):
+                    if seen_numbered:
+                        break
+                    seen_numbered = True
+                na = j
+                continue
+            break
+        # --- jalan maju (maks 8 paragraf) ---
+        eaten = 0
+        for _ in range(8):
+            j = nb + 1
+            if j >= n or j in drop:
+                break
+            t = _clean(paras[j])
+            if kind[j] == "GUARD" or "TIPS:" in t or "TRIK:" in t:
+                break
+            if _is_heading_like(paras[j]):
+                break
+            if kind[j] in ("OPT", "LETTER", "ANS", "ANS_INLINE", "SCORE", "SCORE_INLINE", "INLINE"):
+                nb = j
+                eaten += 1
+                continue
+            if _EXPLAIN_START.match(t):
+                nb = j
+                eaten += 1
+                continue
+            if "dengan menggunakan" in t.lower() and len(t.split()) < 40:
+                nb = j
+                eaten += 1
+                continue
+            if re.search(r"Pola\s+\d+\s+adalah", t) and len(t.split()) < 40:
+                nb = j
+                eaten += 1
+                continue
+            if "menunjukkan" in t.lower() and len(t.split()) < 40:
+                nb = j  # "Daerah arsiran menunjukkan ..." (penjelasan jawaban)
+                eaten += 1
+                continue
+            if _is_stem(paras[j]):
+                nb = j  # stem soal berikutnya (urutan kolom OCR teracak)
+                eaten += 1
+                continue
+            if "hasilnya" in t.lower() and len(t.split()) < 40:
+                nb = j  # "Hasilnya adalah ..." (ujung penjelasan pembahasan)
+                eaten += 1
+                continue
+            if eaten >= 1 and re.match(r"^Jika\b", t) and len(t.split()) < 30:
+                nb = j  # premis soal logika berikutnya ("Jika Lutfi lulus...")
+                eaten += 1
+                continue
+            if _is_fragment(paras[j], lower_max=10 if has_letter else 6):
+                nb = j
+                eaten += 1
+                continue
+            break
+        final.append((na, nb))
+    for (a, b) in final:
+        drop.update(range(a, b + 1))
+    kept = [(i, p) for i, p in enumerate(paras) if i not in drop and p.strip()]
+    # --- pembersihan sisa (hanya untuk seksi yang memang ada zonanya) ---
+    def _drop_second_pass(items):
+        """Satu putaran pembersihan residu; kembalikan daftar baru + jumlah hapus."""
+        out = []
+        removed_idx = set()
+        for pos, (i, p) in enumerate(items):
+            t = _clean(p)
+            b = _body(p)
+            drop_it = False
+            if SHAPE_RE.search(t):
+                pass  # contoh gambar figural: bukan opsi
+            elif OPT_RE.match(b) or (lowercase_options and OPT_LOWER_RE.match(b)):
+                # opsi yatim; subjudul materi huruf ("A. Kubus", "D. Tabung")
+                # dilindungi kecuali pendek-berawalan kata kerja ("E. Melaporkan...")
+                m = re.match(r"^[A-Ea-e][.)]\s+(\S+)", b)
+                verb = m and re.match(r"^(me|ber|di|tidak)", m.group(1), re.I)
+                if len(t.split()) > 5 or verb:
+                    drop_it = True
+            elif " Saya " in f" {t} " and (t[:1].islower() or t.endswith("...") or len(t.split()) < 12):
+                drop_it = True  # fragmen soal TKP orang pertama
+            elif re.match(r"^(TIPS|Tips)\s*:", t) and " Saya " in f" {t} ":
+                drop_it = True  # tips palsu = opsi yang terfusi label TIPS
+            elif LETTER_RE.match(b):
+                drop_it = True  # huruf opsi telanjang ("A.")
+            elif _BARE_STEM_RE.match(t):
+                drop_it = True  # "Kampiun : ..." (stem telanjang)
+            elif re.match(r"^contoh\s+soal\s+tipe\b", t, re.I):
+                drop_it = True  # prompt soal gambar tanpa gambar
+            elif CONTOH_RE.match(b) and pos == len(items) - 1:
+                drop_it = True  # penanda "Contoh:" yatim di akhir seksi
+            if drop_it:
+                removed_idx.add(i)
+            else:
+                out.append((i, p))
+        # fragmen huruf kecil < 10 kata yang bersebelahan dengan paragraf hapus
+        # (indeks paragraf asli dipakai supaya posisi tidak bergeser)
+        if removed_idx:
+            out2 = []
+            for (i, p) in out:
+                t = _clean(p)
+                if (t[:1].islower() and len(t.split()) < 10
+                        and any(abs(i - r) <= 1 for r in removed_idx)):
+                    continue
+                out2.append((i, p))
+            return out2, len(items) - len(out2)
+        return out, len(items) - len(out)
+    kept, _ = _drop_second_pass(kept)
+    kept, _ = _drop_second_pass(kept)
+    # judul pendek yang ujungnya menempel fragmen opsi ("Antonim/Lawan Kata
+    # A. Pembukaan"): pangkas fragmen opsinya, simpan judulnya.
+    _trimmed_head = []
+    for (i, p) in kept:
+        t = _clean(p)
+        if (_is_heading_like(p) and len(t.split()) < 12
+                and not t.lower().startswith(("bagian", "bab ", "modul", "topik", "seksi"))):
+            m = re.search(r"\s+[A-E][.)]\s+\S+(?:\s+\S+){0,2}\s*$", t)
+            if m:
+                head = t[:m.start()].strip()
+                if len(head.split()) >= 2:
+                    _trimmed_head.append((i, head))
+                    continue
+        _trimmed_head.append((i, p))
+    kept = _trimmed_head
+    # potong stem "Soal N ..." di ujung paragraf materi (mis. akhir Silogisme)
+    trimmed = []
+    for (i, p) in kept:
+        t = _clean(p)
+        m = re.search(r"\s*(Contoh(\s+\w+){0,2})?\s*Soal\s+\d+\b.*$", t, re.S)
+        if m and t.endswith(("...", "?")):
+            head = t[:m.start()].strip()
+            if len(head) >= 100:
+                trimmed.append((i, head))
+            # else: paragraf murni stem -> buang
+        else:
+            trimmed.append((i, p))
+    kept = trimmed
+    # paragraf akhir yang berupa stem ("..."): paragraf pendek dibuang utuh;
+    # paragraf panjang dipangkas kalimat-kalimat stem di ujungnya (maks 3
+    # kalimat, total <= 60 kata, sisa kepala >= 30 kata) - mis. tabel POIN
+    # SETIAP SILA yang ujungnya menempel stem soal pertama.
+    for _ in range(2):
+        if not kept or not _clean(kept[-1][1]).endswith(("...", "....")):
+            break
+        idx, para = kept[-1]
+        words = len(_clean(para).split())
+        if words <= 30:
+            kept.pop()
+            continue
+        sents = re.split(r"(?<=[.!?])\s+|(?<=[.!?][\"”'])\s+", _clean(para))
+        if len(sents) <= 1:
+            break  # satu kalimat tanpa pemisah: stem menempel tak terpisah,
+            # simpan utuh (materinya lebih berharga daripada ekor stemnya)
+        tail_w = 0
+        cut = len(sents)
+        while cut > 0 and (len(sents) - cut) < 3:
+            w = len(sents[cut - 1].split())
+            if tail_w + w > 60:
+                break  # kalimat ini masuk kepala, bukan ekor stem
+            tail_w += w
+            cut -= 1
+        head = " ".join(sents[:cut]).strip()
+        if cut > 0 and len(head.split()) >= 30 and tail_w <= 60:
+            kept[-1] = (idx, head)
+        else:
+            kept.pop()
+    # kalimat terakhir paragraf akhir berupa awal stem/bacaan soal
+    # ("Dalam sebuah proyek ..." / "Pemerintah provinsi telah menyusun ..."):
+    # buang kalimat itu saja bila kepala paragraf tetap >= 30 kata.
+    _SCEN_SENT = (r"^(Dalam sebuah|Dalam suatu|Di sebuah|Seorang|Pada suatu|"
+                  r"Suatu hari|Ketika sedang|"
+                  r"Pemerintah \w+ telah (menyusun|melakukan|mengadakan|"
+                  r"mengeluarkan|menerapkan))\b")
+    if kept:
+        idx, para = kept[-1]
+        t = _clean(para)
+        sents = re.split(r"(?<=[.!?])\s+|(?<=[.!?][\"”'])\s+", t)
+        if len(sents) >= 2:
+            if re.match(_SCEN_SENT, sents[-1]):
+                head = " ".join(sents[:-1]).strip()
+                if len(head.split()) >= 30:
+                    kept[-1] = (idx, head)
+            else:
+                # stem menempel di TENGAH kalimat terakhir tanpa titik
+                # pemisah ("... masing-masing Di sebuah desa terpencil ..."):
+                # pangkas di frasa pembuka skenario bila kepala >= 30 kata
+                # dan ekornya kalimat utuh (>= 8 kata, <= 60 kata).
+                m = re.search(r"\s+(Dalam sebuah|Dalam suatu|Di sebuah|Suatu hari|Pada suatu)\s+",
+                              sents[-1])
+                if m:
+                    head = " ".join(sents[:-1] + [sents[-1][:m.start()].strip()]).strip()
+                    tail = sents[-1][m.start():].strip()
+                    if (len(head.split()) >= 30
+                            and 8 <= len(tail.split()) <= 60):
+                        kept[-1] = (idx, head)
+        elif len(sents) < 2:
+            # stem menempel tanpa titik pemisah (tabel tanpa tanda baca):
+            # pangkas di frasa pembuka skenario bila kepala >= 30 kata.
+            m = re.search(r"\b(Dalam sebuah|Dalam suatu|Di sebuah)\b", t)
+            if m and m.start() > 0:
+                head, tail = t[:m.start()].strip(), t[m.start():].strip()
+                if (len(head.split()) >= 30
+                        and 8 <= len(tail.split()) <= 60):
+                    kept[-1] = (idx, head)
+    # --- tail-cleanup: residu soal di ujung seksi (stem skenario, fragmen
+    # pembahasan, kalimat menggantung). Dijalankan berulang (maks 3 putaran)
+    # karena tiap penghapusan bisa membuka residu baru di ujung.
+    _SCEN_STRONG = (r"(?:Dalam sebuah|Dalam suatu|Di sebuah|Suatu hari|"
+                    r"Pada suatu|Suatu ketika|Ketika sedang)")
+    _SCEN_WEAK = r"(?:Pada akhir|Seorang|Pemerintah \w+ telah)"
+    _DANGLING_END = ("yang", "dan", "atau", "dengan", "untuk", "dari", "ke",
+                     "pada", "adalah", "sebagai", "jika", "ketika", "lalu",
+                     "kemudian", "yaitu")
+
+    def _is_scen_para(t):
+        """Paragraf stem skenario (< 60 kata, bukan contoh hitung)."""
+        if len(t.split()) >= 60 or "=" in t or "Rp" in t:
+            return False
+        if re.match(r"^(?:\d{1,3}[.)]\s*)?" + _SCEN_STRONG + r"\b", t):
+            return True
+        if (re.match(r"^(?:\d{1,3}[.)]\s*)?" + _SCEN_WEAK + r"\b", t)
+                and ("saya" in t.lower() or "kami" in t.lower())):
+            return True
+        return False
+
+    def _is_tail_residue(t):
+        """Paragraf ekor yang jelas-jelas residu soal (dipakai aturan
+        'Contoh:' berjangkar): stem skenario, fragmen huruf kecil, atau
+        paragraf yang kalimat terakhirnya menggantung."""
+        if _is_scen_para(t):
+            return True
+        if t[:1].islower() and len(t.split()) < 30:
+            return True
+        sents = re.split(r"(?<=[.!?])\s+|(?<=[.!?][\"”'])\s+", t)
+        if sents:
+            last = sents[-1].strip().rstrip(".!?…").strip()
+            lw = last.split()[-1].lower() if last.split() else ""
+            if lw in _DANGLING_END:
+                return True
+        return False
+
+    tail_dropped = False
+    for _outer in range(3):
+        changed = False
+        # (1) paragraf akhir berupa stem skenario ("Dalam sebuah proyek ..."):
+        # pembuka kuat langsung dibuang; pembuka lemah ("Pada akhir",
+        # "Seorang") hanya bila bernada orang pertama ("saya"/"kami").
+        # Awalan nomor soal ("1. Dalam suatu ...") diabaikan.
+        for _ in range(3):
+            if not kept:
+                break
+            if _is_scen_para(_clean(kept[-1][1])):
+                kept.pop()
+                changed = True
+                tail_dropped = True
+                continue
+            break
+        # (2) "Contoh:" berjangkar di 3 paragraf terakhir: bila semua
+        # paragraf sesudahnya adalah residu soal, buang dari "Contoh:".
+        for pos in range(max(0, len(kept) - 3), len(kept)):
+            if CONTOH_RE.match(_body(kept[pos][1])):
+                after = [_clean(p) for _, p in kept[pos + 1:]]
+                if after and all(_is_tail_residue(t) for t in after):
+                    del kept[pos:]
+                    changed = True
+                    tail_dropped = True
+                    break
+        # (3) stem skenario di posisi KEDUA dari akhir (diikuti paragraf
+        # nasihat singkat, mis. "Ditolak adalah hal yang wajar, ...").
+        if len(kept) >= 2:
+            last_t = _clean(kept[-1][1])
+            prev_t = _clean(kept[-2][1])
+            if len(last_t.split()) < 35 and _is_scen_para(prev_t):
+                del kept[-2]
+                changed = True
+                tail_dropped = True
+        # (4) kalimat terakhir paragraf akhir menggantung ("... Semestinya
+        # yang"): buang kalimat yang tak lengkap itu (berakhir kata
+        # sambung/preposisi). Paragraf satu kalimat hanya dibuang utuh bila
+        # < 20 kata (fragmen); paragraf >= 20 kata disimpan meski ujungnya
+        # terpotong (contoh jawaban cheat-sheet 36 kata).
+        for _ in range(2):
+            if not kept:
+                break
+            idx, para = kept[-1]
+            t = _clean(para)
+            sents = re.split(r"(?<=[.!?])\s+|(?<=[.!?][\"”'])\s+", t)
+            if not sents:
+                break
+            last = sents[-1].strip().rstrip(".!?…").strip()
+            last_word = last.split()[-1].lower() if last.split() else ""
+            if last_word not in _DANGLING_END:
+                break
+            if len(sents) >= 2:
+                head = " ".join(sents[:-1]).strip()
+                if len(head.split()) >= 10:
+                    kept[-1] = (idx, head)
+                    changed = True
+                    tail_dropped = True
+                    continue
+            if len(t.split()) < 20:
+                kept.pop()
+                changed = True
+                tail_dropped = True
+                continue
+            break
+        # (5) fragmen huruf kecil di ujung - HANYA bila tail-cleanup sudah
+        # menghapus sesuatu (tanpa jangkar ini, kelanjutan kalimat materi
+        # yang terbelah paragraf ikut terhapus, mis. "tanggungjawab utama
+        # atau mengorbankan waktu kerja ...").
+        if tail_dropped:
+            for _ in range(2):
+                if not kept:
+                    break
+                t = _clean(kept[-1][1])
+                if t[:1].islower() and len(t.split()) < 30:
+                    kept.pop()
+                    changed = True
+                    continue
+                break
+        # (6) penanda "Contoh:" yang jadi yatim di akhir
+        if kept and CONTOH_RE.match(_body(kept[-1][1])):
+            kept.pop()
+            changed = True
+            tail_dropped = True
+        if not changed:
+            break
+    konten_baru = "\n\n".join(p for _, p in kept).strip()
+    # rapikan penanda menggantung di ujung konten ("Pilihan:", "Jawaban:")
+    konten_baru = re.sub(r"\s*(Pilihan|Jawaban|Pembahasan)\s*:\s*$", "", konten_baru)
+    return konten_baru, len(paras) - len(kept), len(final)
+
+# Judul seksi yang SELALU menandakan bukan materi belajar (dipakai di semua
+# dokumen). "Soal ..." sengaja TIDAK ada di sini: "Soal Cerita" handbook
+# numerik adalah materi teknik (tanpa opsi), bukan bank soal.
+TITLE_DROP_RES = [
+    re.compile(r"^pembahasan\b", re.I),        # "Pembahasan Pancasila ..."
+    re.compile(r"^pengantar\b", re.I),         # pengantar handbook + hitung cepat
+    re.compile(r"mini drill", re.I),           # "Bagian VIII: Mini Drill"
+    re.compile(r"mini latihan", re.I),         # "Mini Latihan Konseptual"
+    re.compile(r"^lampiran:", re.I),           # lampiran soal + kunci jawaban
+    re.compile(r"^latihan\b", re.I),           # "Latihan: Volume Bangun Ruang"
+    re.compile(r"^kata pengantar\b", re.I),
+    re.compile(r"^daftar isi\b", re.I),
+]
+
+# Seksi yang dihapus utuh karena judulnya tidak menandai isi soal
+# (judul hasil OCR kacau / seksi duplikat). Alasan per seksi ada di laporan audit.
+SECTION_DROP = {
+    ("tiu-modul", "tiu-modul-s11"),            # "D. KamarTidur": 100% soal analogi
+    ("tkp-modul", "tkp-modul-s16"),            # "A. Diam saja karena jika saya": 1 soal utuh
+    ("tkp-cheat-sheet", "tkp-cheat-sheet-s07"),  # duplikat twk-cheat-sheet-s06
+}
+
+# Bang Arya adalah BUKU SOAL: hanya 6 seksi tabel/rangkuman yang diselamatkan
+# (judul baru = isi tabelnya, tanpa atribusi). Semua seksi lain dibuang,
+# termasuk bacaan cerita Bahasa Indonesia (stimulus soal, bukan materi).
+BANG_ARYA_SALVAGE = {
+    "twk-bang-arya-s02": "Poin Setiap Sila Pancasila",
+    "twk-bang-arya-s08": "Timeline UUD 1945",
+    "twk-bang-arya-s17": "Sembilan Nilai Integritas",
+    "twk-bang-arya-s25": "Penggunaan Huruf Kapital",
+    "twk-bang-arya-s32": "Prinsip Nasionalisme dan Bhinneka Tunggal Ika",
+    "twk-bang-arya-s37": "NKRI dalam UUD 1945",
+}
+
+def clean_bang_arya_content(t):
+    """Bersihkan artefak ekstraksi PDF Bang Arya pada seksi yang diselamatkan:
+    watermark atribusi, kata/frasa yang terekstrak berulang, nomor liar."""
+    t = t.replace("Kang Arya CPNS", "").replace("Kang Arya", "")
+    # kata berulang menempel ("PRINSIPPRINSIP", "patriotismepatriotisme")
+    for _ in range(3):
+        t2 = re.sub(r"\b([A-Za-z]{4,})\1+\b", r"\1", t)
+        if t2 == t:
+            break
+        t = t2
+    # frasa berulang bersebelahan, 2-4 kata, koma ditoleransi
+    # ("Sikap dan tindakanSikap dan tindakan", "Cara berfikir, berbuatCara ...")
+    _phrase_dup = re.compile(r"\b([A-Za-z]+[,.]?(?:\s+[A-Za-z]+[,.]?){1,3}?)\s*?\1\b", re.I)
+    for _ in range(3):
+        t2 = _phrase_dup.sub(r"\1", t)
+        if t2 == t:
+            break
+        t = t2
+    # nomor halaman liar di awal seksi ("5555 PRINSIP ...")
+    m = re.match(r"^(\d{4,})\s+", t)
+    if m and not (1900 <= int(m.group(1)) <= 2100):
+        t = t[m.end():]
+    return re.sub(r"[ \t]{2,}", " ", t)
+
+def filter_doc_sections(doc):
+    """Terapkan kebijakan isi Belajar pada satu dokumen yang sudah dibangun.
+    ID seksi dipertahankan (tidak dinomori ulang) supaya progres baca lama
+    tetap cocok. Kembalikan (n_hapus, n_strip)."""
+    doc_id = doc["id"]
+    is_bang_arya = (doc_id == "twk-bang-arya")
+    kept = []
+    n_drop = n_strip = 0
+    for sec in doc["sections"]:
+        sid, judul = sec["id"], sec["judul"]
+        if is_bang_arya:
+            if sid not in BANG_ARYA_SALVAGE:
+                n_drop += 1
+                continue
+            sec["judul"] = BANG_ARYA_SALVAGE[sid]
+        elif (doc_id, sid) in SECTION_DROP:
+            n_drop += 1
+            continue
+        elif any(rx.search(judul) for rx in TITLE_DROP_RES):
+            n_drop += 1
+            continue
+        new_konten, ndropped, _nzones = strip_question_zones(
+            sec["konten"], lowercase_options=is_bang_arya)
+        if is_bang_arya:
+            new_konten = clean_bang_arya_content(new_konten)
+        if ndropped:
+            n_strip += 1
+        sec["konten"] = new_konten
+        sec["kata"] = len(new_konten.split())
+        # sisa strip < 20 kata = fragmen, bukan materi: buang seksi utuh.
+        # (Hanya untuk seksi yang di-strip: seksi kecil yang tidak di-strip,
+        # mis. intro 19 kata "Ringkas 10: Pemahaman Bacaan", dipertahankan.)
+        if ndropped and sec["kata"] < 20:
+            n_drop += 1
+            continue
+        kept.append(sec)
+    doc["sections"] = kept
+    doc["kata"] = sum(s["kata"] for s in kept)
+    if n_drop or n_strip:
+        print(f"  filter {doc_id}: hapus {n_drop} seksi, strip {n_strip} seksi "
+              f"-> {len(kept)} seksi, {doc['kata']} kata")
+    return n_drop, n_strip
 
 # ---------------------------------------------------------------- main
 def main():
@@ -1553,6 +2155,11 @@ def main():
         docs.append(doc)
         print(f"{doc['id']}: {len(doc['sections'])} sections, {doc['kata']} kata")
 
+    # filter isi: buang seksi soal/pengantar/duplikat, strip zona soal dari
+    # seksi campuran (audit 2026-11-15). Berjalan setelah semua ID ditetapkan.
+    for doc in docs:
+        filter_doc_sections(doc)
+
     order = ["TWK", "TIU", "TKP"]
     docs.sort(key=lambda d: (order.index(d["materi"]), d["id"]))
     for doc in docs:
@@ -1562,7 +2169,7 @@ def main():
         print("tulis", path, os.path.getsize(path), "bytes")
 
     index = {
-        "dibuat": "2026-11-13",
+        "dibuat": "2026-11-15",
         "total_dokumen": len(docs),
         "total_kata": sum(d["kata"] for d in docs),
         "total_halaman": sum(d["halaman"] for d in docs),

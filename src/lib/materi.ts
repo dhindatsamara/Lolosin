@@ -297,7 +297,7 @@ const GROUP_DEFS: GroupDef[] = [
     id: 'tkp-ringkasan',
     judul: 'Ringkasan Materi TKP',
     deskripsi:
-      'Ringkasan materi TKP per aspek: integritas, adaptasi, pengendalian diri, pelayanan, jejaring kerja, sosial budaya, dan TIK, dengan contoh soal situasional.',
+      'Ringkasan materi TKP per aspek: integritas, adaptasi, pengendalian diri, pelayanan, jejaring kerja, sosial budaya, dan TIK.',
     docIds: ['tkp-modul', 'tkp-rangkuman-temenasn'],
   },
 ]

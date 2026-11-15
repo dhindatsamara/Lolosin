@@ -2,27 +2,19 @@
   "id": "tiu-handbook-numerik",
   "judul": "Handbook TIU SKD CPNS Seri 2 | Kemampuan Numerik",
   "materi": "TIU",
-  "deskripsi": "Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, hitung cepat, dan mini drill.",
+  "deskripsi": "Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, dan hitung cepat.",
   "sumber": "bahan_belajar/1. Bahan Belajar/Handbook_TIU_SKD_CPNS_Seri2_Kemampuan_Numerik_Landscape-1-1.pdf",
   "halaman": 44,
-  "kata": 4633,
+  "kata": 3898,
   "subtopik": [
     "Berhitung",
     "Deret angka",
     "Perbandingan kuantitatif",
     "Soal cerita",
     "Hitung cepat",
-    "Jebakan TIU numerik",
-    "Mini drill"
+    "Jebakan TIU numerik"
   ],
   "sections": [
-    {
-      "id": "tiu-handbook-numerik-s01",
-      "subtopik": "Berhitung",
-      "judul": "Pengantar: Catatan Acuan",
-      "konten": "Catatan Acuan Handbook ini disusun berdasarkan struktur materi Tes Intelegensia Umum (TIU) yang digunakan dalam SKD CPNS, dengan fokus pada kemampuan numerik. Dalam formulasi resmi TIU, kemampuan numerik mencakup:\n\n1. Berhitung mengukur kemampuan hitung sederhana.\n\n2. Deret angka mengukur kemampuan melihat pola hubungan angka.\n\n3. Perbandingan kuantitatif mengukur kemampuan menarik kesimpulan berdasarkan dua data kuantitatif.\n\n4. Soal cerita mengukur kemampuan melakukan analisis kuantitatif terhadap informasi yang diberikan.\n\nSecara regulasi umum, PermenPANRB Nomor 6 Tahun 2024 tentang Pengadaan Pegawai ASN masih berstatus berlaku dan mencabut PermenPANRB Nomor 27 Tahun 2021. Untuk SKD CPNS Tahun Anggaran 2024, KepmenPANRB Nomor 321 Tahun 2024 juga masih tercantum berstatus berlaku di JDIH Kementerian PANRB. Keputusan tersebut secara khusus mengatur nilai ambang batas SKD pengadaan PNS Tahun Anggaran 2024. PA DA SKDCPNS 2 0 24 35 soal × 5 = 175 · benar = 5 · salah/kosong = 0 Ambang batas umum 80 Nilai maks. 1750 Beberapa kategori kebutuhan khusus mempunyai ketentuan yang berbeda. Ketentuan jumlah soal, nilai ambang batas, komposisi, dan teknis seleksi pada pengadaan CPNS berikutnya harus mengikuti regulasi resmi yang berlaku pada tahun seleksi. Ketentuan Sekolah Kedinasan 2026 juga harus dibedakan dari CPNS umum. KepmenPANRB Nomor 406 Tahun 2026 secara khusus mengatur SKD penerimaan peserta didik Sekolah Kedinasan Tahun 2026. TIU terdiri atas 35 soal; nilai maksimum TIU 175; jawaban benar bernilai 5; jawaban salah atau tidak dijawab bernilai 0; nilai ambang batas TIU untuk kategori umum adalah 80. ⚠ PENTING",
-      "kata": 238
-    },
     {
       "id": "tiu-handbook-numerik-s02",
       "subtopik": "Jebakan TIU numerik",
@@ -62,8 +54,8 @@
       "id": "tiu-handbook-numerik-s07",
       "subtopik": "Hitung cepat",
       "judul": "Bagian VI: Hitung Cepat",
-      "konten": "Hitung Cepat Kuadrat Bilangan Berakhiran 5 Untuk bilangan: 10a + 5 berlaku: (10a + 5)² = 100a(a + 1) + 25 CON TO H : 8 5 ² angka depan 5 72 8 × 9 selalu 25 Ambil angka depan 8: 8(8 + 1) = 8(9) = 72 tempelkan 25: 7225 Perkalian dengan 11 Untuk bilangan dua digit: ab = 10a + b Jika a + b < 10, maka digit hasil dapat dibentuk sebagai: CON TO H : 3 2 × 1 1\n\n3+2\n\n3, 5, 2 → 352 JIKAJUMLAHDIGIT ≥ 1 0 : 7 8 × 1 1\n\n7+1 carry +1 ↙\n\nJumlah: 7 + 8 = 15. Tulis 5 pada posisi tengah dan lakukan carry 1: 7 + 1, 5, 8 → 858 Notasi ab digunakan agar tidak tertukar dengan ab = a × b. 43 44 Perkalian 5, 25, dan 125 KALI 5 n × 5 = n 2 × 10 KALI 2 5 Karena 25 = 100 4 , maka: n × 25 = n × 100 48 × 25 = 12 × 100 = 1200 KALI 1 2 5 Karena 125 = 1000 8 , maka: n × 125 = n × 1000 32 × 125 = 4 × 1000 = 4000 Rumus-rumus tersebut tetap benar untuk bilangan yang tidak habis dibagi 2, 4, atau 8, tetapi mungkin tidak lagi menjadi metode hitung tercepat karena menghasilkan pecahan sementara. Dekat dengan Bilangan Bulat Contoh 99 × 47 = 4700 − 47 = 4653 Contoh: 1002 × 18 = 18.000 + 36 = 18.036 Aproksimasi Paling berguna untuk: Contoh: 19,8 × 50,2 Pendekatan: 20 × 50 ≈ 1000 Nilai tepatnya: 19,8(50,2) = 993,96 Jika pilihan: A. 96 · B. 204 · C. 512 · D. 994 · E. 1.850, maka D dapat dikenali dengan cepat. ≈ 1000\n\nA. 96\n\nB. 204\n\nC. 512\n\nD. 994\n\nE. 1.850 Jangan mengandalkan aproksimasi jika pilihan jawaban sangat berdekatan.\n\n45 46 mengecek kewajaran hasil; mengeliminasi pilihan yang jauh; memperkirakan orde besaran.",
-      "kata": 331
+      "konten": "Hitung Cepat Kuadrat Bilangan Berakhiran 5 Untuk bilangan: 10a + 5 berlaku: (10a + 5)² = 100a(a + 1) + 25 CON TO H : 8 5 ² angka depan 5 72 8 × 9 selalu 25 Ambil angka depan 8: 8(8 + 1) = 8(9) = 72 tempelkan 25: 7225 Perkalian dengan 11 Untuk bilangan dua digit: ab = 10a + b Jika a + b < 10, maka digit hasil dapat dibentuk sebagai: CON TO H : 3 2 × 1 1\n\n3+2\n\n3, 5, 2 → 352 JIKAJUMLAHDIGIT ≥ 1 0 : 7 8 × 1 1\n\n7+1 carry +1 ↙\n\nJumlah: 7 + 8 = 15. Tulis 5 pada posisi tengah dan lakukan carry 1: 7 + 1, 5, 8 → 858 Notasi ab digunakan agar tidak tertukar dengan ab = a × b. 43 44 Perkalian 5, 25, dan 125 KALI 5 n × 5 = n 2 × 10 KALI 2 5 Karena 25 = 100 4 , maka: n × 25 = n × 100 48 × 25 = 12 × 100 = 1200 KALI 1 2 5 Karena 125 = 1000 8 , maka: n × 125 = n × 1000 32 × 125 = 4 × 1000 = 4000 Rumus-rumus tersebut tetap benar untuk bilangan yang tidak habis dibagi 2, 4, atau 8, tetapi mungkin tidak lagi menjadi metode hitung tercepat karena menghasilkan pecahan sementara. Dekat dengan Bilangan Bulat Contoh 99 × 47 = 4700 − 47 = 4653 Contoh: 1002 × 18 = 18.000 + 36 = 18.036 Aproksimasi Paling berguna untuk: Contoh: 19,8 × 50,2 Pendekatan: 20 × 50 ≈ 1000 Nilai tepatnya: 19,8(50,2) = 993,96 Jika pilihan: A. 96 · B. 204 · C. 512 · D. 994 · E. 1.850, maka D dapat dikenali dengan cepat. ≈ 1000",
+      "kata": 301
     },
     {
       "id": "tiu-handbook-numerik-s08",
@@ -71,13 +63,6 @@
       "judul": "Bagian VII: Jebakan TIU Numerik",
       "konten": "Jebakan TIU Numerik Berhitung Deret Perb. Kuantitatif Soal Cerita Umum Jebakan yang Wajib Dikenali 01 BERHITUNG Salah urutan operasi. 02 BERHITUNG Salah membaca tanda negatif. 03 BERHITUNG Menjumlahkan diskon bertingkat. BERHITUNG Menganggap kenaikan dan penurunan persentase sama saling menghapus. SOAL CERITA Menggunakan rata-rata sederhana untuk kecepatan rata-rata. 06 SOAL CERITA Menganggap semua hubungan sebagai perbandingan senilai. SOAL CERITA Tidak menyamakan satuan. 08 PERB. KUANTITATIF Mengasumsikan variabel positif tanpa informasi. DERET Memaksakan pola deret. DERET Mengabaikan pola ganjil–genap. 11 UMUM Menghitung bilangan besar ketika sebenarnya dapat disederhanakan. UMUM Menggunakan shortcut tanpa memeriksa syarat penggunaannya. BERHITUNG Salah menentukan basis persentase. 14 PERB. KUANTITATIF Menggunakan rasio P/Q ketika tanda penyebut tidak diketahui. DERET Terlalu lama mempertahankan satu hipotesis pola yang gagal. Cek 5 Detik Sebelum memilih jawaban, tanyakan: Apakah satuannya benar? ± Apakah tandanya benar? Apakah basis persentasenya benar? Apakah asumsi yang saya gunakan diberikan soal? Apakah pola berlaku untuk seluruh suku? ✔ Apakah hasilnya masuk akal? CON TO H 5 pekerja membutuhkan 12 hari. Jika produktivitas setiap pekerja sama dan jumlah pekerja menjadi 10, waktu penyelesaian seharusnya menurun, bukan meningkat. pekerja ↑ (5 → 10) hari harus ↓ (< 12) 24 hari ✕ Tanpa menghitung pun jawaban 24 hari dapat langsung dicurigai.",
       "kata": 200
-    },
-    {
-      "id": "tiu-handbook-numerik-s09",
-      "subtopik": "Mini drill",
-      "judul": "Bagian VIII: Mini Drill",
-      "konten": "Mini Drill Soal 1 BERHITUNG 75% × 48 + 3 8 × 64 = ...\n\nA. 48 B. 54\n\nC. 60 D. 66\n\nE. 72 PEMBAHASAN 75% = 3 4 3 4 (48) = 36 dan:\n\nMaka: 36 + 24 = 60 ✓ Jawaban: C Soal 2 ALJABAR CEPAT 63² − 37² = ...\n\nA. 2.200 B. 2.400\n\nC. 2.500 D. 2.600\n\nE. 2.800 PEMBAHASAN Gunakan:\n\na² − b² = (a + b)(a − b) = (100)(26) = 2600 ✓ Jawaban: D 63 + 37 = 100 · 63 − 37 = 26 Soal 3 SELISIH BERTINGKAT 6, 11, 18, 27, 38, …\n\nA. 47 B. 49\n\nC. 50 D. 51\n\nE. 53 PEMBAHASAN Selisih:\n\n5, 7, 9, 11 Selisih berikutnya: Maka: 38 + 13 = 51 ✓ Jawaban: D Soal 4 OPERASI PROGRESIF 3, 7, 23, 95, 479, …\n\nA. 2.869 B. 2.874\n\nC. 2.879 D. 2.884\n\nE. 2.889 PEMBAHASAN Perhatikan:\n\n3 × 2 + 1 = 7 7 × 3 + 2 = 23 23 × 4 + 3 = 95 95 × 5 + 4 = 479 Maka: 479 × 6 + 5 = 2874 + 5 = 2879 ✓ Jawaban: C Soal 5 PERBANDINGAN KUANTITATIF Diketahui: x > 2 P = x² + 1 Q = 3x Bandingkan P dan Q. PEMBAHASAN P − Q = x² − 3x + 1 Jika x = 2,5 maka: P − Q = 6,25 − 7,5 + 1 = −0,25 sehingga P < Q Namun jika x = 4 maka: P − Q = 16 − 12 + 1 = 5 sehingga P > Q x=2,5 → −0,25 x=4 → 5 P − Q = 0 P − Q = x² − 3× + 1 (untuk x > 2) Karena hasilnya dapat berbeda: Hubungan tidak dapat ditentukan Soal 6 KERJA BERSAMA A dapat menyelesaikan pekerjaan dalam 12 hari dan B dalam 18 hari. Setelah keduanya bekerja bersama selama 4 hari, berapa bagian pekerjaan yang masih tersisa? PEMBAHASAN Laju bersama: 12 + 1 18 = 3 36 + 2 36 = 5 36 Dalam 4 hari: 4( 5 36 ) = 20 36 = 5 9 Sisa: 1 − 5 9 = 4 9 sisa 4/9 Soal 7 KECEPATAN RATA-RATA Sebuah kendaraan menempuh separuh jarak dengan kecepatan 40 km/jam dan separuh lainnya dengan kecepatan 60 km/jam. Jika total jarak 120 km: PEMBAHASAN t = 60 40 + 60 60 = 1,5 + 1 = 2,5 Kecepatan rata-rata: 2,5 = 48 km/jam 60 km @40 · 1,5 j 60 km @60 · 1 j Lebar batang = waktu tempuh Soal 8 PERUBAHAN PERSENTASE Harga suatu barang dinaikkan 25%, kemudian diberikan diskon 20%. PEMBAHASAN Jika harga awal H: Maka: Harga akhir sama dengan harga awal 1,25H Perhatikan: kenaikan 25% kemudian penurunan 20% berbeda dari kenaikan 20% kemudian penurunan 20%.",
-      "kata": 467
     },
     {
       "id": "tiu-handbook-numerik-s10",
@@ -108,5 +93,5 @@
       "kata": 50
     }
   ],
-  "catatan_kualitas": "PDF berteks landscape, ekstraksi baik. 8 soal Mini Drill dengan jawaban + pembahasan, plus contoh-contoh dalam materi."
+  "catatan_kualitas": "PDF berteks landscape, ekstraksi baik."
 }

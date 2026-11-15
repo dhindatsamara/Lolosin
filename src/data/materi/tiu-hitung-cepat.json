@@ -5,7 +5,7 @@
   "deskripsi": "Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
   "sumber": "skd_cpns_2/skd cpns 2/tiu-hitung-cepat.pdf",
   "halaman": 10,
-  "kata": 1908,
+  "kata": 1867,
   "subtopik": [
     "Jenis bilangan (ABCSIROPP)",
     "Sifat-sifat bilangan",
@@ -13,13 +13,6 @@
     "Teknik hitung cepat"
   ],
   "sections": [
-    {
-      "id": "tiu-hitung-cepat-s01",
-      "subtopik": "Jenis bilangan (ABCSIROPP)",
-      "judul": "Pengantar",
-      "konten": "HITUNGCEPAT jbeberapamenjadidibagiBilangan enis Untuk. kitabilangan,jenismengingatmemudahkan dapat akronimdenganmengingatnya ABCSIROPP yang merupakan singkatan dari Sifat bilangan Irasional, Rasional, Prima, Pecahan, Asli, Bulat, Cacah. Ada beberapa bentuk pecahan, yaitu pecahan biasa, campuran, desimal, masingPerbedaanpersen.dan - bilanganjenismasing tersebut dapat diamati dalam tabel berikut: Jenis Bilangan",
-      "kata": 41
-    },
     {
       "id": "tiu-hitung-cepat-s02",
       "subtopik": "Jenis bilangan (ABCSIROPP)",

@@ -1,17 +1,17 @@
 {
-  "dibuat": "2026-11-13",
+  "dibuat": "2026-11-15",
   "total_dokumen": 17,
-  "total_kata": 124085,
+  "total_kata": 68287,
   "total_halaman": 591,
   "dokumen": [
     {
       "id": "twk-bang-arya",
       "file": "twk-bang-arya.json",
-      "judul": "Mastery TWK 2024 | Kang Arya (TWK Bang Arya)",
+      "judul": "Rangkuman Tabel TWK",
       "materi": "TWK",
-      "deskripsi": "Buku soal TWK + pembahasan per topik: Pancasila, Bela Negara, Integritas, Bahasa Indonesia, Nasionalisme & Bhinneka Tunggal Ika, dan Pilar Negara (~300 soal).",
+      "deskripsi": "Rangkuman tabel TWK: poin setiap sila Pancasila, timeline UUD 1945, sembilan nilai integritas, penggunaan huruf kapital, prinsip nasionalisme, dan NKRI dalam UUD 1945.",
       "halaman": 121,
-      "kata": 39927,
+      "kata": 817,
       "subtopik": [
         "Pancasila",
         "Bela Negara",
@@ -20,7 +20,7 @@
         "Nasionalisme dan Bhinneka Tunggal Ika",
         "Bahasa Indonesia"
       ],
-      "jumlahSections": 43
+      "jumlahSections": 6
     },
     {
       "id": "twk-cheat-sheet",
@@ -29,7 +29,7 @@
       "materi": "TWK",
       "deskripsi": "Kartu ringkas TWK: poin penting, kata kunci, dan tips menjawab soal per tema.",
       "halaman": 10,
-      "kata": 1423,
+      "kata": 1403,
       "subtopik": [
         "Nasionalisme",
         "Pilar Negara",
@@ -49,7 +49,7 @@
       "materi": "TWK",
       "deskripsi": "Infografis pembeda empat konsep yang sering tertukar: bela negara, nasionalisme, patriotisme, dan cinta tanah air.",
       "halaman": 2,
-      "kata": 269,
+      "kata": 267,
       "subtopik": [
         "Bela Negara",
         "Patriotisme",
@@ -129,9 +129,9 @@
       "file": "tiu-analogi-verbal.json",
       "judul": "Materi Analogi Verbal TIU | TemanASN",
       "materi": "TIU",
-      "deskripsi": "Materi analogi verbal: definisi, bentuk-bentuk soal, dan contoh analogi beserta pembahasan.",
+      "deskripsi": "Materi analogi verbal: definisi, bentuk-bentuk analogi, dan contoh analogi profesi dan tempat kerja.",
       "halaman": 4,
-      "kata": 871,
+      "kata": 561,
       "subtopik": [
         "Definisi analogi verbal",
         "Bentuk-bentuk soal analogi (dua kata, kalimat)",
@@ -146,55 +146,52 @@
       "materi": "TIU",
       "deskripsi": "Handbook kemampuan figural: analogi gambar, ketidaksamaan, serial gambar, dan strategi mengerjakan soal gambar.",
       "halaman": 57,
-      "kata": 4927,
+      "kata": 3827,
       "subtopik": [
         "Analogi gambar",
         "Ketidaksamaan",
         "Serial gambar",
         "Strategi mengerjakan figural",
         "Jebakan figural",
-        "Formula pemeriksaan cepat",
-        "Mini latihan konseptual"
+        "Formula pemeriksaan cepat"
       ],
-      "jumlahSections": 17
+      "jumlahSections": 13
     },
     {
       "id": "tiu-handbook-numerik",
       "file": "tiu-handbook-numerik.json",
       "judul": "Handbook TIU SKD CPNS Seri 2 | Kemampuan Numerik",
       "materi": "TIU",
-      "deskripsi": "Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, hitung cepat, dan mini drill.",
+      "deskripsi": "Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, dan hitung cepat.",
       "halaman": 44,
-      "kata": 4633,
+      "kata": 3898,
       "subtopik": [
         "Berhitung",
         "Deret angka",
         "Perbandingan kuantitatif",
         "Soal cerita",
         "Hitung cepat",
-        "Jebakan TIU numerik",
-        "Mini drill"
+        "Jebakan TIU numerik"
       ],
-      "jumlahSections": 13
+      "jumlahSections": 11
     },
     {
       "id": "tiu-handbook-verbal",
       "file": "tiu-handbook-verbal.json",
       "judul": "Handbook TIU SKD CPNS Seri 1 | Kemampuan Verbal",
       "materi": "TIU",
-      "deskripsi": "Handbook kemampuan verbal: analogi, silogisme, penalaran analitis, teknik eliminasi, error pattern, dan mini drill.",
+      "deskripsi": "Handbook kemampuan verbal: analogi, silogisme, penalaran analitis, teknik eliminasi, dan error pattern.",
       "halaman": 46,
-      "kata": 4989,
+      "kata": 3710,
       "subtopik": [
         "Analogi",
         "Silogisme",
         "Penalaran analitis",
         "Teknik eliminasi",
         "Error pattern",
-        "Sistem cepat verbal",
-        "Mini drill"
+        "Sistem cepat verbal"
       ],
-      "jumlahSections": 13
+      "jumlahSections": 11
     },
     {
       "id": "tiu-hitung-cepat",
@@ -203,23 +200,23 @@
       "materi": "TIU",
       "deskripsi": "Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
       "halaman": 10,
-      "kata": 1908,
+      "kata": 1867,
       "subtopik": [
         "Jenis bilangan (ABCSIROPP)",
         "Sifat-sifat bilangan",
         "Pecahan",
         "Teknik hitung cepat"
       ],
-      "jumlahSections": 9
+      "jumlahSections": 8
     },
     {
       "id": "tiu-modul",
       "file": "tiu-modul.json",
       "judul": "Ringkasan Materi TIU CPNS (Modul TIU)",
       "materi": "TIU",
-      "deskripsi": "Ringkasan materi TIU: penalaran verbal, analitis, logis, silogisme, aritmetika, deret angka, dan hitung cepat, lengkap dengan contoh soal dan pembahasan.",
+      "deskripsi": "Ringkasan materi TIU: penalaran verbal, analitis, logis, silogisme, aritmetika, deret angka, dan hitung cepat.",
       "halaman": 98,
-      "kata": 18481,
+      "kata": 16360,
       "subtopik": [
         "Penalaran verbal: sinonim, antonim, analogi",
         "Penalaran analitis",
@@ -230,23 +227,22 @@
         "Kecepatan berhitung",
         "Pecahan dan perbandingan"
       ],
-      "jumlahSections": 59
+      "jumlahSections": 58
     },
     {
       "id": "tiu-tabel-pangkat",
       "file": "tiu-tabel-pangkat.json",
       "judul": "Tabel Bilangan Pangkat 2, 3, dan 4 (1–100)",
       "materi": "TIU",
-      "deskripsi": "Tabel pangkat 2, 3, dan 4 untuk bilangan 1–100 (dihitung ulang secara programatis, bukan dari OCR) plus 10 soal latihan volume bangun ruang.",
+      "deskripsi": "Tabel pangkat 2, 3, dan 4 untuk bilangan 1–100 (dihitung ulang secara programatis, bukan dari OCR).",
       "halaman": 5,
-      "kata": 396,
+      "kata": 224,
       "subtopik": [
         "Tabel pangkat 2 (1–100)",
         "Tabel pangkat 3 (1–100)",
-        "Tabel pangkat 4 (1–100)",
-        "Volume bangun ruang (soal latihan)"
+        "Tabel pangkat 4 (1–100)"
       ],
-      "jumlahSections": 5
+      "jumlahSections": 4
     },
     {
       "id": "tkp-cheat-sheet",
@@ -255,7 +251,7 @@
       "materi": "TKP",
       "deskripsi": "Kartu ringkas TKP: kata kunci dan ciri soal per aspek (profesionalisme, pelayanan publik, jejaring kerja, sosial budaya, TIK, anti radikalisme).",
       "halaman": 10,
-      "kata": 2220,
+      "kata": 2064,
       "subtopik": [
         "Profesionalisme",
         "Pelayanan publik",
@@ -264,7 +260,7 @@
         "Teknologi informasi dan komunikasi",
         "Anti radikalisme"
       ],
-      "jumlahSections": 7
+      "jumlahSections": 6
     },
     {
       "id": "tkp-kartu-sakti",
@@ -292,9 +288,9 @@
       "file": "tkp-modul.json",
       "judul": "Ringkasan Materi TKP CPNS (Modul TKP)",
       "materi": "TKP",
-      "deskripsi": "Ringkasan materi TKP per aspek: integritas, adaptasi, pengendalian diri, semangat berprestasi, pelayanan, dan lainnya, dengan contoh soal situasional dan skor.",
+      "deskripsi": "Ringkasan materi TKP per aspek: integritas, adaptasi, pengendalian diri, semangat berprestasi, pelayanan, dan lainnya.",
       "halaman": 60,
-      "kata": 13926,
+      "kata": 3174,
       "subtopik": [
         "Integritas",
         "Kejujuran",
@@ -309,7 +305,7 @@
         "Kepedulian lingkungan",
         "Efisiensi kerja"
       ],
-      "jumlahSections": 19
+      "jumlahSections": 18
     },
     {
       "id": "tkp-rangkuman-temenasn",
