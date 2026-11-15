@@ -253,7 +253,7 @@ export function Layout() {
           body, dan footer terlihat jelas bedanya. */}
       <footer className="border-t-4 border-accent-500 bg-primary-900 pb-24 text-white lg:pb-8">
         <div className="mx-auto w-full max-w-7xl px-4 pt-8 lg:px-8">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-start sm:gap-16">
             <div className="max-w-sm">
               <span className="flex items-center gap-2.5">
                 <LogoMark />
