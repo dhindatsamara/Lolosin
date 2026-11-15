@@ -10,7 +10,9 @@
  * - 14 hari: mahkota kecil
  * - 30 hari: jubah wisuda + mahkota
  */
+import { useSyncExternalStore } from 'react'
 import { MASCOT_NAME } from './mascot'
+import { getCurrentNamespace, scopedKey } from './storage'
 
 /** Aksesori yang bisa dipakai maskot (dirender Mascot lewat prop outfit). */
 export type PetOutfit = 'none' | 'syal' | 'kacamata' | 'mahkota' | 'jubah'
@@ -98,4 +100,108 @@ export function getPetStage(streak: number): PetProgress {
     progress: span > 0 ? Math.min(1, Math.max(0, done / span)) : 1,
     remaining: next.minStreak - safe,
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Pilihan outfit (picker "Gaya Osi", v2.3.2)                          */
+/* ------------------------------------------------------------------ */
+
+/** Key dasar pilihan outfit (ditambah namespace user lewat scopedKey). */
+export const PET_OUTFIT_KEY = 'lolosin:pet-outfit'
+
+/** Label pendek tiap outfit untuk picker. */
+export const OUTFIT_LABELS: Record<PetOutfit, string> = {
+  none: 'Polos',
+  syal: 'Syal',
+  kacamata: 'Kacamata',
+  mahkota: 'Mahkota',
+  jubah: 'Jubah',
+}
+
+const OUTFIT_VALUES: PetOutfit[] = [
+  'none',
+  'syal',
+  'kacamata',
+  'mahkota',
+  'jubah',
+]
+
+function isPetOutfit(value: unknown): value is PetOutfit {
+  return (
+    typeof value === 'string' &&
+    (OUTFIT_VALUES as string[]).includes(value)
+  )
+}
+
+/** Outfit yang sudah terbuka pada streak tertentu. */
+export function getUnlockedOutfits(streak: number): PetOutfit[] {
+  const safe = Math.max(0, Math.floor(streak))
+  return PET_STAGES.filter((s) => safe >= s.minStreak).map(
+    (s) => s.outfit,
+  )
+}
+
+/**
+ * Outfit yang dirender: pilihan user bila masih terbuka, kalau tidak
+ * (mis. streak putus lalu outfitnya terkunci lagi) jatuh ke outfit
+ * tertinggi yang terbuka. Pilihan null berarti "pakai default".
+ */
+export function resolveOutfit(
+  streak: number,
+  chosen: PetOutfit | null,
+): PetOutfit {
+  const unlocked = getUnlockedOutfits(streak)
+  if (chosen !== null && unlocked.includes(chosen)) return chosen
+  return unlocked[unlocked.length - 1] ?? 'none'
+}
+
+const outfitListeners = new Set<() => void>()
+let cachedOutfitNamespace: string | null = null
+let cachedOutfit: PetOutfit | null = null
+
+function loadChosenOutfit(): PetOutfit | null {
+  try {
+    const raw = localStorage.getItem(scopedKey(PET_OUTFIT_KEY))
+    return isPetOutfit(raw) ? raw : null
+  } catch {
+    return null
+  }
+}
+
+/** Baca pilihan outfit tersimpan (null = belum pernah memilih). */
+export function getChosenOutfit(): PetOutfit | null {
+  const namespace = getCurrentNamespace()
+  if (cachedOutfitNamespace === namespace) return cachedOutfit
+  cachedOutfitNamespace = namespace
+  cachedOutfit = loadChosenOutfit()
+  return cachedOutfit
+}
+
+function subscribeChosenOutfit(listener: () => void): () => void {
+  outfitListeners.add(listener)
+  return () => {
+    outfitListeners.delete(listener)
+  }
+}
+
+/** Hook React: pilihan outfit yang reaktif terhadap perubahan. */
+export function useChosenOutfit(): PetOutfit | null {
+  return useSyncExternalStore(
+    subscribeChosenOutfit,
+    getChosenOutfit,
+    getChosenOutfit,
+  )
+}
+
+/** Simpan pilihan outfit, lalu beri tahu semua subscriber. */
+export function setChosenOutfit(outfit: PetOutfit): void {
+  try {
+    localStorage.setItem(scopedKey(PET_OUTFIT_KEY), outfit)
+  } catch {
+    // Gagal simpan (penyimpanan penuh atau tidak tersedia): pilihan
+    // tetap tampil sampai reload, jangan crash.
+  }
+  cachedOutfit = outfit
+  cachedOutfitNamespace = getCurrentNamespace()
+  outfitListeners.forEach((listener) => listener())
 }

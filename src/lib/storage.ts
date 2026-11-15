@@ -117,6 +117,7 @@ const PER_USER_BASE_KEYS = [
   'lolosin:kuis-kilat-best',
   'lolosin:kartu-kilat:v1',
   'lolosin:benar-salah-best',
+  'lolosin:pet-outfit',
 ]
 
 /**

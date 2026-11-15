@@ -2,7 +2,10 @@
 """Build konten materi belajar Lolosin dari sumber di ~/workspace/cpns/materi/.
 
 Output: ~/workspace/lolosin/src/data/materi/*.json (+ index.json).
-Hanya membersihkan + menstrukturkan teks sumber; TIDAK menulis ulang isi materi.
+Hanya membersihkan + menstrukturkan teks sumber; TIDAK menulis ulang isi materi
+(kecuali 6 seksi Bang Arya yang dikurasi tulis-ulang pada v2.3.3 karena
+ekstraksi mind-map/tabel aslinya tidak berurutan dan tidak enak dibaca;
+fakta dicek dari konten lama + file riset baru/).
 Jalankan dengan: ~/workspace/venv-whisper/bin/python /tmp/build_materi.py
 (atau ~/workspace/venv-materi/bin/python, dibuat 2026-11-15 khusus pipeline ini).
 
@@ -1409,7 +1412,7 @@ def process_bang_arya():
                sumber="skd_cpns_2/skd cpns 2/TWK BANG ARYA.pdf", halaman=121,
                subtopik=["Pancasila","Bela Negara","Pilar Negara","Integritas",
                          "Nasionalisme dan Bhinneka Tunggal Ika","Bahasa Indonesia"],
-               catatan_kualitas="PDF berteks, kualitas ekstraksi baik. Hanya tabel dan rangkuman yang dipertahankan; soal latihan dan pembahasan dikeluarkan dari Belajar. Sebagian teks tabel terekstrak berulang (artefak layout PDF).")
+               catatan_kualitas="PDF berteks, kualitas ekstraksi baik. Hanya 6 rangkuman yang dipertahankan; soal latihan dan pembahasan dikeluarkan dari Belajar. Isi 6 seksi dikurasi tulis-ulang terstruktur (v2.3.3) karena ekstraksi mind-map/tabel aslinya tidak berurutan.")
     pages = extract_pdf_pages(os.path.join(SRC, cfg["sumber"]))
     assert len(pages) == 121, f"Bang Arya: {len(pages)} halaman, perkiraan 121"
     sections = []
@@ -2328,6 +2331,149 @@ BANG_ARYA_SALVAGE = {
     "twk-bang-arya-s37": "NKRI dalam UUD 1945",
 }
 
+# v2.3.3: TULIS ULANG KURASI 6 seksi Bang Arya. Hasil ekstraksi mind-map/tabel
+# PDF asli tidak bisa dipakai apa adanya: huruf kapital semua, kata kunci
+# menempel tanpa struktur, ada typo ("Indoneisia", "tumbuhm"). Konten di bawah
+# ini adalah sumber kanonis untuk ke-6 seksi (menggantikan hasil ekstraksi di
+# filter_doc_sections); fakta diambil dari konten lama + file riset
+# ~/workspace/cpns/materi/baru/twk-integritas.md dan twk-pilar-negara.md.
+# Format MarkdownLite: heading ##, bullet "- ", daftar bernomor, **tebal**,
+# *miring*, `kode`. Tanpa em-dash, tanpa atribusi, tanpa huruf kapital semua
+# (kecuali akronim). ID seksi TIDAK diubah (progres baca user aman).
+BANG_ARYA_REWRITE = {
+    "twk-bang-arya-s02": '''Setiap sila Pancasila punya nilai intinya masing-masing. Ini ringkasannya:
+
+1. **Ketuhanan Yang Maha Esa**: Nilai ketuhanan. Saling toleransi dan menghormati keyakinan, ketuhanan, dan peribadahan orang lain.
+2. **Kemanusiaan yang adil dan beradab**: Nilai kemanusiaan. Manusia diperlakukan sesuai harkat dan martabatnya, tanpa diskriminasi dan tanpa menghina fisik.
+3. **Persatuan Indonesia**: Nilai persatuan. Keragaman bangsa dan negara justru menyatukan, bukan memecah belah.
+4. **Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan**: Nilai musyawarah mufakat. Tidak boleh memaksakan kehendak, dan keputusan bersama harus dihormati.
+5. **Keadilan sosial bagi seluruh rakyat Indonesia**: Nilai keadilan. Hak pribadi ada batasnya: tidak boleh merugikan orang lain.''',
+
+    "twk-bang-arya-s08": '''## UUD 1945 (18 Agustus 1945 - 27 Desember 1949)
+
+- UUD 1945 disahkan **PPKI** pada 18 Agustus 1945, sehari setelah proklamasi.
+- MPR dan DPR belum terbentuk, jadi kekuasaan legislatif diserahkan kepada **KNIP** (Komite Nasional Indonesia Pusat).
+- 14 November 1945: sistem pemerintahan berubah menjadi **parlementer**. Kabinet bertanggung jawab kepada KNIP, bukan lagi hanya kepada presiden.
+
+## Konstitusi RIS 1949 (27 Desember 1949 - 17 Agustus 1950)
+
+- Sistem pemerintahan **parlementer**.
+- Bentuk negara **federasi**: Republik Indonesia Serikat (RIS), yang terdiri dari negara-negara bagian.
+
+## UUDS 1950 (17 Agustus 1950 - 5 Juli 1959)
+
+- Berlaku sistem **Demokrasi Parlementer**, yang sering disebut **Demokrasi Liberal**.
+- Ciri khas periode ini: kabinet **silih berganti** karena sering jatuh lewat mosi tidak percaya.
+
+## Kembali ke UUD 1945 (5 Juli 1959 - 11 Maret 1966)
+
+- 5 Juli 1959: Presiden Soekarno mengeluarkan **Dekret Presiden** yang memberlakukan kembali UUD 1945 dan membubarkan Konstituante.
+- UUDS 1950 tidak berlaku lagi.
+
+## UUD 1945 masa Orde Baru (11 Maret 1966 - 21 Mei 1998)
+
+- Periode ini dimulai dengan Surat Perintah 11 Maret (**Supersemar**) 1966.
+- Pemerintah menyatakan akan melaksanakan UUD 1945 dan Pancasila secara **murni dan konsekuen**.
+- Dalam praktiknya, kekuasaan presiden sangat besar dan MPR memegang **kekuasaan tertinggi**.
+
+## Masa transisi (21 Mei 1998 - 19 Oktober 1999)
+
+- Presiden Soeharto digantikan oleh **B.J. Habibie**.
+- Periode ini berakhir setelah **Timor Timur** lepas dari NKRI.
+
+## Periode perubahan UUD 1945 (1999 - 2002)
+
+- Tuntutan perubahan muncul karena pasal-pasal UUD 1945 dinilai terlalu **luwes**, sehingga memberi ruang kekuasaan yang sangat besar kepada presiden.
+- UUD 1945 **diamandemen empat kali**: 1999, 2000, 2001, dan 2002. Yang diubah hanya batang tubuhnya; Pembukaan UUD 1945 tidak boleh diubah.''',
+
+    "twk-bang-arya-s17": '''KPK merumuskan sembilan nilai integritas sebagai tameng dari perilaku koruptif. Gampang diingat lewat akronim **JUMAT BERSEPEDA KK**: Jujur, Mandiri, Tanggung jawab, Berani, Sederhana, Peduli, Disiplin, Adil, Kerja Keras.
+
+## Nilai inti
+
+- **Jujur**: Lurus hati, tidak berbohong dan tidak curang. Laporan ditulis sesuai kenyataan, kesalahan diakui, bukan ditutupi.
+- **Disiplin**: Melakukan yang seharusnya pada waktu yang tepat, dan taat pada peraturan yang berlaku.
+- **Tanggung jawab**: Siap menanggung akibat perbuatannya, menuntaskan kewajiban, dan memperbaiki kesalahan.
+
+## Nilai sikap
+
+- **Berani**: Berani berkata benar dan menolak yang salah, tidak gentar menghadapi ancaman atau bahaya. Misalnya berani menolak suap.
+- **Adil**: Memperlakukan semua pihak secara setara, bertindak sesuai kewenangan, dan tidak sewenang-wenang.
+- **Peduli**: Memperhatikan orang lain dan lingkungan sekitar, termasuk berani menegur atau melaporkan penyimpangan.
+
+## Nilai etos kerja
+
+- **Mandiri**: Berusaha dengan kemampuan sendiri, tidak bergantung pada bantuan yang tidak semestinya dan tidak memakai "orang dalam".
+- **Kerja keras**: Gigih dan fokus sampai tujuan tercapai, tidak asal-asalan.
+- **Sederhana**: Hidup sesuai kebutuhan, bersahaja, dan tidak berlebih-lebihan.''',
+
+    "twk-bang-arya-s25": '''## Huruf kapital di awal
+
+- **Awal kalimat.** Contoh: `Kita harus belajar.`
+- **Awal petikan langsung.** Contoh: Kakak bertanya, “Jam berapa acaranya?”
+- **Kata sapaan.** Contoh: `Besok Adik akan pulang.` dan `Siapa nama Anda?`
+
+## Kapital kalau diikuti nama
+
+- **Nama orang.** Contoh: Adam Malik.
+- **Gelar yang diikuti nama orang.** Contoh: Tuanku Imam Bonjol, Imam Syafi’i.
+- **Nama jabatan yang diikuti nama orang, instansi, atau tempat.** Contoh: Presiden Republik Indonesia, Sultan Hamengkubuwono X.
+- **Nama negara atau instansi.** Contoh: Republik Indonesia, Kementerian Luar Negeri.
+- **Nama peristiwa sejarah.** Contoh: Perang Dingin, Perang Dunia II.
+- **Nama diri geografi.** Contoh: Asia Tenggara, Amerika Utara, Danau Singkarak, Sungai Citarum.
+- **Nama bangsa, suku, dan bahasa.** Kata awalnya huruf kecil, namanya kapital. Contoh: bangsa Indonesia, suku Indian, bahasa Inggris.
+- **Nama tahun, bulan, hari, dan hari raya.** Kata awalnya huruf kecil, namanya kapital. Contoh: tahun Hijriah, hari Selasa, bulan Juli, hari raya Idul Fitri.
+- **Gambaran khas daerah atau suku.** Contoh: ukiran Jepara, tari Melayu.
+
+## Tidak kapital
+
+- **Jabatan tanpa nama orang.** Contoh: `Beliau baru saja diangkat menjadi gubernur.`
+- **Peristiwa tanpa nama.** Contoh: `Nuklir dapat menyebabkan terjadinya perang dunia.`
+- **Nama geografi tanpa nama diri.** Contoh: `berenang di laut`, `menyeberangi sungai`.''',
+
+    "twk-bang-arya-s32": '''## Lima prinsip nasionalisme
+
+- **Kesatuan**: Satu dalam wilayah, bangsa, bahasa, ideologi, dan sistem politik.
+- **Kebebasan**: Bebas beragama, berbicara, berpendapat, berkelompok, dan berorganisasi.
+- **Kesamaan**: Sama dalam kedudukan hukum, hak, dan kewajiban.
+- **Kepribadian**: Punya harga diri, rasa bangga, dan rasa sayang terhadap kepribadian dan identitas bangsa.
+- **Prestasi**: Bercita-cita mewujudkan kesejahteraan, kebesaran, dan kemanusiaan bangsanya.
+
+## Istilah yang sering tertukar
+
+- **Nasionalisme**: Paham yang menempatkan kesetiaan tertinggi kepada bangsa dan negara, diwujudkan lewat sikap dan tindakan untuk identitas negara.
+- **Patriotisme**: Sikap rela mengorbankan segalanya demi negara dan bangsa.
+- **Cinta tanah air**: Cara berpikir dan berbuat yang menunjukkan cinta terhadap tanah air.
+- **Bela negara**: Sikap dan tindakan setiap warga sesuai kewajibannya untuk mendukung tujuan negara.
+
+## Bhinneka Tunggal Ika
+
+Bhinneka Tunggal Ika berarti berbeda-beda tetapi tetap satu. Keberagaman tidak membuat bangsa pecah: carilah persamaan di tengah perbedaan supaya tercipta kedamaian.
+
+Prinsipnya adalah *common denominator*: menerima dan terbuka terhadap perbedaan.''',
+
+    "twk-bang-arya-s37": '''## Pasal 1 ayat 1: bentuk negara
+
+"Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik."
+
+Artinya bentuk negara Indonesia adalah **kesatuan**, sedangkan bentuk pemerintahannya adalah **republik**. Kekuasaan tertinggi ada di pemerintah pusat, dan kepala negara adalah presiden yang dipilih.
+
+## Pasal 18 ayat 1: wilayah NKRI
+
+NKRI dibagi atas **daerah provinsi**, dan provinsi dibagi atas **kabupaten dan kota**. Masing-masing punya pemerintahan daerah sendiri.
+
+## Pasal 37 ayat 5: NKRI tidak bisa diubah
+
+Khusus mengenai bentuk Negara Kesatuan Republik Indonesia, **tidak dapat dilakukan perubahan**. Inilah yang membuat NKRI disebut final dan harga mati.
+
+## Alinea keempat Pembukaan UUD 1945
+
+Alinea keempat memuat dasar negara **Pancasila** dan menyatakan bahwa negara Indonesia disusun sebagai Negara Republik Indonesia yang **berkedaulatan rakyat**. Di sinilah ditegaskan bahwa bangsa Indonesia hidup, tumbuh, dan berkembang dalam satu wilayah kesatuan yang saling terintegrasi.
+
+## Pasal 31 ayat 1: hak atas pendidikan
+
+"Setiap warga negara berhak mendapat pendidikan."''',
+}
+
 def clean_bang_arya_content(t):
     """Bersihkan artefak ekstraksi PDF Bang Arya pada seksi yang diselamatkan:
     watermark atribusi, kata/frasa yang terekstrak berulang, nomor liar."""
@@ -2367,6 +2513,15 @@ def filter_doc_sections(doc):
                 n_drop += 1
                 continue
             sec["judul"] = BANG_ARYA_SALVAGE[sid]
+            if sid in BANG_ARYA_REWRITE:
+                # v2.3.3: isi kurasi menggantikan hasil ekstraksi mind-map
+                # (kapital semua, kata kunci tidak berurutan). Lewati strip/
+                # clean: konten kurasi sudah bersih dan bebas soal.
+                sec["konten"] = BANG_ARYA_REWRITE[sid]
+                sec.pop("catatan", None)
+                sec["kata"] = len(sec["konten"].split())
+                kept.append(sec)
+                continue
         elif (doc_id, sid) in SECTION_DROP:
             n_drop += 1
             continue
@@ -2394,6 +2549,40 @@ def filter_doc_sections(doc):
         print(f"  filter {doc_id}: hapus {n_drop} seksi, strip {n_strip} seksi "
               f"-> {len(kept)} seksi, {doc['kata']} kata")
     return n_drop, n_strip
+
+def verify_bang_arya_rewrite(docs):
+    """Gagalkan build bila 6 seksi Rangkuman Tabel TWK tidak memakai isi kurasi
+    (v2.3.3): ID seksi tetap, tanpa catatan mind-map, tanpa em-dash/URL/atribusi,
+    tanpa lagi tembok huruf kapital."""
+    for doc in docs:
+        if doc["id"] != "twk-bang-arya":
+            continue
+        errors = []
+        ids = {s["id"] for s in doc["sections"]}
+        if ids != set(BANG_ARYA_SALVAGE):
+            errors.append(f"ID seksi berubah: {sorted(ids)}")
+        # akronim kapital yang sah di luar ACRONYMS (mnemonik + UUDS + KNIP)
+        allowed_caps = set(ACRONYMS) | {"UUDS", "JUMAT", "BERSEPEDA", "KNIP"}
+        for s in doc["sections"]:
+            if "catatan" in s:
+                errors.append(f"{s['id']}: masih punya catatan mind-map")
+            if "mind map" in s["konten"].lower():
+                errors.append(f"{s['id']}: masih mengandung 'mind map'")
+            for rx in _BARU_FORBIDDEN_RES:
+                m = rx.search(s["konten"])
+                if m:
+                    errors.append(f"{s['id']}.konten: cocok {rx.pattern!r} "
+                                  f"({m.group(0)[:60]!r})")
+            for w in re.findall(r"\b[A-Z]{4,}\b", s["konten"]):
+                if w not in allowed_caps:
+                    errors.append(f"{s['id']}: kata kapital semua {w!r}")
+            if s["kata"] > 1500:
+                errors.append(f"{s['id']}: {s['kata']} kata, melebihi batas 1500")
+        if errors:
+            raise SystemExit("verifikasi bang-arya GAGAL:\n  " + "\n  ".join(errors))
+        print("  verifikasi bang-arya: OK (6 seksi kurasi, tanpa mind-map/em-dash)")
+        return
+    raise SystemExit("verifikasi bang-arya GAGAL: dokumen twk-bang-arya tidak ditemukan")
 
 # ---------------------------------------------------------------- main
 def main():
@@ -2429,6 +2618,9 @@ def main():
 
     # verifikasi konten baru (setelah filter, sebelum tulis)
     verify_baru_content(docs)
+
+    # verifikasi tulis-ulang kurasi Bang Arya (v2.3.3)
+    verify_bang_arya_rewrite(docs)
 
     order = ["TWK", "TIU", "TKP"]
     docs.sort(key=lambda d: (order.index(d["materi"]), d["id"]))

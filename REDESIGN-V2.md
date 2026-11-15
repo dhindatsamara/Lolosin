@@ -788,3 +788,80 @@ Pilar Negara tipis, TIU kehilangan penjelasan analogi tiga kata). Sumber:
 - QA: cek jumlah entri Belajar diperbarui 10 jadi 12; seksi baru
   "Materi Baru v2.3.1" ditambahkan ke qa.mjs (dokumen/seksi baru tampil,
   jumlah kata naik, tanpa atribusi/URL di halaman, tanpa overflow).
+
+## v2.3.2: Dashboard dirapikan, Osi bisa di-style + dibagikan pakai foto (2026-11-15)
+
+Feedback user (dengan screenshot): ada slot kosong besar di bawah kartu
+"Streak minggu ini" karena kolom kiri jauh lebih pendek dari kolom misi,
+dan beranda terasa penuh karena terlalu banyak blok full-width bertumpuk.
+
+- PETCARD PINDAH KE KOLOM KIRI: PetCard tidak lagi full-width di bawah
+  hero, tapi bertumpuk di bawah WeekStreak (kolom kiri = WeekStreak +
+  PetCard, kolom kanan = DailyMissions). Layout internal PetCard diubah
+  jadi tumpukan vertikal (maskot di atas, teks di tengah) supaya muat
+  di kolom setengah lebar desktop maupun full-width mobile.
+- PICKER OUTFIT ("Gaya Osi"): 5 tombol mini maskot (Polos, Syal,
+  Kacamata, Mahkota, Jubah). Hanya outfit yang syarat streaknya
+  terpenuhi yang bisa dipilih; yang terkunci tampil abu-abu dengan
+  syaratnya ("streak 7 hari"). Pilihan tersimpan per-user di
+  `lolosin:pet-outfit:<namespace>` (pola namespacing storage.ts,
+  termasuk dalam PER_USER_BASE_KEYS supaya ikut pindah saat perbaikan
+  progres tamu ke akun); default = outfit tertinggi yang terbuka.
+  Bila streak putus lalu pilihan jadi terkunci lagi, tampilan jatuh
+  ke outfit tertinggi yang masih terbuka (resolveOutfit).
+- BAGIKAN DENGAN FOTO: kartu PNG portrait 4:5 (1080x1350) dirangkai
+  lewat canvas di `src/lib/shareCard.ts`: SVG maskot yang sedang
+  dirender di PetCard diserialisasi dari DOM (jadi outfit pilihan
+  ikut terbawa), digambar di atas latar gradasi hijau + wordmark
+  Lolosin + nama stage + streak + level + XP, font sistem (tanpa
+  dependensi npm baru). Jalur utama Web Share API dengan files bila
+  didukung, fallback unduh PNG. Bagikan teks dipertahankan sebagai
+  opsi kedua ("Bagikan teks"). Gagal render tidak crash, hanya
+  menampilkan pesan ramah.
+- PERAMPINGAN: padding/jarak kartu DailyMissions sedikit dirapatkan;
+  grid 3 teaser (Peringkat + Game + Formasi) jadi 3 kolom di lg,
+  sebelumnya 3 item di grid 2 kolom menyisakan lubang.
+- TIDAK BERUBAH: hero, ProfileCard, BujukOsiCard, dan semua fitur lain.
+- QA: seksi baru "Dashboard v2.3.2" di qa.mjs (posisi PetCard di kolom
+  kiri, picker outfit + persistensi setelah reload, unduhan PNG kartu
+  1080x1350 + status "Foto tersimpan", grid teaser 3 kolom, tanpa
+  overflow desktop + mobile).
+
+## v2.3.3: Tulis ulang 6 seksi Rangkuman Tabel TWK (2026-11-15)
+
+Laporan user (dengan screenshot s17): isi 6 seksi `twk-bang-arya`
+("Rangkuman Tabel TWK") tidak enak dibaca. Penyebab: hasil ekstraksi
+halaman mind-map/tabel PDF yang huruf kapital semua, kata kunci menempel
+tanpa struktur, dan ada typo. Ini satu-satunya dokumen yang bermasalah
+(grep "mind map" hanya kena file ini).
+
+- TULIS ULANG KURASI: ke-6 seksi ditulis ulang terstruktur dalam format
+  MarkdownLite (subheading `##` + bullet/daftar bernomor + label **tebal**,
+  tanpa tabel karena renderer tidak mendukungnya). s02 lima sila Pancasila
+  (rumusan resmi + nilai + makna); s08 timeline 7 periode UUD 1945
+  (tanggal + ciri tiap periode); s17 sembilan nilai KPK + akronim
+  JUMAT BERSEPEDA KK + 3 kelompok nilai; s25 aturan huruf kapital dalam
+  3 kelompok (di awal / kalau diikuti nama / tidak kapital) + contoh;
+  s32 lima prinsip nasionalisme + istilah yang sering tertukar +
+  Bhinneka Tunggal Ika; s37 lima pasal/alinea NKRI + kutipan pasal.
+  Fakta dicek dari konten lama + file riset `baru/twk-integritas.md`
+  dan `baru/twk-pilar-negara.md`. Ekor "NILAI DASAR BELA NEGARA" yang
+  acak di s08 dibuang (materinya sudah ada di dokumen bela negara lain).
+  Total dokumen 817 jadi 1.048 kata; total Belajar 79.612 jadi 79.843 kata.
+- PIPELINE: `BANG_ARYA_REWRITE` di `src/data/materi/build_materi.py`
+  (peta sid -> konten kurasi, sumber kanonis) diterapkan di
+  `filter_doc_sections` (ganti konten, hapus `catatan` mind-map, hitung
+  ulang kata). `verify_bang_arya_rewrite()` menggagalkan build bila ID
+  berubah, `catatan` tersisa, ada "mind map"/em-dash/URL/atribusi, ada
+  kata kapital semua di luar akronim sah, atau seksi > 1500 kata.
+- ID SEKSI TIDAK BERUBAH: rebuild dengan pypdf==7.0.1 (venv-materi);
+  18 dokumen lain + inventaris.json byte-identik, hanya
+  `twk-bang-arya.json` dan `index.json` berubah.
+- QA: TIDAK memakai qa.mjs (dipakai agen dashboard v2.3.2 secara paralel).
+  Cek render mandiri `~/workspace/qa-lolosin/cek-bangarya.mjs` (Playwright,
+  server preview port 4195): 43/43 PASS, 0 FAIL — tiap seksi terstruktur
+  (heading/list/tebal), tanpa tembok kapital, tanpa "mind map"/em-dash,
+  tanpa overflow desktop + mobile, tanpa console/page error. Screenshot
+  s17 dan s08 diperiksa visual. Laporan: QA-LOCAL-BANGARYA-2026-11-15.md.
+  Catatan: port 4193 ternyata sudah dipakai server QA agen lain (bundle
+  lama); selalu pastikan bundle yang dilayani adalah hasil build baru.

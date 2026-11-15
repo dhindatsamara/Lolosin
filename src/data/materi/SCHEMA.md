@@ -3,7 +3,9 @@
 Konten belajar terstruktur untuk halaman Belajar. Dibuat 2026-11-13 dari sumber di
 `~/workspace/cpns/materi/` (modul OCR, PDF berteks, DOCX). Teks dibersihkan dan
 distrukturkan secara programatis; **isi materi tidak ditulis ulang** (kecuali
-penjelasan "Cara Memakai Tabel Pangkat" dan label struktur Kartu Sakti).
+penjelasan "Cara Memakai Tabel Pangkat", label struktur Kartu Sakti, dan
+6 seksi Rangkuman Tabel TWK yang dikurasi tulis-ulang pada v2.3.3, lihat
+`BANG_ARYA_REWRITE` di build_materi.py).
 Script build: `build_materi.py` di folder ini (dapat dijalankan ulang).
 Audit isi 2026-11-15: soal latihan, pengantar, dan duplikat dikeluarkan dari
 Belajar (lihat "Kebijakan isi" di bawah); 17 dokumen, 269 section, 68.287 kata.
@@ -14,6 +16,11 @@ Integritas + Pilar Negara, analogi tiga kata TIU) -> 19 dokumen, 284 section,
 + 1 section baru (`tiu-analogi-verbal-s04`). Header sumber file `.md` TIDAK
 masuk JSON (tanpa atribusi "by siapa" di app); sumber tercatat di file `.md`
 internal. Dokumen baru punya `halaman: 0` (riset web, tanpa halaman sumber).
+Tulis-ulang kurasi 2026-11-15 (v2.3.3): 6 seksi Rangkuman Tabel TWK
+(`twk-bang-arya`) ditulis ulang terstruktur karena ekstraksi mind-map/tabel
+aslinya huruf kapital semua dan tidak berurutan -> 19 dokumen, 284 section,
+79.843 kata. ID seksi tidak berubah (progres baca aman); `catatan` mind-map
+dihapus; verifikasi `verify_bang_arya_rewrite()` di build_materi.py.
 
 ## File
 
@@ -30,7 +37,7 @@ internal. Dokumen baru punya `halaman: 0` (riset web, tanpa halaman sumber).
 {
   "dibuat": "2026-11-15",
   "total_dokumen": 19,
-  "total_kata": 79612,
+  "total_kata": 79843,
   "total_halaman": 591,
   "dokumen": [
     {

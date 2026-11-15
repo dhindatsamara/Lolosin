@@ -339,7 +339,7 @@ export function TryoutPage() {
     finishedRef.current = false
     recordDailyActivity()
     setMode('running')
-    window.scrollTo({ top: 0 })
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }
 
   function cancelTryout() {
@@ -371,7 +371,7 @@ export function TryoutPage() {
 
     function goTo(index: number) {
       setCurrentIndex(Math.min(total - 1, Math.max(0, index)))
-      window.scrollTo({ top: 0 })
+      window.scrollTo({ top: 0, behavior: 'instant' })
     }
 
     return (

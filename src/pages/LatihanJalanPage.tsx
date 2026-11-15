@@ -127,6 +127,15 @@ export function LatihanJalanPage({
     return () => clearTimeout(timer)
   }, [xpFlashKey])
 
+  // Soal baru dan layar hasil selalu mulai dari atas. Tanpa ini, posisi
+  // scroll tertinggal di bawah setelah user membaca pembahasan, sehingga
+  // soal berikutnya terbuka dengan tampilan footer, bukan soal.
+  // behavior 'instant': CSS global memakai scroll-behavior smooth, dan
+  // scroll halus ke atas bisa tersela/terpotong saat konten berganti.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [index, finished])
+
   if (!isReview && (!materi || !session)) {
     return (
       <Card className="p-6 text-center">

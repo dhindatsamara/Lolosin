@@ -22,7 +22,7 @@ export function DailyMissions() {
 
   return (
     <section aria-label="Misi harian">
-      <div className="mb-3 flex items-end justify-between gap-3">
+      <div className="mb-2.5 flex items-end justify-between gap-3">
         <div>
           <p className="kicker">tantangan kecil, hadiah nyata</p>
           <h2 className="mt-1 font-display text-xl font-extrabold">
@@ -34,9 +34,9 @@ export function DailyMissions() {
         </Badge>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2.5">
         {statuses.map(({ def, progress, done, claimed }) => (
-          <Card key={def.id} className="p-4">
+          <Card key={def.id} className="p-3.5">
             <div className="flex items-start gap-3">
               <span
                 className={cx(
@@ -66,7 +66,7 @@ export function DailyMissions() {
                 <p className="mt-0.5 text-xs leading-snug font-medium text-ink/60">
                   {def.deskripsi}
                 </p>
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-1.5 flex items-center gap-2">
                   <ProgressBar
                     value={progress}
                     max={def.target}
@@ -78,7 +78,7 @@ export function DailyMissions() {
                     {progress}/{def.target}
                   </span>
                 </div>
-                <div className="mt-2.5">
+                <div className="mt-2">
                   {claimed ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-primary-100 px-3 py-1 text-xs font-extrabold text-primary-700">
                       <CheckIcon width={12} height={12} />
@@ -106,7 +106,7 @@ export function DailyMissions() {
       </div>
 
       {semuaDiklaim && (
-        <p className="mt-3 rounded-2xl bg-primary-100 px-4 py-3 text-center text-sm font-bold text-primary-700">
+        <p className="mt-2.5 rounded-2xl bg-primary-100 px-4 py-3 text-center text-sm font-bold text-primary-700">
           Misi hari ini beres semua. Besok gas lagi!
         </p>
       )}

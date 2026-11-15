@@ -684,17 +684,22 @@ function DashboardPage() {
       {/* Bujuk Osi: tampil hanya saat streak putus dan masih bisa dibujuk */}
       <BujukOsiCard />
 
-      {/* Peliharaan: maskot + outfit sesuai streak, bisa dibagikan */}
-      <PetCard />
-
-      {/* Streak mingguan + misi harian */}
+      {/* Streak mingguan + peliharaan (kolom kiri) dan misi harian
+          (kolom kanan). PetCard pindah ke sini (v2.3.2) supaya slot
+          kosong di bawah kartu streak terisi dan beranda tidak lagi
+          terasa penuh oleh blok full-width bertumpuk. */}
       <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
-        <WeekStreak />
+        <div className="flex flex-col gap-5 lg:gap-6">
+          <WeekStreak />
+          <PetCard />
+        </div>
         <DailyMissions />
       </div>
 
-      {/* Teaser peringkat minggu ini + teaser game + teaser formasi */}
-      <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
+      {/* Teaser peringkat minggu ini + teaser game + teaser formasi:
+          3 kolom di lg (v2.3.2), sebelumnya 3 item di grid 2 kolom
+          menyisakan lubang di baris kedua. */}
+      <div className="grid gap-5 lg:grid-cols-3 lg:gap-6">
         <LeaderboardTeaser />
         <GameTeaserCard />
         <FormasiTeaserCard />
