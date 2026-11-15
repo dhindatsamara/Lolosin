@@ -5,6 +5,7 @@ import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { StickyBackButton } from '../components/belajar/StickyBackButton'
 import { CheckIcon, ChevronRightIcon } from '../components/icons'
+import { MateriMotifMini, MateriWatermark } from '../components/motifs'
 import {
   groupEntriesBySubtopik,
   groupNextUnreadSection,
@@ -13,11 +14,25 @@ import {
   resolveMateriView,
   type SectionEntry,
 } from '../lib/materi'
-import { MATERI_META } from '../lib/questions'
+import { MATERI_META, type Materi } from '../lib/questions'
 import { useStore } from '../lib/store'
 import { cx } from '../lib/utils'
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
+
+/** Warna motif per subtes, dipakai dengan opacity rendah untuk watermark. */
+const MATERI_WATERMARK: Record<Materi, string> = {
+  TWK: 'text-twk',
+  TIU: 'text-tiu',
+  TKP: 'text-tkp',
+}
+
+/** Latar lembut chip motif di header detail. */
+const MATERI_CHIP_SOFT: Record<Materi, string> = {
+  TWK: 'bg-twk-soft',
+  TIU: 'bg-tiu-soft',
+  TKP: 'bg-tkp-soft',
+}
 
 /**
  * Kartu satu sub-materi: judul + indikator sudah dibaca. Kartu satu
@@ -97,19 +112,41 @@ export function MateriDetailPage() {
     <div className="flex flex-col gap-5">
       <StickyBackButton to="/belajar" />
 
-      <header>
-        <h1 className="font-display text-3xl leading-tight font-extrabold">
-          {view.judul}
-        </h1>
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <Badge tone={MATERI_TONE[view.materi]}>{view.materi}</Badge>
-          <span className="text-xs font-semibold text-ink/60">
-            {MATERI_META[view.materi].nama}
-          </span>
+      <header className="relative">
+        <MateriWatermark
+          materi={view.materi}
+          className={cx(
+            'absolute -top-1 right-0 h-20 w-32 text-6xl opacity-10 lg:h-24 lg:w-40',
+            MATERI_WATERMARK[view.materi],
+            view.materi === 'TWK' && 'motif-melayang',
+          )}
+        />
+        <div className="relative">
+          <h1 className="font-display text-3xl leading-tight font-extrabold">
+            {view.judul}
+          </h1>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <span
+              className={cx(
+                'flex h-7 w-10 items-center justify-center rounded-lg',
+                MATERI_CHIP_SOFT[view.materi],
+              )}
+              aria-hidden="true"
+            >
+              <MateriMotifMini
+                materi={view.materi}
+                className={MATERI_WATERMARK[view.materi]}
+              />
+            </span>
+            <Badge tone={MATERI_TONE[view.materi]}>{view.materi}</Badge>
+            <span className="text-xs font-semibold text-ink/60">
+              {MATERI_META[view.materi].nama}
+            </span>
+          </div>
+          <p className="mt-2 text-sm leading-relaxed text-ink/60">
+            {view.deskripsi}
+          </p>
         </div>
-        <p className="mt-2 text-sm leading-relaxed text-ink/60">
-          {view.deskripsi}
-        </p>
       </header>
 
       {/* Progres baca (visual, tanpa angka) + lanjut baca */}

@@ -8,6 +8,22 @@
  * soal sudah dijawab lawan) dikirim lewat broadcast channel per battle.
  * Pemenang = skor benar terbanyak, seri = total waktu tercepat.
  *
+ * Host memilih kategori soal saat membuat battle (TWK, TIU, TKP, atau
+ * Campur): kategori hanya mengubah pemilihan soal di host, karena lawan
+ * membaca soal yang sama dari baris battle_sessions. Kategori satu
+ * battle diturunkan dari soal tersimpannya (semua satu materi berarti
+ * kategori itu, campuran berarti Campur), jadi tidak butuh kolom baru.
+ *
+ * Selain kode dan link, host bisa mengundang lewat username: guest_id
+ * diisi id profil yang diundang selagi status masih 'waiting'. Lawan
+ * melihat undangan masuk lewat query guest_id = id saya, lalu menerima
+ * (status jadi 'active') atau menolak (status jadi 'cancelled'). RLS
+ * yang sudah ada di migrasi 002 mengizinkan semua langkah ini: SELECT
+ * terbuka untuk user login, UPDATE hanya host atau guest battle itu.
+ * joinBattle sengaja tetap menolak battle yang guest_id-nya sudah
+ * terisi, supaya battle undangan tidak bisa direbut orang lain lewat
+ * kode; penerimaan undangan memakai acceptBattleInvite.
+ *
  * Semua fungsi di sini tidak pernah melempar error ke pemanggil:
  * kegagalan Supabase dikembalikan sebagai { ok: false, error } dengan
  * pesan ramah. Bila Supabase belum terkonfigurasi, semua fungsi tulis
@@ -46,6 +62,17 @@ const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 /* ------------------------------------------------------------------ */
 
 export type BattleStatus = 'waiting' | 'active' | 'finished' | 'cancelled'
+
+/** Kategori soal satu battle: satu subtes, atau campuran ketiganya. */
+export type BattleCategory = Materi | 'campur'
+
+/** Semua kategori, urutan tampil di pemilih kategori. */
+export const BATTLE_CATEGORIES: BattleCategory[] = [
+  'TWK',
+  'TIU',
+  'TKP',
+  'campur',
+]
 
 /** Baris tabel public.battle_sessions. */
 export interface BattleRow {
@@ -136,13 +163,34 @@ export function normalizeGameCode(code: string): string {
 /* ------------------------------------------------------------------ */
 
 /**
- * Pilih id soal untuk satu game: campuran 3 TWK, 4 TIU, 3 TKP, urutan
- * diacak. Bila satu materi kehabisan soal, kekurangannya diisi soal
- * acak dari materi lain. Tidak ada soal yang berulang dalam satu set.
+ * Pilih id soal untuk satu game.
+ * - Kategori satu materi (TWK/TIU/TKP): semua soal dari materi itu.
+ * - 'campur' (default): campuran 3 TWK, 4 TIU, 3 TKP, urutan diacak.
+ * Bila satu materi kehabisan soal, kekurangannya diisi soal acak dari
+ * materi lain. Tidak ada soal yang berulang dalam satu set. Pool yang
+ * dipakai hanya soal ber-kunci (getQuestions), dan opsi kosong
+ * disembunyikan di tampilan lewat visibleOptions.
  */
 export function pickGameQuestionIds(
   count: number = GAME_QUESTION_COUNT,
+  category: BattleCategory = 'campur',
 ): string[] {
+  if (category !== 'campur') {
+    const picked = shuffle(getQuestions(category)).slice(0, count)
+    if (picked.length < count) {
+      const ids = new Set(picked.map((q) => q.id))
+      for (const q of shuffle(QUIZABLE_QUESTIONS)) {
+        if (picked.length >= count) break
+        if (!ids.has(q.id)) {
+          picked.push(q)
+          ids.add(q.id)
+        }
+      }
+    }
+    return shuffle(picked)
+      .slice(0, count)
+      .map((q) => q.id)
+  }
   const mix: Array<{ materi: Materi; n: number }> = [
     { materi: 'TWK', n: 3 },
     { materi: 'TIU', n: 4 },
@@ -175,6 +223,27 @@ export function resolveGameQuestions(ids: readonly string[]): Question[] {
     if (q !== undefined) questions.push(q)
   }
   return questions
+}
+
+/**
+ * Turunkan kategori battle dari soalnya: semua satu materi berarti
+ * kategori materi itu, campuran (atau tidak ada soal yang ketemu)
+ * berarti 'campur'. Dipakai lobi, arena, dan kartu undangan, supaya
+ * kategori tampil sama untuk host dan lawan tanpa kolom baru.
+ */
+export function deriveBattleCategory(
+  questions: readonly Question[],
+): BattleCategory {
+  if (questions.length === 0) return 'campur'
+  const first = questions[0].materi
+  return questions.every((q) => q.materi === first) ? first : 'campur'
+}
+
+/** Turunkan kategori battle dari daftar id soal tersimpan. */
+export function deriveBattleCategoryFromIds(
+  ids: readonly string[],
+): BattleCategory {
+  return deriveBattleCategory(resolveGameQuestions(ids))
 }
 
 /**
@@ -263,17 +332,18 @@ function failed<T>(error: string): BattleResult<T> {
 }
 
 /**
- * Buat battle baru sebagai host. Soal dipilih sekali di sini dan
- * disimpan sebagai question_ids, supaya host dan lawan mengerjakan
- * soal yang sama persis. Bila kode bentrok (sangat jarang), dicoba
- * lagi dengan kode baru sampai 3 kali.
+ * Buat battle baru sebagai host. Soal dipilih sekali di sini sesuai
+ * kategori dan disimpan sebagai question_ids, supaya host dan lawan
+ * mengerjakan soal yang sama persis. Bila kode bentrok (sangat jarang),
+ * dicoba lagi dengan kode baru sampai 3 kali.
  */
 export async function createBattle(
   hostId: string,
+  category: BattleCategory = 'campur',
 ): Promise<BattleResult<BattleRow>> {
   if (!isSupabaseConfigured() || !supabase) return NOT_CONFIGURED
   const client = supabase
-  const questionIds = pickGameQuestionIds()
+  const questionIds = pickGameQuestionIds(GAME_QUESTION_COUNT, category)
   if (questionIds.length === 0) {
     return failed('Bank soal lagi kosong, coba lagi nanti ya.')
   }
@@ -379,6 +449,139 @@ export async function joinBattle(
     if (!data) return failed('Battle ini sudah dimulai atau sudah penuh.')
     const updated = parseBattleRow(data)
     if (!updated) return failed('Gagal gabung battle, coba lagi ya.')
+    return { ok: true, data: updated }
+  } catch {
+    return failed('Koneksi bermasalah, coba lagi ya.')
+  }
+}
+
+/**
+ * Cari profil dari username. Username dinormalisasi (trim + huruf
+ * kecil) mengikuti aturan di lib/auth.ts, jadi pencarian tidak peduli
+ * kapital. Dipakai host saat mengundang teman lewat username.
+ */
+export async function findProfileByUsername(
+  username: string,
+): Promise<BattleResult<{ id: string; username: string }>> {
+  if (!isSupabaseConfigured() || !supabase) return NOT_CONFIGURED
+  const clean = username.trim().toLowerCase()
+  if (clean.length === 0) {
+    return failed('Isi dulu username temanmu ya.')
+  }
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id, username')
+      .eq('username', clean)
+      .maybeSingle()
+    if (error) return failed('Username gagal dicari, coba lagi ya.')
+    if (!data) return failed('Username tidak ditemukan, cek lagi ya.')
+    const row = data as { id: unknown; username: unknown }
+    if (typeof row.id !== 'string' || typeof row.username !== 'string') {
+      return failed('Username tidak ditemukan, cek lagi ya.')
+    }
+    return { ok: true, data: { id: row.id, username: row.username } }
+  } catch {
+    return failed('Koneksi bermasalah, coba lagi ya.')
+  }
+}
+
+/**
+ * Undang satu user ke battle yang masih menunggu, dengan mengisi
+ * guest_id baris battle. Battle jadi khusus untuk yang diundang:
+ * joinBattle menolak battle yang guest_id-nya sudah terisi, jadi
+ * tidak bisa direbut orang lain lewat kode. Dicek atomik di query,
+ * jadi undangan gagal bila lawan lain sudah gabung duluan. RLS
+ * mengizinkan update ini karena pemanggil adalah host battle itu.
+ */
+export async function inviteGuestToBattle(
+  battle: BattleRow,
+  guestId: string,
+): Promise<BattleResult<BattleRow>> {
+  if (!isSupabaseConfigured() || !supabase) return NOT_CONFIGURED
+  if (battle.host_id === guestId) {
+    return failed('Itu username kamu sendiri, undang teman lain ya.')
+  }
+  if (battle.status !== 'waiting' || battle.guest_id !== null) {
+    return failed('Battle ini sudah ada lawannya.')
+  }
+  try {
+    const { data, error } = await supabase
+      .from('battle_sessions')
+      .update({ guest_id: guestId })
+      .eq('id', battle.id)
+      .eq('status', 'waiting')
+      .is('guest_id', null)
+      .select()
+      .maybeSingle()
+    if (error) return failed('Undangan gagal dikirim, coba lagi ya.')
+    if (!data) return failed('Battle ini sudah ada lawannya.')
+    const updated = parseBattleRow(data)
+    if (!updated) return failed('Undangan gagal dikirim, coba lagi ya.')
+    return { ok: true, data: updated }
+  } catch {
+    return failed('Koneksi bermasalah, coba lagi ya.')
+  }
+}
+
+/**
+ * Daftar undangan battle masuk untuk satu user: battle yang guest_id-nya
+ * adalah user itu dan statusnya masih 'waiting', terbaru dulu. RLS
+ * battle_sessions_select_auth (migrasi 002) mengizinkan user login
+ * membaca baris battle apa pun, jadi query ini jalan tanpa policy baru.
+ * Tidak pernah melempar: gagal baca mengembalikan daftar kosong.
+ */
+export async function getIncomingInvites(userId: string): Promise<BattleRow[]> {
+  if (!isSupabaseConfigured() || !supabase) return []
+  try {
+    const { data, error } = await supabase
+      .from('battle_sessions')
+      .select('*')
+      .eq('guest_id', userId)
+      .eq('status', 'waiting')
+      .order('created_at', { ascending: false })
+    if (error || !data) return []
+    const invites: BattleRow[] = []
+    for (const row of data) {
+      const parsed = parseBattleRow(row)
+      if (parsed) invites.push(parsed)
+    }
+    return invites
+  } catch {
+    return []
+  }
+}
+
+/**
+ * Terima undangan battle: status 'waiting' jadi 'active' untuk battle
+ * yang guest_id-nya memang user ini. Pasangan joinBattle untuk jalur
+ * undangan (joinBattle menolak battle yang guest_id-nya sudah terisi).
+ * RLS mengizinkan update ini karena pemanggil adalah guest battle itu.
+ */
+export async function acceptBattleInvite(
+  battle: BattleRow,
+  guestId: string,
+): Promise<BattleResult<BattleRow>> {
+  if (!isSupabaseConfigured() || !supabase) return NOT_CONFIGURED
+  if (battle.guest_id !== guestId) {
+    return failed('Undangan ini bukan untukmu.')
+  }
+  if (battle.status !== 'waiting') {
+    return failed('Undangan ini sudah tidak berlaku.')
+  }
+  try {
+    const { data, error } = await supabase
+      .from('battle_sessions')
+      .update({ status: 'active' })
+      .eq('id', battle.id)
+      .eq('status', 'waiting')
+      .eq('guest_id', guestId)
+      .select()
+      .maybeSingle()
+    if (error) return failed('Gagal menerima undangan, coba lagi ya.')
+    if (!data) return failed('Undangan ini sudah tidak berlaku.')
+    const updated = parseBattleRow(data)
+    if (!updated) return failed('Gagal menerima undangan, coba lagi ya.')
     return { ok: true, data: updated }
   } catch {
     return failed('Koneksi bermasalah, coba lagi ya.')

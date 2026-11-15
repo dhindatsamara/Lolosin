@@ -33,6 +33,7 @@ import { isSupabaseConfigured } from '../lib/supabase'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
+import { ConfirmModal } from '../components/quiz/ConfirmModal'
 import {
   ArrowLeftIcon,
   CrownIcon,
@@ -42,6 +43,7 @@ import {
   SparklesIcon,
   TrophyIcon,
   UsersIcon,
+  XIcon,
 } from '../components/icons'
 
 const POLL_MS = 4000
@@ -59,6 +61,7 @@ export function SessionHostPage() {
   const [players, setPlayers] = useState<GamePlayerRow[]>([])
   const [message, setMessage] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [showFinishConfirm, setShowFinishConfirm] = useState(false)
   const [copied, setCopied] = useState(false)
   const [premiumChecked, setPremiumChecked] = useState(false)
 
@@ -499,12 +502,25 @@ export function SessionHostPage() {
           size="lg"
           fullWidth
           variant="secondary"
-          onClick={handleFinish}
+          onClick={() => setShowFinishConfirm(true)}
           disabled={busy}
         >
           <TrophyIcon width={18} height={18} />
           {busy ? 'Lagi mengakhiri...' : 'Akhiri sesi dan tampilkan podium'}
         </Button>
+        <ConfirmModal
+          open={showFinishConfirm}
+          title="Akhiri sesi sekarang?"
+          body="Pemain yang belum selesai tidak bisa lanjut menjawab, dan podium langsung ditampilkan."
+          confirmLabel="Ya, akhiri"
+          cancelLabel="Lanjut memantau"
+          icon={<XIcon width={22} height={22} />}
+          onConfirm={() => {
+            setShowFinishConfirm(false)
+            void handleFinish()
+          }}
+          onCancel={() => setShowFinishConfirm(false)}
+        />
       </div>
     )
   }

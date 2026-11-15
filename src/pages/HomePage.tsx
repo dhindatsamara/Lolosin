@@ -9,6 +9,7 @@ import { BadgeShowcase } from '../components/gamifikasi/BadgeShowcase'
 import { DailyMissions } from '../components/gamifikasi/DailyMissions'
 import { WeekStreak } from '../components/gamifikasi/WeekStreak'
 import { Mascot } from '../components/Mascot'
+import { InteractiveMascot } from '../components/InteractiveMascot'
 import { PetCard } from '../components/PetCard'
 import { PredictionPanel } from '../components/PredictionPanel'
 import { LandingPage } from './LandingPage'
@@ -55,6 +56,7 @@ import {
 import { todayFocus } from '../lib/plan'
 import { REVIEW_SESSION_MAX, reviewCountDue } from '../lib/review'
 import {
+  armRevive,
   getLevel,
   MAKASSAR_TIME_ZONE,
   todayMakassar,
@@ -69,7 +71,8 @@ import {
   getCurrentWeekStart,
   type LeaderboardEntry,
 } from '../lib/leaderboard'
-import { useAuthUser } from '../lib/auth'
+import { getMyProfile, useAuthUser, type Profile } from '../lib/auth'
+import { ProfileAvatar } from '../components/ProfileAvatar'
 import { isSupabaseConfigured } from '../lib/supabase'
 import { cx } from '../lib/utils'
 
@@ -364,11 +367,144 @@ function GameTeaserCard() {
   )
 }
 
+/**
+ * Kartu "Bujuk Osi": tampil saat streak putus dan masih bisa dibujuk
+ * kembali (mekanik "Bujuk Osi", v2.2.1). Sebelum dibujuk: jelaskan
+ * streak yang putus dan tawarkan tombol Bujuk Osi (persenjatai revive
+ * lalu arahkan ke Latihan; user juga boleh baca materi, flag armed
+ * berlaku untuk keduanya). Sesudah dibujuk: ingatkan tinggal
+ * selesaikan 1 drill atau baca 1 seksi materi. Sembunyi bila tidak
+ * ada streak putus yang pending.
+ */
+function BujukOsiCard() {
+  const { streakBroken, reviveArmed } = useStore()
+  const navigate = useNavigate()
+
+  if (!streakBroken) return null
+  const lostStreak = streakBroken.lostStreak
+
+  function handleBujuk() {
+    if (armRevive()) navigate('/latihan')
+  }
+
+  return (
+    <Card className="border-accent-200 bg-accent-50 p-5 lg:p-6">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
+        <Mascot
+          mood="marah"
+          size={88}
+          className="h-auto w-20 shrink-0 sm:w-24"
+        />
+        <div className="min-w-0 flex-1 text-center sm:text-left">
+          <h2 className="font-display text-xl font-extrabold">
+            Bujuk {MASCOT_NAME}
+          </h2>
+          {reviveArmed ? (
+            <>
+              <p className="mt-1 text-sm leading-relaxed font-medium text-ink/70">
+                {MASCOT_NAME} udah dibujuk. Tinggal selesaikan 1 drill atau
+                baca 1 seksi materi, streak {lostStreak} hari balik lagi.
+              </p>
+              <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
+                <Button size="sm" onClick={() => navigate('/latihan')}>
+                  Mulai drill
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => navigate('/belajar')}
+                >
+                  Baca materi
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="mt-1 text-sm leading-relaxed font-medium text-ink/70">
+                Streak {lostStreak} hari putus karena kemarin kamu nggak
+                belajar, dan {MASCOT_NAME} lagi ngambek. Ketuk tombol di
+                bawah, lalu selesaikan 1 drill atau baca 1 seksi materi
+                buat balikin streak ke {lostStreak} hari. Kesempatan ini
+                cuma ada sekali tiap streak putus. Kalau belajar biasa
+                tanpa membujuk, streak mulai lagi dari 1.
+              </p>
+              <Button size="sm" className="mt-3" onClick={handleBujuk}>
+                Bujuk {MASCOT_NAME}
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+/**
+ * Kartu profil ringkas di dashboard: avatar, username, formasi, dan
+ * tombol Ubah profil. Hanya tampil saat user login dan profilnya
+ * sudah termuat; di mode tamu atau placeholder (Supabase belum
+ * terkonfigurasi) dan selama profil dimuat, kartu disembunyikan
+ * supaya tidak pernah tampil kartu kosong.
+ */
+function ProfileCard() {
+  const configured = isSupabaseConfigured()
+  const { user, loading } = useAuthUser()
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [profileLoading, setProfileLoading] = useState(false)
+
+  useEffect(() => {
+    if (!configured || !user) {
+      setProfile(null)
+      return
+    }
+    let cancelled = false
+    setProfileLoading(true)
+    getMyProfile()
+      .then((nextProfile) => {
+        if (cancelled) return
+        setProfile(nextProfile)
+        setProfileLoading(false)
+      })
+      .catch(() => {
+        if (!cancelled) setProfileLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [configured, user])
+
+  if (!configured || loading || profileLoading || !user || !profile) {
+    return null
+  }
+
+  return (
+    <Card className="p-5">
+      <div className="flex items-center gap-4">
+        <ProfileAvatar size={56} />
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-display text-lg font-extrabold">
+            {profile.username}
+          </p>
+          <p className="truncate text-sm font-medium text-ink/60">
+            {profile.formasi ?? 'Formasi belum diisi'}
+          </p>
+        </div>
+        <Link to="/profil" className="shrink-0">
+          <Button size="sm" variant="outline">
+            Ubah profil
+          </Button>
+        </Link>
+      </div>
+    </Card>
+  )
+}
+
 function DashboardPage() {
   const {
     xp,
     streak,
     lastActivityDate,
+    streakBroken,
     seenQuestionIds,
     readSections,
     tryoutHistory,
@@ -389,6 +525,10 @@ function DashboardPage() {
   const bacaKeseluruhan = overallReadProgress(readSections)
   const streakAmanHariIni = lastActivityDate === todayMakassar()
   const tryoutTerakhir = tryoutHistory[tryoutHistory.length - 1]
+  // Streak putus yang masih bisa dibujuk kembali: Osi ngambek di hero
+  // dan kartu Bujuk Osi tampil di bawah hero.
+  const streakPutus = streakBroken !== null
+  const lostStreak = streakBroken?.lostStreak ?? 0
 
   // Seksi pertama yang belum dibaca (urut katalog) untuk kartu "Lanjutkan".
   let lanjutBelajar: { doc: MateriDoc; section: MateriSection } | null = null
@@ -450,6 +590,8 @@ function DashboardPage() {
                 <CheckIcon width={14} height={14} className="mt-0.5 shrink-0 text-primary-600" />
                 Streak aman, kamu sudah belajar hari ini.
               </>
+            ) : streakPutus ? (
+              `Streak-mu putus. Bujuk ${MASCOT_NAME} di bawah biar balik lagi.`
             ) : (
               'Yuk belajar hari ini biar streak-mu tetap nyala.'
             )}
@@ -465,29 +607,45 @@ function DashboardPage() {
         </p>
         </div>
 
-        {/* Maskot, teman belajarmu: balon ucapan + nama yang terlihat */}
-        <div className="flex shrink-0 flex-col items-center lg:w-52">
-          <div className="relative w-fit rounded-2xl bg-primary-50 px-4 py-2.5 text-center">
-            <p className="text-sm leading-snug font-bold text-primary-800">
-              {streakAmanHariIni
-                ? 'Streak aman! Kamu keren.'
-                : 'Aku nemenin kamu belajar hari ini!'}
-            </p>
-            <span
-              className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-primary-50"
-              aria-hidden="true"
-            />
-          </div>
-          <Mascot
-            mood={streakAmanHariIni ? 'semangat' : 'senang'}
-            size={160}
-            className="float-soft mt-2 h-auto w-32 lg:w-40"
-          />
-          <p className="mt-1 rounded-full bg-primary-100 px-4 py-1 font-display text-base font-extrabold text-primary-800">
-            {MASCOT_NAME}
-          </p>
-        </div>
+        {/* Osi, teman belajarmu: bisa ditekan, balon ucapannya berganti.
+            Kalimat pertama kontekstual (streak hari ini), sisanya
+            penyemangat yang berputar. Saat streak putus, Osi ngambek
+            (mood marah + kalimat sewot-lucu). Key memaksa remount
+            saat status putus berubah, karena InteractiveMascot
+            menyimpan mood dasar di state internalnya. */}
+        <InteractiveMascot
+          key={streakPutus ? 'marah' : 'normal'}
+          baseMood={streakPutus ? 'marah' : streakAmanHariIni ? 'semangat' : 'senang'}
+          size={160}
+          phrases={
+            streakPutus
+              ? [
+                  'Hmph! Kemarin kamu nggak belajar.',
+                  `Streak ${lostStreak} hari putus, aku ngambek nih.`,
+                  'Bujuk aku dulu, baru streak-mu balik.',
+                  'Satu drill aja, aku maafin kok.',
+                ]
+              : [
+                  streakAmanHariIni
+                    ? 'Streak aman! Kamu keren.'
+                    : 'Aku nemenin kamu belajar hari ini!',
+                  'Kamu bisa, gas terus!',
+                  'Satu soal lagi, satu langkah ke NIP.',
+                  'Streak-mu keren, jangan sampai padam ya.',
+                  'Aku bangga sama progresmu!',
+                  'Belajar bentar tiap hari, hasilnya besar.',
+                ]
+          }
+          mascotClassName="float-soft h-auto w-32 lg:w-40"
+          className="shrink-0 lg:w-52"
+        />
       </section>
+
+      {/* Kartu profil ringkas: hanya tampil saat login */}
+      <ProfileCard />
+
+      {/* Bujuk Osi: tampil hanya saat streak putus dan masih bisa dibujuk */}
+      <BujukOsiCard />
 
       {/* Peliharaan: maskot + outfit sesuai streak, bisa dibagikan */}
       <PetCard />

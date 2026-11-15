@@ -12,21 +12,39 @@
  * landing hijau gelap; sebelumnya #0E5C43 nyaru dengan background.
  * Outfit peliharaan (syal/kacamata/mahkota/jubah) mengikuti streak,
  * lihat src/lib/pet.ts.
+ *
+ * v2.2.1: mood 'kagum' didesain ulang jadi cute (mata kecil, senyum
+ * terbuka kecil, tanpa mata membelalak dan tanpa mulut "o") karena
+ * versi lamanya terlihat melotot dan seram di favicon/ikon. Mood
+ * baru 'marah' (cute marah: alis miring, cemberut kecil, mata normal)
+ * HANYA dipakai saat streak putus, lihat mekanik "Bujuk Osi" di
+ * src/lib/store.ts. Jangan pakai 'marah' di tempat lain. Prop aditif
+ * 'showCap' (default true) dan 'headphones' (default false) dipakai
+ * varian avatar di pemilih avatar; pemakaian lama tanpa kedua prop
+ * itu tampil sama persis seperti sebelumnya.
  */
 import { MASCOT_NAME } from '../lib/mascot'
 import type { PetOutfit } from '../lib/pet'
 
-export type MascotMood = 'senang' | 'semangat' | 'sedih' | 'kagum'
+export type MascotMood = 'senang' | 'semangat' | 'sedih' | 'kagum' | 'marah'
 
 interface MascotProps {
   /** Ekspresi: senang (default), semangat (mata tertawa + mulut terbuka),
-      sedih (alis turun, mulut cemberut ringan), kagum (mata membelalak
-      + mulut "o" kecil, untuk momen perkenalan atau kejutan seru). */
+      sedih (alis turun, mulut cemberut ringan), kagum (mata kecil +
+      alis naik + senyum terbuka kecil, untuk momen perkenalan atau
+      kejutan seru), marah (cute marah: alis miring + cemberut kecil,
+      HANYA untuk streak putus). */
   mood?: MascotMood
   /** Ukuran kotak SVG dalam px (default 64). */
   size?: number
   /** Outfit peliharaan dari streak (default 'none', tanpa aksesori). */
   outfit?: PetOutfit
+  /** Tampilkan topi wisuda (default true). False untuk varian avatar
+      tanpa topi, mis. varian polos dan varian headphone. */
+  showCap?: boolean
+  /** Pakai headphone (default false). Hanya dipakai varian avatar
+      musik di pemilih avatar; bukan bagian dari tahapan streak. */
+  headphones?: boolean
   className?: string
 }
 
@@ -61,19 +79,39 @@ function Eyes({ mood }: { mood: MascotMood }) {
       </g>
     )
   }
-  if (mood === 'kagum') {
-    // Mata membelalak (lebih besar, pupil lebih besar) + alis naik.
+  if (mood === 'marah') {
+    // Cute marah: alis miring (ujung dalam ke bawah), mata ukuran
+    // normal menunduk ke samping, pupil kecil. Tanpa melotot.
     return (
       <g>
-        <circle cx="36" cy="52" r="7.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
-        <circle cx="60" cy="52" r="7.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
-        <circle cx="36" cy="52" r="3.6" fill="#1B1E1C" />
-        <circle cx="60" cy="52" r="3.6" fill="#1B1E1C" />
-        <circle cx="37.5" cy="50" r="1.3" fill="#FFFFFF" />
-        <circle cx="61.5" cy="50" r="1.3" fill="#FFFFFF" />
+        <circle cx="36" cy="52" r="6.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
+        <circle cx="60" cy="52" r="6.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
+        <circle cx="34.5" cy="54" r="3" fill="#1B1E1C" />
+        <circle cx="61.5" cy="54" r="3" fill="#1B1E1C" />
+        <circle cx="35.8" cy="52.2" r="1.2" fill="#FFFFFF" />
+        <circle cx="62.8" cy="52.2" r="1.2" fill="#FFFFFF" />
+        <g stroke="#1B1E1C" strokeWidth="2.5" strokeLinecap="round">
+          <path d="M29 43 L42 48" />
+          <path d="M67 43 L54 48" />
+        </g>
+      </g>
+    )
+  }
+  if (mood === 'kagum') {
+    // Kagum versi cute (v2.2.1): mata lebih kecil dari 'senang', pupil
+    // kecil, alis naik. Sengaja tanpa mata membelalak supaya tidak
+    // terlihat melotot atau seram.
+    return (
+      <g>
+        <circle cx="36" cy="52" r="6.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
+        <circle cx="60" cy="52" r="6.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
+        <circle cx="36" cy="52" r="2.8" fill="#1B1E1C" />
+        <circle cx="60" cy="52" r="2.8" fill="#1B1E1C" />
+        <circle cx="37.2" cy="50.2" r="1.2" fill="#FFFFFF" />
+        <circle cx="61.2" cy="50.2" r="1.2" fill="#FFFFFF" />
         <g stroke="#1B1E1C" strokeWidth="2.5" strokeLinecap="round" fill="none">
-          <path d="M29 42 Q36 39 43 42" />
-          <path d="M53 42 Q60 39 67 42" />
+          <path d="M29 41 Q36 38 43 41" />
+          <path d="M53 41 Q60 38 67 41" />
         </g>
       </g>
     )
@@ -108,9 +146,21 @@ function Mouth({ mood }: { mood: MascotMood }) {
       />
     )
   }
+  if (mood === 'marah') {
+    // Cemberut kecil (ngambek lucu, bukan marah besar).
+    return (
+      <path
+        d="M43 67 Q48 63.5 53 67"
+        fill="none"
+        stroke="#1B1E1C"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+    )
+  }
   if (mood === 'kagum') {
-    // Mulut "o" kecil.
-    return <ellipse cx="48" cy="66" rx="5" ry="6.5" fill="#1B1E1C" />
+    // Senyum terbuka kecil (bukan lingkaran "o").
+    return <path d="M42 62 Q48 70 54 62 Z" fill="#1B1E1C" />
   }
   // Senyum biasa.
   return (
@@ -234,10 +284,63 @@ function Kacamata() {
   )
 }
 
+/**
+ * Headphone flat senada maskot: busur amber di atas kepala dan dua
+ * earcup hijau gelap di sisi badan. Dipakai varian avatar musik
+ * (tanpa topi wisuda). Digambar terakhir supaya earcup menutupi
+ * tepi pipi dengan rapi.
+ */
+function Headphones() {
+  return (
+    <g>
+      {/* Busur: garis ink tebal di bawah, amber di atas, biar ada outline */}
+      <path
+        d="M16 54 Q48 2 80 54"
+        fill="none"
+        stroke="#1B1E1C"
+        strokeWidth="8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M16 54 Q48 2 80 54"
+        fill="none"
+        stroke="#F59E0B"
+        strokeWidth="4.5"
+        strokeLinecap="round"
+      />
+      {/* Earcup kiri dan kanan */}
+      <rect
+        x="10"
+        y="46"
+        width="13"
+        height="20"
+        rx="6"
+        fill="#0B4A36"
+        stroke="#1B1E1C"
+        strokeWidth="2.5"
+      />
+      <rect
+        x="73"
+        y="46"
+        width="13"
+        height="20"
+        rx="6"
+        fill="#0B4A36"
+        stroke="#1B1E1C"
+        strokeWidth="2.5"
+      />
+      <circle cx="16.5" cy="56" r="2.5" fill="#F59E0B" />
+      <circle cx="79.5" cy="56" r="2.5" fill="#F59E0B" />
+    </g>
+  )
+}
+
 export function Mascot({
   mood = 'senang',
   size = 64,
   outfit = 'none',
+  showCap = true,
+  headphones = false,
   className,
 }: MascotProps) {
   return (
@@ -270,40 +373,43 @@ export function Mascot({
         transform="rotate(-20 34 40)"
       />
       <OutfitBawah outfit={outfit} />
-      {/* Topi wisuda amber, sedikit miring */}
-      <g transform="rotate(-8 48 20)">
-        <rect
-          x="36"
-          y="22"
-          width="24"
-          height="9"
-          rx="4"
-          fill="#D97706"
-          stroke="#1B1E1C"
-          strokeWidth="2.5"
-        />
-        <polygon
-          points="48,6 74,17 48,28 22,17"
-          fill="#F59E0B"
-          stroke="#1B1E1C"
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M74 17 L78 30"
-          stroke="#1B1E1C"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-        <circle
-          cx="78"
-          cy="32"
-          r="3.5"
-          fill="#D97706"
-          stroke="#1B1E1C"
-          strokeWidth="2"
-        />
-      </g>
+      {/* Topi wisuda amber, sedikit miring (bisa disembunyikan lewat
+          showCap untuk varian avatar tanpa topi) */}
+      {showCap && (
+        <g transform="rotate(-8 48 20)">
+          <rect
+            x="36"
+            y="22"
+            width="24"
+            height="9"
+            rx="4"
+            fill="#D97706"
+            stroke="#1B1E1C"
+            strokeWidth="2.5"
+          />
+          <polygon
+            points="48,6 74,17 48,28 22,17"
+            fill="#F59E0B"
+            stroke="#1B1E1C"
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M74 17 L78 30"
+            stroke="#1B1E1C"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+          <circle
+            cx="78"
+            cy="32"
+            r="3.5"
+            fill="#D97706"
+            stroke="#1B1E1C"
+            strokeWidth="2"
+          />
+        </g>
+      )}
       {/* Mahkota (streak 14 hari, dan ikut dipakai di tahap jubah) */}
       {(outfit === 'mahkota' || outfit === 'jubah') && <Mahkota />}
       {/* Pipi merona (tidak untuk mood sedih) */}
@@ -317,6 +423,8 @@ export function Mascot({
       <Mouth mood={mood} />
       {/* Kacamata digambar terakhir supaya menutupi mata */}
       {outfit === 'kacamata' && <Kacamata />}
+      {/* Headphone digambar paling akhir supaya earcup rapi di sisi badan */}
+      {headphones && <Headphones />}
     </svg>
   )
 }

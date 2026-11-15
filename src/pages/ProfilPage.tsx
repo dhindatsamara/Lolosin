@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import {
   getMyProfile,
@@ -7,15 +7,31 @@ import {
   useAuthUser,
   type Profile,
 } from '../lib/auth'
+import { MASCOT_NAME } from '../lib/mascot'
+import {
+  processProfilePhoto,
+  removeProfilePhoto,
+  setProfilePhoto,
+  useProfileAvatar,
+} from '../lib/profile'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
+import { AvatarPicker } from '../components/AvatarPicker'
+import { ProfileAvatar } from '../components/ProfileAvatar'
+import { ConfirmModal } from '../components/quiz/ConfirmModal'
+import { XIcon } from '../components/icons'
 
 const INPUT_CLASS =
   'w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm font-medium outline-none placeholder:text-ink/60 focus:border-primary-600 focus:ring-2 focus:ring-primary-100'
 
 /**
- * Halaman Profil (/profil): username dan email (read-only), formasi
- * yang bisa diedit, toggle Premium Beta, dan tombol Keluar.
+ * Halaman Profil (/profil): avatar (foto unggahan atau avatar maskot),
+ * username dan email, formasi yang bisa diedit, toggle Premium Beta,
+ * dan tombol Keluar.
+ *
+ * Foto profil di-resize dan dikompres di client sebelum disimpan di
+ * localStorage per user; avatar maskot dipilih dari 7 varian. Foto
+ * yang diunggah selalu tampil duluan, sebelum avatar maskot.
  *
  * Hanya bisa dibuka saat login; tamu diarahkan ke /auth. User yang
  * login tapi belum punya profil (mis. login Google yang belum
@@ -24,6 +40,11 @@ const INPUT_CLASS =
 export default function ProfilPage() {
   const { user, loading: authLoading } = useAuthUser()
   const navigate = useNavigate()
+  const { photo } = useProfileAvatar()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [photoMessage, setPhotoMessage] = useState('')
+  const [photoError, setPhotoError] = useState('')
+  const [photoProcessing, setPhotoProcessing] = useState(false)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [profileLoading, setProfileLoading] = useState(true)
   const [formasi, setFormasi] = useState('')
@@ -33,6 +54,7 @@ export default function ProfilPage() {
   const [premiumSaving, setPremiumSaving] = useState(false)
   const [premiumError, setPremiumError] = useState('')
   const [signingOut, setSigningOut] = useState(false)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   useEffect(() => {
     if (authLoading) return
@@ -60,6 +82,37 @@ export default function ProfilPage() {
       cancelled = true
     }
   }, [authLoading, user])
+
+  /** Unggah foto: resize dan kompres di client, lalu simpan per user. */
+  async function handlePhotoChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    // Reset value supaya file yang sama bisa dipilih lagi nanti.
+    event.target.value = ''
+    if (!file) return
+    setPhotoMessage('')
+    setPhotoError('')
+    setPhotoProcessing(true)
+    try {
+      const dataUrl = await processProfilePhoto(file)
+      setProfilePhoto(dataUrl)
+      setPhotoMessage('Fotonya udah terpasang.')
+    } catch (err) {
+      setPhotoError(
+        err instanceof Error
+          ? err.message
+          : 'Fotonya gagal diproses, coba foto lain ya.',
+      )
+    } finally {
+      setPhotoProcessing(false)
+    }
+  }
+
+  /** Hapus foto: kembali memakai avatar maskot. */
+  function handleRemovePhoto() {
+    removeProfilePhoto()
+    setPhotoMessage(`Foto dihapus, avatar ${MASCOT_NAME} dipakai lagi.`)
+    setPhotoError('')
+  }
 
   async function handleSaveFormasi(event: React.FormEvent) {
     event.preventDefault()
@@ -147,23 +200,92 @@ export default function ProfilPage() {
         </p>
       </header>
 
-      <Card padding="lg" className="flex flex-col gap-4">
+      {/* Identitas: avatar besar, username, formasi, email */}
+      <Card padding="lg" className="flex flex-col items-center gap-3 text-center">
+        <ProfileAvatar size={96} />
         <div>
-          <p className="text-xs font-extrabold tracking-wide text-ink/50 uppercase">
-            Username
-          </p>
-          <p className="mt-1 font-display text-lg font-extrabold">
+          <p className="font-display text-xl font-extrabold break-words">
             {profile.username}
           </p>
-        </div>
-        <div>
-          <p className="text-xs font-extrabold tracking-wide text-ink/50 uppercase">
-            Email
+          <p className="mt-0.5 text-sm font-medium text-ink/60">
+            {profile.formasi ?? 'Formasi belum diisi'}
           </p>
-          <p className="mt-1 text-sm font-semibold break-all">
+          <p className="mt-0.5 text-sm font-medium break-all text-ink/60">
             {user.email ?? '-'}
           </p>
         </div>
+      </Card>
+
+      {/* Foto profil: unggah (di-resize di client) atau hapus */}
+      <Card padding="lg" className="flex flex-col gap-3">
+        <div>
+          <h2 className="font-display text-base font-extrabold">
+            Foto profil
+          </h2>
+          <p className="mt-0.5 text-sm leading-relaxed text-ink/60">
+            Foto tersimpan di browser ini dulu, sinkronisasi ke server
+            menyusul.
+          </p>
+        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          aria-label="Pilih foto profil"
+          className="sr-only"
+          onChange={(event) => void handlePhotoChange(event)}
+        />
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={photoProcessing}
+          >
+            {photoProcessing ? 'Memproses...' : 'Unggah foto'}
+          </Button>
+          {photo && (
+            <Button
+              variant="outline"
+              onClick={handleRemovePhoto}
+              disabled={photoProcessing}
+            >
+              Hapus foto
+            </Button>
+          )}
+        </div>
+        <p className="text-xs leading-relaxed font-medium text-ink/60">
+          Foto otomatis diperkecil biar ringan. Foto yang kamu unggah
+          tampil duluan, sebelum avatar {MASCOT_NAME}.
+        </p>
+        {photoMessage && (
+          <p
+            role="status"
+            className="rounded-xl bg-primary-50 px-3.5 py-2.5 text-sm font-semibold text-primary-700"
+          >
+            {photoMessage}
+          </p>
+        )}
+        {photoError && (
+          <p
+            role="alert"
+            className="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-semibold text-red-800"
+          >
+            {photoError}
+          </p>
+        )}
+      </Card>
+
+      {/* Avatar maskot: 7 varian, dipakai kalau belum unggah foto */}
+      <Card padding="lg" className="flex flex-col gap-3">
+        <div>
+          <h2 className="font-display text-base font-extrabold">
+            Avatar {MASCOT_NAME}
+          </h2>
+          <p className="mt-0.5 text-sm leading-relaxed text-ink/60">
+            Pilih gaya {MASCOT_NAME} favoritmu. Dipakai kalau kamu belum
+            unggah foto.
+          </p>
+        </div>
+        <AvatarPicker />
       </Card>
 
       <Card padding="lg">
@@ -257,12 +379,25 @@ export default function ProfilPage() {
 
       <Button
         variant="outline"
-        onClick={handleSignOut}
+        onClick={() => setShowLogoutConfirm(true)}
         disabled={signingOut}
         className="self-start"
       >
         {signingOut ? 'Sebentar ya...' : 'Keluar'}
       </Button>
+      <ConfirmModal
+        open={showLogoutConfirm}
+        title="Yakin mau keluar?"
+        body="Progres belajar di akunmu tetap tersimpan. Kamu bisa masuk lagi kapan pun."
+        confirmLabel="Ya, keluar"
+        cancelLabel="Tetap masuk"
+        icon={<XIcon width={22} height={22} />}
+        onConfirm={() => {
+          setShowLogoutConfirm(false)
+          void handleSignOut()
+        }}
+        onCancel={() => setShowLogoutConfirm(false)}
+      />
     </div>
   )
 }

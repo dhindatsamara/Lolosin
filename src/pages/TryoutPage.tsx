@@ -62,11 +62,13 @@ import {
   CheckIcon,
   ChevronRightIcon,
   ClockIcon,
+  HandshakeIcon,
   InfoIcon,
-  SparklesIcon,
   TrophyIcon,
+  XIcon,
   ZapIcon,
 } from '../components/icons'
+import { MateriMotifMini } from '../components/motifs'
 import type { TryoutResultState } from './TryoutHasilPage'
 
 /** Ikon bendera kecil (gaya garis Lucide) untuk tombol ragu-ragu. */
@@ -91,6 +93,13 @@ function FlagIcon({ width = 24, height = 24 }: { width?: number; height?: number
 }
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
+
+/** Warna motif mini per subtes di kartu passing grade. */
+const MATERI_WATERMARK = {
+  TWK: 'text-twk',
+  TIU: 'text-tiu',
+  TKP: 'text-tkp',
+} as const
 
 type Mode = 'info' | 'running'
 
@@ -159,6 +168,10 @@ function PassingCard({
     >
       <div className="flex items-center gap-2">
         <Badge tone={MATERI_TONE[materi]}>{materi}</Badge>
+        <MateriMotifMini
+          materi={materi}
+          className={MATERI_WATERMARK[materi]}
+        />
         <span className="text-sm font-semibold">
           {MATERI_META[materi].nama}
         </span>
@@ -226,6 +239,7 @@ export function TryoutPage() {
     TRYOUT_TIME_LIMIT_SECONDS,
   )
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [showPalette, setShowPalette] = useState(true)
   const finishedRef = useRef(false)
 
@@ -373,7 +387,7 @@ export function TryoutPage() {
             </span>
             <button
               type="button"
-              onClick={cancelTryout}
+              onClick={() => setShowCancelConfirm(true)}
               className="text-xs font-bold text-red-700 hover:underline"
             >
               Batalkan
@@ -483,6 +497,19 @@ export function TryoutPage() {
           )}
           </div>
         </div>
+        <ConfirmModal
+          open={showCancelConfirm}
+          title="Batalkan tryout ini?"
+          body={`Semua jawaban yang sudah diisi (${answeredCount} dari ${total} soal) akan hilang dan tidak dapat XP.`}
+          confirmLabel="Ya, batalkan"
+          cancelLabel="Lanjut mengerjakan"
+          icon={<XIcon width={22} height={22} />}
+          onConfirm={() => {
+            setShowCancelConfirm(false)
+            cancelTryout()
+          }}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
       </div>
     )
   }
@@ -512,74 +539,106 @@ export function TryoutPage() {
           <button
             type="button"
             onClick={() => setPendingMode('mini')}
-            className="w-full rounded-2xl border border-line bg-white p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
+            className="relative w-full overflow-hidden rounded-2xl border border-accent-200 bg-accent-50 p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
           >
-            <div className="flex items-start gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
-                <ClockIcon width={22} height={22} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="font-display text-lg font-extrabold">
-                  Tryout kilat
-                </p>
-                <p className="text-xs font-semibold text-ink/60">
-                  Buat pemanasan, cepat dan ringan
-                </p>
-                <p className="mt-1.5 text-sm font-bold">
-                  {TRYOUT_TOTAL_QUESTIONS} soal · {TRYOUT_TIME_LIMIT_MINUTES}{' '}
-                  menit · +{XP_TRYOUT_COMPLETE} XP
-                </p>
-                <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
-                  {TRYOUT_QUESTIONS_PER_SECTION} soal per seksi · passing
-                  grade mini TWK ≥{TRYOUT_PASSING_MINI.TWK} · TIU ≥
-                  {TRYOUT_PASSING_MINI.TIU} · TKP ≥{TRYOUT_PASSING_MINI.TKP}{' '}
-                  (maks {TRYOUT_MAX_PER_SECTION} per seksi)
-                </p>
-              </div>
-            </div>
-            <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-primary-600 px-4 py-2 text-sm font-extrabold text-white">
-              Mulai tryout kilat
-              <ChevronRightIcon width={16} height={16} />
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 flex h-1.5"
+            >
+              <span className="flex-1 bg-twk" />
+              <span className="flex-1 bg-tiu" />
+              <span className="flex-1 bg-tkp" />
             </span>
+            <ClockIcon
+              width={88}
+              height={88}
+              className="pointer-events-none absolute -right-3 -bottom-5 text-accent-600 opacity-15"
+            />
+            <div className="relative">
+              <div className="flex items-start gap-3">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-accent-400 text-ink">
+                  <ClockIcon width={28} height={28} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-display text-lg font-extrabold">
+                    Tryout kilat
+                  </p>
+                  <p className="text-xs font-semibold text-ink/60">
+                    Buat pemanasan, cepat dan ringan
+                  </p>
+                  <p className="mt-1.5 text-sm font-bold">
+                    {TRYOUT_TOTAL_QUESTIONS} soal ·{' '}
+                    {TRYOUT_TIME_LIMIT_MINUTES} menit · +{XP_TRYOUT_COMPLETE}{' '}
+                    XP
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+                    {TRYOUT_QUESTIONS_PER_SECTION} soal per seksi · passing
+                    grade mini TWK ≥{TRYOUT_PASSING_MINI.TWK} · TIU ≥
+                    {TRYOUT_PASSING_MINI.TIU} · TKP ≥
+                    {TRYOUT_PASSING_MINI.TKP} (maks {TRYOUT_MAX_PER_SECTION}{' '}
+                    per seksi)
+                  </p>
+                </div>
+              </div>
+              <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-primary-600 px-4 py-2 text-sm font-extrabold text-white">
+                Mulai tryout kilat
+                <ChevronRightIcon width={16} height={16} />
+              </span>
+            </div>
           </button>
 
           <button
             type="button"
             onClick={() => setPendingMode('full')}
-            className="w-full rounded-2xl border border-accent-200 bg-accent-50 p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
+            className="relative w-full overflow-hidden rounded-2xl border border-primary-200 bg-primary-50 p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
           >
-            <div className="flex items-start gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-400 text-ink">
-                <TrophyIcon width={22} height={22} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="flex flex-wrap items-center gap-2 font-display text-lg font-extrabold">
-                  Simulasi CAT
-                  <span className="rounded-full bg-white px-2 py-0.5 font-sans text-[11px] font-extrabold text-ink shadow-soft">
-                    Suasana ujian beneran
-                  </span>
-                </p>
-                <p className="text-xs font-semibold text-ink/60">
-                  Jumlah soal dan waktu persis SKD asli
-                </p>
-                <p className="mt-1.5 text-sm font-bold">
-                  {SIMULASI_TOTAL_QUESTIONS} soal ·{' '}
-                  {SIMULASI_TIME_LIMIT_MINUTES} menit · +{XP_SIMULASI_COMPLETE}{' '}
-                  XP
-                </p>
-                <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
-                  TWK {SIMULASI_QUESTIONS_PER_SECTION.TWK} · TIU{' '}
-                  {SIMULASI_QUESTIONS_PER_SECTION.TIU} · TKP{' '}
-                  {SIMULASI_QUESTIONS_PER_SECTION.TKP} soal · passing grade
-                  asli TWK ≥{ORIGINAL_PASSING.TWK} · TIU ≥
-                  {ORIGINAL_PASSING.TIU} · TKP ≥{ORIGINAL_PASSING.TKP}
-                </p>
-              </div>
-            </div>
-            <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-ink px-4 py-2 text-sm font-extrabold text-white">
-              Mulai simulasi CAT
-              <ChevronRightIcon width={16} height={16} />
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 flex h-1.5"
+            >
+              <span className="flex-1 bg-twk" />
+              <span className="flex-1 bg-tiu" />
+              <span className="flex-1 bg-tkp" />
             </span>
+            <TrophyIcon
+              width={88}
+              height={88}
+              className="pointer-events-none absolute -right-3 -bottom-5 text-primary-600 opacity-15"
+            />
+            <div className="relative">
+              <div className="flex items-start gap-3">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
+                  <TrophyIcon width={28} height={28} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="flex flex-wrap items-center gap-2 font-display text-lg font-extrabold">
+                    Simulasi CAT
+                    <span className="rounded-full bg-white px-2 py-0.5 font-sans text-[11px] font-extrabold text-ink shadow-soft">
+                      Suasana ujian beneran
+                    </span>
+                  </p>
+                  <p className="text-xs font-semibold text-ink/60">
+                    Jumlah soal dan waktu persis SKD asli
+                  </p>
+                  <p className="mt-1.5 text-sm font-bold">
+                    {SIMULASI_TOTAL_QUESTIONS} soal ·{' '}
+                    {SIMULASI_TIME_LIMIT_MINUTES} menit · +
+                    {XP_SIMULASI_COMPLETE} XP
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+                    TWK {SIMULASI_QUESTIONS_PER_SECTION.TWK} · TIU{' '}
+                    {SIMULASI_QUESTIONS_PER_SECTION.TIU} · TKP{' '}
+                    {SIMULASI_QUESTIONS_PER_SECTION.TKP} soal · passing grade
+                    asli TWK ≥{ORIGINAL_PASSING.TWK} · TIU ≥
+                    {ORIGINAL_PASSING.TIU} · TKP ≥{ORIGINAL_PASSING.TKP}
+                  </p>
+                </div>
+              </div>
+              <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-ink px-4 py-2 text-sm font-extrabold text-white">
+                Mulai simulasi CAT
+                <ChevronRightIcon width={16} height={16} />
+              </span>
+            </div>
           </button>
         </div>
         {startError && (
@@ -599,7 +658,7 @@ export function TryoutPage() {
             Jawaban benar {TWK_TIU_CORRECT_POINTS} poin, salah atau kosong 0.
           </RuleCard>
           <RuleCard
-            icon={<SparklesIcon width={20} height={20} />}
+            icon={<HandshakeIcon width={20} height={20} />}
             title="TKP"
           >
             Tiap opsi bernilai {TKP_FALLBACK_WRONG}–{TKP_FALLBACK_CORRECT}{' '}

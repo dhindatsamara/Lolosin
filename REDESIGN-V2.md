@@ -201,10 +201,10 @@ header tampil email bukan username; beranda login kosong.
 ## Maskot: nama baru + hijau terang + interaktif + peliharaan
 
 - Nama maskot disentralkan di SATU konstanta `MASCOT_NAME` di
-  `src/lib/mascot.ts` (placeholder "Losi" sampai user memilih nama
-  final dari kandidat Losi/Nusa/Bima/Sina). Tidak ada "Lolo" hardcode
-  tersisa di luar konstanta (verifikasi grep; "Lolosin" dan lencana
-  "Lolos Mini"/"Lolos Simulasi" bukan nama maskot).
+  `src/lib/mascot.ts` (nama final "Osi" dipilih user di v2.2.1).
+  Tidak ada nama lama yang hardcode tersisa di luar konstanta
+  (verifikasi grep; "Lolosin" dan lencana "Lolos Mini"/"Lolos
+  Simulasi" bukan nama maskot).
 - Warna tubuh maskot `#0E5C43` menjadi hijau terang `#2FBF71`
   (highlight `#B8F1D1`) supaya nge-pop di atas hero hijau gelap.
 - Favicon + ikon PWA (`public/icons/icon.svg`, `maskable.svg`)
@@ -344,3 +344,295 @@ menemukan selector klik maskot yang salah, mengklik CTA "Daftar
 gratis" (diperbaiki di script QA); run 5 menemukan tamu /profil
 terjebak loading selamanya (diperbaiki di ProfilPage); run 6 hijau
 penuh.
+
+## Iterasi v2.2.1 (2026-11-15, feedback beruntun user — BELUM LIVE)
+
+Satu build menampung 6 pesan feedback user (11:14, 11:18, 11:22,
+11:23, 11:25). Dikerjakan paralel oleh 5 subagent dengan pembagian
+file yang tegas; QA + commit oleh koordinator.
+
+### Nama maskot final: Osi
+
+- `MASCOT_NAME` di `src/lib/mascot.ts` menjadi 'Osi'. 0 "Losi"
+  tersisa di `src/` (verifikasi grep, termasuk komentar).
+- Teks "maskot Lolosin" di bawah nama maskot di hero landing
+  DIHAPUS (hanya label aksesibilitas `aria-label` yang
+  mempertahankan frasa itu, tidak terlihat).
+
+### Maskot interaktif: goyang, bukan ramai
+
+- `InteractiveMascot.tsx`: efek +XP melayang DIHAPUS (dan tidak ada
+  efek yang memunculkan mini-maskot; audit membuktikan tidak ada kode
+  semacam itu, yang ada hanya satu maskot + satu +XP + balon).
+  Tekan maskot kini: Osi GOYANG lucu (keyframes `mascot-goyang` di
+  `index.css`: geleng kiri-kanan + lompat kecil, hanya transform,
+  berakhir di posisi diam) + balon penyemangat bergilir + mood
+  'semangat' 900ms. Keyframes lama `mascot-squash`/`xp-float` dan
+  variabel `--spring-easing` dihapus (tidak terpakai lagi).
+- Dashboard logged-in: maskot hero yang tadinya statis kini memakai
+  `InteractiveMascot` yang sama (bisa ditekan, kalimat pertama
+  kontekstual streak: "Streak aman! Kamu keren." / "Aku nemenin
+  kamu belajar hari ini!"), jadi Osi hadir jelas di beranda login.
+
+### Konfirmasi semua aksi penting (ConfirmModal digeneralisasi)
+
+- `ConfirmModal.tsx` kini umum: props `body?`, `confirmLabel?`
+  (default "Mulai"), `cancelLabel?` (default "Batalkan"), `icon?`
+  (default PlayIcon); `modeLabel?`/`summary?` opsional (hanya
+  tryout). Semua konfirmasi memakai komponen yang sama.
+- DENGAN konfirmasi: keluar (header AuthStatus, halaman Profil,
+  gate verifikasi di App) — "Yakin mau keluar?"; batalkan tryout
+  yang sedang jalan — "Batalkan tryout ini?" (menyebut N dari M
+  soal hilang + tanpa XP); akhiri drill yang sudah menjawab —
+  "Akhiri sesi drill ini?" (bonus selesai sesi hilang); batalkan
+  battle (lobi + arena, copy berbeda per fase); keluar dari sesi —
+  "Keluar dari sesi ini?" (harus gabung lagi pakai kode); host
+  mengakhiri sesi — "Akhiri sesi sekarang?" (pemain yang belum
+  selesai tidak bisa lanjut); hapus semua tanda hafal Kartu Kilat
+  — "Hapus semua tanda hafal?" (tidak bisa dibatalkan).
+  Selesaikan tryout sudah punya konfirmasi inline dua langkah
+  sejak v2.2 (dipertahankan).
+- SENGAJA TANPA konfirmasi: pilih opsi / Jawab (reversible sebelum
+  dikunci; Jawab adalah commit yang dimaksudkan); klaim misi
+  (hadiah, tidak merugikan); mulai drill/ulas/tryout (tidak ada
+  yang hilang); simpan formasi, toggle Premium Beta (edit
+  reversible); kirim ulang verifikasi, login Google, masuk/daftar
+  (aman); salin kode, bagikan peliharaan (tidak merugikan);
+  navigasi biasa; tandai ragu, navigasi palet, ganti tab (state
+  UI); tandai materi dibaca (tidak merugikan); tutup
+  warning/perayaan (trivial); akhiri sesi ulas soal (jawaban sudah
+  tersimpan, yang belum tetap jatuh tempo — tidak ada yang
+  hilang); akhiri battle lebih awal saat lawan sudah pergi
+  (hasil sudah ditentukan); mulai sesi host (pemain telat tetap
+  bisa gabung, tidak ada yang terkunci); lihat hasil Kuis Kilat /
+  Benar-Salah (semua sudah tersimpan).
+
+### Footer, tombol jump, ikon cute (Layout + favicon)
+
+- Footer punya identitas sendiri: `bg-primary-900` + `border-t-4
+  border-accent-500`, teks terang — header, body, footer jelas
+  beda. Isi footer dipertahankan.
+- Tombol jump "Ke atas"/"Ke bawah" di `Layout` (semua page):
+  muncul setelah scroll (atas >400px; bawah saat sudah scroll dan
+  sisa >100px), smooth scroll (instan bila reduced-motion),
+  `bottom-20` di mobile supaya tidak menumpuk bottom nav,
+  `bottom-6` di desktop, aria-label "Ke atas"/"Ke bawah".
+- Favicon + ikon app digambar ulang mengikuti Mascot mood
+  'senang': mata lebih kecil dan lembut (putih r=30, pupil r=13),
+  senyum lebar yang jelas, pipi merona. Diverifikasi render di
+  16/32/64/128px: lucu dan ramah di semua ukuran, tidak melotot.
+  LogoMark header kini eksplisit mood 'senang' (mood 'kagum'
+  dilarang di ukuran kecil).
+- Catatan: file PNG lokal (`icon-192.png`, `icon-512.png`,
+  `maskable-512.png`) masih memakai wajah lama — tidak pernah
+  ter-deploy (push_files hanya teks) dan bukan yang dipakai
+  manifest; bila suatu hari diunggah lewat web, regenerasi dari
+  SVG baru.
+
+### Dua game baru di hub /main
+
+Hub kini berisi LIMA game: Battle 1v1, Sesi Bareng, Kuis Kilat,
+Kartu Kilat, Benar/Salah Kilat. Dua yang baru solo + tamu, gaya
+visual konsisten dengan Kuis Kilat, konten hanya dari data soal
+yang ada (tidak ada konten karangan).
+
+- **Kartu Kilat** (`/main/kartu-kilat`): flashcard dari soal TWK
+  (default; filter TWK/TIU/TKP/Semua), 20 kartu per sesi, soal
+  berpembahasan diutamakan. Depan = stem, belakang = kunci +
+  pembahasan (±160 karakter). Tap untuk balik (rotateY, tanpa
+  transisi bila reduced-motion), tandai "Hafal"/"Belum"; yang
+  Hafal keluar dari rotasi. Progres di
+  `localStorage lolosin:kartu-kilat:v1`. XP 10 flat per sesi
+  selesai. "Ulang dari awal" pakai ConfirmModal. Deck TWK: 2.968
+  soal (2.621 berkunci + pembahasan).
+- **Benar/Salah Kilat** (`/main/benar-salah`): 60 detik, pernyataan
+  dari soal TWK/TIU (TKP tidak dipakai karena tidak ada
+  benar/salah): stem + klaim jawaban, 50% klaim = kunci (benar),
+  50% = pengecoh (salah). Kombo 1x/2x/3x sama seperti Kuis Kilat,
+  10 poin dasar, XP skor/10 maks 50. Best score di
+  `localStorage lolosin:benar-salah-best`. Pool: 6.686 soal.
+
+### Battle 1v1: kategori + undang teman
+
+- Host memilih kategori soal saat membuat battle: TWK, TIU, TKP,
+  atau Campur (default). Kategori hanya mengubah pemilihan soal di
+  host (`pickGameQuestionIds(count, category)`); lawan membaca 10
+  soal yang sama dari baris `battle_sessions`. Kategori diturunkan
+  dari soal tersimpan (`deriveBattleCategory`, tanpa kolom baru),
+  tampil di lobi, arena, dan kartu undangan.
+- Undang lewat LINK: tombol "Salin link" di lobi (feedback "Link
+  tersalin"), format `/#/main/battle?code=XXXXXX`; BattlePage
+  membaca `?code=` saat mount dan mengisi kode gabung. Kode tidak
+  valid ditangani dengan pesan ramah.
+- Undang lewat USERNAME: host ketik username, lookup
+  `findProfileByUsername` (tidak ketemu: "Username tidak ditemukan,
+  cek lagi ya."; diri sendiri ditolak), lalu `inviteGuestToBattle`
+  mengisi `guest_id` secara atomik (gagal bila lawan lain sudah
+  gabung duluan). Lawan melihat "Undangan battle masuk" di halaman
+  Battle (`getIncomingInvites`, guest_id = saya + status waiting)
+  dengan tombol Terima (`acceptBattleInvite`, status jadi active)
+  / Tolak (sesi dibatalkan). `joinBattle` menolak battle yang
+  `guest_id`-nya sudah terisi, jadi undangan tidak bisa direbut
+  lewat kode. RLS migrasi 002 sudah mengizinkan semua langkah ini
+  (SELECT terbuka untuk user login, UPDATE hanya host/guest battle
+  itu) — TIDAK butuh migrasi baru.
+- Konfirmasi batal battle: lobi "Batalkan battle ini?" (kode tidak
+  bisa dipakai lagi), arena "Keluar dari battle?" (jawaban tidak
+  dihitung). Verifikasi live butuh 2 akun (Realtime tidak bisa
+  diuji dari VM).
+
+### Visual khas per subtes (Belajar + Tryout)
+
+- Komponen baru `src/components/motifs.tsx`: `GarudaMotif` (siluet
+  burung terbang stylized ORIGINAL, digambar sendiri — burung
+  generik, BUKAN lambang negara: tanpa perisai/pita/mahkota/cakar),
+  `MathWatermark` (glif Σ π √), `MateriWatermark` (watermark sudut
+  kartu/header), `MateriMotifMini` (Garuda kecil / Σ / jabat
+  tangan). Semua `aria-hidden` + `pointer-events-none`, tidak
+  menutupi teks/tombol.
+- TWK: motif Garuda + aksen merah (strip atas kartu grup).
+  TIU: simbol matematika sebagai watermark + ikon. TKP: ikon
+  `HandshakeIcon` baru (gaya garis Lucide, di `icons.tsx`) +
+  aksen ungu. Diterapkan di daftar Belajar, detail materi, dan
+  kartu passing grade + kartu aturan TKP di Tryout. Tanpa font
+  script, tanpa grid, tanpa kartu sticker.
+
+### Wajah Osi: semua cute + mekanik "Bujuk Osi"
+
+- Audit semua wajah: mood 'kagum' didesain ulang jadi cute (mata
+  r=6.5 dari 7.5, pupil 2.8 dari 3.6, mulut "o" diganti senyum
+  terbuka kecil). Mood baru 'marah' (cute marah: alis miring,
+  cemberut kecil, mata normal) HANYA dipakai saat streak putus —
+  verifikasi grep: pemakaian hanya di hero dashboard, kartu Bujuk,
+  dan PetCard, semuanya terkunci pada `streakBroken`.
+- Mekanik "Bujuk Osi" (streak revive): saat store dimuat dan
+  aktivitas terakhir sudah 2+ hari lalu dengan streak >0,
+  `normalizeStreak` menyimpan angka ke `streakBroken` dan mereset
+  streak ke 0 (hanya pada transisi; user baru tidak kena).
+  Dashboard menampilkan Osi marah + kartu "Bujuk Osi" yang
+  menjelaskan aturan jujur (ketuk Bujuk, selesaikan 1 drill atau
+  baca 1 seksi materi, streak balik ke N hari; satu kesempatan per
+  putus; belajar biasa tanpa membujuk mulai dari 1). Tombol
+  "Bujuk Osi" memanggil `armRevive()` lalu ke /latihan;
+  `maybeReviveStreak()` dipanggil di akhir `completeDrill` dan
+  `completeSectionRead` (di `lib/gamification.ts`) dan memulihkan
+  streak bila revive dipersenjatai; bila tidak, `recordActivity`
+  menghabiskan kesempatan (streak 1, broken state hilang). Satu
+  revive per kejadian putus, tidak bisa di-farm. State di store
+  utama (`streakBroken`, `reviveArmed`, backward compatible).
+
+### Bug progres tercampur antar akun: namespacing per user
+
+- Penyebab: progres di `localStorage` key global `lolosin:v1`.
+  Perbaikan: helper baru `src/lib/storage.ts` — `scopedKey(base)`
+  menghasilkan `lolosin:<base>:<userId>` saat login dan
+  `lolosin:<base>:guest` saat tamu. Store utama memakai scoped
+  key; `setStoreUserId(userId)` (dipanggil efek di App saat auth
+  user berubah) membersihkan cache + memberi tahu listener
+  `useStore` sehingga UI langsung me-render progres user yang
+  benar tanpa reload. Logout kembali ke data tamu.
+- Migrasi sekali: `migrateLegacyKey(base)` menyalin key legacy ke
+  scoped key aktif bila scoped key belum berisi data, lalu selalu
+  menghapus legacy (stale bila scoped sudah berisi). Dijalankan
+  saat store dimuat + saat key lain dibaca pertama kali.
+- Audit semua key: namespaced = store utama, `pending-scores`
+  (plus userId dicap di tiap entri antrean sebagai pertahanan
+  tambahan saat flush), best score Kuis Kilat, best score
+  Benar/Salah, daftar hafal Kartu Kilat, state revive (di dalam
+  store). Tetap global = `dismiss-guest-warning` (preferensi UI
+  per-browser, hanya relevan saat logout). Key Supabase
+  (`sb-<ref>-auth-token`) tidak disentuh.
+- Verifikasi otomatis: migrasi legacy ke guest + guest key
+  (QA 9b). Verifikasi 2 akun (A → B mulai 0 → A utuh) butuh login
+  Supabase sungguhan — manual, belum dilakukan.
+
+### Ikon mata password (AuthPage)
+
+- Satu input password dipakai mode Masuk + Daftar; tombol
+  show/hide dengan aria-label dinamis "Tampilkan password" /
+  "Sembunyikan password" + `aria-pressed`, ikon mata/mata-tercoret
+  inline (EyeIcon/EyeOffIcon di AuthPage). Default tersembunyi.
+
+### Profil kaya: pill username, foto, avatar Osi (7 varian)
+
+- Pill username header (AuthStatus): dulu `max-w-28` memotong
+  username panjang ("dhindalolosc..."). Sekarang lebar fleksibel
+  `max-w-44` (mobile) / `sm:max-w-56` / `lg:max-w-64`, berisi
+  avatar bulat 28px + username; username 15 karakter (sekitar
+  130px) muat penuh di desktop (ruang teks sekitar 202px), bahkan
+  username maksimal 20 karakter masih muat. Ellipsis hanya
+  fallback terakhir; `title` selalu menampilkan username lengkap.
+- Foto profil (ProfilPage): upload JPG/PNG, di-resize dan
+  dikompres di client (canvas, sisi maks 256px, JPEG kualitas
+  0.8, latar putih), disimpan per user di localStorage
+  `lolosin:profil-foto:<userId>` (atau `:guest`). Tombol "Hapus
+  foto" mengembalikan ke avatar maskot. Microcopy jujur: "Foto
+  tersimpan di browser ini dulu, sinkronisasi ke server
+  menyusul." Error ramah untuk file bukan gambar, gagal proses,
+  dan penyimpanan penuh (QuotaExceededError).
+- Avatar Osi (ProfilPage, kartu "Avatar Osi"): 7 varian dari art
+  maskot yang sudah ada, semua mood cute (tanpa marah/sedih):
+  Wisuda (default), Kacamata, Mahkota, Syal, Musik (headphone,
+  tanpa topi), Polos, Wisudawan (jubah). Dipilih lewat radiogroup
+  (ring hijau + latar hijau muda untuk yang terpilih), disimpan
+  per user di `lolosin:profil-avatar:<userId>`. Foto unggahan
+  selalu tampil duluan, sebelum avatar maskot.
+- Implementasi: `src/lib/profile.ts` (state foto + avatar,
+  pub/sub + hook `useProfileAvatar()` via useSyncExternalStore
+  mengikuti pola store; snapshot di-cache per namespace sehingga
+  ganti akun otomatis memuat namespace baru),
+  `src/components/ProfileAvatar.tsx` (satu komponen tampil:
+  foto dulu, lalu varian maskot 88% diameter lingkaran supaya
+  topi/mahkota tidak terpotong), `src/components/AvatarPicker.tsx`
+  (grid radiogroup). Perubahan di Profil langsung tercermin di
+  header tanpa reload.
+- Mascot.tsx hanya aditif untuk ini: prop `showCap` (default
+  true) + `headphones` (default false) + komponen `Headphones`
+  (busur amber + earcup hijau gelap). Pemakaian lama tanpa kedua
+  prop tampil sama persis; `pet.ts` tidak disentuh (headphone
+  bukan outfit streak).
+- Dashboard logged-in: kartu profil ringkas (`ProfileCard` di
+  HomePage, setelah hero) berisi avatar, username, formasi, dan
+  tombol "Ubah profil" ke /profil. Hanya tampil saat login dan
+  profil termuat; tamu tidak melihat kartu ini.
+- Menu browser formasi CPNS (filter wilayah/jurusan/gaji)
+  sengaja TIDAK dibangun: fase berikutnya, belum ada sumber
+  datanya.
+- Verifikasi butuh login sungguhan (manual, belum dilakukan):
+  pill muat username 15+ karakter; avatar berubah instan di
+  header + bertahan setelah refresh; foto tampil di header,
+  Profil, dan dashboard; akun kedua tidak melihat foto/avatar
+  akun pertama.
+
+### QA v2.2.1
+
+- QA lokal penuh (Playwright, `~/workspace/qa-lolosin/qa.mjs`,
+  dua build base `/Lolosin/`: tanpa Supabase di 4173 dan env
+  palsu di 4174): **311/311 PASS, 0 FAIL, 0 console error, 0
+  page error, 0 console warning** (run kedua; laporan di
+  `QA-LOCAL-2026-11-13.md`). Seksi baru: motif per subtes (3b),
+  konfirmasi akhiri drill (6c), batal tryout mobile (7b),
+  Bujuk Osi seeded (8b, 9 cek), migrasi legacy key (9b),
+  password eye + 5 kartu hub + Kartu Kilat + Benar/Salah Kilat
+  + footer/jump (seksi 11). Typecheck 0 error, build lulus,
+  grep 0 em-dash di `src/`, 0 "Losi", tanpa font script/grid/
+  sticker.
+- Run pertama crash di alur Kartu Kilat dan menemukan bug nyata:
+  `KartuKilatPage` memanggil `pembahasan.trim()` padahal 193
+  soal quizable punya `pembahasan: null` di data mentah (179 di
+  antaranya TWK), sehingga game tidak pernah mulai. Diperbaiki
+  null-safe (`(pembahasan ?? '').trim()`) di `buildDeck` dan
+  render arena; run kedua lulus penuh. Benar/Salah Kilat dicek
+  aman (pool sudah memakai `visibleOptions` null-safe).
+- Ikon Osi baru dirender nyata di 16/32/64/128px dan diverifikasi
+  cute + ramah di semua ukuran. File PNG lama di `public/icons/`
+  masih berwajah lama (tidak pernah ter-deploy karena push hanya
+  file teks, dan tidak direferensikan manifest); regenerasi dari
+  SVG baru bila suatu saat diunggah via web.
+- Yang TIDAK bisa diverifikasi otomatis (butuh login Supabase
+  sungguhan / 2 akun, manual): modal konfirmasi logout (header,
+  Profil, gate verifikasi), batal battle, keluar sesi, akhiri
+  sesi host; battle kategori + invite username/link + Realtime;
+  ganti akun A/B untuk namespacing; foto profil + avatar +
+  pill username panjang; verifikasi live end-to-end (daftar +
+  1 simulasi full + cek Peringkat).

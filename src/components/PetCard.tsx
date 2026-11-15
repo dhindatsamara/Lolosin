@@ -28,7 +28,7 @@ const SHARE_MESSAGES: Record<Exclude<ShareState, 'idle'>, string> = {
 }
 
 export function PetCard() {
-  const { streak } = useStore()
+  const { streak, streakBroken } = useStore()
   const { stage, next, remaining } = getPetStage(streak)
   const [shareState, setShareState] = useState<ShareState>('idle')
   const timer = useRef<number | undefined>(undefined)
@@ -56,8 +56,10 @@ export function PetCard() {
     <Card className="border-primary-200 bg-primary-50 p-5 lg:p-6">
       <div className="flex flex-col items-center gap-5 sm:flex-row sm:gap-6">
         <div className="flex shrink-0 flex-col items-center">
+          {/* Saat streak putus, Osi ngambek (mood marah). Logika outfit
+              streak tidak berubah. */}
           <Mascot
-            mood="senang"
+            mood={streakBroken ? 'marah' : 'senang'}
             size={120}
             outfit={stage.outfit}
             className="float-soft h-auto w-28 lg:w-32"

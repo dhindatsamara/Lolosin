@@ -259,59 +259,36 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* v2.2: maskot interaktif (lihat src/components/InteractiveMascot.tsx) */
-/* Squash-and-stretch saat ditekan, "+XP" melayang naik, dan balon     */
-/* ucapan yang nge-pop tiap ganti kalimat. Semuanya compositor-only    */
+/* v2.2.1: maskot interaktif (lihat src/components/InteractiveMascot.tsx) */
+/* Osi goyang lucu saat ditekan + balon ucapan yang nge-pop tiap      */
+/* ganti kalimat. Sengaja tanpa elemen tambahan (tanpa +XP melayang):  */
+/* satu maskot, satu balon, bersih. Semuanya compositor-only          */
 /* (transform dan opacity) dan opt-in lewat prefers-reduced-motion:    */
 /* tanpa preferensi gerak, konten tampil statis dalam keadaan akhir.   */
 /* ------------------------------------------------------------------ */
 
-/* Easing pegas (spring) berbasis linear(), dipakai ulang untuk bounce
-   maskot. linear() Baseline sejak 2023; browser lama mengabaikan
-   deklarasi ini dan memakai cubic-bezier fallback di bawah. */
-:root {
-  --spring-easing: linear(0, 0.016 0.5%, 0.06 1%, 0.226 2%, 1.116 5.4%, 1.375 6.6%, 1.527 7.7%, 1.565 8.2%, 1.585 8.8%, 1.581 9.3%, 1.559 9.8%, 1.458 10.9%, 0.937 14.3%, 0.784 15.5%, 0.693 16.6%, 0.67 17.1%, 0.657 17.7%, 0.671 18.7%, 0.729 19.8%, 1.042 23.3%, 1.13 24.5%, 1.182 25.6%, 1.201 26.7%, 1.192 27.7%, 1.156 28.8%, 0.977 32.2%, 0.925 33.4%, 0.894 34.5%, 0.882 35.6%, 0.887 36.6%, 0.907 37.7%, 1.045 42.4%, 1.069 44.5%, 1.059 46.3%, 0.979 50.9%, 0.96 53.4%, 0.966 55.3%, 1.013 59.9%, 1.024 62.3%, 0.986 71.2%, 1.008 79.9%, 0.995 88.9%, 1);
-}
-
-/* Squash-and-stretch: gepeng dulu, melar ke atas, lalu kembali pas ke
-   skala 1 (game-feel: tiap efek harus berakhir di nilai diamnya). */
-@keyframes mascot-squash {
+/* Goyang lucu: geleng kiri-kanan sambil melompat kecil, lalu kembali
+   pas ke posisi diam (game-feel: tiap efek harus berakhir di nilai
+   diamnya). Hanya transform, tanpa elemen tambahan yang menumpuk. */
+@keyframes mascot-goyang {
   0% {
-    transform: scale(1, 1);
-  }
-  25% {
-    transform: scale(1.18, 0.8);
-  }
-  50% {
-    transform: scale(0.92, 1.1);
-  }
-  70% {
-    transform: scale(1.04, 0.96);
-  }
-  100% {
-    transform: scale(1, 1);
-  }
-}
-
-/* "+XP" melayang naik lalu menghilang. Default opacity 0: tanpa
-   animasi (reduced motion), elemen ini tidak pernah terlihat. */
-@keyframes xp-float {
-  0% {
-    opacity: 0;
-    transform: translateY(6px) scale(0.8);
+    transform: rotate(0deg) translateY(0) scale(1, 1);
   }
   20% {
-    opacity: 1;
-    transform: translateY(0) scale(1.05);
+    transform: rotate(-8deg) translateY(-6px) scale(1.04, 0.96);
+  }
+  40% {
+    transform: rotate(7deg) translateY(-8px) scale(0.97, 1.04);
+  }
+  60% {
+    transform: rotate(-5deg) translateY(-4px) scale(1.02, 0.98);
+  }
+  80% {
+    transform: rotate(3deg) translateY(-2px) scale(1, 1);
   }
   100% {
-    opacity: 0;
-    transform: translateY(-30px) scale(1);
+    transform: rotate(0deg) translateY(0) scale(1, 1);
   }
-}
-
-.xp-float {
-  opacity: 0;
 }
 
 /* Balon ucapan nge-pop halus tiap kalimat berganti. */
@@ -327,17 +304,32 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .mascot-bounce {
-    /* Fallback dulu, lalu easing pegas menimpa di browser modern. */
-    animation: mascot-squash 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation-timing-function: var(--spring-easing);
-  }
-
-  .xp-float {
-    animation: xp-float 0.9s ease-out forwards;
+  .mascot-goyang {
+    animation: mascot-goyang 0.7s ease-out;
   }
 
   .bubble-pop {
     animation: bubble-pop 0.3s ease-out;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* v2.2.1: motif subtes Belajar dan Tryout (src/components/motifs.tsx) */
+/* Garuda stylized TWK melayang halus di header. Hanya transform,     */
+/* opt-in lewat prefers-reduced-motion.                               */
+/* ------------------------------------------------------------------ */
+
+@keyframes motif-melayang {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motif-melayang {
+    animation: motif-melayang 3.2s ease-in-out infinite alternate;
   }
 }

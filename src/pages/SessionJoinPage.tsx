@@ -36,6 +36,7 @@ import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { OptionButton } from '../components/quiz/OptionButton'
+import { ConfirmModal } from '../components/quiz/ConfirmModal'
 import {
   ArrowLeftIcon,
   CheckIcon,
@@ -68,6 +69,7 @@ export function SessionJoinPage() {
   const [players, setPlayers] = useState<GamePlayerRow[]>([])
   const [message, setMessage] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
   const [joinCode, setJoinCode] = useState('')
   const [username, setUsername] = useState('')
 
@@ -446,11 +448,24 @@ export function SessionJoinPage() {
 
         <button
           type="button"
-          onClick={handleLeave}
+          onClick={() => setShowLeaveConfirm(true)}
           className="text-center text-sm font-semibold text-ink/50 hover:text-ink/80 hover:underline"
         >
           Keluar dari sesi ini
         </button>
+        <ConfirmModal
+          open={showLeaveConfirm}
+          title="Keluar dari sesi ini?"
+          body="Kamu harus gabung lagi pakai kode kalau mau balik."
+          confirmLabel="Ya, keluar"
+          cancelLabel="Tetap di sesi"
+          icon={<XIcon width={22} height={22} />}
+          onConfirm={() => {
+            setShowLeaveConfirm(false)
+            void handleLeave()
+          }}
+          onCancel={() => setShowLeaveConfirm(false)}
+        />
       </div>
     )
   }

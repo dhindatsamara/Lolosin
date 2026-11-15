@@ -1,7 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Ikon maskable Lolosin v2.2: latar full-bleed hijau tua, maskot di
-       dalam safe zone 80% (tengah) supaya tidak terpotong mask
-       bulat/kotak launcher. -->
+  <!-- Ikon maskable Lolosin v2.2.1: latar full-bleed hijau tua, maskot
+       Osi di dalam safe zone 80% (tengah) supaya tidak terpotong mask
+       bulat/kotak launcher. Wajah mengikuti Mascot mood 'senang': mata
+       lebih kecil dan lembut, senyum lebar yang jelas, pipi merona.
+       Versi sebelumnya terlihat melotot di ukuran kecil karena mata
+       putih dan pupilnya terlalu besar. -->
   <rect width="512" height="512" fill="#0E5C43"/>
   <g transform="translate(51.2 51.2) scale(0.8)">
     <!-- Badan blob hijau terang -->
@@ -14,16 +17,16 @@
     <path d="M395 91 L416 160" stroke="#1B1E1C" stroke-width="13" stroke-linecap="round"/>
     <circle cx="416" cy="170" r="19" fill="#D97706" stroke="#1B1E1C" stroke-width="11"/>
     <!-- Pipi merona -->
-    <ellipse cx="139" cy="325" rx="21" ry="15" fill="#FCD34D" opacity="0.8"/>
-    <ellipse cx="373" cy="325" rx="21" ry="15" fill="#FCD34D" opacity="0.8"/>
-    <!-- Mata -->
-    <circle cx="192" cy="277" r="37" fill="#FFFFFF" stroke="#1B1E1C" stroke-width="13"/>
-    <circle cx="320" cy="277" r="37" fill="#FFFFFF" stroke="#1B1E1C" stroke-width="13"/>
-    <circle cx="197" cy="283" r="17" fill="#1B1E1C"/>
-    <circle cx="325" cy="283" r="17" fill="#1B1E1C"/>
-    <circle cx="205" cy="272" r="7" fill="#FFFFFF"/>
-    <circle cx="333" cy="272" r="7" fill="#FFFFFF"/>
-    <!-- Senyum -->
-    <path d="M197 336 Q256 379 315 336" fill="none" stroke="#1B1E1C" stroke-width="16" stroke-linecap="round"/>
+    <ellipse cx="139" cy="325" rx="24" ry="17" fill="#FCD34D" opacity="0.8"/>
+    <ellipse cx="373" cy="325" rx="24" ry="17" fill="#FCD34D" opacity="0.8"/>
+    <!-- Mata lembut: putih lebih kecil, pupil kecil, highlight -->
+    <circle cx="192" cy="277" r="30" fill="#FFFFFF" stroke="#1B1E1C" stroke-width="11"/>
+    <circle cx="320" cy="277" r="30" fill="#FFFFFF" stroke="#1B1E1C" stroke-width="11"/>
+    <circle cx="196" cy="282" r="13" fill="#1B1E1C"/>
+    <circle cx="324" cy="282" r="13" fill="#1B1E1C"/>
+    <circle cx="205" cy="272" r="6" fill="#FFFFFF"/>
+    <circle cx="333" cy="272" r="6" fill="#FFFFFF"/>
+    <!-- Senyum lebar yang jelas -->
+    <path d="M186 330 Q256 388 326 330" fill="none" stroke="#1B1E1C" stroke-width="17" stroke-linecap="round"/>
   </g>
 </svg>

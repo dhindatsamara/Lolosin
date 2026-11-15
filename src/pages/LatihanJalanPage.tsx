@@ -41,7 +41,8 @@ import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { QuestionCard } from '../components/quiz/QuestionCard'
-import { CheckIcon, ChevronRightIcon } from '../components/icons'
+import { ConfirmModal } from '../components/quiz/ConfirmModal'
+import { CheckIcon, ChevronRightIcon, XIcon } from '../components/icons'
 
 interface DrillState {
   materi?: unknown
@@ -109,6 +110,9 @@ export function LatihanJalanPage({
   // Kilas "+10 XP" saat jawaban benar (angka = kunci animasi ulang).
   const [xpFlashKey, setXpFlashKey] = useState(0)
   const [showXpFlash, setShowXpFlash] = useState(false)
+  // Konfirmasi akhiri sesi (hanya drill yang sudah menjawab: bonus
+  // selesai sesi hilang kalau keluar di tengah jalan).
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
 
   // Catat aktivitas (streak) saat sesi dimulai.
   useEffect(() => {
@@ -375,12 +379,22 @@ export function LatihanJalanPage({
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
       <header>
-        <Link
-          to="/latihan"
+        <button
+          type="button"
+          onClick={() => {
+            // Drill yang sudah menjawab: tanya dulu, bonus selesai sesi
+            // hilang kalau keluar. Ulas soal / belum menjawab: langsung
+            // keluar, tidak ada yang hilang.
+            if (!isReview && answeredCount > 0) {
+              setShowLeaveConfirm(true)
+            } else {
+              navigate('/latihan')
+            }
+          }}
           className="text-sm font-semibold text-primary-700 hover:underline"
         >
           ← Akhiri sesi & pilih sesi lain
-        </Link>
+        </button>
         <h1 className="mt-2 flex flex-wrap items-center gap-2 font-display text-3xl font-extrabold">
           {isReview ? (
             'Ulas Soal'
@@ -468,6 +482,20 @@ export function LatihanJalanPage({
           +{XP_DRILL_CORRECT} XP · Jawaban benar!
         </p>
       </div>
+
+      <ConfirmModal
+        open={showLeaveConfirm}
+        title="Akhiri sesi drill ini?"
+        body="Jawaban yang sudah dikunci tetap tersimpan, tapi bonus selesai sesi tidak didapat."
+        confirmLabel="Ya, akhiri"
+        cancelLabel="Lanjut latihan"
+        icon={<XIcon width={22} height={22} />}
+        onConfirm={() => {
+          setShowLeaveConfirm(false)
+          navigate('/latihan')
+        }}
+        onCancel={() => setShowLeaveConfirm(false)}
+      />
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { GuestProgressWarning } from '../components/GuestProgressWarning'
 import { CheckIcon } from '../components/icons'
+import { MateriMotifMini, MateriWatermark } from '../components/motifs'
 import {
   getMateriGroupsByMateri,
   groupReadProgress,
@@ -20,6 +21,20 @@ const MATERI_CHIP: Record<Materi, string> = {
   TWK: 'bg-twk-soft text-twk',
   TIU: 'bg-tiu-soft text-tiu',
   TKP: 'bg-tkp-soft text-tkp',
+}
+
+/** Warna motif per subtes, dipakai dengan opacity rendah untuk watermark. */
+const MATERI_WATERMARK: Record<Materi, string> = {
+  TWK: 'text-twk',
+  TIU: 'text-tiu',
+  TKP: 'text-tkp',
+}
+
+/** Strip aksen atas kartu grup: TWK merah, TIU biru, TKP ungu. */
+const MATERI_STRIP: Record<Materi, string> = {
+  TWK: 'bg-red-600',
+  TIU: 'bg-tiu',
+  TKP: 'bg-tkp',
 }
 
 /**
@@ -113,41 +128,63 @@ function GroupCard({
 
   return (
     <Link to={`/belajar/${group.id}`} className="block h-full">
-      <article className="card-lift reveal flex h-full flex-col rounded-2xl border border-line bg-white p-4 shadow-soft lg:p-5">
-        <div className="flex items-start justify-between gap-3">
-          <span
-            className={cx(
-              'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-display text-xs font-extrabold',
-              MATERI_CHIP[group.materi],
-            )}
-            aria-hidden="true"
-          >
-            {group.materi}
-          </span>
-          {selesai ? (
-            <Badge tone="green">
-              <CheckIcon width={12} height={12} className="mr-1" />
-              Selesai
-            </Badge>
-          ) : (
-            <span className="mt-1 shrink-0 text-xs font-bold text-ink/50">
-              {progress.read > 0 ? 'Lanjut baca' : 'Mulai baca'}
-            </span>
+      <article className="card-lift reveal relative h-full overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+        <span
+          className={cx(
+            'absolute inset-x-0 top-0 h-1',
+            MATERI_STRIP[group.materi],
           )}
-        </div>
-        <h3 className="mt-3 font-display font-extrabold leading-snug">
-          {group.judul}
-        </h3>
-        <p className="mt-1 text-sm leading-relaxed text-ink/60">
-          {deskripsi}
-        </p>
-        <div className="mt-auto pt-4">
-          <ProgressBar
-            value={progress.read}
-            max={progress.total}
-            tone={MATERI_TONE[group.materi]}
-            label={`Progres baca ${group.judul}`}
-          />
+          aria-hidden="true"
+        />
+        <MateriWatermark
+          materi={group.materi}
+          className={cx(
+            'absolute -right-1 bottom-1 h-16 w-24 text-4xl opacity-10',
+            MATERI_WATERMARK[group.materi],
+          )}
+        />
+        <div className="relative z-10 flex h-full flex-col p-4 lg:p-5">
+          <div className="flex items-start justify-between gap-3">
+            <span className="flex items-center gap-2">
+              <span
+                className={cx(
+                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-display text-xs font-extrabold',
+                  MATERI_CHIP[group.materi],
+                )}
+                aria-hidden="true"
+              >
+                {group.materi}
+              </span>
+              <MateriMotifMini
+                materi={group.materi}
+                className={MATERI_WATERMARK[group.materi]}
+              />
+            </span>
+            {selesai ? (
+              <Badge tone="green">
+                <CheckIcon width={12} height={12} className="mr-1" />
+                Selesai
+              </Badge>
+            ) : (
+              <span className="mt-1 shrink-0 text-xs font-bold text-ink/50">
+                {progress.read > 0 ? 'Lanjut baca' : 'Mulai baca'}
+              </span>
+            )}
+          </div>
+          <h3 className="mt-3 font-display font-extrabold leading-snug">
+            {group.judul}
+          </h3>
+          <p className="mt-1 text-sm leading-relaxed text-ink/60">
+            {deskripsi}
+          </p>
+          <div className="mt-auto pt-4">
+            <ProgressBar
+              value={progress.read}
+              max={progress.total}
+              tone={MATERI_TONE[group.materi]}
+              label={`Progres baca ${group.judul}`}
+            />
+          </div>
         </div>
       </article>
     </Link>
@@ -176,38 +213,48 @@ export function BelajarPage() {
         const motif = MATERI_MOTIF[materi]
         return (
           <section key={materi} aria-label={MATERI_META[materi].nama}>
-            <Card className="reveal mb-3">
-              <MotifStrip materi={materi} />
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <span className="font-display text-xl font-extrabold">
-                  {materi}
-                </span>
-                <Badge tone={MATERI_TONE[materi]}>
-                  {MATERI_META[materi].nama}
-                </Badge>
-                <span
-                  className={cx(
-                    'rounded-full px-2.5 py-0.5 text-xs font-extrabold',
-                    motif.pillClass,
-                  )}
-                >
-                  {motif.pill}
-                </span>
-              </div>
-              <p className="mt-1.5 text-sm leading-relaxed text-ink/60">
-                {MATERI_META[materi].deskripsi}
-              </p>
-              <div className="mt-3 flex items-center gap-3">
-                <ProgressBar
-                  value={progress.read}
-                  max={progress.total}
-                  tone={MATERI_TONE[materi]}
-                  label={`Progres baca ${materi}`}
-                  className="flex-1"
-                />
-                <span className="shrink-0 text-xs font-extrabold text-ink/60">
-                  {statusBaca(progress.percent)}
-                </span>
+            <Card className="reveal relative mb-3 overflow-hidden">
+              <MateriWatermark
+                materi={materi}
+                className={cx(
+                  'absolute -top-1 right-2 h-24 w-36 text-6xl opacity-10 lg:h-28 lg:w-44',
+                  MATERI_WATERMARK[materi],
+                  materi === 'TWK' && 'motif-melayang',
+                )}
+              />
+              <div className="relative">
+                <MotifStrip materi={materi} />
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <span className="font-display text-xl font-extrabold">
+                    {materi}
+                  </span>
+                  <Badge tone={MATERI_TONE[materi]}>
+                    {MATERI_META[materi].nama}
+                  </Badge>
+                  <span
+                    className={cx(
+                      'rounded-full px-2.5 py-0.5 text-xs font-extrabold',
+                      motif.pillClass,
+                    )}
+                  >
+                    {motif.pill}
+                  </span>
+                </div>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink/60">
+                  {MATERI_META[materi].deskripsi}
+                </p>
+                <div className="mt-3 flex items-center gap-3">
+                  <ProgressBar
+                    value={progress.read}
+                    max={progress.total}
+                    tone={MATERI_TONE[materi]}
+                    label={`Progres baca ${materi}`}
+                    className="flex-1"
+                  />
+                  <span className="shrink-0 text-xs font-extrabold text-ink/60">
+                    {statusBaca(progress.percent)}
+                  </span>
+                </div>
               </div>
             </Card>
             <div className="grid gap-3 lg:grid-cols-2">

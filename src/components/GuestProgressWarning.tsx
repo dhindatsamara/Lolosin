@@ -4,6 +4,11 @@ import { useAuthUser } from '../lib/auth'
 import { isSupabaseConfigured } from '../lib/supabase'
 import { InfoIcon } from './icons'
 
+/**
+ * Key dismiss peringatan tamu. Sengaja TETAP global (tanpa namespace
+ * per user): ini preferensi UI per-browser, dan peringatannya hanya
+ * relevan saat logout (tamu). Tidak ikut namespacing v2.2.1.
+ */
 const DISMISS_KEY = 'lolosin:dismiss-guest-warning'
 
 /**

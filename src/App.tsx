@@ -4,17 +4,21 @@ import type { User } from '@supabase/supabase-js'
 import { Layout } from './components/Layout'
 import { Button } from './components/ui/Button'
 import { Card } from './components/ui/Card'
-import { CheckIcon } from './components/icons'
+import { ConfirmModal } from './components/quiz/ConfirmModal'
+import { CheckIcon, XIcon } from './components/icons'
 import {
   isEmailVerified,
   resendConfirmation,
   signOut,
   useAuthUser,
 } from './lib/auth'
+import { setStoreUserId } from './lib/store'
 import AuthPage from './pages/AuthPage'
 import { BattlePage } from './pages/BattlePage'
 import { BelajarPage } from './pages/BelajarPage'
+import { BenarSalahKilatPage } from './pages/BenarSalahKilatPage'
 import { HomePage } from './pages/HomePage'
+import { KartuKilatPage } from './pages/KartuKilatPage'
 import { KuisKilatPage } from './pages/KuisKilatPage'
 import { LatihanJalanPage } from './pages/LatihanJalanPage'
 import { LatihanPage } from './pages/LatihanPage'
@@ -55,6 +59,7 @@ function VerifyGate({ user }: { user: User }) {
   const [error, setError] = useState('')
   const [sending, setSending] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   useEffect(() => {
     if (cooldown <= 0) return
@@ -143,13 +148,26 @@ function VerifyGate({ user }: { user: User }) {
           </Button>
           <Button
             variant="outline"
-            onClick={handleSignOut}
+            onClick={() => setShowLogoutConfirm(true)}
             disabled={signingOut}
           >
             {signingOut ? 'Sebentar ya...' : 'Keluar'}
           </Button>
         </div>
       </Card>
+      <ConfirmModal
+        open={showLogoutConfirm}
+        title="Yakin mau keluar?"
+        body="Progres belajar di akunmu tetap tersimpan. Kamu bisa masuk lagi kapan pun."
+        confirmLabel="Ya, keluar"
+        cancelLabel="Tetap masuk"
+        icon={<XIcon width={22} height={22} />}
+        onConfirm={() => {
+          setShowLogoutConfirm(false)
+          void handleSignOut()
+        }}
+        onCancel={() => setShowLogoutConfirm(false)}
+      />
     </div>
   )
 }
@@ -157,6 +175,16 @@ function VerifyGate({ user }: { user: User }) {
 export default function App() {
   const { user, loading } = useAuthUser()
   const { pathname } = useLocation()
+
+  // Namespacing progres per user (v2.2.1): setiap user berubah
+  // (masuk, keluar, ganti akun), store beralih ke namespace user itu
+  // dan UI langsung me-render progres yang benar tanpa reload.
+  // Dependensi memakai id (string stabil), bukan objek user, supaya
+  // efek tidak jalan ulang saat Supabase me-refresh token.
+  const userId = user?.id ?? null
+  useEffect(() => {
+    setStoreUserId(userId)
+  }, [userId])
 
   // Gate verifikasi email: user login yang emailnya belum terkonfirmasi
   // tidak bisa memakai app apa pun kecuali halaman /auth (supaya tetap
@@ -206,6 +234,11 @@ export default function App() {
               element={<SessionHostPage />}
             />
             <Route path="main/kuis-kilat" element={<KuisKilatPage />} />
+            <Route path="main/kartu-kilat" element={<KartuKilatPage />} />
+            <Route
+              path="main/benar-salah"
+              element={<BenarSalahKilatPage />}
+            />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

@@ -24,6 +24,7 @@ import {
   markSeen,
   recordActivity,
 } from '../lib/store'
+import { migrateLegacyKey, scopedKey } from '../lib/storage'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -45,7 +46,7 @@ export const KUIS_KILAT_SECONDS = 60
 export const KUIS_KILAT_BASE_POINTS = 10
 /** Ukuran antrean soal per permainan (diisi ulang bila habis). */
 const QUEUE_SIZE = 30
-/** Key localStorage untuk skor terbaik Kuis Kilat. */
+/** Key dasar localStorage untuk skor terbaik Kuis Kilat (di-namespace per user: `:guest` atau `:<userId>`). */
 export const KUIS_KILAT_BEST_KEY = 'lolosin:kuis-kilat-best'
 /** Hadiah XP maksimal per permainan. */
 export const KUIS_KILAT_MAX_XP = 50
@@ -68,7 +69,10 @@ export function comboMultiplier(combo: number): number {
 
 function loadBest(): BestScore | null {
   try {
-    const raw = localStorage.getItem(KUIS_KILAT_BEST_KEY)
+    // Migrasi sekali: skor terbaik lama di key tanpa namespace pindah
+    // ke namespace aktif sebelum dibaca.
+    migrateLegacyKey(KUIS_KILAT_BEST_KEY)
+    const raw = localStorage.getItem(scopedKey(KUIS_KILAT_BEST_KEY))
     if (!raw) return null
     const parsed = JSON.parse(raw) as Partial<BestScore>
     if (
@@ -90,7 +94,7 @@ function loadBest(): BestScore | null {
 
 function saveBest(best: BestScore): void {
   try {
-    localStorage.setItem(KUIS_KILAT_BEST_KEY, JSON.stringify(best))
+    localStorage.setItem(scopedKey(KUIS_KILAT_BEST_KEY), JSON.stringify(best))
   } catch {
     // Penyimpanan tidak tersedia: abaikan diam-diam.
   }

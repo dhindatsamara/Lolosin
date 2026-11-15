@@ -206,9 +206,6 @@ export function LandingPage() {
               size={220}
               mascotClassName="float-soft h-auto w-44 sm:w-52 lg:w-60"
             />
-            <p className="relative z-10 mt-1 text-center text-xs font-bold text-primary-200">
-              maskot Lolosin
-            </p>
             <p className="relative z-10 mt-1 text-center text-xs font-bold text-primary-200/80">
               Coba tekan {MASCOT_NAME}!
             </p>

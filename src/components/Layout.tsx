@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { getLevel, useStore } from '../lib/store'
 import { getRankTitle } from '../lib/ranks'
@@ -28,7 +29,8 @@ const NAV_ITEMS = [
 function LogoMark() {
   return (
     <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-primary-100">
-      <Mascot size={40} className="h-10 w-10" />
+      {/* Mood senang eksplisit: wajah ramah, paling terbaca di ukuran kecil. */}
+      <Mascot mood="senang" size={40} className="h-10 w-10" />
       <span className="sr-only">Lolosin</span>
     </span>
   )
@@ -40,6 +42,126 @@ const FOOTER_LINKS = [
   { to: '/tryout', label: 'Tryout' },
   { to: '/leaderboard', label: 'Peringkat' },
 ] as const
+
+/** Ikon chevron atas/bawah inline (gaya Lucide, seperti icons.tsx):
+    icons.tsx hanya punya ChevronRightIcon, dan file itu milik
+    subagent lain. */
+function ChevronUpIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <polyline points="18 15 12 9 6 15" />
+    </svg>
+  )
+}
+
+function ChevronDownIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  )
+}
+
+/**
+ * Tombol melayang "ke atas" dan "ke bawah", berlaku di semua page
+ * karena tinggal di Layout.
+ *
+ * Aturan tampil: tombol atas muncul setelah scroll >400px; tombol
+ * bawah muncul setelah user mulai scroll dan hilang saat sudah dekat
+ * dasar halaman (sisa <100px); keduanya sembunyi saat di paling atas
+ * dan saat halaman tidak bisa di-scroll.
+ *
+ * Posisi: fixed kanan bawah, bottom-20 di mobile supaya tidak
+ * bertumpuk dengan bottom nav (tingginya sekitar 72px), bottom-6 di
+ * desktop (tanpa bottom nav). Scroll halus, kecuali user mengaktifkan
+ * prefers-reduced-motion (langsung loncat).
+ */
+function JumpButtons() {
+  const [showUp, setShowUp] = useState(false)
+  const [showDown, setShowDown] = useState(false)
+
+  useEffect(() => {
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const y = window.scrollY
+      const sisa =
+        document.documentElement.scrollHeight - window.innerHeight - y
+      setShowUp(y > 400)
+      setShowDown(y > 0 && sisa > 100)
+    }
+    const onScroll = () => {
+      if (raf === 0) raf = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf !== 0) cancelAnimationFrame(raf)
+    }
+  }, [])
+
+  const jump = (to: 'top' | 'bottom') => {
+    const reduce = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+    window.scrollTo({
+      top: to === 'top' ? 0 : document.documentElement.scrollHeight,
+      behavior: reduce ? 'auto' : 'smooth',
+    })
+  }
+
+  const btnClass = (visible: boolean) =>
+    cx(
+      'flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-primary-700 shadow-soft transition-all duration-200 hover:bg-primary-50 hover:text-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 motion-reduce:transition-none',
+      visible
+        ? 'pointer-events-auto visible translate-y-0 opacity-100'
+        : 'pointer-events-none invisible translate-y-2 opacity-0',
+    )
+
+  return (
+    <div className="pointer-events-none fixed right-4 bottom-20 z-40 flex flex-col gap-2 lg:bottom-6">
+      <button
+        type="button"
+        aria-label="Ke atas"
+        onClick={() => jump('top')}
+        className={btnClass(showUp)}
+      >
+        <ChevronUpIcon />
+      </button>
+      <button
+        type="button"
+        aria-label="Ke bawah"
+        onClick={() => jump('bottom')}
+        className={btnClass(showDown)}
+      >
+        <ChevronDownIcon />
+      </button>
+    </div>
+  )
+}
 
 export function Layout() {
   const { xp, streak } = useStore()
@@ -112,9 +234,11 @@ export function Layout() {
         <Outlet />
       </main>
 
-      {/* Footer lengkap, tampil di semua viewport */}
-      <footer className="mx-auto w-full max-w-7xl px-4 pt-2 pb-24 lg:px-8 lg:pb-8">
-        <div className="border-t border-line pt-6">
+      {/* Footer lengkap, tampil di semua viewport. Identitas visual
+          sendiri (hijau sangat tua + garis atas amber) supaya header,
+          body, dan footer terlihat jelas bedanya. */}
+      <footer className="border-t-4 border-accent-500 bg-primary-900 pb-24 text-white lg:pb-8">
+        <div className="mx-auto w-full max-w-7xl px-4 pt-8 lg:px-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div className="max-w-sm">
               <span className="flex items-center gap-2.5">
@@ -123,14 +247,14 @@ export function Layout() {
                   Lolosin
                 </span>
               </span>
-              <p className="mt-3 text-sm leading-relaxed font-medium text-ink/60">
+              <p className="mt-3 text-sm leading-relaxed font-medium text-white/70">
                 Belajar CPNS jadi menyenangkan: materi SKD, latihan per
                 topik, tryout mini, dan simulasi CAT dalam satu aplikasi,
                 ditemani maskot yang ikut tumbuh bareng streak-mu.
               </p>
             </div>
             <nav aria-label="Navigasi footer">
-              <p className="text-xs font-extrabold tracking-[0.14em] text-ink/50 uppercase">
+              <p className="text-xs font-extrabold tracking-[0.14em] text-accent-300 uppercase">
                 Jelajahi
               </p>
               <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 sm:flex-col sm:gap-2">
@@ -138,7 +262,7 @@ export function Layout() {
                   <li key={to}>
                     <Link
                       to={to}
-                      className="text-sm font-semibold text-ink/70 hover:text-primary-700"
+                      className="text-sm font-semibold text-white/80 hover:text-accent-300"
                     >
                       {label}
                     </Link>
@@ -147,7 +271,7 @@ export function Layout() {
               </ul>
             </nav>
           </div>
-          <p className="mt-6 border-t border-line pt-4 text-xs leading-relaxed font-medium text-ink/50">
+          <p className="mt-6 border-t border-white/15 pt-4 text-xs leading-relaxed font-medium text-white/50">
             © 2026 Lolosin. Dibuat untuk pejuang CPNS.
           </p>
         </div>
@@ -179,6 +303,8 @@ export function Layout() {
           ))}
         </div>
       </nav>
+      {/* Tombol jump ke atas/bawah, tampil di semua page */}
+      <JumpButtons />
       {/* Host perayaan gamifikasi (naik level, lencana, milestone streak) */}
       <CelebrationHost />
     </div>

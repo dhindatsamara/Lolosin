@@ -1,5 +1,9 @@
 /**
- * Store progres pengguna di localStorage (key `lolosin:v1`).
+ * Store progres pengguna di localStorage, di-namespace per user
+ * (v2.2.1, lihat lib/storage.ts): login memakai key
+ * `lolosin:v1:<userId>`, tamu memakai `lolosin:v1:guest`. Key lama
+ * tanpa namespace (`lolosin:v1`) dimigrasi sekali ke namespace aktif
+ * saat store dimuat (lihat migrateLegacyKey).
  *
  * Semua tanggal aktivitas memakai zona waktu Asia/Makassar (WITA),
  * diformat `YYYY-MM-DD` lewat Intl.DateTimeFormat.
@@ -13,13 +17,31 @@
  *
  * Level: level = floor(sqrt(xp / 50)) + 1
  *
+ * Streak putus bisa dibujuk kembali (mekanik "Bujuk Osi", v2.2.1):
+ * saat store dimuat dan aktivitas terakhir sudah 2+ hari lalu,
+ * streak yang putus disimpan di `streakBroken` (bukan hilang begitu
+ * saja) supaya user bisa memulihkannya dengan menyelesaikan 1 drill
+ * atau membaca 1 seksi materi setelah mengetuk "Bujuk Osi".
+ * Lihat `normalizeStreak`, `armRevive`, dan `maybeReviveStreak`.
+ *
  * Komponen React memakai hook `useStore()` agar tampilan (mis. top bar)
  * ikut berubah saat store berubah.
  */
 import { useSyncExternalStore } from 'react'
 import { canonicalTopicDisplay, type Materi } from './questions'
 import type { TryoutMode } from './quiz'
+import {
+  getCurrentUserId,
+  migrateLegacyKey,
+  scopedKey,
+  setCurrentUserId,
+} from './storage'
 
+/**
+ * Key dasar store. Key yang dipakai di localStorage adalah scoped key
+ * (`lolosin:v1:guest` atau `lolosin:v1:<userId>`); key dasar ini juga
+ * key legacy pra-namespacing yang dimigrasi sekali saat load.
+ */
 export const STORE_KEY = 'lolosin:v1'
 export const MAKASSAR_TIME_ZONE = 'Asia/Makassar'
 
@@ -103,6 +125,19 @@ export interface StoreState {
   streak: number
   /** Tanggal aktivitas terakhir, `YYYY-MM-DD` (Asia/Makassar) atau null. */
   lastActivityDate: string | null
+  /**
+   * Streak yang putus dan masih bisa dibujuk kembali (mekanik
+   * "Bujuk Osi"): angka streak sebelum putus. Null bila tidak ada
+   * streak putus yang pending. Store lama tidak punya field ini
+   * (default null, backward compatible).
+   */
+  streakBroken: { lostStreak: number } | null
+  /**
+   * User sudah mengetuk "Bujuk Osi" untuk kejadian putus ini.
+   * Hanya bermakna bila `streakBroken` tidak null; tanpa broken
+   * state yang pending, field ini dinormalisasi ke false.
+   */
+  reviveArmed: boolean
   seenQuestionIds: string[]
   readSections: string[]
   tryoutHistory: TryoutRecord[]
@@ -125,6 +160,8 @@ function freshState(): StoreState {
     xp: 0,
     streak: 0,
     lastActivityDate: null,
+    streakBroken: null,
+    reviveArmed: false,
     seenQuestionIds: [],
     readSections: [],
     tryoutHistory: [],
@@ -201,7 +238,10 @@ const listeners = new Set<() => void>()
 function loadFromStorage(): StoreState {
   const state = freshState()
   try {
-    const raw = localStorage.getItem(STORE_KEY)
+    // Migrasi sekali: progres lama di key tanpa namespace pindah ke
+    // namespace aktif (user yang login atau tamu) sebelum dibaca.
+    migrateLegacyKey(STORE_KEY)
+    const raw = localStorage.getItem(scopedKey(STORE_KEY))
     if (!raw) return state
     const parsed = JSON.parse(raw) as Partial<StoreState>
     if (typeof parsed.xp === 'number') state.xp = parsed.xp
@@ -209,6 +249,17 @@ function loadFromStorage(): StoreState {
     if (typeof parsed.lastActivityDate === 'string' || parsed.lastActivityDate === null) {
       state.lastActivityDate = parsed.lastActivityDate
     }
+    if (
+      typeof parsed.streakBroken === 'object' &&
+      parsed.streakBroken !== null &&
+      typeof parsed.streakBroken.lostStreak === 'number' &&
+      parsed.streakBroken.lostStreak > 0
+    ) {
+      state.streakBroken = {
+        lostStreak: Math.floor(parsed.streakBroken.lostStreak),
+      }
+    }
+    if (parsed.reviveArmed === true) state.reviveArmed = true
     if (Array.isArray(parsed.seenQuestionIds)) {
       state.seenQuestionIds = parsed.seenQuestionIds.filter(
         (id): id is string => typeof id === 'string',
@@ -329,7 +380,7 @@ function loadFromStorage(): StoreState {
 
 function persist(state: StoreState): void {
   try {
-    localStorage.setItem(STORE_KEY, JSON.stringify(state))
+    localStorage.setItem(scopedKey(STORE_KEY), JSON.stringify(state))
   } catch {
     // Penyimpanan penuh atau tidak tersedia: abaikan diam-diam.
   }
@@ -347,9 +398,44 @@ function update(patch: Partial<StoreState>): StoreState {
   return next
 }
 
+/**
+ * Normalisasi streak saat store dimuat (mekanik "Bujuk Osi").
+ * Bila aktivitas terakhir sudah 2+ hari lalu (lebih lama dari kemarin)
+ * dan streak masih lebih dari 0, streak dianggap putus: angkanya
+ * disimpan di `streakBroken` supaya masih bisa dibujuk kembali, lalu
+ * streak direset ke 0. Hanya berjalan pada transisi: broken state yang
+ * sudah pending tidak pernah ditimpa, dan user baru dengan streak 0
+ * tidak mendapat broken state. Mengembalikan true bila state berubah.
+ */
+function normalizeStreak(state: StoreState): boolean {
+  let changed = false
+  // reviveArmed tanpa broken state yang pending tidak valid: matikan.
+  if (state.reviveArmed && !state.streakBroken) {
+    state.reviveArmed = false
+    changed = true
+  }
+  if (
+    !state.streakBroken &&
+    state.streak > 0 &&
+    state.lastActivityDate !== null
+  ) {
+    const yesterday = shiftDate(todayMakassar(), -1)
+    if (state.lastActivityDate < yesterday) {
+      state.streakBroken = { lostStreak: state.streak }
+      state.streak = 0
+      changed = true
+    }
+  }
+  return changed
+}
+
 /** Baca state saat ini (dari cache memori, dimuat malas dari localStorage). */
 export function getStore(): StoreState {
-  if (!cached) cached = loadFromStorage()
+  if (!cached) {
+    cached = loadFromStorage()
+    // Normalisasi streak putus jalan sekali saat load; simpan bila berubah.
+    if (normalizeStreak(cached)) persist(cached)
+  }
   return cached
 }
 
@@ -363,6 +449,22 @@ export function subscribeStore(listener: () => void): () => void {
 /** Hook React: state store yang reaktif terhadap perubahan. */
 export function useStore(): StoreState {
   return useSyncExternalStore(subscribeStore, getStore, getStore)
+}
+
+/**
+ * Ganti namespace progres aktif saat user berubah (login, logout,
+ * ganti akun). Dipanggil dari App lewat efek yang memantau auth user.
+ * Cache memori dibersihkan supaya load berikutnya membaca namespace
+ * baru, lalu semua listener useStore diberi tahu agar UI (header
+ * XP/streak, dashboard) langsung me-render data user yang baru tanpa
+ * reload. Bila userId sama dengan yang aktif, tidak ngapa-ngapain
+ * (menutupi event refresh token Supabase yang mengirim user yang sama).
+ */
+export function setStoreUserId(userId: string | null): void {
+  if (getCurrentUserId() === userId) return
+  setCurrentUserId(userId)
+  cached = null
+  emit()
 }
 
 /* ------------------------------------------------------------------ */
@@ -382,6 +484,12 @@ export function addXp(n: number): number {
  * - Jeda lebih dari 1 hari: streak reset ke 1.
  * Hari ini juga dicatat di `activityDates` (maks 60 hari terakhir,
  * tanpa duplikat) untuk tampilan streak mingguan.
+ *
+ * Bila ada streak putus yang pending (mekanik "Bujuk Osi") dan user
+ * belum membujuk, aktivitas ini menghabiskan kesempatan: broken state
+ * dibersihkan dan streak mulai dari 1. Bila user sudah membujuk,
+ * broken state dibiarkan supaya `maybeReviveStreak` di akhir drill
+ * atau baca seksi bisa memulihkan streak.
  */
 export function recordActivity(date = new Date()): {
   streak: number
@@ -402,14 +510,59 @@ export function recordActivity(date = new Date()): {
   }
   const yesterday = shiftDate(today, -1)
   const streak = state.lastActivityDate === yesterday ? state.streak + 1 : 1
+  const consumeBreak = state.streakBroken !== null && !state.reviveArmed
   update({
     streak,
     lastActivityDate: today,
     activityDates: [...state.activityDates, today].slice(
       -ACTIVITY_HISTORY_LIMIT,
     ),
+    ...(consumeBreak ? { streakBroken: null, reviveArmed: false } : {}),
   })
   return { streak, isNewDay: true }
+}
+
+/**
+ * Persenjatai revive ("Bujuk Osi"): hanya berlaku bila ada streak
+ * putus yang masih pending. Mengembalikan true bila revive berhasil
+ * dipersenjatai (atau sudah dipersenjatai sebelumnya).
+ */
+export function armRevive(): boolean {
+  const state = getStore()
+  if (!state.streakBroken) return false
+  if (state.reviveArmed) return true
+  update({ reviveArmed: true })
+  return true
+}
+
+/**
+ * Pulihkan streak putus bila revive sudah dipersenjatai ("Bujuk Osi").
+ * Dipanggil dari `completeDrill` dan `completeSectionRead` di
+ * `lib/gamification.ts` saat user menyelesaikan 1 sesi drill atau
+ * selesai membaca 1 seksi materi. Bila berhasil: streak kembali ke
+ * angka sebelum putus, hari ini ditandai aktif, dan broken state
+ * beserta flag armed dibersihkan (satu revive per kejadian putus,
+ * tidak bisa di-farm). Bila tidak ada broken state pending atau
+ * revive belum dipersenjatai, tidak melakukan apa-apa.
+ */
+export function maybeReviveStreak(): { revived: boolean; streak: number } {
+  const state = getStore()
+  const broken = state.streakBroken
+  if (!broken || !state.reviveArmed) {
+    return { revived: false, streak: state.streak }
+  }
+  const today = todayMakassar()
+  const activityDates = state.activityDates.includes(today)
+    ? state.activityDates
+    : [...state.activityDates, today].slice(-ACTIVITY_HISTORY_LIMIT)
+  const next = update({
+    streak: broken.lostStreak,
+    lastActivityDate: today,
+    activityDates,
+    streakBroken: null,
+    reviveArmed: false,
+  })
+  return { revived: true, streak: next.streak }
 }
 
 /** Tandai soal-soal sebagai sudah dilihat. Mengembalikan jumlah id baru. */

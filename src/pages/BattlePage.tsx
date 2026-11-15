@@ -16,27 +16,34 @@
  * yang sama, jadi perbandingannya adil di V1.
  */
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { getMyProfile, useAuthUser } from '../lib/auth'
 import {
   abandonBattle,
+  acceptBattleInvite,
   countCorrect,
   createBattle,
   decideBattleWinner,
+  deriveBattleCategoryFromIds,
+  findProfileByUsername,
   finishBattleEarly,
   GAME_QUESTION_COUNT,
   getBattleByCode,
   getBattleById,
   getBattleUsernames,
+  getIncomingInvites,
+  inviteGuestToBattle,
   joinBattle,
+  normalizeGameCode,
   resolveGameQuestions,
   submitBattleResult,
   subscribeBattleChannel,
+  type BattleCategory,
   type BattleRole,
   type BattleRow,
   type GameChannel,
 } from '../lib/battle'
-import type { Opsi, Question } from '../lib/questions'
+import { MATERI_META, type Opsi, type Question } from '../lib/questions'
 import { visibleOptions } from '../lib/quiz'
 import { isSupabaseConfigured } from '../lib/supabase'
 import { markSeen, recordActivity } from '../lib/store'
@@ -44,6 +51,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
+import { ConfirmModal } from '../components/quiz/ConfirmModal'
 import { OptionButton } from '../components/quiz/OptionButton'
 import {
   ArrowLeftIcon,
@@ -63,12 +71,53 @@ type Phase =
   | 'loading'
   | 'lobby'
   | 'join'
+  | 'invite'
   | 'waiting'
   | 'arena'
   | 'done'
   | 'result'
   | 'error'
   | 'cancelled'
+
+/** Opsi kategori soal saat membuat battle, default Campur. */
+const CATEGORY_OPTIONS: Array<{
+  value: BattleCategory
+  label: string
+  deskripsi: string
+}> = [
+  { value: 'TWK', label: 'TWK', deskripsi: MATERI_META.TWK.nama },
+  { value: 'TIU', label: 'TIU', deskripsi: MATERI_META.TIU.nama },
+  { value: 'TKP', label: 'TKP', deskripsi: MATERI_META.TKP.nama },
+  {
+    value: 'campur',
+    label: 'Campur',
+    deskripsi: 'Campuran TWK, TIU, dan TKP',
+  },
+]
+
+/** Label kategori untuk chip tampilan. */
+const CATEGORY_LABEL: Record<BattleCategory, string> = {
+  TWK: 'TWK',
+  TIU: 'TIU',
+  TKP: 'TKP',
+  campur: 'Campur',
+}
+
+/** Warna chip kategori, mengikuti aksen subtes di halaman Belajar. */
+const CATEGORY_CHIP: Record<BattleCategory, string> = {
+  TWK: 'bg-twk-soft text-twk',
+  TIU: 'bg-tiu-soft text-tiu',
+  TKP: 'bg-tkp-soft text-tkp',
+  campur: 'bg-primary-50 text-primary-700',
+}
+
+/** Titik warna kategori di pemilih kategori. */
+const CATEGORY_DOT: Record<BattleCategory, string> = {
+  TWK: 'bg-twk',
+  TIU: 'bg-tiu',
+  TKP: 'bg-tkp',
+  campur: 'bg-primary-600',
+}
 
 /** Format milidetik jadi "1:23" (menit:detik). */
 function formatTime(ms: number): string {
@@ -80,11 +129,16 @@ function formatTime(ms: number): string {
 
 export function BattlePage() {
   const { code } = useParams<{ code?: string }>()
+  const [searchParams] = useSearchParams()
+  /* Kode dari link undang (/#/main/battle?code=XXXXXX). */
+  const queryCode = searchParams.get('code')
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuthUser()
   const configured = isSupabaseConfigured()
 
-  const [phase, setPhase] = useState<Phase>(code ? 'loading' : 'lobby')
+  const [phase, setPhase] = useState<Phase>(
+    code ?? queryCode ? 'loading' : 'lobby',
+  )
   const [battle, setBattle] = useState<BattleRow | null>(null)
   const [role, setRole] = useState<BattleRole | null>(null)
   const [message, setMessage] = useState<string | null>(null)
@@ -93,6 +147,11 @@ export function BattlePage() {
   const [username, setUsername] = useState('')
   const [names, setNames] = useState<Record<string, string>>({})
   const [copied, setCopied] = useState(false)
+  const [linkCopied, setLinkCopied] = useState(false)
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const [category, setCategory] = useState<BattleCategory>('campur')
+  const [inviteUsername, setInviteUsername] = useState('')
+  const [invites, setInvites] = useState<BattleRow[]>([])
 
   const [questions, setQuestions] = useState<Question[]>([])
   const [index, setIndex] = useState(0)
@@ -124,9 +183,20 @@ export function BattlePage() {
     }
   }, [userId])
 
-  /* Muat battle dari kode di URL. */
+  /* Muat battle dari kode di URL: path /:code, atau query ?code= dari
+     link undang. Tanpa kode berarti lobi: reset state battle supaya
+     tombol "Ke lobi battle" dan batal battle selalu mendarat di lobi
+     yang bersih (komponen ini dipakai dua rute, jadi state tidak
+     ke-reset sendiri saat pindah rute). */
   useEffect(() => {
-    if (!code) return
+    const effectiveCode = code ?? queryCode
+    if (!effectiveCode) {
+      setBattle(null)
+      setRole(null)
+      setQuestions([])
+      setPhase('lobby')
+      return
+    }
     if (authLoading) return
     if (!configured || !userId) {
       setPhase('error')
@@ -139,7 +209,10 @@ export function BattlePage() {
     }
     let cancelled = false
     setPhase('loading')
-    getBattleByCode(code).then((result) => {
+    /* Isi otomatis kolom kode gabung, supaya kode dari link tetap
+       terlihat bila user akhirnya mendarat di lobi. */
+    setJoinCode(normalizeGameCode(effectiveCode))
+    getBattleByCode(effectiveCode).then((result) => {
       if (cancelled) return
       if (!result.ok || !result.data) {
         setMessage(result.error ?? 'Battle gagal dimuat, coba lagi ya.')
@@ -169,6 +242,12 @@ export function BattlePage() {
         return
       }
       if (row.guest_id === userId) {
+        /* Diundang lewat username tapi belum menerima: tampilkan
+           undangan (Terima/Tolak), jangan langsung masuk arena. */
+        if (row.status === 'waiting') {
+          setPhase('invite')
+          return
+        }
         setRole('guest')
         setQuestions(resolveGameQuestions(row.question_ids))
         startTimeRef.current = Date.now()
@@ -179,13 +258,18 @@ export function BattlePage() {
         setPhase('join')
         return
       }
+      if (row.status === 'waiting' && row.guest_id !== null) {
+        setMessage('Battle ini khusus untuk lawan yang diundang host.')
+        setPhase('error')
+        return
+      }
       setMessage('Battle ini sudah dimulai atau sudah penuh.')
       setPhase('error')
     })
     return () => {
       cancelled = true
     }
-  }, [code, authLoading, configured, userId])
+  }, [code, queryCode, authLoading, configured, userId])
 
   /* Username kedua pemain, untuk layar hasil dan arena. */
   useEffect(() => {
@@ -201,6 +285,29 @@ export function BattlePage() {
       cancelled = true
     }
   }, [battle?.host_id, battle?.guest_id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* Undangan battle masuk (host mengundang lewat username): dimuat
+     tiap mendarat di lobi. Gagal baca tidak merusak lobi, daftarnya
+     tinggal kosong. */
+  useEffect(() => {
+    if (phase !== 'lobby' || !userId || !configured) return
+    let cancelled = false
+    getIncomingInvites(userId).then((rows) => {
+      if (cancelled) return
+      setInvites(rows)
+      const hostIds = rows.map((row) => row.host_id)
+      if (hostIds.length > 0) {
+        getBattleUsernames(hostIds).then((map) => {
+          if (!cancelled) {
+            setNames((prev) => ({ ...prev, ...map }))
+          }
+        })
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [phase, userId, configured])
 
   /* Channel broadcast + presence, selama battle menunggu atau berjalan. */
   useEffect(() => {
@@ -246,7 +353,8 @@ export function BattlePage() {
       phase !== 'waiting' &&
       phase !== 'arena' &&
       phase !== 'done' &&
-      phase !== 'join'
+      phase !== 'join' &&
+      phase !== 'invite'
     ) {
       return
     }
@@ -309,11 +417,22 @@ export function BattlePage() {
     }
   }
 
+  /* Salin link undang battle. */
+  async function handleCopyLink(link: string) {
+    try {
+      await navigator.clipboard.writeText(link)
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    } catch {
+      setMessage('Gagal menyalin link, salin manual aja ya.')
+    }
+  }
+
   async function handleCreate() {
     if (!userId) return
     setBusy(true)
     setMessage(null)
-    const result = await createBattle(userId)
+    const result = await createBattle(userId, category)
     setBusy(false)
     if (!result.ok || !result.data) {
       setMessage(result.error ?? 'Battle gagal dibuat, coba lagi ya.')
@@ -362,6 +481,72 @@ export function BattlePage() {
     setQuestions(resolveGameQuestions(joined.data.question_ids))
     startTimeRef.current = Date.now()
     setPhase('arena')
+  }
+
+  /* Undang teman lewat username: cari profilnya, lalu isi guest_id
+     battle ini dengan id-nya. */
+  async function handleInviteByUsername() {
+    if (!userId || !battle) return
+    const clean = inviteUsername.trim()
+    if (clean.length === 0) {
+      setMessage('Isi dulu username temanmu ya.')
+      return
+    }
+    setBusy(true)
+    setMessage(null)
+    const found = await findProfileByUsername(clean)
+    if (!found.ok || !found.data) {
+      setBusy(false)
+      setMessage(found.error ?? 'Username tidak ditemukan, cek lagi ya.')
+      return
+    }
+    if (found.data.id === userId) {
+      setBusy(false)
+      setMessage('Itu username kamu sendiri, undang teman lain ya.')
+      return
+    }
+    const invited = await inviteGuestToBattle(battle, found.data.id)
+    setBusy(false)
+    if (!invited.ok || !invited.data) {
+      setMessage(invited.error ?? 'Undangan gagal dikirim, coba lagi ya.')
+      return
+    }
+    setBattle(invited.data)
+    setInviteUsername('')
+    setMessage(`Undangan terkirim ke ${found.data.username}.`)
+  }
+
+  /* Terima undangan battle (dari kartu undangan di lobi atau layar
+     undangan): battle langsung mulai. */
+  async function handleAcceptInvite(invite: BattleRow) {
+    if (!userId) return
+    setBusy(true)
+    setMessage(null)
+    const accepted = await acceptBattleInvite(invite, userId)
+    setBusy(false)
+    if (!accepted.ok || !accepted.data) {
+      setMessage(accepted.error ?? 'Gagal menerima undangan, coba lagi ya.')
+      return
+    }
+    setInvites((prev) => prev.filter((row) => row.id !== invite.id))
+    setBattle(accepted.data)
+    setRole('guest')
+    setQuestions(resolveGameQuestions(accepted.data.question_ids))
+    startTimeRef.current = Date.now()
+    setPhase('arena')
+  }
+
+  /* Tolak undangan battle: sesi dibatalkan. Dari layar undangan,
+     kembali ke lobi; dari kartu undangan di lobi, kartunya hilang. */
+  async function handleDeclineInvite(invite: BattleRow) {
+    setBusy(true)
+    await abandonBattle(invite.id)
+    setBusy(false)
+    setInvites((prev) => prev.filter((row) => row.id !== invite.id))
+    setMessage('Undangan battle ditolak.')
+    if (phaseRef.current === 'invite') {
+      navigate('/main/battle')
+    }
   }
 
   async function handleCancel() {
@@ -442,6 +627,14 @@ export function BattlePage() {
   const opponentName = opponentId
     ? (names[opponentId] ?? 'Lawan')
     : 'Lawan'
+  /* Kategori battle ini, diturunkan dari soal tersimpan. */
+  const battleCategory: BattleCategory = battle
+    ? deriveBattleCategoryFromIds(battle.question_ids)
+    : 'campur'
+  /* Link undang: rute /main/battle dengan query ?code= (HashRouter). */
+  const shareLink = battle
+    ? `${window.location.origin}/#/main/battle?code=${battle.code}`
+    : ''
   const myCorrect = countCorrect(questions, answers)
   const answeredCount = Object.keys(answers).length
   const total = questions.length || GAME_QUESTION_COUNT
@@ -581,14 +774,96 @@ export function BattlePage() {
           </p>
         )}
 
+        {invites.length > 0 && (
+          <section
+            aria-label="Undangan battle masuk"
+            className="flex flex-col gap-3"
+          >
+            <h2 className="font-display text-lg font-extrabold">
+              Undangan battle masuk
+            </h2>
+            {invites.map((invite) => {
+              const inviteCategory = deriveBattleCategoryFromIds(
+                invite.question_ids,
+              )
+              return (
+                <Card key={invite.id} className="flex flex-col gap-3">
+                  <p className="text-sm leading-relaxed text-ink/70">
+                    <span className="font-bold text-ink">
+                      {names[invite.host_id] ?? 'Seorang pejuang'}
+                    </span>{' '}
+                    mengajakmu battle 1v1.
+                  </p>
+                  <p>
+                    <span
+                      className={`inline-block rounded-full px-2.5 py-1 text-xs font-extrabold ${CATEGORY_CHIP[inviteCategory]}`}
+                    >
+                      Kategori: {CATEGORY_LABEL[inviteCategory]}
+                    </span>
+                  </p>
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <Button
+                      onClick={() => handleAcceptInvite(invite)}
+                      disabled={busy}
+                    >
+                      {busy ? 'Sebentar...' : 'Terima'}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleDeclineInvite(invite)}
+                      disabled={busy}
+                    >
+                      Tolak
+                    </Button>
+                  </div>
+                </Card>
+              )
+            })}
+          </section>
+        )}
+
         <Card className="flex flex-col gap-3">
           <h2 className="font-display text-lg font-extrabold">
             Buat battle baru
           </h2>
           <p className="text-sm leading-relaxed text-ink/60">
             Kamu jadi host. Setelah battle dibuat, bagikan kode 6
-            karakternya ke lawanmu.
+            karakternya atau link-nya ke lawanmu.
           </p>
+          <fieldset>
+            <legend className="text-sm font-semibold text-ink/70">
+              Kategori soal
+            </legend>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {CATEGORY_OPTIONS.map((option) => {
+                const active = category === option.value
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setCategory(option.value)}
+                    className={
+                      active
+                        ? 'flex flex-col items-start gap-1 rounded-2xl border-2 border-primary-600 bg-primary-50 px-3 py-2.5 text-left'
+                        : 'flex flex-col items-start gap-1 rounded-2xl border border-line bg-white px-3 py-2.5 text-left hover:border-primary-300'
+                    }
+                  >
+                    <span className="flex items-center gap-1.5 font-display text-sm font-extrabold">
+                      <span
+                        className={`inline-block h-2.5 w-2.5 rounded-full ${CATEGORY_DOT[option.value]}`}
+                        aria-hidden="true"
+                      />
+                      {option.label}
+                    </span>
+                    <span className="text-xs leading-snug font-medium text-ink/60">
+                      {option.deskripsi}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </fieldset>
           <Button size="lg" onClick={handleCreate} disabled={busy}>
             {busy ? 'Lagi membuat...' : 'Buat battle'}
           </Button>
@@ -645,6 +920,13 @@ export function BattlePage() {
             . Begitu kamu gabung, battle langsung mulai dan kalian
             mengerjakan 10 soal yang sama.
           </p>
+          <p className="mt-3">
+            <span
+              className={`inline-block rounded-full px-2.5 py-1 text-xs font-extrabold ${CATEGORY_CHIP[battleCategory]}`}
+            >
+              Kategori: {CATEGORY_LABEL[battleCategory]}
+            </span>
+          </p>
           {message && (
             <p className="mt-3 text-sm font-medium text-ink/70">{message}</p>
           )}
@@ -663,6 +945,53 @@ export function BattlePage() {
     )
   }
 
+  if (phase === 'invite' && battle) {
+    return (
+      <div className="mx-auto w-full max-w-3xl">
+        <Card className="p-6 text-center">
+          <p className="kicker">Undangan battle</p>
+          <h1 className="mt-2 font-display text-2xl font-extrabold">
+            Diajak battle nih
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-ink/60">
+            <span className="font-bold text-ink">
+              {names[battle.host_id] ?? 'Seorang pejuang'}
+            </span>{' '}
+            mengundangmu battle 1v1. Begitu kamu terima, battle langsung
+            mulai dan kalian mengerjakan 10 soal yang sama.
+          </p>
+          <p className="mt-3">
+            <span
+              className={`inline-block rounded-full px-2.5 py-1 text-xs font-extrabold ${CATEGORY_CHIP[battleCategory]}`}
+            >
+              Kategori: {CATEGORY_LABEL[battleCategory]}
+            </span>
+          </p>
+          {message && (
+            <p className="mt-3 text-sm font-medium text-ink/70">{message}</p>
+          )}
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <Button
+              size="lg"
+              onClick={() => handleAcceptInvite(battle)}
+              disabled={busy}
+            >
+              {busy ? 'Sebentar...' : 'Terima undangan'}
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => handleDeclineInvite(battle)}
+              disabled={busy}
+            >
+              Tolak
+            </Button>
+          </div>
+        </Card>
+      </div>
+    )
+  }
+
   if (phase === 'waiting' && battle) {
     return (
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
@@ -672,16 +1001,28 @@ export function BattlePage() {
             Menunggu lawan gabung
           </h1>
           <p className="mt-1 text-sm text-ink/60">
-            Bagikan kode ini ke temanmu. Battle mulai otomatis begitu
-            lawan gabung.
+            Bagikan kode atau link ini ke temanmu. Battle mulai otomatis
+            begitu lawan gabung.
           </p>
         </header>
+        {message && (
+          <p className="rounded-2xl border border-line bg-white px-4 py-3 text-sm font-medium text-ink/70 shadow-soft">
+            {message}
+          </p>
+        )}
         <Card className="text-center">
           <p className="text-xs font-extrabold tracking-wide text-ink/60 uppercase">
             Kode battle
           </p>
           <p className="mt-1 font-display text-5xl font-extrabold tracking-[0.15em]">
             {battle.code}
+          </p>
+          <p className="mt-3">
+            <span
+              className={`inline-block rounded-full px-2.5 py-1 text-xs font-extrabold ${CATEGORY_CHIP[battleCategory]}`}
+            >
+              Kategori: {CATEGORY_LABEL[battleCategory]}
+            </span>
           </p>
           <Button
             variant="outline"
@@ -691,14 +1032,88 @@ export function BattlePage() {
             <ShareIcon width={16} height={16} />
             {copied ? 'Kode tersalin' : 'Salin kode'}
           </Button>
+          <div className="mt-4 border-t border-line pt-4 text-left">
+            <p className="text-xs font-extrabold tracking-wide text-ink/60 uppercase">
+              Link undang
+            </p>
+            <p className="mt-1 truncate rounded-xl bg-paper px-3 py-2 text-sm font-medium text-ink/70">
+              {shareLink}
+            </p>
+            <Button
+              variant="outline"
+              className="mt-2"
+              onClick={() => handleCopyLink(shareLink)}
+            >
+              <ShareIcon width={16} height={16} />
+              {linkCopied ? 'Link tersalin' : 'Salin link'}
+            </Button>
+          </div>
           <p className="mt-3 flex items-center justify-center gap-1.5 text-sm font-medium text-ink/60">
             <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-primary-600" />
             Lagi menunggu lawan...
           </p>
         </Card>
-        <Button variant="ghost" onClick={handleCancel}>
+        <Card className="flex flex-col gap-3">
+          <h2 className="font-display text-lg font-extrabold">
+            Undang teman lewat username
+          </h2>
+          {battle.guest_id ? (
+            <p className="text-sm leading-relaxed text-ink/60">
+              Undangan terkirim ke{' '}
+              <span className="font-bold text-ink">
+                {names[battle.guest_id] ?? 'temanmu'}
+              </span>
+              . Battle mulai otomatis begitu undangan diterima.
+            </p>
+          ) : (
+            <>
+              <p className="text-sm leading-relaxed text-ink/60">
+                Ketik username temanmu, undangan battle langsung masuk ke
+                lobi battle-nya.
+              </p>
+              <label
+                htmlFor="invite-username"
+                className="text-sm font-semibold text-ink/70"
+              >
+                Username temanmu
+              </label>
+              <input
+                id="invite-username"
+                type="text"
+                value={inviteUsername}
+                onChange={(e) => setInviteUsername(e.target.value)}
+                placeholder="Misal pejuangcpns"
+                autoCapitalize="none"
+                autoComplete="off"
+                className="rounded-xl border border-line bg-white px-4 py-3 text-base font-semibold outline-none focus:border-primary-600"
+              />
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleInviteByUsername}
+                disabled={busy || inviteUsername.trim().length === 0}
+              >
+                {busy ? 'Lagi mengirim...' : 'Kirim undangan'}
+              </Button>
+            </>
+          )}
+        </Card>
+        <Button variant="ghost" onClick={() => setShowCancelConfirm(true)}>
           Batalkan battle
         </Button>
+        <ConfirmModal
+          open={showCancelConfirm}
+          title="Batalkan battle ini?"
+          body="Kode battle tidak bisa dipakai lagi."
+          confirmLabel="Ya, batalkan"
+          cancelLabel="Tetap di lobi"
+          icon={<XIcon width={22} height={22} />}
+          onConfirm={() => {
+            setShowCancelConfirm(false)
+            void handleCancel()
+          }}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
       </div>
     )
   }
@@ -934,6 +1349,9 @@ export function BattlePage() {
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Badge tone="green">Benar: {myCorrect}</Badge>
             <Badge tone="neutral">
+              Kategori: {CATEGORY_LABEL[battleCategory]}
+            </Badge>
+            <Badge tone="neutral">
               {opponentName} sudah jawab {oppAnswered}/{total}
             </Badge>
             {oppFinished && (
@@ -994,11 +1412,24 @@ export function BattlePage() {
         </Button>
         <button
           type="button"
-          onClick={handleCancel}
+          onClick={() => setShowCancelConfirm(true)}
           className="text-center text-sm font-semibold text-ink/50 hover:text-ink/80 hover:underline"
         >
           Keluar dari battle (battle dibatalkan)
         </button>
+        <ConfirmModal
+          open={showCancelConfirm}
+          title="Keluar dari battle?"
+          body="Battle dibatalkan dan jawabanmu tidak dihitung."
+          confirmLabel="Ya, keluar"
+          cancelLabel="Lanjut battle"
+          icon={<XIcon width={22} height={22} />}
+          onConfirm={() => {
+            setShowCancelConfirm(false)
+            void handleCancel()
+          }}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
       </div>
     )
   }

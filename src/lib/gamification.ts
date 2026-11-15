@@ -20,6 +20,7 @@ import {
   getLevel,
   getStore,
   markRead,
+  maybeReviveStreak,
   recordActivity,
   recordTryout,
   todayMakassar,
@@ -114,6 +115,20 @@ function checkBadges(): void {
   })
 }
 
+/**
+ * Coba pulihkan streak putus (mekanik "Bujuk Osi"). Dipanggil di akhir
+ * drill dan baca seksi; hanya memulihkan bila user sudah mengetuk
+ * "Bujuk Osi". Bila streak pulih ke angka milestone, rayakan juga.
+ * Dipanggil sebelum `checkBadges` supaya lencana streak melihat angka
+ * yang sudah dipulihkan.
+ */
+function reviveIfArmed(): void {
+  const { revived, streak } = maybeReviveStreak()
+  if (revived && STREAK_MILESTONES.includes(streak)) {
+    pushCelebration({ kind: 'streak', streak })
+  }
+}
+
 /** Reset progres misi bila tanggal sudah berganti. */
 function ensureMissionsToday(today: string): void {
   const { missions } = getStore()
@@ -196,7 +211,8 @@ export function recordReviewCorrect(): void {
 
 /**
  * Drill selesai: +50 XP (aturan lama), perbarui statistik drill,
- * majukan misi drill, catat aktivitas, cek naik level dan lencana.
+ * majukan misi drill, catat aktivitas, pulihkan streak putus bila
+ * user sudah membujuk Osi, cek naik level dan lencana.
  */
 export function completeDrill(
   materi: Materi,
@@ -218,6 +234,7 @@ export function completeDrill(
   bumpMission('drillMateri', materi)
   checkLevelUp(xpBefore)
   recordDailyActivity()
+  reviveIfArmed()
   checkBadges()
 }
 
@@ -271,7 +288,8 @@ export function completeTryout(score: TryoutScore): void {
 
 /**
  * Seksi materi ditandai dibaca: +5 XP sekali per seksi (aturan lama),
- * majukan misi baca, catat aktivitas, cek naik level dan lencana.
+ * majukan misi baca, catat aktivitas, pulihkan streak putus bila
+ * user sudah membujuk Osi, cek naik level dan lencana.
  * Mengembalikan `false` bila seksi sudah pernah ditandai.
  */
 export function completeSectionRead(
@@ -288,6 +306,7 @@ export function completeSectionRead(
   bumpMission('bacaMateri', materi)
   checkLevelUp(xpBefore)
   recordDailyActivity()
+  reviveIfArmed()
   checkBadges()
   return true
 }

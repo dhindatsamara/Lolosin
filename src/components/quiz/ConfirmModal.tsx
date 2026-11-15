@@ -1,24 +1,39 @@
 import { useEffect, useId, useRef } from 'react'
+import type { ReactNode } from 'react'
 import { Button } from '../ui/Button'
 import { PlayIcon } from '../icons'
 
 export interface ConfirmModalProps {
   /** Modal terbuka atau tidak. Dialog selalu ter-render; buka/tutup lewat showModal/close. */
   open: boolean
-  /** Judul modal, mis. "Mulai sekarang?". */
+  /** Judul modal, mis. "Mulai sekarang?" atau "Yakin mau keluar?". */
   title: string
-  /** Nama mode yang dikonfirmasi, mis. "Tryout kilat". */
-  modeLabel: string
-  /** Ringkasan mode, mis. "30 soal · 27 menit". */
-  summary: string
-  /** Dipanggil saat user menekan "Mulai". */
+  /** Nama mode yang dikonfirmasi, mis. "Tryout kilat". Opsional; baris subjudul hanya tampil bila modeLabel atau summary diisi. */
+  modeLabel?: string
+  /** Ringkasan mode, mis. "30 soal · 27 menit". Opsional. */
+  summary?: string
+  /** Isi kotak penjelasan. Bila tidak diisi, tampil catatan timer tryout (dipakai konfirmasi mulai tryout). */
+  body?: string
+  /** Label tombol konfirmasi. Default "Mulai". */
+  confirmLabel?: string
+  /** Label tombol batal. Default "Batalkan". */
+  cancelLabel?: string
+  /** Ikon di samping judul. Default PlayIcon. */
+  icon?: ReactNode
+  /** Dipanggil saat user menekan tombol konfirmasi. */
   onConfirm: () => void
-  /** Dipanggil saat modal ditutup tanpa konfirmasi (Batalkan, Esc, klik luar). */
+  /** Dipanggil saat modal ditutup tanpa konfirmasi (tombol batal, Esc, klik luar). */
   onCancel: () => void
 }
 
 /**
- * Modal konfirmasi native `<dialog>` (modal, via `showModal()`).
+ * Modal konfirmasi umum, native `<dialog>` (modal, via `showModal()`).
+ *
+ * Dipakai semua konfirmasi aksi penting: mulai tryout, batal tryout,
+ * keluar (logout), akhiri drill, batal/keluar battle, keluar sesi,
+ * dan akhiri sesi host. Tiap pemakaian mengatur judul, isi, dan label
+ * tombolnya sendiri; perilakunya (light dismiss, Esc, fokus awal)
+ * sama di semua tempat.
  *
  * - Light dismiss: `closedby="any"` + fallback pointerdown/pointerup
  *   untuk browser tanpa dukungan `closedBy` (Safari).
@@ -36,6 +51,10 @@ export function ConfirmModal({
   title,
   modeLabel,
   summary,
+  body,
+  confirmLabel = 'Mulai',
+  cancelLabel = 'Batalkan',
+  icon,
   onConfirm,
   onCancel,
 }: ConfirmModalProps) {
@@ -125,7 +144,7 @@ export function ConfirmModal({
       <form method="dialog" className="flex flex-col gap-4 p-5">
         <div className="flex items-start gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
-            <PlayIcon width={22} height={22} />
+            {icon ?? <PlayIcon width={22} height={22} />}
           </span>
           <div className="min-w-0">
             <h2
@@ -134,23 +153,25 @@ export function ConfirmModal({
             >
               {title}
             </h2>
-            <p className="mt-0.5 text-sm leading-relaxed font-medium text-ink/60">
-              {modeLabel} · {summary}
-            </p>
+            {(modeLabel || summary) && (
+              <p className="mt-0.5 text-sm leading-relaxed font-medium text-ink/60">
+                {[modeLabel, summary].filter(Boolean).join(' · ')}
+              </p>
+            )}
           </div>
         </div>
 
         <p className="rounded-xl bg-paper px-3 py-2.5 text-sm leading-relaxed font-medium text-ink/70">
-          Timer mulai jalan begitu kamu ketuk Mulai. Jawaban masih bisa
-          diubah sampai kamu selesai.
+          {body ??
+            'Timer mulai jalan begitu kamu ketuk Mulai. Jawaban masih bisa diubah sampai kamu selesai.'}
         </p>
 
         <div className="grid grid-cols-2 gap-2">
           <Button type="submit" variant="outline" value="batal">
-            Batalkan
+            {cancelLabel}
           </Button>
           <Button type="submit" value="mulai" autoFocus>
-            Mulai
+            {confirmLabel}
           </Button>
         </div>
       </form>

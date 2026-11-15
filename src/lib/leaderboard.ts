@@ -17,11 +17,18 @@
  *
  * Skor yang gagal terkirim disimpan di localStorage key terpisah
  * `lolosin:pending-scores` (bukan key store `lolosin:v1`) lalu dicoba
- * lagi otomatis saat halaman leaderboard dibuka.
+ * lagi otomatis saat halaman leaderboard dibuka. Key antrean
+ * di-namespace per user (v2.2.1, lihat lib/storage.ts):
+ * `lolosin:pending-scores:<userId>` atau `:guest` untuk tamu, supaya
+ * skor satu user tidak pernah ter-submit sebagai user lain. Sebagai
+ * pertahanan tambahan, setiap entri antrean menyimpan userId
+ * pemiliknya dan entri yang pemiliknya bukan user aktif dilewati
+ * saat flush.
  */
 import type { User } from '@supabase/supabase-js'
 import { getCurrentUser } from './auth'
 import { isSupabaseConfigured, supabase } from './supabase'
+import { migrateLegacyKey, scopedKey } from './storage'
 import {
   MAKASSAR_TIME_ZONE,
   shiftDate,
@@ -29,7 +36,12 @@ import {
   type TryoutRecord,
 } from './store'
 
-/** Key localStorage untuk skor yang gagal terkirim (terpisah dari store). */
+/**
+ * Key dasar localStorage untuk skor yang gagal terkirim (terpisah dari
+ * store). Key yang dipakai adalah scoped key per user
+ * (`lolosin:pending-scores:<userId>` atau `:guest`); key dasar ini
+ * juga key legacy pra-namespacing yang dimigrasi sekali saat load.
+ */
 export const PENDING_SCORES_KEY = 'lolosin:pending-scores'
 
 /** Batas antrean skor tertunda, supaya tidak tumbuh tanpa batas. */
@@ -138,7 +150,17 @@ export function getPreviousWeekStart(): string {
 /* Antrean skor tertunda (localStorage, key terpisah dari store)       */
 /* ------------------------------------------------------------------ */
 
-function isPendingRecord(value: unknown): value is TryoutRecord {
+/**
+ * Satu skor tertunda: TryoutRecord ditambah id user pemiliknya.
+ * `userId` tidak ada pada antrean lama (sebelum v2.2.1); entri tanpa
+ * userId dianggap milik namespace tempat antrean itu tersimpan.
+ */
+export interface PendingScoreRecord extends TryoutRecord {
+  /** Id user Supabase pemilik skor. */
+  userId?: string
+}
+
+function isPendingRecord(value: unknown): value is PendingScoreRecord {
   if (typeof value !== 'object' || value === null) return false
   const r = value as Record<string, unknown>
   return (
@@ -147,13 +169,17 @@ function isPendingRecord(value: unknown): value is TryoutRecord {
     typeof r.twk === 'number' &&
     typeof r.tiu === 'number' &&
     typeof r.tkp === 'number' &&
-    typeof r.passed === 'boolean'
+    typeof r.passed === 'boolean' &&
+    (r.userId === undefined || typeof r.userId === 'string')
   )
 }
 
-function loadPending(): TryoutRecord[] {
+function loadPending(): PendingScoreRecord[] {
   try {
-    const raw = localStorage.getItem(PENDING_SCORES_KEY)
+    // Migrasi sekali: antrean lama di key tanpa namespace pindah ke
+    // namespace aktif sebelum dibaca.
+    migrateLegacyKey(PENDING_SCORES_KEY)
+    const raw = localStorage.getItem(scopedKey(PENDING_SCORES_KEY))
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
@@ -163,19 +189,28 @@ function loadPending(): TryoutRecord[] {
   }
 }
 
-function savePending(records: TryoutRecord[]): void {
+function savePending(records: PendingScoreRecord[]): void {
   try {
-    localStorage.setItem(PENDING_SCORES_KEY, JSON.stringify(records))
+    localStorage.setItem(
+      scopedKey(PENDING_SCORES_KEY),
+      JSON.stringify(records),
+    )
   } catch {
     // Penyimpanan penuh atau tidak tersedia: abaikan diam-diam.
   }
 }
 
-/** Masukkan record ke antrean (dedup berdasarkan tanggal selesai). */
-function enqueuePending(record: TryoutRecord): void {
+/**
+ * Masukkan record ke antrean (dedup berdasarkan tanggal selesai).
+ * `userId` dicap bila pemiliknya diketahui (user yang login);
+ * entri tamu atau yang pemiliknya tidak diketahui tidak dicap.
+ */
+function enqueuePending(record: TryoutRecord, userId?: string | null): void {
   const queue = loadPending()
   if (queue.some((r) => r.date === record.date)) return
-  queue.push(record)
+  const entry: PendingScoreRecord =
+    userId ? { ...record, userId } : { ...record }
+  queue.push(entry)
   savePending(queue.slice(-PENDING_MAX))
 }
 
@@ -252,7 +287,7 @@ async function submitInner(
   // Status 'failed' dipakai supaya halaman hasil tetap menampilkan
   // pesan percobaan ulang yang sudah ada (tanpa status baru).
   if (!user.email_confirmed_at) {
-    enqueuePending(record)
+    enqueuePending(record, user.id)
     return FAILED_RESULT(
       'Konfirmasi dulu emailmu biar skormu masuk leaderboard.',
     )
@@ -274,14 +309,14 @@ async function submitInner(
       week_start: getMondayWITA(record.date),
     })
     if (error) {
-      enqueuePending(record)
+      enqueuePending(record, user.id)
       return FAILED_RESULT(
         'Skormu belum kekirim, dicoba lagi otomatis nanti.',
       )
     }
     return { ok: true, status: 'sent' }
   } catch {
-    enqueuePending(record)
+    enqueuePending(record, user.id)
     return FAILED_RESULT('Skormu belum kekirim, dicoba lagi otomatis nanti.')
   }
 }
@@ -305,6 +340,9 @@ export function submitTryoutResult(
  * terkonfigurasi dan user sudah login; bila tidak, tidak ada yang
  * dicoba dan antrean dibiarkan utuh. Yang berhasil dikirim dihapus
  * dari antrean, yang gagal tetap menunggu percobaan berikutnya.
+ * Entri yang userId-nya bukan user aktif dilewati (tidak dicoba,
+ * tetap di antrean): pertahanan supaya skor satu user tidak pernah
+ * ter-submit sebagai user lain.
  */
 export async function retryPendingSubmissions(): Promise<{
   sent: number
@@ -324,8 +362,14 @@ export async function retryPendingSubmissions(): Promise<{
 
   let sent = 0
   let failed = 0
-  const remaining: TryoutRecord[] = []
+  const remaining: PendingScoreRecord[] = []
   for (const record of pending) {
+    // Skor milik user lain (mis. antrean legacy yang termigrasi ke
+    // namespace ini): jangan pernah kirim sebagai user aktif.
+    if (record.userId !== undefined && record.userId !== user.id) {
+      remaining.push(record)
+      continue
+    }
     const result = await submitInner(record, user)
     if (result.ok) {
       sent += 1
