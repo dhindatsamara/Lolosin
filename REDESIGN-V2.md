@@ -865,3 +865,36 @@ tanpa struktur, dan ada typo. Ini satu-satunya dokumen yang bermasalah
   s17 dan s08 diperiksa visual. Laporan: QA-LOCAL-BANGARYA-2026-11-15.md.
   Catatan: port 4193 ternyata sudah dipakai server QA agen lain (bundle
   lama); selalu pastikan bundle yang dilayani adalah hasil build baru.
+
+## v2.3.4: Osi beranda ikut avatar pilihan + lonceng notifikasi (2026-11-15)
+
+Feedback user (15:10): (1) Osi di beranda user yang sudah login harus
+mengikuti avatar Osi yang dipilih di Profil; (2) tidak ada tempat
+melihat undangan main, undangan battle 1v1 hanya terlihat di halaman
+Battle.
+
+- OSI HERO IKUT AVATAR: `InteractiveMascot` mendapat props baru
+  `outfit`/`showCap`/`headphones` (diteruskan ke `Mascot`, perilaku
+  ketuk/balon/mood-sementara tidak berubah). Hero `DashboardPage`
+  membaca `useProfileAvatar()` + `getAvatarVariant()` dan meneruskan
+  mood/outfit/topi/headphone varian terpilih. Aturan mood: mood varian
+  dipakai normal, mood 'marah' tetap menang saat streak putus (outfit
+  varian tetap dipakai). Key remount mencakup variantId. Foto profil
+  yang diunggah TIDAK menggantikan Osi di hero (foto hanya untuk foto
+  profil). PetCard TIDAK diubah (outfit peliharaan adalah game streak
+  sendiri) dan dua Mascot dekoratif (Fokus hari ini, Tryout terakhir)
+  tetap default.
+- LONCENG NOTIFIKASI: komponen baru `src/components/NotificationBell.tsx`
+  di header (sebelum AuthStatus, desktop + mobile), hanya saat user
+  login. Badge angka = undangan battle masuk yang belum dibaca (polling
+  `getIncomingInvites` tiap 3 detik, pola BattlePage, tanpa Realtime
+  baru). Panel dropdown: nama host + chip kategori + tombol Terima
+  (`acceptBattleInvite`, lalu navigasi ke arena `/main/battle/:code`)
+  dan Tolak (`abandonBattle`, undangan hilang). Badge hilang setelah
+  panel dibuka; undangan baru memunculkan badge lagi. State kosong:
+  "Belum ada undangan". Klik di luar panel / Escape menutupnya. Hanya
+  undangan battle, bukan sistem notifikasi umum.
+- QA: seksi 15 baru di qa.mjs (12 cek: varian default/musik/kacamata di
+  hero, marah menang saat streak putus, PetCard + Mascot dekoratif tidak
+  berubah, ketuk Osi tetap jalan, lonceng absen untuk tamu desktop +
+  mobile). Laporan: QA-LOCAL-NOTIF-2026-11-15.md.

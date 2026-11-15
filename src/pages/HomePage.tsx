@@ -73,6 +73,7 @@ import {
   type LeaderboardEntry,
 } from '../lib/leaderboard'
 import { getMyProfile, useAuthUser, type Profile } from '../lib/auth'
+import { getAvatarVariant, useProfileAvatar } from '../lib/profile'
 import { ProfileAvatar } from '../components/ProfileAvatar'
 import { isSupabaseConfigured } from '../lib/supabase'
 import { cx } from '../lib/utils'
@@ -567,6 +568,15 @@ function DashboardPage() {
   const streakPutus = streakBroken !== null
   const lostStreak = streakBroken?.lostStreak ?? 0
 
+  // Avatar Osi yang dipilih di Profil (v2.3.4): Osi di hero memakai
+  // varian yang sama, supaya tampilannya konsisten dengan avatar akun.
+  // Foto profil yang diunggah TIDAK dipakai di sini, foto hanya untuk
+  // foto profil; varian avatar tetap yang dipakai. Hook ini reaktif,
+  // jadi ganti varian di Profil langsung tercermin saat kembali ke
+  // beranda tanpa reload.
+  const { variantId } = useProfileAvatar()
+  const avatarVariant = getAvatarVariant(variantId)
+
   // Seksi pertama yang belum dibaca (urut katalog) untuk kartu "Lanjutkan".
   let lanjutBelajar: { doc: MateriDoc; section: MateriSection } | null = null
   for (const doc of getDocuments()) {
@@ -646,13 +656,20 @@ function DashboardPage() {
 
         {/* Osi, teman belajarmu: bisa ditekan, balon ucapannya berganti.
             Kalimat pertama kontekstual (streak hari ini), sisanya
-            penyemangat yang berputar. Saat streak putus, Osi ngambek
-            (mood marah + kalimat sewot-lucu). Key memaksa remount
-            saat status putus berubah, karena InteractiveMascot
-            menyimpan mood dasar di state internalnya. */}
+            penyemangat yang berputar. Tampilannya mengikuti varian
+            avatar yang dipilih di Profil (v2.3.4): mood, outfit, topi,
+            dan headphone dari varian itu. Saat streak putus, Osi
+            ngambek (mood marah + kalimat sewot-lucu): mood marah tetap
+            menang atas mood varian, tapi outfit varian tetap dipakai.
+            Key memaksa remount saat status putus atau varian berubah,
+            karena InteractiveMascot menyimpan mood dasar di state
+            internalnya. */}
         <InteractiveMascot
-          key={streakPutus ? 'marah' : 'normal'}
-          baseMood={streakPutus ? 'marah' : streakAmanHariIni ? 'semangat' : 'senang'}
+          key={streakPutus ? 'marah' : `normal-${variantId}`}
+          baseMood={streakPutus ? 'marah' : avatarVariant.mood}
+          outfit={avatarVariant.outfit}
+          showCap={avatarVariant.showCap}
+          headphones={avatarVariant.headphones}
           size={160}
           phrases={
             streakPutus

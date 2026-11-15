@@ -5,6 +5,7 @@ import { getRankTitle } from '../lib/ranks'
 import { cx } from '../lib/utils'
 import { Mascot } from './Mascot'
 import { AuthStatus } from './AuthStatus'
+import { NotificationBell } from './NotificationBell'
 import { CelebrationHost } from './gamifikasi/Celebration'
 import {
   BookIcon,
@@ -238,6 +239,7 @@ export function Layout() {
               <FlameIcon width={15} height={15} />
               {streak} hari
             </span>
+            <NotificationBell />
             <AuthStatus />
           </div>
         </div>

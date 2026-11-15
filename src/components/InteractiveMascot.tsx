@@ -18,6 +18,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Mascot, type MascotMood } from './Mascot'
 import { MASCOT_NAME } from '../lib/mascot'
+import type { PetOutfit } from '../lib/pet'
 import { cx } from '../lib/utils'
 
 /** Kalimat balon ucapan. Indeks 0 adalah sapaan awal di hero. */
@@ -44,6 +45,14 @@ interface InteractiveMascotProps {
   withBubble?: boolean
   /** Tampilkan pill nama di bawah maskot (default true). */
   showName?: boolean
+  /** Outfit dari varian avatar Profil (default 'none'). Diteruskan ke
+      Mascot; tidak mengubah perilaku ketuk atau balon ucapan. */
+  outfit?: PetOutfit
+  /** Tampilkan topi wisuda (default true). Varian tanpa topi (polos,
+      musik) menyembunyikannya. */
+  showCap?: boolean
+  /** Pakai headphone (default false). Hanya varian avatar musik. */
+  headphones?: boolean
   className?: string
   /** Class tambahan untuk SVG maskot (mis. lebar responsif, float-soft). */
   mascotClassName?: string
@@ -55,6 +64,9 @@ export function InteractiveMascot({
   phrases = PHRASES,
   withBubble = true,
   showName = true,
+  outfit,
+  showCap,
+  headphones,
   className,
   mascotClassName,
 }: InteractiveMascotProps) {
@@ -110,7 +122,14 @@ export function InteractiveMascot({
       >
         {/* key baru = animasi goyang jalan lagi dari awal */}
         <span key={danceKey} className="mascot-goyang block">
-          <Mascot mood={mood} size={size} className={mascotClassName} />
+          <Mascot
+            mood={mood}
+            size={size}
+            outfit={outfit}
+            showCap={showCap}
+            headphones={headphones}
+            className={mascotClassName}
+          />
         </span>
       </button>
       {showName && (
