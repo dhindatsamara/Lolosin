@@ -4,6 +4,13 @@
 Output: ~/workspace/lolosin/src/data/materi/*.json (+ index.json).
 Hanya membersihkan + menstrukturkan teks sumber; TIDAK menulis ulang isi materi.
 Jalankan dengan: ~/workspace/venv-whisper/bin/python /tmp/build_materi.py
+(atau ~/workspace/venv-materi/bin/python, dibuat 2026-11-15 khusus pipeline ini).
+
+PENTING - PIN VERSI pypdf==7.0.1: pypdf 7.1.0 mengekstrak teks PDF sedikit
+berbeda (kata terpecah "me njadi" jadi "menjadi", judul terlewat jadi
+terdeteksi) sehingga ID seksi bisa BERGESER (twk-rangkuman-temenasn s18/s19
+pada 2026-11-15) dan progres baca user rusak. Jangan upgrade pypdf tanpa
+membandingkan ulang seluruh JSON hasil rebuild dengan snapshot sebelumnya.
 """
 import json, os, re, zipfile
 from collections import Counter
@@ -1499,6 +1506,260 @@ def process_tabel_pangkat():
     }
     return doc
 
+# ---------------------------------------------------------------- Materi baru (riset 2026-11-15)
+# File Markdown di ~/workspace/cpns/materi/baru/ - hasil riset free-access
+# (artikel web + situs resmi) untuk menutup gap audit isi materi
+# (laporan: ~/workspace/cpns/materi/MATERI-BARU-2026-11-15.md).
+# Struktur tiap file: judul H1, header sumber (blockquote "> ..." untuk TKP,
+# seksi "## Sumber" + paragraf Catatan untuk TWK/TIU), lalu konten markdown
+# (subjudul ##, paragraf, daftar "- " / "1. ", **tebal**).
+# Header sumber TIDAK masuk JSON app (aturan: tanpa atribusi "by siapa" di
+# app; sumber tetap tercatat di file .md internal). Kalimat atribusi yang
+# terselip di dalam konten juga dibuang (daftar di _ATRIBUSI_DROP_RES).
+# Verifikasi akhir (verify_baru_content) menggagalkan build bila ada
+# atribusi/URL/em-dash/soal yang lolos ke konten baru.
+BARU_DIR = os.path.join(SRC, "baru")
+
+# Kalimat/klausa atribusi di dalam konten (bukan header) yang dibuang utuh.
+# Ditemukan dengan grep atas 15 file (2026-11-15); substansi materinya
+# (fakta Putusan MK, daftar 9 nilai + akronim) dipertahankan, hanya klaim
+# "dicek di situs X" / "berdasarkan situs X" yang dibuang.
+_ATRIBUSI_DROP_RES = [
+    # "(Catatan istilah ini berdasarkan PejuangCPNS; Wikipedia mencatat ...)"
+    # NB: tanpa \s* di akhir - pola lama memakan baris kosong pemisah
+    # paragraf sehingga heading "## Pilar 1" menempel ke paragraf di atasnya.
+    re.compile(r"\(Catatan istilah ini berdasarkan [^)]*\)[ \t]*"),
+    # "Daftar dan akronim ini terkonfirmasi sama di situs KPK, ACLC KPK, dan PejuangCPNS."
+    re.compile(r"Daftar dan akronim ini terkonfirmasi sama[^.]*\.[ \t]*"),
+]
+
+# Token yang TIDAK BOLEH muncul di konten baru (verifikasi akhir).
+_BARU_FORBIDDEN_RES = [
+    re.compile(r"https?://"),
+    re.compile(r"belajarbro|pejuangcpns|pejuangpns|suratplus|datadikdasmen|"
+               r"studipedia|latihansoal|knowt|gencendekia|tipscv|"
+               r"digitaleducation|utbk\.or|wikipedia", re.I),
+    re.compile(r"kunci jawaban|latihan soal", re.I),
+    re.compile(r"app lolosin|file ini", re.I),
+    re.compile(r"diakses 2026"),
+    re.compile(r"\u2014"),  # em-dash
+]
+
+def _convert_table_block(rows):
+    """Baris tabel markdown (| A | B |) -> daftar bullet '- **A**: B'.
+    Baris header + pemisah (|---|---|) dibuang; tiap baris data jadi satu
+    bullet. Renderer app (MarkdownLite) tidak mendukung tabel, jadi tabel
+    satu-satunya (dasar hukum di tkp-integritas.md) dikonversi begini."""
+    data = []
+    for r in rows:
+        cells = [c.strip() for c in r.strip().strip("|").split("|")]
+        if all(re.fullmatch(r":?-{2,}:?", c) for c in cells):
+            continue  # baris pemisah |---|---|
+        data.append(cells)
+    if len(data) < 2:
+        return []
+    out = []
+    for cells in data[1:]:  # baris pertama = header kolom
+        if len(cells) >= 2:
+            out.append(f"- **{cells[0]}**: " + " - ".join(cells[1:]))
+        elif cells:
+            out.append("- " + cells[0])
+    return out
+
+def parse_baru_markdown(path):
+    """Satu file .md baru -> konten bersih (markdown ringan app).
+    Membuang: judul H1, header sumber (blockquote awal / seksi '## Sumber'
+    + paragraf Catatan), garis '---'. Tabel markdown dikonversi ke bullet,
+    quote konten ('> ...' sesudah konten dimulai) dibuka jadi paragraf
+    biasa. Em-dash dibersihkan via clean_materi_text."""
+    lines = open(path, encoding="utf-8").read().splitlines()
+    out = []
+    i = 0
+    in_sumber_section = False
+    seen_content_heading = False
+    while i < len(lines):
+        ln = lines[i]
+        stripped = ln.strip()
+        # judul H1 (judul seksi diatur dari konfigurasi, bukan dari file)
+        if stripped.startswith("# ") and not stripped.startswith("## "):
+            i += 1
+            continue
+        # seksi "## Sumber" -> buang sampai subjudul berikutnya / garis ---
+        if re.match(r"^##\s+Sumber\s*$", stripped):
+            in_sumber_section = True
+            i += 1
+            continue
+        if in_sumber_section:
+            if stripped.startswith("## ") or stripped == "---":
+                in_sumber_section = False
+                # jangan consume: baris ini diproses normal di bawah
+            else:
+                i += 1
+                continue
+        # garis pemisah
+        if stripped == "---":
+            i += 1
+            continue
+        # paragraf meta "Catatan: ..." tentang app (bukan materi)
+        if stripped.startswith("Catatan:") and "Lolosin" in stripped:
+            i += 1
+            continue
+        # blockquote: sebelum konten dimulai = header sumber (buang);
+        # sesudahnya = kutipan isi (buka jadi paragraf biasa)
+        if stripped.startswith(">"):
+            if not seen_content_heading:
+                i += 1
+                continue
+            text = stripped[1:].strip()
+            if text:
+                out.append(text)
+            i += 1
+            continue
+        # tabel markdown: kumpulkan blok baris '|' berurutan, konversi
+        if stripped.startswith("|"):
+            block = []
+            while i < len(lines) and lines[i].strip().startswith("|"):
+                block.append(lines[i].strip())
+                i += 1
+            out.extend(_convert_table_block(block))
+            continue
+        if stripped.startswith("## "):
+            seen_content_heading = True
+        out.append(ln)
+        i += 1
+    konten = "\n".join(out)
+    # buang kalimat atribusi di dalam konten
+    for rx in _ATRIBUSI_DROP_RES:
+        konten = rx.sub("", konten)
+    konten = re.sub(r"\n{3,}", "\n\n", konten).strip()
+    # jaga-jaga: heading "## "/"### " harus selalu memulai blok baru
+    # (MarkdownLite memisah blok dengan baris kosong)
+    konten = re.sub(r"(?<!\n)\n(#{2,3} )", r"\n\n\1", konten)
+    konten = re.sub(r"[ \t]{2,}", " ", konten)
+    konten = clean_materi_text(konten)
+    return konten
+
+# Urutan seksi TKP mengikuti subtopik tkp-modul (supaya dua dokumen TKP
+# per-aspek sejajar urutannya).
+BARU_TKP = [
+    ("tkp-integritas.md", "Integritas", "Integritas"),
+    ("tkp-kejujuran.md", "Kejujuran", "Kejujuran"),
+    ("tkp-adaptasi.md", "Kemampuan Beradaptasi", "Kemampuan beradaptasi"),
+    ("tkp-pengendalian-diri.md", "Pengendalian Diri", "Pengendalian diri"),
+    ("tkp-semangat-berprestasi.md", "Semangat Berprestasi", "Semangat berprestasi"),
+    ("tkp-inisiatif.md", "Inisiatif", "Inisiatif"),
+    ("tkp-kreativitas-inovasi.md", "Kreativitas dan Inovasi", "Kreativitas dan inovasi"),
+    ("tkp-ketekunan.md", "Ketekunan", "Ketekunan"),
+    ("tkp-orientasi-pelayanan.md", "Orientasi Pelayanan", "Orientasi pelayanan"),
+    ("tkp-toleransi.md", "Toleransi", "Toleransi"),
+    ("tkp-kepedulian-lingkungan.md", "Kepedulian Lingkungan", "Kepedulian lingkungan"),
+    ("tkp-efisiensi-kerja.md", "Efisiensi Kerja", "Efisiensi kerja"),
+]
+
+BARU_TWK = [
+    ("twk-integritas.md", "Integritas", "Integritas"),
+    ("twk-pilar-negara.md", "Pilar Negara", "Pilar Negara"),
+]
+
+def _baru_section(doc_id, n, fname, judul, subtopik):
+    konten = parse_baru_markdown(os.path.join(BARU_DIR, fname))
+    if len(konten.split()) < 50:
+        raise SystemExit(f"materi baru {fname}: konten kosong/terlalu pendek "
+                         f"setelah parse ({len(konten.split())} kata)")
+    return {"id": f"{doc_id}-s{n:02d}", "subtopik": subtopik,
+            "judul": judul, "konten": konten,
+            "kata": len(konten.split())}
+
+def process_baru_docs():
+    """Dua dokumen baru dari riset 2026-11-15 (TKP 12 aspek + TWK 2 subtopik).
+    Analogi tiga kata (TIU) bukan dokumen baru: ditambahkan sebagai seksi
+    ke tiu-analogi-verbal di append_baru_tiu() (satu subtopik pelengkap di
+    tempatnya). Dokumen baru tampil sebagai entri sendiri di Belajar
+    (fallback buildGroups di src/lib/materi.ts)."""
+    docs = []
+    tkp_sections = [_baru_section("tkp-karakter-perilaku", i + 1, *row)
+                    for i, row in enumerate(BARU_TKP)]
+    docs.append({
+        "id": "tkp-karakter-perilaku",
+        "judul": "Karakter dan Perilaku Kerja ASN",
+        "materi": "TKP",
+        "deskripsi": "Pendalaman 12 aspek TKP: integritas, kejujuran, adaptasi, pengendalian diri, semangat berprestasi, inisiatif, kreativitas dan inovasi, ketekunan, orientasi pelayanan, toleransi, kepedulian lingkungan, dan efisiensi kerja.",
+        "sumber": "baru/tkp-*.md (12 file riset free-access, 2026-11-15)",
+        "halaman": 0,  # riset web, tanpa halaman sumber (lihat SCHEMA.md)
+        "kata": sum(s["kata"] for s in tkp_sections),
+        "subtopik": [row[2] for row in BARU_TKP],
+        "sections": tkp_sections,
+        "catatan_kualitas": "Materi disusun dari sumber free-access (artikel web dan situs resmi) pada 2026-11-15 untuk menutup gap audit isi materi; sumber tiap aspek tercatat di file .md internal.",
+    })
+    twk_sections = [_baru_section("twk-integritas-pilar", i + 1, *row)
+                    for i, row in enumerate(BARU_TWK)]
+    docs.append({
+        "id": "twk-integritas-pilar",
+        "judul": "Integritas dan Pilar Negara",
+        "materi": "TWK",
+        "deskripsi": "Pendalaman dua subtopik TWK: sembilan nilai integritas versi KPK, korupsi dan gratifikasi, serta Empat Pilar MPR RI sebagai satu kesatuan.",
+        "sumber": "baru/twk-integritas.md + baru/twk-pilar-negara.md (riset free-access, 2026-11-15)",
+        "halaman": 0,  # riset web, tanpa halaman sumber (lihat SCHEMA.md)
+        "kata": sum(s["kata"] for s in twk_sections),
+        "subtopik": [row[2] for row in BARU_TWK],
+        "sections": twk_sections,
+        "catatan_kualitas": "Materi disusun dari sumber free-access (artikel web dan situs resmi KPK/MPR) pada 2026-11-15 untuk menutup gap audit isi materi; sumber tiap subtopik tercatat di file .md internal.",
+    })
+    return docs
+
+def append_baru_tiu(docs):
+    """Analogi tiga kata (riset 2026-11-15) sebagai seksi baru di dokumen
+    analogi verbal yang sudah ada. ID melanjutkan nomor seksi terakhir
+    (s04 saat ini); subtopik baru ditambahkan ke daftar dokumen."""
+    for doc in docs:
+        if doc["id"] != "tiu-analogi-verbal":
+            continue
+        konten = parse_baru_markdown(os.path.join(BARU_DIR, "tiu-analogi-tiga-kata.md"))
+        max_n = max(int(s["id"].rsplit("-s", 1)[1]) for s in doc["sections"])
+        doc["sections"].append({
+            "id": f"tiu-analogi-verbal-s{max_n + 1:02d}",
+            "subtopik": "Bentuk-bentuk soal analogi (tiga kata)",
+            "judul": "Analogi Tiga Kata",
+            "konten": konten,
+            "kata": len(konten.split()),
+        })
+        doc["kata"] = sum(s["kata"] for s in doc["sections"])
+        if "Bentuk-bentuk soal analogi (tiga kata)" not in doc["subtopik"]:
+            doc["subtopik"].append("Bentuk-bentuk soal analogi (tiga kata)")
+        print(f"  tiu-analogi-verbal: +1 seksi analogi tiga kata "
+              f"(s{max_n + 1:02d}, {len(konten.split())} kata)")
+        return
+    raise SystemExit("append_baru_tiu: dokumen tiu-analogi-verbal tidak ditemukan")
+
+def verify_baru_content(docs):
+    """Gagalkan build bila konten baru mengandung atribusi/URL/em-dash/soal.
+    Hanya memeriksa dokumen/seksi baru (tkp-karakter-perilaku,
+    twk-integritas-pilar, tiu-analogi-verbal-s04)."""
+    baru_ids = {"tkp-karakter-perilaku", "twk-integritas-pilar"}
+    errors = []
+    for doc in docs:
+        secs = []
+        if doc["id"] in baru_ids:
+            secs = doc["sections"]
+            for field in ("judul", "deskripsi"):
+                for rx in _BARU_FORBIDDEN_RES:
+                    if rx.search(doc.get(field, "")):
+                        errors.append(f"{doc['id']}.{field}: cocok {rx.pattern!r}")
+        elif doc["id"] == "tiu-analogi-verbal":
+            secs = [s for s in doc["sections"] if s["id"] == "tiu-analogi-verbal-s04"]
+        for s in secs:
+            for field in ("judul", "konten"):
+                for rx in _BARU_FORBIDDEN_RES:
+                    m = rx.search(s[field])
+                    if m:
+                        errors.append(f"{s['id']}.{field}: cocok {rx.pattern!r} "
+                                      f"({m.group(0)[:60]!r})")
+            if s["kata"] > 1500:
+                errors.append(f"{s['id']}: {s['kata']} kata, melebihi batas 1500")
+    if errors:
+        raise SystemExit("verifikasi materi baru GAGAL:\n  " + "\n  ".join(errors))
+    print("  verifikasi materi baru: OK (tanpa atribusi/URL/em-dash/soal)")
+
 # ---------------------------------------------------------------- filter isi (audit 2026-11-15)
 # Kebijakan: Belajar hanya berisi MATERI belajar murni (penjelasan, rangkuman,
 # rumus, tabel, contoh pengerjaan). Soal latihan/tryout (stem + opsi A-E +
@@ -2155,10 +2416,19 @@ def main():
         docs.append(doc)
         print(f"{doc['id']}: {len(doc['sections'])} sections, {doc['kata']} kata")
 
+    # materi baru (riset 2026-11-15): 2 dokumen baru + 1 seksi TIU
+    for doc in process_baru_docs():
+        docs.append(doc)
+        print(f"{doc['id']}: {len(doc['sections'])} sections, {doc['kata']} kata (baru)")
+    append_baru_tiu(docs)
+
     # filter isi: buang seksi soal/pengantar/duplikat, strip zona soal dari
     # seksi campuran (audit 2026-11-15). Berjalan setelah semua ID ditetapkan.
     for doc in docs:
         filter_doc_sections(doc)
+
+    # verifikasi konten baru (setelah filter, sebelum tulis)
+    verify_baru_content(docs)
 
     order = ["TWK", "TIU", "TKP"]
     docs.sort(key=lambda d: (order.index(d["materi"]), d["id"]))

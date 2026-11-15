@@ -7,6 +7,13 @@ penjelasan "Cara Memakai Tabel Pangkat" dan label struktur Kartu Sakti).
 Script build: `build_materi.py` di folder ini (dapat dijalankan ulang).
 Audit isi 2026-11-15: soal latihan, pengantar, dan duplikat dikeluarkan dari
 Belajar (lihat "Kebijakan isi" di bawah); 17 dokumen, 269 section, 68.287 kata.
+Materi baru 2026-11-15 (v2.3.1): 15 file riset free-access dari
+`~/workspace/cpns/materi/baru/` menutup gap audit (12 aspek TKP tipis, TWK
+Integritas + Pilar Negara, analogi tiga kata TIU) -> 19 dokumen, 284 section,
+79.612 kata. Dua dokumen baru (`tkp-karakter-perilaku`, `twk-integritas-pilar`)
++ 1 section baru (`tiu-analogi-verbal-s04`). Header sumber file `.md` TIDAK
+masuk JSON (tanpa atribusi "by siapa" di app); sumber tercatat di file `.md`
+internal. Dokumen baru punya `halaman: 0` (riset web, tanpa halaman sumber).
 
 ## File
 
@@ -14,16 +21,16 @@ Belajar (lihat "Kebijakan isi" di bawah); 17 dokumen, 269 section, 68.287 kata.
 |---|---|
 | `index.json` | Daftar semua dokumen + total + daftar yang dikecualikan dari MVP |
 | `inventaris.json` | Salinan `~/workspace/cpns/materi/inventaris-materi.json` (referensi) |
-| `<id-dokumen>.json` | Satu file per dokumen materi (17 file) |
-| `build_materi.py` | Script pembangun (reproducible; baca `~/workspace/cpns/materi/`) |
+| `<id-dokumen>.json` | Satu file per dokumen materi (19 file) |
+| `build_materi.py` | Script pembangun (reproducible; baca `~/workspace/cpns/materi/`). PIN pypdf==7.0.1, lihat docstring script |
 
 ## `index.json`
 
 ```json
 {
   "dibuat": "2026-11-15",
-  "total_dokumen": 17,
-  "total_kata": 68287,
+  "total_dokumen": 19,
+  "total_kata": 79612,
   "total_halaman": 591,
   "dokumen": [
     {
@@ -47,6 +54,8 @@ Belajar (lihat "Kebijakan isi" di bawah); 17 dokumen, 269 section, 68.287 kata.
 
 - `kata` = jumlah kata dihitung dari `konten` semua section (bukan dari klaim inventaris).
 - `halaman` = jumlah halaman dokumen sumber (termasuk sampul/daftar isi).
+  Dokumen dari riset web (`tkp-karakter-perilaku`, `twk-integritas-pilar`)
+  punya `halaman: 0` karena tidak ada halaman sumber.
 - `total_kata` / `total_halaman` = jumlah dari semua dokumen di `dokumen`.
 
 ## Dokumen (`<id>.json`)
@@ -117,6 +126,13 @@ Belajar (lihat "Kebijakan isi" di bawah); 17 dokumen, 269 section, 68.287 kata.
   Pengecualian diimplementasikan di `build_materi.py` (`filter_doc_sections` +
   `strip_question_zones`, berjalan setelah ID section ditetapkan) sehingga
   perbaikan tahan rebuild. Laporan: `~/workspace/cpns/materi/AUDIT-ISI-2026-11-15.md`.
+- Materi baru dari `baru/*.md` (v2.3.1, `parse_baru_markdown` di
+  `build_materi.py`): header sumber (blockquote / seksi `## Sumber` + paragraf
+  Catatan), garis `---`, dan kalimat atribusi di dalam konten dibuang; tabel
+  markdown dikonversi ke bullet (renderer tidak mendukung tabel); quote isi
+  dibuka jadi paragraf biasa; em-dash dibersihkan. `verify_baru_content`
+  menggagalkan build bila konten baru mengandung URL, nama situs sumber,
+  em-dash, atau frasa soal ("kunci jawaban", "latihan soal").
 - Section dibatasi ±1500 kata (dipecah di batas paragraf; lanjutan memakai suffix judul).
 - Karakter khusus matematika dipertahankan apa adanya (`√`, `×`, `²`, `→`, dll.).
 

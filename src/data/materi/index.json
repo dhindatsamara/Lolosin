@@ -1,7 +1,7 @@
 {
   "dibuat": "2026-11-15",
-  "total_dokumen": 17,
-  "total_kata": 68287,
+  "total_dokumen": 19,
+  "total_kata": 79612,
   "total_halaman": 591,
   "dokumen": [
     {
@@ -41,6 +41,20 @@
         "NKRI"
       ],
       "jumlahSections": 6
+    },
+    {
+      "id": "twk-integritas-pilar",
+      "file": "twk-integritas-pilar.json",
+      "judul": "Integritas dan Pilar Negara",
+      "materi": "TWK",
+      "deskripsi": "Pendalaman dua subtopik TWK: sembilan nilai integritas versi KPK, korupsi dan gratifikasi, serta Empat Pilar MPR RI sebagai satu kesatuan.",
+      "halaman": 0,
+      "kata": 1808,
+      "subtopik": [
+        "Integritas",
+        "Pilar Negara"
+      ],
+      "jumlahSections": 2
     },
     {
       "id": "twk-keyword-bela-negara",
@@ -131,13 +145,14 @@
       "materi": "TIU",
       "deskripsi": "Materi analogi verbal: definisi, bentuk-bentuk analogi, dan contoh analogi profesi dan tempat kerja.",
       "halaman": 4,
-      "kata": 561,
+      "kata": 1670,
       "subtopik": [
         "Definisi analogi verbal",
         "Bentuk-bentuk soal analogi (dua kata, kalimat)",
-        "Contoh analogi profesi dan tempat kerja"
+        "Contoh analogi profesi dan tempat kerja",
+        "Bentuk-bentuk soal analogi (tiga kata)"
       ],
-      "jumlahSections": 3
+      "jumlahSections": 4
     },
     {
       "id": "tiu-handbook-figural",
@@ -261,6 +276,30 @@
         "Anti radikalisme"
       ],
       "jumlahSections": 6
+    },
+    {
+      "id": "tkp-karakter-perilaku",
+      "file": "tkp-karakter-perilaku.json",
+      "judul": "Karakter dan Perilaku Kerja ASN",
+      "materi": "TKP",
+      "deskripsi": "Pendalaman 12 aspek TKP: integritas, kejujuran, adaptasi, pengendalian diri, semangat berprestasi, inisiatif, kreativitas dan inovasi, ketekunan, orientasi pelayanan, toleransi, kepedulian lingkungan, dan efisiensi kerja.",
+      "halaman": 0,
+      "kata": 8408,
+      "subtopik": [
+        "Integritas",
+        "Kejujuran",
+        "Kemampuan beradaptasi",
+        "Pengendalian diri",
+        "Semangat berprestasi",
+        "Inisiatif",
+        "Kreativitas dan inovasi",
+        "Ketekunan",
+        "Orientasi pelayanan",
+        "Toleransi",
+        "Kepedulian lingkungan",
+        "Efisiensi kerja"
+      ],
+      "jumlahSections": 12
     },
     {
       "id": "tkp-kartu-sakti",

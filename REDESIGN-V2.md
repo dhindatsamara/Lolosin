@@ -746,3 +746,45 @@ yang mencuri NIK dan nomor KK).
   + mobile, tautan nav/footer/dashboard); cek top nav diperbarui
   dari 6 jadi 7 item (Formasi di posisi terakhir); cek bottom nav
   mobile tetap 6 item.
+
+## v2.3.1: 15 materi baru ke Belajar (12 TKP + 2 TWK + 1 TIU) (2026-11-15)
+
+Menutup gap audit isi materi 2026-11-15 (TKP paling tipis, TWK Integritas +
+Pilar Negara tipis, TIU kehilangan penjelasan analogi tiga kata). Sumber:
+15 file riset free-access di `~/workspace/cpns/materi/baru/` (laporan:
+`~/workspace/cpns/materi/MATERI-BARU-2026-11-15.md`).
+
+- STRUKTUR: 12 aspek TKP jadi satu dokumen baru `tkp-karakter-perilaku`
+  ("Karakter dan Perilaku Kerja ASN", 12 seksi, 8.408 kata), urutan seksi
+  mengikuti subtopik `tkp-modul` supaya dua dokumen TKP per-aspek sejajar.
+  TWK Integritas + Pilar Negara jadi dokumen baru `twk-integritas-pilar`
+  (2 seksi, 1.808 kata). Analogi tiga kata jadi seksi baru
+  `tiu-analogi-verbal-s04` (1.109 kata) di dokumen analogi verbal yang
+  sudah ada. Total Belajar: 19 dokumen, 284 seksi, 79.612 kata
+  (sebelumnya 17 dokumen, 269 seksi, 68.287 kata).
+- INTEGRASI LEWAT PIPELINE: `parse_baru_markdown` + `process_baru_docs` +
+  `append_baru_tiu` di `src/data/materi/build_materi.py`. Header sumber
+  (blockquote / seksi `## Sumber` + paragraf Catatan), garis `---`, dan
+  kalimat atribusi di dalam konten dibuang; tabel markdown dikonversi ke
+  bullet; quote isi dibuka jadi paragraf biasa; em-dash dibersihkan.
+  `verify_baru_content` menggagalkan build bila konten baru mengandung
+  URL, nama situs sumber, em-dash, atau frasa soal. Dokumen baru tampil
+  sebagai entri sendiri di Belajar lewat fallback `buildGroups` di
+  `src/lib/materi.ts` (tanpa perubahan GROUP_DEFS); jumlah entri Belajar
+  10 jadi 12.
+- OVERLAP: TKP Integritas vs TWK Integritas keduanya dipertahankan
+  (sudut berbeda: TKP = karakteristik pribadi + level respons,
+  TWK = 9 nilai KPK + korupsi/gratifikasi). Toleransi dipertahankan
+  (sudut karakteristik pribadi, bukan duplikasi materi Sosial Budaya
+  yang sudah ada). TWK Integritas baru melengkapi seksi lama
+  "Sembilan Nilai Integritas" (daftar kata kunci 69 kata) dengan
+  penjelasan tiap nilai.
+- ID SEKSI LAMA TIDAK BERUBAH: rebuild dengan pypdf==7.0.1 menghasilkan
+  16 dokumen lama byte-identik dan s01-s03 analogi verbal identik.
+  PENTING: pypdf 7.1.0 mengekstrak teks PDF sedikit berbeda sehingga ID
+  seksi bisa bergeser (twk-rangkuman-temenasn s18/s19); versi dipin di
+  docstring `build_materi.py`. Venv pipeline: `~/workspace/venv-materi`
+  (pypdf 7.0.1 + python-docx).
+- QA: cek jumlah entri Belajar diperbarui 10 jadi 12; seksi baru
+  "Materi Baru v2.3.1" ditambahkan ke qa.mjs (dokumen/seksi baru tampil,
+  jumlah kata naik, tanpa atribusi/URL di halaman, tanpa overflow).
