@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { getLevel, useStore } from '../lib/store'
 import { getRankTitle } from '../lib/ranks'
+import { FEEDBACK_EMAIL, FEEDBACK_SUBJECT, OFFICIAL_LINKS } from '../lib/site'
 import { cx } from '../lib/utils'
 import { Mascot } from './Mascot'
 import { AuthStatus } from './AuthStatus'
@@ -13,26 +14,29 @@ import {
   FlameIcon,
   GamepadIcon,
   HomeIcon,
-  RankingIcon,
   TargetIcon,
   TrophyIcon,
   ZapIcon,
 } from './icons'
 
+/**
+ * Navigasi utama (v2.4): Peringkat KELUAR dari header karena header
+ * sudah kepenuhan. Rute /leaderboard tetap ada dan terjangkau lewat
+ * footer ("Jelajahi") dan tombol "Lihat peringkat" di halaman Tryout.
+ */
 const NAV_ITEMS = [
   { to: '/', label: 'Beranda', icon: HomeIcon, end: true },
   { to: '/belajar', label: 'Belajar', icon: BookIcon, end: false },
   { to: '/latihan', label: 'Latihan', icon: TargetIcon, end: false },
   { to: '/tryout', label: 'Tryout', icon: TrophyIcon, end: false },
   { to: '/main', label: 'Main', icon: GamepadIcon, end: false },
-  { to: '/leaderboard', label: 'Peringkat', icon: RankingIcon, end: false },
 ]
 
 /**
  * Navigasi desktop = NAV_ITEMS + Formasi. Formasi sengaja TIDAK masuk
- * bottom nav mobile (v2.3): grid bawah sudah penuh 6 item, dan QA
+ * bottom nav mobile (v2.3): grid bawah sudah penuh 5 item, dan QA
  * mengunci jumlahnya. Di mobile, Formasi tetap terjangkau lewat
- * footer dan kartu teaser di dashboard.
+ * footer dan tile pintasan di dashboard.
  */
 const NAV_ITEMS_DESKTOP = [
   ...NAV_ITEMS,
@@ -199,7 +203,8 @@ export function Layout() {
             </span>
           </NavLink>
 
-          {/* Navigasi atas (desktop): 7 item, termasuk Formasi (v2.3).
+          {/* Navigasi atas (desktop): 6 item, termasuk Formasi (v2.3).
+              Peringkat keluar dari header (v2.4), rutenya tetap ada.
               Padding dirampingkan supaya muat satu baris di 1280px. */}
           <nav
             aria-label="Navigasi utama"
@@ -255,7 +260,7 @@ export function Layout() {
           body, dan footer terlihat jelas bedanya. */}
       <footer className="border-t-4 border-accent-500 bg-primary-900 pb-24 text-white lg:pb-8">
         <div className="mx-auto w-full max-w-7xl px-4 pt-8 lg:px-8">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-start sm:gap-16">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-start lg:gap-16">
             <div className="max-w-sm">
               <span className="flex items-center gap-2.5">
                 <LogoMark />
@@ -268,6 +273,17 @@ export function Layout() {
                 topik, tryout mini, dan simulasi CAT dalam satu aplikasi,
                 ditemani maskot yang ikut tumbuh bareng streak-mu.
               </p>
+              {/* Kirim saran: hanya tampil bila FEEDBACK_EMAIL sudah
+                  diisi di lib/site.ts. Selama null, tombol disembunyikan
+                  total, bukan placeholder mailto. */}
+              {FEEDBACK_EMAIL && (
+                <a
+                  href={`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(FEEDBACK_SUBJECT)}`}
+                  className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-300 hover:text-accent-200"
+                >
+                  Kirim saran ke pengembang
+                </a>
+              )}
             </div>
             <nav aria-label="Navigasi footer">
               <p className="text-xs font-extrabold tracking-[0.14em] text-accent-300 uppercase">
@@ -286,6 +302,32 @@ export function Layout() {
                 ))}
               </ul>
             </nav>
+            {/* Tautan resmi (v2.4): situs pemerintah terkait seleksi
+                CPNS, dibuka di tab baru. Disclaimer jujur di bawahnya:
+                Lolosin bukan situs resmi pemerintah. */}
+            <nav aria-label="Tautan resmi">
+              <p className="text-xs font-extrabold tracking-[0.14em] text-accent-300 uppercase">
+                Tautan resmi
+              </p>
+              <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 sm:flex-col sm:gap-2">
+                {OFFICIAL_LINKS.map(({ label, href }) => (
+                  <li key={href}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-semibold text-white/80 hover:text-accent-300"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 max-w-xs text-xs leading-relaxed font-medium text-white/50">
+                Lolosin bukan situs resmi pemerintah. Tautan di atas
+                adalah situs resmi terkait seleksi CPNS.
+              </p>
+            </nav>
           </div>
           <p className="mt-6 border-t border-white/15 pt-4 text-xs leading-relaxed font-medium text-white/50">
             © 2026 Lolosin. Dibuat untuk pejuang CPNS.
@@ -298,7 +340,7 @@ export function Layout() {
         aria-label="Navigasi bawah"
         className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur lg:hidden"
       >
-        <div className="mx-auto grid w-full max-w-2xl grid-cols-6 gap-1 px-2 py-2">
+        <div className="mx-auto grid w-full max-w-2xl grid-cols-5 gap-1 px-2 py-2">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}

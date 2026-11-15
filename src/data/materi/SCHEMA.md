@@ -21,6 +21,15 @@ Tulis-ulang kurasi 2026-11-15 (v2.3.3): 6 seksi Rangkuman Tabel TWK
 aslinya huruf kapital semua dan tidak berurutan -> 19 dokumen, 284 section,
 79.843 kata. ID seksi tidak berubah (progres baca aman); `catatan` mind-map
 dihapus; verifikasi `verify_bang_arya_rewrite()` di build_materi.py.
+Keterbacaan 2026-11-15 (v2.5): audit menemukan 43 seksi berupa tembok teks
+(baris >600 karakter, terpanjang ~5.000, terkonsentrasi di 3 Handbook TIU);
+SEMUA 284 seksi diaudit, yang kurang jelas ditulis ulang terkurasi lewat map
+`READABILITY_REWRITE` + `verify_readability_rewrite()` (pola yang sama seperti
+Bang Arya); setiap seksi mendapat field baru `poin_inti` (3-5 butir ringkasan,
+map `POIN_INTI`, diverifikasi `verify_poin_inti()` yang menggagalkan build
+bila ada seksi tanpa poin inti). ID seksi tidak berubah. Halaman baca
+(`SectionDetailPage`) diubah jadi mode layar penuh: isi memakai lebar viewport
+penuh, kartu Poin Inti di atas isi (HP) / kolom samping sticky (desktop).
 
 ## File
 
@@ -105,6 +114,7 @@ dihapus; verifikasi `verify_bang_arya_rewrite()` di build_materi.py.
   "judul": "C. Sejarah Perumusan Pancasila",
   "konten": "Berikut adalah tokoh-tokoh ...\n\n1. Muh. Yamin ...\n\n(i) Peri kebangsaan.",
   "kata": 190,
+  "poin_inti": ["Perumusan Pancasila ...", "Tokoh kunci ...", "Tanggal penting ..."],
   "catatan": "Hasil OCR bagian ini kurang rapi ..."
 }
 ```
@@ -116,6 +126,7 @@ dihapus; verifikasi `verify_bang_arya_rewrite()` di build_materi.py.
 | `judul` | string | ya | Judul section (judul bab/subbab sumber; lanjutan memakai suffix `" (lanjutan 2)"`) |
 | `konten` | string | ya | Teks markdown ringan (lihat bawah) |
 | `kata` | integer | ya | Jumlah kata `konten` (dipisah spasi) |
+| `poin_inti` | string[] | ya (v2.5) | 3–5 butir ringkasan inti, tiap butir satu kalimat pendek (≤200 karakter), teks polos tanpa markdown/em-dash/URL/atribusi. Ditampilkan sebagai kartu callout di halaman baca. Wajib ada di semua seksi; `verify_poin_inti()` menggagalkan build bila ada yang hilang |
 | `catatan` | string | tidak | Peringatan kualitas (OCR kacau / butuh gambar). Tampilkan sebagai notice bila ada |
 | `nomor` | integer | hanya `tkp-kartu-sakti` | Nomor urut kompetensi di tabel sumber (1–33) |
 

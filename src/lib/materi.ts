@@ -22,6 +22,8 @@ export interface MateriSection {
   judul: string
   konten: string
   kata: number
+  /** 3-5 butir ringkasan inti seksi (v2.5; dijamin ada oleh build). */
+  poin_inti?: string[]
 }
 
 export interface PangkatTabel {

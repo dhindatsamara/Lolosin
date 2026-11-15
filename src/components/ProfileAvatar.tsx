@@ -1,4 +1,5 @@
-import { getAvatarVariant, useProfileAvatar } from '../lib/profile'
+import { resolveAvatarVariant, useProfileAvatar } from '../lib/profile'
+import { useStore } from '../lib/store'
 import { Mascot } from './Mascot'
 import { cx } from '../lib/utils'
 
@@ -15,6 +16,11 @@ interface ProfileAvatarProps {
  * dan kartu profil dashboard. Foto yang diunggah didahulukan; kalau
  * belum ada foto, tampil varian maskot yang dipilih user.
  *
+ * Gating streak (v2.4): varian yang dirender adalah hasil resolve
+ * terhadap streak saat ini, jadi varian yang terkunci karena streak
+ * putus jatuh ke varian tertinggi yang masih terbuka (lihat
+ * resolveAvatarVariant di lib/profile.ts).
+ *
  * Varian maskot dirender sedikit lebih kecil dari lingkaran (88%)
  * supaya mahkota dan topi wisuda tidak terpotong tepi lingkaran.
  */
@@ -24,7 +30,8 @@ export function ProfileAvatar({
   label,
 }: ProfileAvatarProps) {
   const { photo, variantId } = useProfileAvatar()
-  const variant = getAvatarVariant(variantId)
+  const { streak } = useStore()
+  const variant = resolveAvatarVariant(streak, variantId)
 
   if (photo) {
     return (

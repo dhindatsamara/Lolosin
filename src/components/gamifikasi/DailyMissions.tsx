@@ -11,6 +11,10 @@ import { CheckIcon, TargetIcon, ZapIcon } from '../icons'
 /**
  * Kartu misi harian: 3 misi yang sama untuk semua pengguna di hari yang
  * sama, dengan progress bar dan tombol klaim reward XP saat selesai.
+ *
+ * Meregang setinggi kolomnya (v2.4): seksi ini mengisi tinggi baris
+ * grid dashboard, dan ketiga kartu misi membagi sisa ruang supaya
+ * tepi bawah kolom misi sejajar dengan kolom streak di kirinya.
  */
 export function DailyMissions() {
   const { missions } = useStore()
@@ -21,7 +25,7 @@ export function DailyMissions() {
   const selesaiCount = statuses.filter((s) => s.done).length
 
   return (
-    <section aria-label="Misi harian">
+    <section aria-label="Misi harian" className="flex h-full flex-col">
       <div className="mb-2.5 flex items-end justify-between gap-3">
         <div>
           <p className="kicker">tantangan kecil, hadiah nyata</p>
@@ -34,9 +38,9 @@ export function DailyMissions() {
         </Badge>
       </div>
 
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-1 flex-col gap-2.5">
         {statuses.map(({ def, progress, done, claimed }) => (
-          <Card key={def.id} className="p-3.5">
+          <Card key={def.id} className="flex flex-1 flex-col justify-center p-3.5">
             <div className="flex items-start gap-3">
               <span
                 className={cx(

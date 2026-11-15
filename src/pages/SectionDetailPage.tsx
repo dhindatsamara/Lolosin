@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { MarkdownLite } from '../components/belajar/MarkdownLite'
 import { PangkatTable } from '../components/belajar/PangkatTable'
+import { PoinIntiCard } from '../components/belajar/PoinIntiCard'
 import { StickyBackButton } from '../components/belajar/StickyBackButton'
 import { CheckIcon, ChevronRightIcon } from '../components/icons'
 import {
@@ -64,7 +64,7 @@ export function SectionDetailPage() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6">
       <StickyBackButton to={backTarget} />
 
       <header>
@@ -78,7 +78,7 @@ export function SectionDetailPage() {
             </Badge>
           )}
         </div>
-        <h1 className="mt-2 font-display text-3xl leading-tight font-extrabold">
+        <h1 className="mt-2 font-display text-3xl leading-tight font-extrabold sm:text-4xl">
           {section.judul}
         </h1>
         <p className="mt-1 text-sm font-medium text-ink/60">
@@ -95,76 +95,101 @@ export function SectionDetailPage() {
         </div>
       </header>
 
-      {/* Isi seksi */}
-      <Card className="p-5 sm:p-6">
-        <div className="mx-auto max-w-prose">
+      <div className="border-t border-line" aria-hidden="true" />
+
+      {/*
+        Mode baca layar penuh (v2.5): isi memakai lebar viewport penuh
+        (tanpa kolom sempit di tengah). Di layar lebar, kartu Poin Inti
+        menempel di kolom samping; di HP ia tampil di atas isi.
+      */}
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-10">
+        <article className="min-w-0">
+          {section.poin_inti && section.poin_inti.length > 0 && (
+            <div className="mb-8 lg:hidden">
+              <PoinIntiCard poinInti={section.poin_inti} />
+            </div>
+          )}
+
           <MarkdownLite konten={konten} />
-          {tabel && <PangkatTable pangkat={tabel.pangkat} rows={tabel.rows} />}
-        </div>
-      </Card>
+          {tabel && (
+            <div className="mt-8">
+              <PangkatTable pangkat={tabel.pangkat} rows={tabel.rows} />
+            </div>
+          )}
 
-      {/* Tandai selesai dibaca */}
-      <div>
-        {isRead ? (
-          <p className="flex items-center justify-center gap-2 rounded-xl border border-primary-200 bg-primary-100 px-4 py-3 text-sm font-bold text-primary-700">
-            <CheckIcon width={16} height={16} />
-            Sudah dibaca · +{XP_SECTION_READ} XP buatmu
-          </p>
-        ) : (
-          <Button size="lg" fullWidth onClick={handleMarkRead}>
-            <CheckIcon width={18} height={18} />
-            Tandai selesai dibaca (+{XP_SECTION_READ} XP)
-          </Button>
-        )}
+          {/* Tandai selesai dibaca */}
+          <div className="mt-10">
+            {isRead ? (
+              <p className="flex items-center justify-center gap-2 rounded-xl border border-primary-200 bg-primary-100 px-4 py-3 text-sm font-bold text-primary-700">
+                <CheckIcon width={16} height={16} />
+                Sudah dibaca · +{XP_SECTION_READ} XP buatmu
+              </p>
+            ) : (
+              <Button size="lg" fullWidth onClick={handleMarkRead}>
+                <CheckIcon width={18} height={18} />
+                Tandai selesai dibaca (+{XP_SECTION_READ} XP)
+              </Button>
+            )}
+          </div>
+
+          {/* Navigasi seksi */}
+          <nav
+            aria-label="Navigasi seksi"
+            className="mt-6 grid grid-cols-2 gap-3"
+          >
+            {nav.prev ? (
+              <Link
+                to={`/belajar/${doc.id}/${nav.prev.id}`}
+                className="rounded-2xl border border-line bg-white p-3 shadow-soft transition-transform hover:-translate-y-px"
+              >
+                <span className="text-xs font-bold text-ink/60">
+                  ← Sebelumnya
+                </span>
+                <span className="mt-0.5 block truncate text-sm font-extrabold">
+                  {nav.prev.judul}
+                </span>
+              </Link>
+            ) : (
+              <span className="rounded-2xl border border-dashed border-line-strong bg-paper p-3 text-xs font-semibold text-ink/60">
+                Ini bagian pertama
+              </span>
+            )}
+            {nav.next ? (
+              <Link
+                to={`/belajar/${doc.id}/${nav.next.id}`}
+                className="rounded-2xl border border-line bg-white p-3 text-right shadow-soft transition-transform hover:-translate-y-px"
+              >
+                <span className="text-xs font-bold text-ink/60">
+                  Berikutnya →
+                </span>
+                <span className="mt-0.5 block truncate text-sm font-extrabold">
+                  {nav.next.judul}
+                </span>
+              </Link>
+            ) : (
+              <span className="rounded-2xl border border-dashed border-line-strong bg-paper p-3 text-right text-xs font-semibold text-ink/60">
+                Ini bagian terakhir
+              </span>
+            )}
+          </nav>
+
+          <Link to={backTarget} className="mt-6 block">
+            <Button variant="outline" fullWidth>
+              Kembali ke materi
+              <ChevronRightIcon width={16} height={16} />
+            </Button>
+          </Link>
+        </article>
+
+        {/* Kolom samping: Poin Inti menempel saat menggulir (desktop). */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-24">
+            {section.poin_inti && section.poin_inti.length > 0 && (
+              <PoinIntiCard poinInti={section.poin_inti} />
+            )}
+          </div>
+        </aside>
       </div>
-
-      {/* Navigasi seksi */}
-      <nav
-        aria-label="Navigasi seksi"
-        className="grid grid-cols-2 gap-3"
-      >
-        {nav.prev ? (
-          <Link
-            to={`/belajar/${doc.id}/${nav.prev.id}`}
-            className="rounded-2xl border border-line bg-white p-3 shadow-soft transition-transform hover:-translate-y-px"
-          >
-            <span className="text-xs font-bold text-ink/60">
-              ← Sebelumnya
-            </span>
-            <span className="mt-0.5 block truncate text-sm font-extrabold">
-              {nav.prev.judul}
-            </span>
-          </Link>
-        ) : (
-          <span className="rounded-2xl border border-dashed border-line-strong bg-paper p-3 text-xs font-semibold text-ink/60">
-            Ini bagian pertama
-          </span>
-        )}
-        {nav.next ? (
-          <Link
-            to={`/belajar/${doc.id}/${nav.next.id}`}
-            className="rounded-2xl border border-line bg-white p-3 text-right shadow-soft transition-transform hover:-translate-y-px"
-          >
-            <span className="text-xs font-bold text-ink/60">
-              Berikutnya →
-            </span>
-            <span className="mt-0.5 block truncate text-sm font-extrabold">
-              {nav.next.judul}
-            </span>
-          </Link>
-        ) : (
-          <span className="rounded-2xl border border-dashed border-line-strong bg-paper p-3 text-right text-xs font-semibold text-ink/60">
-            Ini bagian terakhir
-          </span>
-        )}
-      </nav>
-
-      <Link to={backTarget} className="block">
-        <Button variant="outline" fullWidth>
-          Kembali ke materi
-          <ChevronRightIcon width={16} height={16} />
-        </Button>
-      </Link>
 
       {/* Toast +XP */}
       <div

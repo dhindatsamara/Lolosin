@@ -898,3 +898,76 @@ Battle.
   hero, marah menang saat streak putus, PetCard + Mascot dekoratif tidak
   berubah, ketuk Osi tetap jalan, lonceng absen untuk tamu desktop +
   mobile). Laporan: QA-LOCAL-NOTIF-2026-11-15.md.
+
+## v2.4: Perombakan beranda login (ramping + personal) + Peringkat menyatu ke Tryout + gating avatar profil + isi footer (2026-11-15)
+
+Feedback user (15:32, 9 poin, dengan screenshot): beranda login
+terlalu penuh dan overwhelming. (15:36) Footer kosong, minta diisi.
+
+- URUTAN BARU BERANDA LOGIN (wajib, atas ke bawah): hero (tetap) lalu
+  BujukOsiCard (hanya saat streak putus, di luar urutan bernomor karena
+  kondisional) lalu streak + misi harian berdampingan dengan tinggi
+  kolom sama lalu 4 tile pintasan (Main, Formasi, Latihan, Tryout) lalu
+  Fokus hari ini lalu Progres per materi lalu Ulas soal salah lalu
+  Riwayat TO + Perkiraan kelulusan lalu Lencana paling bawah.
+  DIHAPUS dari beranda: ProfileCard, teaser "Peringkat minggu ini",
+  seksi "Mau ngapain hari ini?", kartu "Progres bacamu", dan kartu
+  besar "Main, biar nggak jenuh" + "Cari formasi CPNS" (digantikan
+  tile pintasan). Beranda login 100% personal: semua kartu menampilkan
+  data user sendiri, tile hanya jalan pintas tanpa deskripsi umum.
+- TINGGI KOLOM SAMA: grid streak/misi memakai items-stretch (default);
+  kolom kiri flex-col dengan PetCard `flex-1` (prop className baru,
+  blok maskot di tengah meregang, picker + tombol bagikan menempel di
+  bawah); DailyMissions `flex h-full flex-col`, daftar misi `flex-1`,
+  kartu misi `flex flex-1 flex-col justify-center`. Kriteria terima:
+  selisih tepi bawah kedua kolom maksimal 16px di desktop (diukur
+  Playwright).
+- PETCARD DIPADATKAN: maskot 120 jadi 96, picker mini 44 jadi 40,
+  padding p-5 jadi p-4, margin antar blok dirapatkan.
+- TILE PINTASAN: ikon + judul + satu baris pendek + panah, menaut ke
+  menu yang sudah ada. Vertikal di mobile (tile 2 kolom sempit: judul
+  + badge BETA tidak muat sebaris dengan ikon; badge BETA sempat
+  meluber 15px dan menyebabkan overflow horizontal mobile, diperbaiki
+  dengan layout vertikal + judul boleh membungkus), horizontal mulai
+  sm, grid 2 kolom mobile dan 4 kolom lg. Tile Formasi tetap membawa
+  badge BETA (keputusan kejujuran v2.3: label beta juga tampil di
+  dashboard).
+- LENCANA DIPADATKAN: saat tertutup hanya strip ringkas (chip lencana
+  diraih maksimal 6 + chip "+N lagi" + tombol "Lihat semua", tinggi
+  kartu maksimal ~130px); tombol mengembang ke grid penuh 13 lencana
+  di tempat, tombol "Tutup" mengembalikan strip. State kosong:
+  "Belum ada lencana diraih. Gas belajar biar koleksimu nambah."
+- HEADER: "Peringkat" HAPUS dari nav desktop (7 jadi 6 item) dan
+  bottom nav mobile (6 jadi 5 item, grid-cols-5). Rute /leaderboard
+  TETAP ADA; tautan footer "Jelajahi" tetap; halaman Tryout mendapat
+  tombol "Lihat peringkat" di bawah info passing grade. "Peringkat
+  sendiri" di halaman Peringkat TIDAK dibangun (user: "nanti").
+- GATING AVATAR PROFIL: tiap varian di AVATAR_VARIANTS mendapat
+  `minStreak` dari tangga outfit pet (none 0, syal 3, kacamata 7,
+  mahkota 14, jubah 30; topi wisuda dan headphone tidak menambah
+  syarat). `getUnlockedAvatarVariants(streak)` dan
+  `resolveAvatarVariant(streak, variantId)` (jatuh ke varian tertinggi
+  yang masih terbuka, pola resolveOutfit). AvatarPicker: varian
+  terkunci abu-abu + syarat ("streak 7 hari"), tidak bisa dipilih;
+  ProfileAvatar dan hero beranda memakai varian ter-resolve. Pilihan
+  avatar profil dan outfit pet BELUM disatukan (iterasi ini sengaja
+  tidak; keduanya masih bisa berbeda tampilan, bahan keputusan user
+  berikutnya).
+- FOOTER DIISI: kolom baru "Tautan resmi" (SSCASN, BKN, KemenPANRB;
+  target _blank, rel noopener noreferrer) + disclaimer jujur
+  "Lolosin bukan situs resmi pemerintah. Tautan di atas adalah situs
+  resmi terkait seleksi CPNS." Baris footer pindah ke breakpoint lg
+  (3 kolom tidak muat di sm). "Kirim saran ke pengembang": mailto ke
+  FEEDBACK_EMAIL (src/lib/site.ts, satu konstanta) dengan subjek
+  "Saran untuk Lolosin"; alamat lolosin.app@gmail.com dari user
+  (2026-11-15 15:45). Selama FEEDBACK_EMAIL null, tombol disembunyikan
+  total (bukan placeholder).
+- QA: seksi 16 baru di qa.mjs (cek urutan seksi, tinggi kolom sama,
+  lencana ringkas + mengembang, gating avatar streak 0/7/30 lewat
+  hero, tombol "Lihat peringkat" di Tryout, footer tautan resmi +
+  disclaimer + mailto saran, mobile tanpa overflow + tile 2 kolom).
+  Seksi lama disesuaikan: §1 (tile pintasan + konten terhapus), §6b
+  (helper lencana mengembang dulu), §10 (nav 6/5 item, Peringkat
+  lewat footer), §14 (grid pintasan 4 kolom), §15 (tes marah-menang
+  memakai varian musik karena kacamata terkunci di streak 0).
+  Laporan: QA-LOCAL-DASHBOARD-V24-2026-11-15.md.

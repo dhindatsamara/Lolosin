@@ -64,6 +64,7 @@ import {
   ClockIcon,
   HandshakeIcon,
   InfoIcon,
+  RankingIcon,
   TrophyIcon,
   XIcon,
   ZapIcon,
@@ -737,6 +738,14 @@ export function TryoutPage() {
           grade-nya masing-masing. Passing grade aslinya dari KepmenPANRB
           406/2026.
         </p>
+        {/* Peringkat keluar dari header (v2.4): jalan masuknya dari
+            sini dan dari footer. */}
+        <Link to="/leaderboard" className="mt-3 inline-block">
+          <Button variant="outline" size="sm">
+            <RankingIcon width={16} height={16} />
+            Lihat peringkat
+          </Button>
+        </Link>
       </section>
 
       {historyNewestFirst.length > 0 && (

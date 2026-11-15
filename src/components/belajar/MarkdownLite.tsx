@@ -4,16 +4,20 @@
  * Mendukung: heading `##` / `###`, bullet `- ` / `• `, daftar bernomor
  * `1. ` / `1) `, paragraf (baris-baris berurutan digabung dengan spasi),
  * serta inline `**tebal**`, `*miring*`, dan `` `kode` ``.
+ * Butir daftar yang menjorok (diawali spasi) dirender sebagai sub-daftar
+ * di bawah butir sebelumnya.
  *
  * Teks materi ditampilkan apa adanya (termasuk artefak OCR kecil).
  */
 import type { ReactNode } from 'react'
 
+type ListItem = { text: string; sub: string[] }
+
 type Block =
   | { type: 'h2'; text: string }
   | { type: 'h3'; text: string }
-  | { type: 'ul'; items: string[] }
-  | { type: 'ol'; items: string[] }
+  | { type: 'ul'; items: ListItem[] }
+  | { type: 'ol'; items: ListItem[] }
   | { type: 'p'; text: string }
 
 const INLINE_PATTERN = /(`[^`]+`|\*\*[^*]+?\*\*|\*[^*]+?\*)/g
@@ -48,7 +52,7 @@ function parseBlocks(konten: string): Block[] {
   const lines = konten.split('\n')
   const blocks: Block[] = []
   let para: string[] = []
-  let list: { type: 'ul' | 'ol'; items: string[] } | null = null
+  let list: { type: 'ul' | 'ol'; items: ListItem[] } | null = null
 
   const flushPara = () => {
     if (para.length > 0) {
@@ -62,6 +66,24 @@ function parseBlocks(konten: string): Block[] {
       list = null
     }
   }
+  // Butir daftar; butir yang menjorok masuk sebagai sub-butir di bawah
+  // butir sebelumnya (bila ada), selebihnya jadi butir biasa.
+  const pushItem = (
+    type: 'ul' | 'ol',
+    text: string,
+    indented: boolean,
+  ) => {
+    flushPara()
+    if (indented && list && list.items.length > 0) {
+      list.items[list.items.length - 1].sub.push(text)
+      return
+    }
+    if (!list || list.type !== type) {
+      flushList()
+      list = { type, items: [] }
+    }
+    list.items.push({ text, sub: [] })
+  }
 
   for (const raw of lines) {
     const line = raw.trim()
@@ -70,6 +92,7 @@ function parseBlocks(konten: string): Block[] {
       flushList()
       continue
     }
+    const indented = /^\s/.test(raw)
     const h2 = line.match(/^##\s+(.*)$/)
     const h3 = line.match(/^###\s+(.*)$/)
     const bullet = line.match(/^[-•]\s+(.*)$/)
@@ -87,21 +110,11 @@ function parseBlocks(konten: string): Block[] {
       continue
     }
     if (bullet) {
-      flushPara()
-      if (!list || list.type !== 'ul') {
-        flushList()
-        list = { type: 'ul', items: [] }
-      }
-      list.items.push(bullet[1])
+      pushItem('ul', bullet[1], indented)
       continue
     }
     if (numbered) {
-      flushPara()
-      if (!list || list.type !== 'ol') {
-        flushList()
-        list = { type: 'ol', items: [] }
-      }
-      list.items.push(numbered[1])
+      pushItem('ol', numbered[1], indented)
       continue
     }
     flushList()
@@ -115,14 +128,14 @@ function parseBlocks(konten: string): Block[] {
 export function MarkdownLite({ konten }: { konten: string }) {
   const blocks = parseBlocks(konten)
   return (
-    <div className="space-y-4 text-[15px] leading-7 text-ink/85">
+    <div className="space-y-5 text-[17px] leading-8 break-words text-ink/85">
       {blocks.map((block, i) => {
         switch (block.type) {
           case 'h2':
             return (
               <h2
                 key={i}
-                className="pt-3 font-display text-xl font-extrabold leading-snug text-ink first:pt-0"
+                className="border-b border-line pt-8 pb-3 font-display text-2xl leading-snug font-extrabold text-ink first:pt-0"
               >
                 {renderInline(block.text)}
               </h2>
@@ -131,7 +144,7 @@ export function MarkdownLite({ konten }: { konten: string }) {
             return (
               <h3
                 key={i}
-                className="pt-2 font-display text-lg font-extrabold leading-snug text-ink first:pt-0"
+                className="pt-6 font-display text-xl leading-snug font-extrabold text-ink first:pt-0"
               >
                 {renderInline(block.text)}
               </h3>
@@ -140,10 +153,19 @@ export function MarkdownLite({ konten }: { konten: string }) {
             return (
               <ul
                 key={i}
-                className="list-disc space-y-1.5 pl-5 marker:text-primary-600"
+                className="list-disc space-y-2 pl-6 marker:text-primary-600"
               >
                 {block.items.map((item, j) => (
-                  <li key={j}>{renderInline(item)}</li>
+                  <li key={j}>
+                    {renderInline(item.text)}
+                    {item.sub.length > 0 && (
+                      <ul className="mt-1.5 list-disc space-y-1.5 pl-5 marker:text-primary-600/70">
+                        {item.sub.map((sub, k) => (
+                          <li key={k}>{renderInline(sub)}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
                 ))}
               </ul>
             )
@@ -151,10 +173,19 @@ export function MarkdownLite({ konten }: { konten: string }) {
             return (
               <ol
                 key={i}
-                className="list-decimal space-y-1.5 pl-5 marker:font-semibold marker:text-primary-600"
+                className="list-decimal space-y-2 pl-6 marker:font-semibold marker:text-primary-600"
               >
                 {block.items.map((item, j) => (
-                  <li key={j}>{renderInline(item)}</li>
+                  <li key={j}>
+                    {renderInline(item.text)}
+                    {item.sub.length > 0 && (
+                      <ul className="mt-1.5 list-disc space-y-1.5 pl-5 marker:text-primary-600/70">
+                        {item.sub.map((sub, k) => (
+                          <li key={k}>{renderInline(sub)}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
                 ))}
               </ol>
             )

@@ -281,8 +281,8 @@ export default function ProfilPage() {
             Avatar {MASCOT_NAME}
           </h2>
           <p className="mt-0.5 text-sm leading-relaxed text-ink/60">
-            Pilih gaya {MASCOT_NAME} favoritmu. Dipakai kalau kamu belum
-            unggah foto.
+            Pilih gaya {MASCOT_NAME} favoritmu. Gaya baru terbuka seiring
+            streak belajar-mu. Dipakai kalau kamu belum unggah foto.
           </p>
         </div>
         <AvatarPicker />

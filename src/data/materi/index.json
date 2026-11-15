@@ -1,7 +1,7 @@
 {
   "dibuat": "2026-11-15",
   "total_dokumen": 19,
-  "total_kata": 79843,
+  "total_kata": 77575,
   "total_halaman": 591,
   "dokumen": [
     {
@@ -29,7 +29,7 @@
       "materi": "TWK",
       "deskripsi": "Kartu ringkas TWK: poin penting, kata kunci, dan tips menjawab soal per tema.",
       "halaman": 10,
-      "kata": 1403,
+      "kata": 1349,
       "subtopik": [
         "Nasionalisme",
         "Pilar Negara",
@@ -63,7 +63,7 @@
       "materi": "TWK",
       "deskripsi": "Infografis pembeda empat konsep yang sering tertukar: bela negara, nasionalisme, patriotisme, dan cinta tanah air.",
       "halaman": 2,
-      "kata": 267,
+      "kata": 251,
       "subtopik": [
         "Bela Negara",
         "Patriotisme",
@@ -80,7 +80,7 @@
       "materi": "TWK",
       "deskripsi": "Ringkasan materi TWK lengkap: Pancasila, UUD 1945, Bhinneka Tunggal Ika, tata negara, HAM, sejarah nasional, dan hubungan internasional.",
       "halaman": 93,
-      "kata": 19498,
+      "kata": 19009,
       "subtopik": [
         "Pancasila",
         "UUD 1945",
@@ -102,7 +102,7 @@
       "materi": "TWK",
       "deskripsi": "Rangkuman ringkas TWK berorientasi hafalan: tokoh, tanggal, dan rumusan penting.",
       "halaman": 11,
-      "kata": 3503,
+      "kata": 3572,
       "subtopik": [
         "Sejarah Perumusan Pancasila",
         "Pancasila (lima sila)",
@@ -121,7 +121,7 @@
       "materi": "TWK",
       "deskripsi": "Catatan materi TWK yang dirangkum dari soal-soal tryout: nasionalisme, gratifikasi, integritas, dan wawasan kebangsaan.",
       "halaman": 3,
-      "kata": 1208,
+      "kata": 1089,
       "subtopik": [
         "Nasionalisme",
         "Gratifikasi dan anti-korupsi (9 nilai anti-korupsi)",
@@ -145,7 +145,7 @@
       "materi": "TIU",
       "deskripsi": "Materi analogi verbal: definisi, bentuk-bentuk analogi, dan contoh analogi profesi dan tempat kerja.",
       "halaman": 4,
-      "kata": 1670,
+      "kata": 1660,
       "subtopik": [
         "Definisi analogi verbal",
         "Bentuk-bentuk soal analogi (dua kata, kalimat)",
@@ -161,7 +161,7 @@
       "materi": "TIU",
       "deskripsi": "Handbook kemampuan figural: analogi gambar, ketidaksamaan, serial gambar, dan strategi mengerjakan soal gambar.",
       "halaman": 57,
-      "kata": 3827,
+      "kata": 3207,
       "subtopik": [
         "Analogi gambar",
         "Ketidaksamaan",
@@ -179,7 +179,7 @@
       "materi": "TIU",
       "deskripsi": "Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, dan hitung cepat.",
       "halaman": 44,
-      "kata": 3898,
+      "kata": 3462,
       "subtopik": [
         "Berhitung",
         "Deret angka",
@@ -197,7 +197,7 @@
       "materi": "TIU",
       "deskripsi": "Handbook kemampuan verbal: analogi, silogisme, penalaran analitis, teknik eliminasi, dan error pattern.",
       "halaman": 46,
-      "kata": 3710,
+      "kata": 4030,
       "subtopik": [
         "Analogi",
         "Silogisme",
@@ -215,7 +215,7 @@
       "materi": "TIU",
       "deskripsi": "Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
       "halaman": 10,
-      "kata": 1867,
+      "kata": 2136,
       "subtopik": [
         "Jenis bilangan (ABCSIROPP)",
         "Sifat-sifat bilangan",
@@ -231,7 +231,7 @@
       "materi": "TIU",
       "deskripsi": "Ringkasan materi TIU: penalaran verbal, analitis, logis, silogisme, aritmetika, deret angka, dan hitung cepat.",
       "halaman": 98,
-      "kata": 16360,
+      "kata": 15479,
       "subtopik": [
         "Penalaran verbal: sinonim, antonim, analogi",
         "Penalaran analitis",
@@ -266,7 +266,7 @@
       "materi": "TKP",
       "deskripsi": "Kartu ringkas TKP: kata kunci dan ciri soal per aspek (profesionalisme, pelayanan publik, jejaring kerja, sosial budaya, TIK, anti radikalisme).",
       "halaman": 10,
-      "kata": 2064,
+      "kata": 2075,
       "subtopik": [
         "Profesionalisme",
         "Pelayanan publik",
@@ -284,7 +284,7 @@
       "materi": "TKP",
       "deskripsi": "Pendalaman 12 aspek TKP: integritas, kejujuran, adaptasi, pengendalian diri, semangat berprestasi, inisiatif, kreativitas dan inovasi, ketekunan, orientasi pelayanan, toleransi, kepedulian lingkungan, dan efisiensi kerja.",
       "halaman": 0,
-      "kata": 8408,
+      "kata": 8388,
       "subtopik": [
         "Integritas",
         "Kejujuran",
@@ -308,7 +308,7 @@
       "materi": "TKP",
       "deskripsi": "Referensi cepat TKP: definisi kompetensi, deskripsi level 0–6, dan kata kunci per aspek.",
       "halaman": 7,
-      "kata": 3952,
+      "kata": 3921,
       "subtopik": [
         "Profesionalisme",
         "Jejaring kerja",
@@ -329,7 +329,7 @@
       "materi": "TKP",
       "deskripsi": "Ringkasan materi TKP per aspek: integritas, adaptasi, pengendalian diri, semangat berprestasi, pelayanan, dan lainnya.",
       "halaman": 60,
-      "kata": 3174,
+      "kata": 3017,
       "subtopik": [
         "Integritas",
         "Kejujuran",
@@ -353,7 +353,7 @@
       "materi": "TKP",
       "deskripsi": "Rangkuman narasi per aspek TKP: ciri-ciri, prinsip, dan cara menghadapi soal.",
       "halaman": 10,
-      "kata": 1954,
+      "kata": 1850,
       "subtopik": [
         "Anti radikalisme",
         "Jejaring kerja",

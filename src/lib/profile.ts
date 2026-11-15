@@ -12,6 +12,15 @@
  * Foto yang diunggah selalu didahulukan atas avatar maskot saat
  * ditampilkan (lihat ProfileAvatar).
  *
+ * Gating streak (v2.4): tiap varian punya syarat streak minimum
+ * (minStreak) yang diambil dari tangga outfit peliharaan (PET_STAGES
+ * di lib/pet.ts), jadi aturan avatar profil dan outfit peliharaan
+ * selalu sama. Varian yang syaratnya belum terpenuhi tidak bisa
+ * dipilih di AvatarPicker, dan bila streak putus sehingga varian
+ * terpilih jadi terkunci, tampilan jatuh ke varian tertinggi yang
+ * masih terbuka (resolveAvatarVariant, mengikuti pola resolveOutfit
+ * di lib/pet.ts).
+ *
  * Reaktivitas mengikuti pola emit/subscribe di lib/store.ts: header
  * (AuthStatus) tidak me-remount saat navigasi, jadi perubahan foto
  * atau avatar di halaman Profil harus langsung tercermin di header
@@ -20,7 +29,7 @@
 import { useSyncExternalStore } from 'react'
 import { MASCOT_NAME } from './mascot'
 import type { MascotMood } from '../components/Mascot'
-import type { PetOutfit } from './pet'
+import { PET_STAGES, type PetOutfit } from './pet'
 import {
   getCurrentNamespace,
   migrateLegacyKey,
@@ -65,6 +74,11 @@ export type AvatarVariantId =
  * Satu varian avatar: kombinasi mood, outfit, topi wisuda, dan
  * headphone dari art maskot yang sudah ada. Semua varian tetap cute:
  * tidak ada mood marah atau sedih di sini.
+ *
+ * Syarat streak (minStreak) mengikuti outfitnya di tangga pet:
+ * none 0 hari, syal 3, kacamata 7, mahkota 14, jubah 30. Topi wisuda
+ * dan headphone TIDAK menambah syarat, jadi varian wisuda, musik,
+ * dan polos tersedia sejak hari 0.
  */
 export interface AvatarVariant {
   id: AvatarVariantId
@@ -73,6 +87,17 @@ export interface AvatarVariant {
   outfit: PetOutfit
   showCap: boolean
   headphones: boolean
+  /** Streak minimum (hari) untuk membuka varian ini. */
+  minStreak: number
+}
+
+/**
+ * Syarat streak (hari) untuk satu outfit, diambil dari tangga stage
+ * pet (PET_STAGES) supaya aturan avatar profil dan outfit peliharaan
+ * selalu sama dan hanya ada satu sumber angka.
+ */
+function minStreakForOutfit(outfit: PetOutfit): number {
+  return PET_STAGES.find((stage) => stage.outfit === outfit)?.minStreak ?? 0
 }
 
 /** Semua varian avatar yang bisa dipilih di halaman Profil. */
@@ -84,6 +109,7 @@ export const AVATAR_VARIANTS: AvatarVariant[] = [
     outfit: 'none',
     showCap: true,
     headphones: false,
+    minStreak: minStreakForOutfit('none'),
   },
   {
     id: 'kacamata',
@@ -92,6 +118,7 @@ export const AVATAR_VARIANTS: AvatarVariant[] = [
     outfit: 'kacamata',
     showCap: true,
     headphones: false,
+    minStreak: minStreakForOutfit('kacamata'),
   },
   {
     id: 'mahkota',
@@ -100,6 +127,7 @@ export const AVATAR_VARIANTS: AvatarVariant[] = [
     outfit: 'mahkota',
     showCap: true,
     headphones: false,
+    minStreak: minStreakForOutfit('mahkota'),
   },
   {
     id: 'syal',
@@ -108,6 +136,7 @@ export const AVATAR_VARIANTS: AvatarVariant[] = [
     outfit: 'syal',
     showCap: true,
     headphones: false,
+    minStreak: minStreakForOutfit('syal'),
   },
   {
     id: 'musik',
@@ -116,6 +145,7 @@ export const AVATAR_VARIANTS: AvatarVariant[] = [
     outfit: 'none',
     showCap: false,
     headphones: true,
+    minStreak: minStreakForOutfit('none'),
   },
   {
     id: 'polos',
@@ -124,6 +154,7 @@ export const AVATAR_VARIANTS: AvatarVariant[] = [
     outfit: 'none',
     showCap: false,
     headphones: false,
+    minStreak: minStreakForOutfit('none'),
   },
   {
     id: 'wisudawan',
@@ -132,6 +163,7 @@ export const AVATAR_VARIANTS: AvatarVariant[] = [
     outfit: 'jubah',
     showCap: true,
     headphones: false,
+    minStreak: minStreakForOutfit('jubah'),
   },
 ]
 
@@ -144,6 +176,34 @@ export function getAvatarVariant(id: AvatarVariantId): AvatarVariant {
     AVATAR_VARIANTS.find((variant) => variant.id === id) ??
     AVATAR_VARIANTS[0]!
   )
+}
+
+/** Varian yang sudah terbuka pada streak tertentu. */
+export function getUnlockedAvatarVariants(streak: number): AvatarVariant[] {
+  const safe = Math.max(0, Math.floor(streak))
+  return AVATAR_VARIANTS.filter((variant) => safe >= variant.minStreak)
+}
+
+/**
+ * Varian yang dirender: pilihan user bila syarat streaknya terpenuhi,
+ * kalau tidak (mis. streak putus lalu variannya terkunci lagi) jatuh
+ * ke varian tertinggi yang masih terbuka (minStreak terbesar; seri
+ * diambil yang pertama di daftar, yaitu varian default). Mengikuti
+ * pola resolveOutfit di lib/pet.ts.
+ */
+export function resolveAvatarVariant(
+  streak: number,
+  variantId: AvatarVariantId,
+): AvatarVariant {
+  const chosen = getAvatarVariant(variantId)
+  const safe = Math.max(0, Math.floor(streak))
+  if (safe >= chosen.minStreak) return chosen
+  const unlocked = getUnlockedAvatarVariants(safe)
+  let best = unlocked[0] ?? AVATAR_VARIANTS[0]!
+  for (const variant of unlocked) {
+    if (variant.minStreak > best.minStreak) best = variant
+  }
+  return best
 }
 
 /** True bila string adalah id varian yang dikenal. */

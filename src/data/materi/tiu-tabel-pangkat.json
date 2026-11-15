@@ -17,28 +17,49 @@
       "subtopik": "Tabel pangkat 2 (1–100)",
       "judul": "Cara Memakai Tabel Pangkat",
       "konten": "Tabel ini berisi nilai pangkat 2, 3, dan 4 untuk bilangan 1–100. Semua angka dihitung ulang secara programatis (bukan disalin dari hasil OCR), jadi dijamin benar.\n\nCara memakai: cari bilangan dasarnya di kolom pertama, lalu baca hasilnya di kolom kedua. Contoh: 7² = 49, 7³ = 343, 7⁴ = 2.401.\n\nTips menghafal untuk TIU: hafalkan pangkat 2 dari 1–30, pangkat 3 dari 1–20, dan pangkat 4 dari 1–10. Pola digit terakhir juga membantu: kuadrat hanya bisa berakhiran 0, 1, 4, 5, 6, atau 9.",
-      "kata": 84
+      "kata": 84,
+      "poin_inti": [
+        "Tabel ini berisi nilai pangkat 2, 3, dan 4 untuk bilangan 1 sampai 100.",
+        "Cara memakai tabel adalah mencari bilangan dasar lalu membaca hasilnya di kolom kedua.",
+        "Hafalkan pangkat 2 dari 1 sampai 30, pangkat 3 dari 1 sampai 20, dan pangkat 4 dari 1 sampai 10.",
+        "Digit terakhir kuadrat hanya bisa 0, 1, 4, 5, 6, atau 9."
+      ]
     },
     {
       "id": "tiu-tabel-pangkat-s02",
       "subtopik": "Tabel pangkat 2 (1–100)",
       "judul": "Tabel Pangkat 2 (1–100)",
       "konten": "Nilai kuadrat bilangan 1–100. Data lengkap ada di field `tabel.pangkat2` sebagai pasangan [bilangan, hasil].\n\nContoh (1–10):\n\n1^2 = 1\n2^2 = 4\n3^2 = 9\n4^2 = 16\n5^2 = 25\n6^2 = 36\n7^2 = 49\n8^2 = 64\n9^2 = 81\n10^2 = 100",
-      "kata": 46
+      "kata": 46,
+      "poin_inti": [
+        "Section ini berisi nilai kuadrat bilangan 1 sampai 100.",
+        "Data lengkap tersimpan sebagai pasangan bilangan dan hasilnya.",
+        "Contoh awalnya adalah 1 kuadrat sama dengan 1 sampai 10 kuadrat sama dengan 100."
+      ]
     },
     {
       "id": "tiu-tabel-pangkat-s03",
       "subtopik": "Tabel pangkat 3 (1–100)",
       "judul": "Tabel Pangkat 3 (1–100)",
       "konten": "Nilai pangkat tiga bilangan 1–100. Data lengkap ada di field `tabel.pangkat3` sebagai pasangan [bilangan, hasil].\n\nContoh (1–10):\n\n1^3 = 1\n2^3 = 8\n3^3 = 27\n4^3 = 64\n5^3 = 125\n6^3 = 216\n7^3 = 343\n8^3 = 512\n9^3 = 729\n10^3 = 1.000",
-      "kata": 47
+      "kata": 47,
+      "poin_inti": [
+        "Section ini berisi nilai pangkat tiga bilangan 1 sampai 100.",
+        "Data lengkap tersimpan sebagai pasangan bilangan dan hasilnya.",
+        "Contoh awalnya adalah 1 pangkat tiga sama dengan 1 sampai 10 pangkat tiga sama dengan seribu."
+      ]
     },
     {
       "id": "tiu-tabel-pangkat-s04",
       "subtopik": "Tabel pangkat 4 (1–100)",
       "judul": "Tabel Pangkat 4 (1–100)",
       "konten": "Nilai pangkat empat bilangan 1–100. Data lengkap ada di field `tabel.pangkat4` sebagai pasangan [bilangan, hasil].\n\nContoh (1–10):\n\n1^4 = 1\n2^4 = 16\n3^4 = 81\n4^4 = 256\n5^4 = 625\n6^4 = 1.296\n7^4 = 2.401\n8^4 = 4.096\n9^4 = 6.561\n10^4 = 10.000",
-      "kata": 47
+      "kata": 47,
+      "poin_inti": [
+        "Section ini berisi nilai pangkat empat bilangan 1 sampai 100.",
+        "Data lengkap tersimpan sebagai pasangan bilangan dan hasilnya.",
+        "Contoh awalnya adalah 1 pangkat empat sama dengan 1 sampai 10 pangkat empat sama dengan sepuluh ribu."
+      ]
     }
   ],
   "tabel": {
