@@ -1,12 +1,14 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import { getLevel, useStore } from '../lib/store'
 import { getRankTitle } from '../lib/ranks'
 import { cx } from '../lib/utils'
+import { Mascot } from './Mascot'
 import { AuthStatus } from './AuthStatus'
 import { CelebrationHost } from './gamifikasi/Celebration'
 import {
   BookIcon,
   FlameIcon,
+  GamepadIcon,
   HomeIcon,
   RankingIcon,
   TargetIcon,
@@ -19,17 +21,25 @@ const NAV_ITEMS = [
   { to: '/belajar', label: 'Belajar', icon: BookIcon, end: false },
   { to: '/latihan', label: 'Latihan', icon: TargetIcon, end: false },
   { to: '/tryout', label: 'Tryout', icon: TrophyIcon, end: false },
+  { to: '/main', label: 'Main', icon: GamepadIcon, end: false },
   { to: '/leaderboard', label: 'Peringkat', icon: RankingIcon, end: false },
 ]
 
 function LogoMark() {
   return (
-    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-600 font-display text-xl font-extrabold text-white">
-      L
+    <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-primary-100">
+      <Mascot size={40} className="h-10 w-10" />
       <span className="sr-only">Lolosin</span>
     </span>
   )
 }
+
+const FOOTER_LINKS = [
+  { to: '/belajar', label: 'Belajar' },
+  { to: '/latihan', label: 'Latihan' },
+  { to: '/tryout', label: 'Tryout' },
+  { to: '/leaderboard', label: 'Peringkat' },
+] as const
 
 export function Layout() {
   const { xp, streak } = useStore()
@@ -102,16 +112,53 @@ export function Layout() {
         <Outlet />
       </main>
 
-      {/* Footer kecil (desktop) */}
-      <footer className="mx-auto hidden w-full max-w-7xl px-8 pt-2 pb-8 lg:block">
-        <p className="border-t border-line pt-5 text-sm font-medium text-ink/50">
-          Lolosin · Belajar CPNS jadi menyenangkan.
-        </p>
+      {/* Footer lengkap, tampil di semua viewport */}
+      <footer className="mx-auto w-full max-w-7xl px-4 pt-2 pb-24 lg:px-8 lg:pb-8">
+        <div className="border-t border-line pt-6">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+            <div className="max-w-sm">
+              <span className="flex items-center gap-2.5">
+                <LogoMark />
+                <span className="font-display text-lg font-extrabold">
+                  Lolosin
+                </span>
+              </span>
+              <p className="mt-3 text-sm leading-relaxed font-medium text-ink/60">
+                Belajar CPNS jadi menyenangkan: materi SKD, latihan per
+                topik, tryout mini, dan simulasi CAT dalam satu aplikasi,
+                ditemani maskot yang ikut tumbuh bareng streak-mu.
+              </p>
+            </div>
+            <nav aria-label="Navigasi footer">
+              <p className="text-xs font-extrabold tracking-[0.14em] text-ink/50 uppercase">
+                Jelajahi
+              </p>
+              <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 sm:flex-col sm:gap-2">
+                {FOOTER_LINKS.map(({ to, label }) => (
+                  <li key={to}>
+                    <Link
+                      to={to}
+                      className="text-sm font-semibold text-ink/70 hover:text-primary-700"
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+          <p className="mt-6 border-t border-line pt-4 text-xs leading-relaxed font-medium text-ink/50">
+            © 2026 Lolosin. Dibuat untuk pejuang CPNS.
+          </p>
+        </div>
       </footer>
 
       {/* Bottom nav (mobile saja) */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur lg:hidden">
-        <div className="mx-auto grid w-full max-w-2xl grid-cols-5 gap-1 px-2 py-2">
+      <nav
+        aria-label="Navigasi bawah"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur lg:hidden"
+      >
+        <div className="mx-auto grid w-full max-w-2xl grid-cols-6 gap-1 px-2 py-2">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}

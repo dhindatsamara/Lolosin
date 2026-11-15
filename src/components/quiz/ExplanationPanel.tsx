@@ -1,9 +1,7 @@
 import type { Opsi, Question } from '../../lib/questions'
-import { scoreQuestion } from '../../lib/quiz'
+import { scoreQuestion, visibleOptions } from '../../lib/quiz'
 import { cx } from '../../lib/utils'
 import { CheckIcon } from '../icons'
-
-const OPSI_LIST: Opsi[] = ['A', 'B', 'C', 'D', 'E']
 
 export interface ExplanationPanelProps {
   question: Question
@@ -23,7 +21,10 @@ export interface ExplanationPanelProps {
  */
 export function ExplanationPanel({ question, selected }: ExplanationPanelProps) {
   const isTkp = question.materi === 'TKP'
-  const pembahasan = question.pembahasan.trim()
+  // 193 soal di bank punya pembahasan null: koersi ke string kosong
+  // supaya panel jatuh ke pesan jujur di bawah, bukan crash.
+  const pembahasan =
+    typeof question.pembahasan === 'string' ? question.pembahasan.trim() : ''
   const kunci = question.kunci
   const poinDidapat =
     selected !== undefined ? scoreQuestion(question, selected) : 0
@@ -65,7 +66,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
           {isTkp ? 'Nilai tiap opsi' : 'Jawaban tiap opsi'}
         </p>
         <ul className="flex flex-col gap-1.5">
-          {OPSI_LIST.map((opsi) => {
+          {visibleOptions(question).map((opsi) => {
             const isKunci = opsi === kunci
             const isPilihan = opsi === selected
             const bobot = bobotOpsi(opsi)

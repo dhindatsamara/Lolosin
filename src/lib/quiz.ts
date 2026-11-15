@@ -131,6 +131,25 @@ export interface TryoutScore {
 /* Util                                                                */
 /* ------------------------------------------------------------------ */
 
+/** Daftar huruf opsi lengkap (A–E). */
+export const OPSI_LIST: Opsi[] = ['A', 'B', 'C', 'D', 'E']
+
+/**
+ * Opsi yang punya isi (teksnya bukan kosong/whitespace), urutan huruf
+ * tetap A–E. Dipakai di SATU tempat (QuestionCard) untuk menyembunyikan
+ * opsi kosong di drill, ulas, dan tryout, jadi soal 4 opsi hanya
+ * menampilkan 4 tombol. Ini hanya filter tampilan: huruf kunci dan
+ * pemetaan bobot TKP tidak berubah.
+ */
+export function visibleOptions(question: Question): Opsi[] {
+  return OPSI_LIST.filter((opsi) => {
+    // Bank soal berisi entri pilihan null/undefined (519 soal, mis. opsi E
+    // tidak ada): tanpa cek tipe, .trim() melempar dan halaman jadi blank.
+    const teks = question.pilihan[opsi]
+    return typeof teks === 'string' && teks.trim().length > 0
+  })
+}
+
 /** Acak (Fisher–Yates), mengembalikan array baru. */
 export function shuffle<T>(items: readonly T[]): T[] {
   const arr = [...items]

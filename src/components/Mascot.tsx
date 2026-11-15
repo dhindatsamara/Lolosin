@@ -1,13 +1,21 @@
 /**
- * Lolo, maskot Lolosin: blob hijau geometris bertopi wisuda amber.
- * Flat, 2-3 bentuk sederhana, garis ink 2-3px, warna hijau #0E5C43 +
- * amber #F59E0B sesuai palet app.
+ * Maskot Lolosin (nama dari MASCOT_NAME, jangan hardcode): blob hijau
+ * geometris bertopi wisuda amber. Flat, 2-3 bentuk sederhana, garis
+ * ink 2-3px, badan hijau terang #2FBF71 + amber #F59E0B.
  *
- * Sejak v2.1 Lolo adalah wajah brand: tampil besar di landing (hero
- * dan seksi "Kenalan, ini Lolo!") dan di dashboard, selalu dengan
- * namanya yang terlihat. Identitas karakternya JANGAN digambar ulang
- * jadi karakter lain; variasi hanya lewat mood dan ukuran.
+ * Sejak v2.1 maskot adalah wajah brand: tampil besar di landing (hero
+ * dan seksi kenalan) dan di dashboard, selalu dengan namanya yang
+ * terlihat. Identitas karakternya JANGAN digambar ulang jadi karakter
+ * lain; variasi hanya lewat mood, ukuran, dan outfit peliharaan.
+ *
+ * v2.2: badan hijau terang (#2FBF71) supaya nge-pop di atas hero
+ * landing hijau gelap; sebelumnya #0E5C43 nyaru dengan background.
+ * Outfit peliharaan (syal/kacamata/mahkota/jubah) mengikuti streak,
+ * lihat src/lib/pet.ts.
  */
+import { MASCOT_NAME } from '../lib/mascot'
+import type { PetOutfit } from '../lib/pet'
+
 export type MascotMood = 'senang' | 'semangat' | 'sedih' | 'kagum'
 
 interface MascotProps {
@@ -17,6 +25,8 @@ interface MascotProps {
   mood?: MascotMood
   /** Ukuran kotak SVG dalam px (default 64). */
   size?: number
+  /** Outfit peliharaan dari streak (default 'none', tanpa aksesori). */
+  outfit?: PetOutfit
   className?: string
 }
 
@@ -114,23 +124,138 @@ function Mouth({ mood }: { mood: MascotMood }) {
   )
 }
 
-export function Mascot({ mood = 'senang', size = 64, className }: MascotProps) {
+/**
+ * Aksesori bawah (digambar sebelum wajah supaya mulut tetap di atas):
+ * syal amber untuk streak 3 hari, jubah wisuda untuk streak 30 hari.
+ * Bentuknya mengikuti lekuk blob supaya tidak keluar dari badan.
+ */
+function OutfitBawah({ outfit }: { outfit: PetOutfit }) {
+  if (outfit === 'syal') {
+    return (
+      <g>
+        <path
+          d="M24 69 Q48 79 72 69 L72 76 Q48 86 24 76 Z"
+          fill="#F59E0B"
+          stroke="#1B1E1C"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <circle
+          cx="48"
+          cy="77"
+          r="4"
+          fill="#D97706"
+          stroke="#1B1E1C"
+          strokeWidth="2"
+        />
+        <rect x="44.5" y="79" width="7" height="5" rx="2.5" fill="#D97706" />
+      </g>
+    )
+  }
+  if (outfit === 'jubah') {
+    return (
+      <g>
+        <path
+          d="M27 73 Q48 66 69 73 L69 79 Q48 86 27 79 Z"
+          fill="#0B4A36"
+          stroke="#1B1E1C"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M27 73 Q48 66 69 73"
+          fill="none"
+          stroke="#F59E0B"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <circle cx="48" cy="74" r="2.5" fill="#FBBF24" />
+      </g>
+    )
+  }
+  return null
+}
+
+/** Mahkota kecil yang bertengger miring di sisi kanan topi wisuda. */
+function Mahkota() {
+  return (
+    <g transform="rotate(12 73 10)">
+      <polygon
+        points="62,14 65,5 69,10 73,4 77,10 81,5 84,14"
+        fill="#FBBF24"
+        stroke="#1B1E1C"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <rect
+        x="62"
+        y="13"
+        width="22"
+        height="4"
+        rx="2"
+        fill="#F59E0B"
+        stroke="#1B1E1C"
+        strokeWidth="2"
+      />
+    </g>
+  )
+}
+
+/** Kacamata hitam keren: menutupi mata (sengaja, biar pede). */
+function Kacamata() {
+  return (
+    <g>
+      <g stroke="#1B1E1C" strokeWidth="2.5" strokeLinecap="round">
+        <path d="M26 50 L20 47" />
+        <path d="M70 50 L76 47" />
+        <path d="M46 50 Q48 47 50 50" fill="none" />
+      </g>
+      <ellipse cx="36" cy="52" rx="10" ry="8.5" fill="#1B1E1C" />
+      <ellipse cx="60" cy="52" rx="10" ry="8.5" fill="#1B1E1C" />
+      <ellipse
+        cx="33"
+        cy="49"
+        rx="3"
+        ry="2"
+        fill="#FFFFFF"
+        opacity="0.85"
+        transform="rotate(-20 33 49)"
+      />
+      <ellipse
+        cx="57"
+        cy="49"
+        rx="3"
+        ry="2"
+        fill="#FFFFFF"
+        opacity="0.85"
+        transform="rotate(-20 57 49)"
+      />
+    </g>
+  )
+}
+
+export function Mascot({
+  mood = 'senang',
+  size = 64,
+  outfit = 'none',
+  className,
+}: MascotProps) {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 96 96"
       role="img"
-      aria-label="Lolo, maskot Lolosin"
+      aria-label={`${MASCOT_NAME}, maskot Lolosin`}
       className={className}
     >
-      {/* Badan blob hijau */}
+      {/* Badan blob hijau terang (nge-pop di atas hero hijau gelap) */}
       <ellipse
         cx="48"
         cy="54"
         rx="32"
         ry="30"
-        fill="#0E5C43"
+        fill="#2FBF71"
         stroke="#1B1E1C"
         strokeWidth="3"
       />
@@ -140,10 +265,11 @@ export function Mascot({ mood = 'senang', size = 64, className }: MascotProps) {
         cy="40"
         rx="8"
         ry="5"
-        fill="#84BCA6"
-        opacity="0.4"
+        fill="#B8F1D1"
+        opacity="0.55"
         transform="rotate(-20 34 40)"
       />
+      <OutfitBawah outfit={outfit} />
       {/* Topi wisuda amber, sedikit miring */}
       <g transform="rotate(-8 48 20)">
         <rect
@@ -178,6 +304,8 @@ export function Mascot({ mood = 'senang', size = 64, className }: MascotProps) {
           strokeWidth="2"
         />
       </g>
+      {/* Mahkota (streak 14 hari, dan ikut dipakai di tahap jubah) */}
+      {(outfit === 'mahkota' || outfit === 'jubah') && <Mahkota />}
       {/* Pipi merona (tidak untuk mood sedih) */}
       {mood !== 'sedih' && (
         <g fill="#FCD34D" opacity="0.8">
@@ -187,6 +315,8 @@ export function Mascot({ mood = 'senang', size = 64, className }: MascotProps) {
       )}
       <Eyes mood={mood} />
       <Mouth mood={mood} />
+      {/* Kacamata digambar terakhir supaya menutupi mata */}
+      {outfit === 'kacamata' && <Kacamata />}
     </svg>
   )
 }

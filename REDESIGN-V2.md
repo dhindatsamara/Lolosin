@@ -183,3 +183,164 @@ teks informatif). Moodboard: designspells.com (micro-interactions:
 angkat kartu 4px saat hover, angka dan bar yang beranimasi),
 supahero.io (hero dua kolom dengan karakter), refero.design (sistem
 warna/tipografi). Semua dipakai sebagai remix, bukan clone.
+
+# Iterasi v2.2 — Maskot peliharaan + game realtime + auth diperbaiki (2026-11-14)
+
+Feedback user 2026-11-14 19:56 WITA: nama "Lolo" terdengar negatif di
+bahasa daerah (ganti nama, final masih dipilih user); favicon huruf
+"L" diganti maskot; maskot hijau gelap nyaru dengan hero; landing
+perlu maskot interaktif; streak jadi peliharaan; footer kosong;
+halaman Belajar AI slop dan ngebosenin; progres tanpa login perlu
+peringatan; latihan kebanyakan scroll + rawan salah pencet; tryout
+perlu kartu aturan + modal konfirmasi; minta battle 1v1, sesi ala
+Quizizz, dan satu game tambahan; halaman auth polos + minta login
+Google; formasi pindah ke Profil; link verifikasi email mengarah ke
+localhost (screenshot user) + user belum verifikasi bisa login;
+header tampil email bukan username; beranda login kosong.
+
+## Maskot: nama baru + hijau terang + interaktif + peliharaan
+
+- Nama maskot disentralkan di SATU konstanta `MASCOT_NAME` di
+  `src/lib/mascot.ts` (placeholder "Losi" sampai user memilih nama
+  final dari kandidat Losi/Nusa/Bima/Sina). Tidak ada "Lolo" hardcode
+  tersisa di luar konstanta (verifikasi grep; "Lolosin" dan lencana
+  "Lolos Mini"/"Lolos Simulasi" bukan nama maskot).
+- Warna tubuh maskot `#0E5C43` menjadi hijau terang `#2FBF71`
+  (highlight `#B8F1D1`) supaya nge-pop di atas hero hijau gelap.
+- Favicon + ikon PWA (`public/icons/icon.svg`, `maskable.svg`)
+  digambar ulang sebagai maskot; LogoMark header jadi mini maskot.
+- `InteractiveMascot.tsx`: maskot bisa ditekan (tombol asli),
+  bounce squash-stretch, 6 balon ucapan bergilir, efek +XP melayang,
+  mood 'semangat' 900ms; reduced-motion: ganti teks instan, tanpa
+  +XP. Animasi hanya transform/opacity.
+- Streak jadi peliharaan (`src/lib/pet.ts` + `PetCard.tsx`): tangga
+  0 hari Teman Baru, 3 hari Sahabat Bersyal, 7 hari Si Kacamata
+  Keren, 14 hari Raja Kecil bermahkota, 30 hari Wisudawan Agung
+  berjubah + mahkota; tampil di dashboard dengan progres milestone
+  berikut; tombol Bagikan (`src/lib/share.ts`: Web Share API, lalu
+  fallback salin link).
+- Footer diisi beneran di semua viewport (tentang Lolosin, navigasi,
+  small print). Dashboard login ditambah PetCard, teaser leaderboard
+  (3 teratas, gagal diam-diam), dan kartu teaser game (link /main).
+
+## Belajar: rekonsep gamifikasi, tanpa statistik
+
+- `BelajarPage`/`MateriDetailPage`/`SectionDetailPage` ditulis ulang:
+  kartu subtes bermotif aksen (TWK strip merah-putih + pill "Merah
+  Putih", TIU biru "Logika & Angka", TKP ungu "Karakter & Kerja
+  Sama"); aksen saja, bukan kartu full-color (aturan v2).
+- SEMUA angka/statistik dihapus ("319 seksi", jumlah kata, "43
+  seksi", "catatan kualitas", menit baca, persen): nama materi + satu
+  baris deskripsi singkat (`DESKRIPSI_GRUP`). Progres baca hanya
+  visual (bar + "Belum mulai"/"Lagi berjalan"/"Selesai dibaca").
+- Sub-materi bentuk card grid (bukan daftar padat). Tombol back jadi
+  ikon panah saja (`StickyBackButton.tsx`, aria-label "Kembali",
+  sticky top-20, selalu terlihat saat scroll). Navigasi "Seksi X
+  dari Y" dipertahankan. Isi materi TIDAK diubah (kualitas isi
+  ditunda user, UI dulu).
+
+## Progres tanpa login
+
+`GuestProgressWarning.tsx`: peringatan dini yang bisa di-dismiss
+(localStorage `lolosin:dismiss-guest-warning`), tampil di
+Belajar/Latihan/Tryout saat Supabase terkonfigurasi + belum login:
+progres hanya tersimpan di browser ini, masuk biar kesimpen di akun.
+
+## Latihan + tryout
+
+- `LatihanPage` dipadatkan (kartu topik `flex flex-col gap-2 p-3`,
+  entri "Mulai ulas" di atas daftar).
+- Opsi kosong tidak dirender: helper `visibleOptions()` di
+  `src/lib/quiz.ts` (dipakai QuestionCard + ExplanationPanel +
+  ketiga halaman game). Soal 4 opsi tampil 4 tombol.
+- Alur jawab baru di drill + ulas: tekan opsi = PILIH (pending,
+  bisa diganti), tombol "Jawab" mengunci (disabled sebelum memilih;
+  skor/XP hanya saat kunci). Tryout tetap tap-to-select.
+- Tryout: 6 kartu aturan ala game + `ConfirmModal.tsx` (native
+  `<dialog>`, "Mulai sekarang?", tombol "Mulai"/"Batalkan",
+  `closedby="any"` + fallback Safari).
+
+## Game realtime (baru, rute /main)
+
+- Hub `/main` ("Belajar sambil main"): 3 kartu (Battle 1v1, Sesi
+  Bareng, Kuis Kilat); tamu diarahkan login (Kuis Kilat bisa dimainkan
+  tamu).
+- Battle 1v1 (`battle.ts` + `BattlePage.tsx`, rute /main/battle):
+  buat battle, kode 6 karakter, lawan gabung, 10 soal sama (3 TWK,
+  4 TIU, 3 TKP), progres live via Realtime broadcast + presence +
+  polling 3 detik, pemenang = benar terbanyak lalu tercepat. Gratis,
+  wajib login, tanpa XP.
+- Sesi ala Quizizz (`session.ts` + `SessionHostPage.tsx` +
+  `SessionJoinPage.tsx`, rute /main/sesi): host buat kode, maks 50
+  pemain, host memulai, leaderboard live. Host digate
+  `profiles.is_premium` (`premium.ts`); selama beta, premium gratis
+  via toggle "Premium Beta" di Profil.
+- Kuis Kilat (`KuisKilatPage.tsx`, rute /main/kuis-kilat): solo
+  rapid-fire 60 detik, kombo pengganda XP (1x/2x/3x), skor terbaik
+  di localStorage. Sengaja langsung dinilai saat ketuk (tanpa tombol
+  Jawab) karena kecepatan adalah inti gamenya.
+- Migrasi `supabase/migrations/002_battle_sessions.sql`:
+  battle_sessions, game_sessions, game_players + RLS + publikasi
+  supabase_realtime. Batasan v1: tanpa anti-cheat server-side, host
+  harus tetap online, cap 50 pemain di sisi klien, skor dilaporkan
+  klien. Realtime belum teruji live dari VM (polling fallback di
+  semua tempat).
+
+## Auth + Profil (baru)
+
+- `AuthPage` ditulis ulang (maskot, teaser daftar); tombol "Masuk
+  dengan Google" (`signInWithOAuth`, redirect ke
+  `https://lolosin.netlify.app/#/auth`); callback OAuth + form
+  "Lengkapi profilmu" (username saja) untuk user Google baru.
+- Form daftar HANYA email + password + username; formasi PINDAH ke
+  halaman Profil baru (`ProfilPage.tsx`, rute /profil): username +
+  email read-only, formasi bisa diedit, toggle Premium Beta, tombol
+  Keluar.
+- `emailRedirectTo` `https://lolosin.netlify.app/#/auth` di signUp
+  + resend. Gate verifikasi di `App.tsx`: login tapi
+  `email_confirmed_at` null menampilkan layar "Cek emailmu" + kirim
+  ulang (cooldown 60 detik) dan MEMBLOKIR pemakaian app; profil
+  tidak dibuat dan skor tidak dikirim sebelum terverifikasi.
+- Header menampilkan USERNAME dari profil (fallback email dihapus).
+  Username sudah `unique` sejak migrasi 001 (tidak perlu constraint
+  baru). Migrasi `supabase/migrations/003_auth_profile.sql` menambah
+  kolom `profiles.is_premium` (idempotent).
+- PANDUAN SETUP USER di `docs/PANDUAN-GOOGLE-OAUTH.md`: OAuth client
+  Google Cloud, aktifkan provider Google di Supabase, Site URL +
+  Redirect URL, branding template email. PENTING: masalah localhost
+  TIDAK selesai oleh kode — link verifikasi tetap mengarah ke
+  localhost:3000 sampai user mengubah Site URL di dashboard
+  Supabase; link lama yang sudah terkirim mati dan harus diminta
+  ulang setelah perbaikan.
+
+## Perbaikan data yang ditemukan saat QA v2.2
+
+- Topik duplikat case-sensitive: bank punya "Analogi Verbal" (281
+  soal) dan "analogi verbal" (10 soal) sebagai topik terpisah; drill
+  varian kecil mengulang 10/10 soal di drill ke-2. `src/lib/questions.ts`
+  kini menggabung topik tanpa peduli huruf (TIU 115 menjadi 101
+  topik; Analogi Verbal 291 soal); nama tampilan utamakan varian
+  berawalan kapital lalu terbanyak.
+- 519 soal punya entri pilihan null/undefined dan 193 soal punya
+  pembahasan null. `visibleOptions()` + `ExplanationPanel` kini
+  null-safe; ketiga halaman game yang menduplikasi filter `.trim()`
+  inline kini memakai `visibleOptions()` dari lib. Tanpa perbaikan
+  ini, soal-soal tersebut melempar TypeError saat render dan halaman
+  jadi blank (penyebab 2 crash QA run 1 dan 2).
+- 0 soal yang kuncinya menunjuk ke opsi hilang (tidak ada soal yang
+  tak terjawab).
+
+## QA v2.2
+
+QA lokal (2026-11-14, `~/workspace/qa-lolosin/qa.mjs`, Playwright
+desktop 1280 + mobile 390, build placeholder + build Supabase palsu
+dengan network diblokir): **272/272 PASS, 0 console error, 0 page
+error, 0 warning**. Laporan: `QA-LOCAL-2026-11-13.md`.
+
+Perjalanan QA (6 run): run 1-2 crash di drill karena 519 soal
+berpilihan null (diperbaiki, lihat "Perbaikan data" di atas); run 3
+menemukan tally terpecah + ambiguitas nav mobile (diperbaiki); run 4
+menemukan selector klik maskot yang salah, mengklik CTA "Daftar
+gratis" (diperbaiki di script QA); run 5 menemukan tamu /profil
+terjebak loading selamanya (diperbaiki di ProfilPage); run 6 hijau
+penuh.

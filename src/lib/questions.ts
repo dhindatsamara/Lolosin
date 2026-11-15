@@ -84,45 +84,127 @@ export function getQuestionById(id: string): Question | undefined {
   return QUESTIONS.find((q) => q.id === id)
 }
 
-/** Soal kuis untuk satu materi, opsional difilter subtopik. */
+/** Kunci normalisasi subtopik: huruf kecil + spasi ujung dipangkas. */
+function topicKey(subtopik: string): string {
+  return subtopik.toLowerCase().trim()
+}
+
+/**
+ * Nama tampilan kanonis per topik (digabung tanpa peduli huruf besar/kecil).
+ * Bank soal berisi varian ejaan topik yang sama, mis. "Analogi Verbal"
+ * (281 soal) dan "analogi verbal" (10 soal). Tanpa penggabungan, varian
+ * kecil kehabisan soal baru setelah satu drill dan anti-ulang rusak
+ * (drill ke-2 mengulang 10/10 soal). Varian yang ditampilkan dipilih
+ * oleh `pickDisplay` (utamakan berawalan kapital, lalu terbanyak).
+ */
+const canonicalCache = new Map<Materi, Map<string, string>>()
+
+function canonicalTopics(materi: Materi): Map<string, string> {
+  const cached = canonicalCache.get(materi)
+  if (cached) return cached
+  const variantCounts = new Map<string, Map<string, number>>()
+  for (const q of QUIZABLE_QUESTIONS) {
+    if (q.materi !== materi) continue
+    const key = topicKey(q.subtopik)
+    let variants = variantCounts.get(key)
+    if (!variants) {
+      variants = new Map()
+      variantCounts.set(key, variants)
+    }
+    variants.set(q.subtopik, (variants.get(q.subtopik) ?? 0) + 1)
+  }
+  const out = new Map<string, string>()
+  for (const [key, variants] of variantCounts) {
+    out.set(key, pickDisplay(variants))
+  }
+  canonicalCache.set(materi, out)
+  return out
+}
+
+/**
+ * Nama tampilan kanonis satu subtopik (cocok tanpa peduli huruf):
+ * "analogi verbal" menjadi "Analogi Verbal". Dipakai supaya tally
+ * per subtopik tidak terpecah oleh varian ejaan. Kembalikan nilai
+ * asli bila tidak ditemukan di pool (tidak seharusnya terjadi).
+ */
+export function canonicalTopicDisplay(
+  materi: Materi,
+  subtopik: string,
+): string {
+  return canonicalTopics(materi).get(topicKey(subtopik)) ?? subtopik
+}
+
+/**
+ * Pilih nama tampilan dari varian ejaan satu topik: utamakan varian
+ * berawalan huruf kapital (tampilan daftar lebih rapi); di antaranya
+ * pilih yang punya soal terbanyak; seri dimenangkan yang alfabetis
+ * pertama. Kalau tidak ada varian kapital, pakai aturan yang sama
+ * untuk semua varian.
+ */
+function pickDisplay(variants: Map<string, number>): string {
+  const entries = [...variants.entries()]
+  const capitalized = entries.filter(([variant]) => /^[A-Z]/.test(variant))
+  const pool = capitalized.length > 0 ? capitalized : entries
+  let best = ''
+  let bestCount = -1
+  for (const [variant, count] of pool) {
+    if (
+      count > bestCount ||
+      (count === bestCount && variant.localeCompare(best, 'id') < 0)
+    ) {
+      best = variant
+      bestCount = count
+    }
+  }
+  return best
+}
+
+/** Soal kuis untuk satu materi, opsional difilter subtopik (cocok tanpa peduli huruf besar/kecil). */
 export function getQuestions(
   materi: Materi,
   subtopik?: string | null,
 ): Question[] {
+  const key = subtopik == null ? null : topicKey(subtopik)
   return QUIZABLE_QUESTIONS.filter(
-    (q) => q.materi === materi && (subtopik == null || q.subtopik === subtopik),
+    (q) =>
+      q.materi === materi && (key === null || topicKey(q.subtopik) === key),
   )
 }
 
-/** Daftar subtopik (terurut alfabetis) untuk satu materi. */
+/**
+ * Daftar subtopik (terurut alfabetis) untuk satu materi.
+ * Varian ejaan yang sama digabung jadi satu topik (lihat `canonicalTopics`).
+ */
 export function getTopics(materi: Materi): string[] {
-  const topics = new Set<string>()
-  for (const q of QUIZABLE_QUESTIONS) {
-    if (q.materi === materi) topics.add(q.subtopik)
-  }
-  return [...topics].sort((a, b) => a.localeCompare(b, 'id'))
+  return [...canonicalTopics(materi).values()].sort((a, b) =>
+    a.localeCompare(b, 'id'),
+  )
 }
 
-/** Jumlah soal kuis per subtopik untuk satu materi. */
+/** Jumlah soal kuis per subtopik untuk satu materi (varian ejaan digabung). */
 export function countByTopic(materi: Materi): Record<string, number> {
+  const canonical = canonicalTopics(materi)
   const counts: Record<string, number> = {}
   for (const q of QUIZABLE_QUESTIONS) {
     if (q.materi !== materi) continue
-    counts[q.subtopik] = (counts[q.subtopik] ?? 0) + 1
+    const display = canonical.get(topicKey(q.subtopik)) ?? q.subtopik
+    counts[display] = (counts[display] ?? 0) + 1
   }
   return counts
 }
 
-/** Sisa soal yang BELUM dilihat per subtopik, diberi daftar id yang sudah dilihat. */
+/** Sisa soal yang BELUM dilihat per subtopik, diberi daftar id yang sudah dilihat (varian ejaan digabung). */
 export function countNewByTopic(
   materi: Materi,
   seenIds: Iterable<string>,
 ): Record<string, number> {
   const seen = seenIds instanceof Set ? seenIds : new Set(seenIds)
+  const canonical = canonicalTopics(materi)
   const counts: Record<string, number> = {}
   for (const q of QUIZABLE_QUESTIONS) {
     if (q.materi !== materi || seen.has(q.id)) continue
-    counts[q.subtopik] = (counts[q.subtopik] ?? 0) + 1
+    const display = canonical.get(topicKey(q.subtopik)) ?? q.subtopik
+    counts[display] = (counts[display] ?? 0) + 1
   }
   return counts
 }

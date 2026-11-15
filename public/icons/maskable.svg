@@ -1,12 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Ikon maskable Lolosin: latar full-bleed, isi di dalam safe zone 80%
-       (tengah) supaya tidak terpotong mask bulat/kotak launcher. -->
+  <!-- Ikon maskable Lolosin v2.2: latar full-bleed hijau tua, maskot di
+       dalam safe zone 80% (tengah) supaya tidak terpotong mask
+       bulat/kotak launcher. -->
   <rect width="512" height="512" fill="#0E5C43"/>
   <g transform="translate(51.2 51.2) scale(0.8)">
-    <g fill="#FFFFFF">
-      <rect x="148" y="118" width="88" height="276" rx="16"/>
-      <rect x="148" y="306" width="208" height="88" rx="16"/>
-    </g>
-    <path d="M292 316 L332 356 L424 258" fill="none" stroke="#F59E0B" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Badan blob hijau terang -->
+    <ellipse cx="256" cy="288" rx="170" ry="160" fill="#2FBF71" stroke="#1B1E1C" stroke-width="16"/>
+    <!-- Kilau halus -->
+    <ellipse cx="181" cy="213" rx="43" ry="27" fill="#B8F1D1" opacity="0.55" transform="rotate(-20 181 213)"/>
+    <!-- Topi wisuda amber -->
+    <rect x="192" y="117" width="128" height="48" rx="21" fill="#D97706" stroke="#1B1E1C" stroke-width="13"/>
+    <polygon points="256,32 395,91 256,149 117,91" fill="#F59E0B" stroke="#1B1E1C" stroke-width="13" stroke-linejoin="round"/>
+    <path d="M395 91 L416 160" stroke="#1B1E1C" stroke-width="13" stroke-linecap="round"/>
+    <circle cx="416" cy="170" r="19" fill="#D97706" stroke="#1B1E1C" stroke-width="11"/>
+    <!-- Pipi merona -->
+    <ellipse cx="139" cy="325" rx="21" ry="15" fill="#FCD34D" opacity="0.8"/>
+    <ellipse cx="373" cy="325" rx="21" ry="15" fill="#FCD34D" opacity="0.8"/>
+    <!-- Mata -->
+    <circle cx="192" cy="277" r="37" fill="#FFFFFF" stroke="#1B1E1C" stroke-width="13"/>
+    <circle cx="320" cy="277" r="37" fill="#FFFFFF" stroke="#1B1E1C" stroke-width="13"/>
+    <circle cx="197" cy="283" r="17" fill="#1B1E1C"/>
+    <circle cx="325" cy="283" r="17" fill="#1B1E1C"/>
+    <circle cx="205" cy="272" r="7" fill="#FFFFFF"/>
+    <circle cx="333" cy="272" r="7" fill="#FFFFFF"/>
+    <!-- Senyum -->
+    <path d="M197 336 Q256 379 315 336" fill="none" stroke="#1B1E1C" stroke-width="16" stroke-linecap="round"/>
   </g>
 </svg>

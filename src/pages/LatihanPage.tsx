@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   countByTopic,
   countNewByTopic,
@@ -9,13 +9,20 @@ import {
   type Materi,
 } from '../lib/questions'
 import { DRILL_DEFAULT_COUNT } from '../lib/quiz'
+import { reviewCountDue } from '../lib/review'
 import { useStore } from '../lib/store'
 import { cx } from '../lib/utils'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
-import { ChevronRightIcon, TargetIcon } from '../components/icons'
+import { GuestProgressWarning } from '../components/GuestProgressWarning'
+import {
+  CheckIcon,
+  ChevronRightIcon,
+  ClockIcon,
+  TargetIcon,
+} from '../components/icons'
 
 const MATERI_BUTTON: Record<Materi, string> = {
   TWK: 'border-twk bg-twk-soft text-twk',
@@ -35,10 +42,12 @@ const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
  * Halaman pemilih drill: pilih materi (TWK/TIU/TKP) lalu topik.
  * Tiap topik menampilkan jumlah soal total, yang sudah dijawab, dan yang
  * masih baru. Satu sesi = 10 soal, soal baru selalu didahulukan.
+ * Kartu topik dibuat padat (judul + tombol sebaris, progres di bawah)
+ * supaya daftarnya tidak banyak scroll.
  */
 export function LatihanPage() {
   const navigate = useNavigate()
-  const { seenQuestionIds } = useStore()
+  const { seenQuestionIds, reviewQueue } = useStore()
   const [materi, setMateri] = useState<Materi>('TIU')
 
   const topics = useMemo(() => getTopics(materi), [materi])
@@ -47,6 +56,7 @@ export function LatihanPage() {
     () => countNewByTopic(materi, seenQuestionIds),
     [materi, seenQuestionIds],
   )
+  const jumlahUlas = useMemo(() => reviewCountDue(), [reviewQueue])
 
   const totalAll = Object.values(counts).reduce((a, b) => a + b, 0)
   const newAll = Object.values(newCounts).reduce((a, b) => a + b, 0)
@@ -57,6 +67,8 @@ export function LatihanPage() {
 
   return (
     <div className="flex flex-col gap-5">
+      <GuestProgressWarning />
+
       <header>
         <p className="kicker">latihan terus, biar makin jago</p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">Latihan</h1>
@@ -66,6 +78,41 @@ export function LatihanPage() {
           soal yang sama.
         </p>
       </header>
+
+      {/* Ulas soal salah: selalu gampang ditemukan di atas daftar topik */}
+      <Card padding="none" className="flex items-center gap-3 p-3">
+        <span
+          className={cx(
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
+            jumlahUlas > 0
+              ? 'bg-accent-100 text-accent-700'
+              : 'bg-primary-100 text-primary-700',
+          )}
+        >
+          {jumlahUlas > 0 ? (
+            <ClockIcon width={20} height={20} />
+          ) : (
+            <CheckIcon width={20} height={20} />
+          )}
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-extrabold">Ulas soal salah</p>
+          <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+            {jumlahUlas > 0
+              ? `${jumlahUlas} soal perlu diulas hari ini, biar makin nempel.`
+              : 'Belum ada yang perlu diulas hari ini.'}
+          </p>
+        </div>
+        <Link to="/latihan/ulas" className="shrink-0">
+          <Button
+            size="sm"
+            variant={jumlahUlas > 0 ? 'secondary' : 'outline'}
+          >
+            Mulai ulas
+            <ChevronRightIcon width={16} height={16} />
+          </Button>
+        </Link>
+      </Card>
 
       <section aria-label="Pilih materi">
         <h2 className="mb-2 font-display text-base font-extrabold">Pilih materi</h2>
@@ -77,7 +124,7 @@ export function LatihanPage() {
               onClick={() => setMateri(m)}
               aria-pressed={materi === m}
               className={cx(
-                'rounded-2xl border px-2 py-3 text-center transition-all active:scale-[0.98]',
+                'rounded-2xl border px-2 py-2.5 text-center transition-all active:scale-[0.98]',
                 materi === m
                   ? MATERI_BUTTON[m]
                   : 'border-line bg-white text-ink/70 shadow-soft hover:bg-paper',
@@ -157,64 +204,60 @@ function TopicRow({
     <Card
       padding="none"
       className={cx(
-        'flex flex-col gap-3 p-4',
+        'flex flex-col gap-2 p-3',
         featured && MATERI_FEATURED[materi],
         featured && 'lg:col-span-2',
       )}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="flex items-center gap-2 text-sm font-extrabold">
-            <TargetIcon
-              width={16}
-              height={16}
-              className={cx(
-                'shrink-0',
-                materi === 'TWK'
-                  ? 'text-twk'
-                  : materi === 'TIU'
-                    ? 'text-tiu'
-                    : 'text-tkp',
-              )}
-            />
-            <span className="leading-snug">{title}</span>
-          </p>
-          {subtitle && (
-            <p className="mt-0.5 text-xs font-medium text-ink/60">
-              {subtitle}
-            </p>
+      <div className="flex items-center gap-2">
+        <TargetIcon
+          width={16}
+          height={16}
+          className={cx(
+            'shrink-0',
+            materi === 'TWK'
+              ? 'text-twk'
+              : materi === 'TIU'
+                ? 'text-tiu'
+                : 'text-tkp',
           )}
-          <p className="mt-1.5 text-xs font-medium text-ink/60">
-            {total} soal · {dijawab} sudah dijawab ·{' '}
-            <span className="font-extrabold text-primary-700">
-              {baru} baru
+        />
+        <p className="min-w-0 flex-1 text-sm leading-snug font-extrabold">
+          {title}
+          {subtitle && (
+            <span className="mt-0.5 block text-xs font-medium text-ink/60">
+              {subtitle}
             </span>
-          </p>
-        </div>
+          )}
+        </p>
+        <Button
+          size="sm"
+          variant={featured ? 'secondary' : 'outline'}
+          onClick={onStart}
+          disabled={total === 0}
+          className="shrink-0"
+        >
+          Mulai latihan
+        </Button>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <ProgressBar
+          value={dijawab}
+          max={total}
+          tone={MATERI_TONE[materi]}
+          label={`Progres ${title}`}
+          className="flex-1"
+        />
+        <p className="shrink-0 text-[11px] font-medium whitespace-nowrap text-ink/60">
+          {dijawab}/{total} dijawab
+        </p>
         {baru > 0 && (
           <Badge tone={MATERI_TONE[materi]} className="shrink-0">
             {baru} baru
           </Badge>
         )}
       </div>
-
-      <ProgressBar
-        value={dijawab}
-        max={total}
-        tone={MATERI_TONE[materi]}
-        label={`Progres ${title}`}
-      />
-
-      <Button
-        size="sm"
-        variant={featured ? 'secondary' : 'outline'}
-        onClick={onStart}
-        disabled={total === 0}
-        className="self-start"
-      >
-        Mulai latihan
-        <ChevronRightIcon width={16} height={16} />
-      </Button>
     </Card>
   )
 }

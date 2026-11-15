@@ -58,7 +58,7 @@ export function AuthStatus() {
     )
   }
 
-  const displayName = profile?.username ?? user.email?.split('@')[0] ?? 'Akun'
+  const displayName = profile?.username ?? 'Akun'
 
   async function handleSignOut() {
     if (signingOut) return
@@ -73,12 +73,13 @@ export function AuthStatus() {
 
   return (
     <span className="inline-flex shrink-0 items-center gap-2">
-      <span
-        className="inline-flex max-w-28 items-center truncate rounded-full bg-primary-100 px-3 py-2 text-sm font-bold whitespace-nowrap text-primary-700"
+      <Link
+        to="/profil"
+        className="inline-flex max-w-28 items-center truncate rounded-full bg-primary-100 px-3 py-2 text-sm font-bold whitespace-nowrap text-primary-700 transition-colors hover:bg-primary-200"
         title={displayName}
       >
         {displayName}
-      </span>
+      </Link>
       <button
         type="button"
         onClick={handleSignOut}

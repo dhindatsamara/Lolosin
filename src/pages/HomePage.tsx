@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -9,6 +9,7 @@ import { BadgeShowcase } from '../components/gamifikasi/BadgeShowcase'
 import { DailyMissions } from '../components/gamifikasi/DailyMissions'
 import { WeekStreak } from '../components/gamifikasi/WeekStreak'
 import { Mascot } from '../components/Mascot'
+import { PetCard } from '../components/PetCard'
 import { PredictionPanel } from '../components/PredictionPanel'
 import { LandingPage } from './LandingPage'
 import {
@@ -16,9 +17,14 @@ import {
   CheckIcon,
   ChevronRightIcon,
   ClockIcon,
+  CrownIcon,
   FlameIcon,
+  GamepadIcon,
+  RankingIcon,
+  SwordsIcon,
   TargetIcon,
   TrophyIcon,
+  UsersIcon,
   ZapIcon,
 } from '../components/icons'
 import {
@@ -57,6 +63,12 @@ import {
   type TryoutRecord,
 } from '../lib/store'
 import { getRankTitle } from '../lib/ranks'
+import { MASCOT_NAME } from '../lib/mascot'
+import {
+  fetchLeaderboard,
+  getCurrentWeekStart,
+  type LeaderboardEntry,
+} from '../lib/leaderboard'
 import { useAuthUser } from '../lib/auth'
 import { isSupabaseConfigured } from '../lib/supabase'
 import { cx } from '../lib/utils'
@@ -208,6 +220,150 @@ function TryoutTerakhirCard({ record }: { record: TryoutRecord }) {
   )
 }
 
+/**
+ * Teaser leaderboard mini: 3 besar minggu berjalan. Tampil hanya saat
+ * login (dashboard memang hanya tampil saat login) dan hanya bila ada
+ * data. Gagal fetch atau belum ada skor minggu ini: sembunyi
+ * diam-diam, tanpa error dan tanpa empty state.
+ */
+function LeaderboardTeaser() {
+  const [entries, setEntries] = useState<LeaderboardEntry[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    fetchLeaderboard(getCurrentWeekStart())
+      .then((list) => {
+        if (!cancelled) setEntries(list.slice(0, 3))
+      })
+      .catch(() => {
+        // Gagal fetch: sembunyikan diam-diam.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  if (entries.length === 0) return null
+
+  return (
+    <Card className="p-5">
+      <div className="flex items-center gap-2">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-tkp-soft text-tkp">
+          <RankingIcon width={20} height={20} />
+        </span>
+        <h2 className="font-display text-lg font-extrabold">
+          Peringkat minggu ini
+        </h2>
+      </div>
+      <ol className="mt-4 space-y-2">
+        {entries.map((entry, i) => (
+          <li
+            key={entry.userId}
+            className={cx(
+              'flex items-center justify-between gap-2 rounded-2xl px-3 py-2.5',
+              i === 0 ? 'bg-accent-50' : 'bg-paper',
+            )}
+          >
+            <span className="flex min-w-0 items-center gap-2 text-sm font-extrabold">
+              <span
+                className={cx(
+                  'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs',
+                  i === 0
+                    ? 'bg-accent-400 text-ink'
+                    : 'bg-ink/5 text-ink/60',
+                )}
+              >
+                {i === 0 ? (
+                  <CrownIcon width={14} height={14} />
+                ) : (
+                  entry.rank
+                )}
+              </span>
+              <span className="truncate">{entry.username}</span>
+            </span>
+            <span className="shrink-0 text-sm font-extrabold">
+              {entry.total.toLocaleString('id-ID')}
+            </span>
+          </li>
+        ))}
+      </ol>
+      <Link to="/leaderboard" className="mt-4 block">
+        <Button variant="outline" fullWidth>
+          Lihat semua peringkat
+          <ChevronRightIcon width={16} height={16} />
+        </Button>
+      </Link>
+    </Card>
+  )
+}
+
+const GAME_ITEMS = [
+  {
+    icon: SwordsIcon,
+    judul: 'Battle 1v1',
+    deskripsi: 'Duel cepat, yang benar dan cepat yang menang.',
+    tone: 'bg-twk-soft text-twk',
+  },
+  {
+    icon: UsersIcon,
+    judul: 'Sesi',
+    deskripsi: 'Main bareng sampai 50 orang pakai kode.',
+    tone: 'bg-tiu-soft text-tiu',
+  },
+  {
+    icon: ZapIcon,
+    judul: 'Kuis Kilat',
+    deskripsi: 'Soal cepat buat pemanasan sebelum drill.',
+    tone: 'bg-accent-100 text-accent-700',
+  },
+] as const
+
+/** Teaser game: Battle 1v1, Sesi, dan Kuis Kilat di halaman Main. */
+function GameTeaserCard() {
+  return (
+    <Card className="p-5">
+      <div className="flex items-center gap-2">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+          <GamepadIcon width={20} height={20} />
+        </span>
+        <h2 className="font-display text-lg font-extrabold">
+          Main, biar nggak jenuh
+        </h2>
+      </div>
+      <p className="mt-3 text-sm leading-relaxed text-ink/70">
+        Belajar terus-terusan bikin jenuh. Selingi dengan game, tetap
+        latihan soal, tapi rasanya main.
+      </p>
+      <ul className="mt-4 space-y-2.5">
+        {GAME_ITEMS.map(({ icon: Icon, judul, deskripsi, tone }) => (
+          <li key={judul} className="flex items-start gap-3 rounded-2xl bg-paper p-3">
+            <span
+              className={cx(
+                'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl',
+                tone,
+              )}
+            >
+              <Icon width={18} height={18} />
+            </span>
+            <span>
+              <span className="block text-sm font-extrabold">{judul}</span>
+              <span className="block text-xs leading-relaxed font-medium text-ink/60">
+                {deskripsi}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <Link to="/main" className="mt-4 block">
+        <Button fullWidth>
+          Main sekarang
+          <ChevronRightIcon width={16} height={16} />
+        </Button>
+      </Link>
+    </Card>
+  )
+}
+
 function DashboardPage() {
   const {
     xp,
@@ -247,7 +403,7 @@ function DashboardPage() {
   return (
     <div className="flex flex-col gap-5 lg:gap-8">
       {/* Hero tipografi: sapaan besar + XP/streak + progres level,
-          ditemani Lolo (v2.1: maskot tampil besar dengan namanya) */}
+          ditemani maskot (v2.1: maskot tampil besar dengan namanya) */}
       <section className="flex flex-col gap-6 rounded-3xl border border-line bg-white p-6 shadow-soft lg:flex-row lg:items-start lg:justify-between lg:p-10">
         <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-ink/60">
@@ -309,7 +465,7 @@ function DashboardPage() {
         </p>
         </div>
 
-        {/* Lolo, teman belajarmu: balon ucapan + nama yang terlihat */}
+        {/* Maskot, teman belajarmu: balon ucapan + nama yang terlihat */}
         <div className="flex shrink-0 flex-col items-center lg:w-52">
           <div className="relative w-fit rounded-2xl bg-primary-50 px-4 py-2.5 text-center">
             <p className="text-sm leading-snug font-bold text-primary-800">
@@ -328,15 +484,24 @@ function DashboardPage() {
             className="float-soft mt-2 h-auto w-32 lg:w-40"
           />
           <p className="mt-1 rounded-full bg-primary-100 px-4 py-1 font-display text-base font-extrabold text-primary-800">
-            Lolo
+            {MASCOT_NAME}
           </p>
         </div>
       </section>
+
+      {/* Peliharaan: maskot + outfit sesuai streak, bisa dibagikan */}
+      <PetCard />
 
       {/* Streak mingguan + misi harian */}
       <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
         <WeekStreak />
         <DailyMissions />
+      </div>
+
+      {/* Teaser peringkat minggu ini + teaser game */}
+      <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
+        <LeaderboardTeaser />
+        <GameTeaserCard />
       </div>
 
       {/* Ulas soal salah + fokus hari ini */}
@@ -458,7 +623,7 @@ function DashboardPage() {
               <div className="text-center">
                 <Mascot mood="semangat" size={64} className="mx-auto" />
                 <p className="mt-1 text-xs font-extrabold text-ink/50">
-                  Lolo
+                  {MASCOT_NAME}
                 </p>
                 <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed font-medium text-ink/70">
                   Ikut drill atau tryout mini dulu, nanti aku susun fokus
@@ -631,7 +796,7 @@ function DashboardPage() {
             <Card className="text-center">
               <Mascot mood="semangat" size={72} className="mx-auto" />
               <p className="mt-1 text-xs font-extrabold text-ink/50">
-                Lolo
+                {MASCOT_NAME}
               </p>
               <p className="mt-2 font-display text-lg font-extrabold">
                 Kamu belum pernah tryout nih

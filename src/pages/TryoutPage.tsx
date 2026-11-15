@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   MATERI_LIST,
@@ -17,6 +18,8 @@ import {
   SIMULASI_TIME_LIMIT_MINUTES,
   SIMULASI_TIME_LIMIT_SECONDS,
   SIMULASI_TOTAL_QUESTIONS,
+  TKP_FALLBACK_CORRECT,
+  TKP_FALLBACK_WRONG,
   TRYOUT_MAX_PER_SECTION,
   TRYOUT_PASSING_MINI,
   TRYOUT_QUESTIONS_PER_SECTION,
@@ -24,6 +27,7 @@ import {
   TRYOUT_TIME_LIMIT_MINUTES,
   TRYOUT_TIME_LIMIT_SECONDS,
   TRYOUT_TOTAL_QUESTIONS,
+  TWK_TIU_CORRECT_POINTS,
   type TryoutAnswers,
   type TryoutMode,
 } from '../lib/quiz'
@@ -49,10 +53,20 @@ import { cx } from '../lib/utils'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
+import { GuestProgressWarning } from '../components/GuestProgressWarning'
+import { ConfirmModal } from '../components/quiz/ConfirmModal'
 import { QuestionCard } from '../components/quiz/QuestionCard'
 import { TimerDisplay } from '../components/quiz/TimerDisplay'
 import { TryoutPalette } from '../components/quiz/TryoutPalette'
-import { ChevronRightIcon, ClockIcon, TrophyIcon } from '../components/icons'
+import {
+  CheckIcon,
+  ChevronRightIcon,
+  ClockIcon,
+  InfoIcon,
+  SparklesIcon,
+  TrophyIcon,
+  ZapIcon,
+} from '../components/icons'
 import type { TryoutResultState } from './TryoutHasilPage'
 
 /** Ikon bendera kecil (gaya garis Lucide) untuk tombol ragu-ragu. */
@@ -160,6 +174,31 @@ function PassingCard({
   )
 }
 
+/** Satu kartu aturan main ala game: ikon + judul singkat + satu baris. */
+function RuleCard({
+  icon,
+  title,
+  children,
+}: {
+  icon: ReactNode
+  title: string
+  children: ReactNode
+}) {
+  return (
+    <Card className="card-lift flex items-start gap-3 p-4">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+        {icon}
+      </span>
+      <div className="min-w-0">
+        <p className="text-sm font-extrabold">{title}</p>
+        <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+          {children}
+        </p>
+      </div>
+    </Card>
+  )
+}
+
 /**
  * Halaman tryout: mode info (pilih mode, aturan, passing grade,
  * riwayat) dan mode jalan (timer, palet navigator, navigasi bebas)
@@ -173,6 +212,8 @@ export function TryoutPage() {
   const { tryoutHistory } = useStore()
   const [mode, setMode] = useState<Mode>('info')
   const [startError, setStartError] = useState<string | null>(null)
+  // Mode yang menunggu konfirmasi di modal "Mulai sekarang?".
+  const [pendingMode, setPendingMode] = useState<TryoutMode | null>(null)
 
   // State sesi jalan
   const [tryoutMode, setTryoutMode] = useState<TryoutMode>('mini')
@@ -450,6 +491,8 @@ export function TryoutPage() {
 
   return (
     <div className="flex flex-col gap-5">
+      <GuestProgressWarning />
+
       <header>
         <p className="kicker">simulasi beneran, deg-degan beneran</p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">
@@ -468,7 +511,7 @@ export function TryoutPage() {
         <div className="grid gap-3 lg:grid-cols-2">
           <button
             type="button"
-            onClick={() => startTryout('mini')}
+            onClick={() => setPendingMode('mini')}
             className="w-full rounded-2xl border border-line bg-white p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
           >
             <div className="flex items-start gap-3">
@@ -502,7 +545,7 @@ export function TryoutPage() {
 
           <button
             type="button"
-            onClick={() => startTryout('full')}
+            onClick={() => setPendingMode('full')}
             className="w-full rounded-2xl border border-accent-200 bg-accent-50 p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
           >
             <div className="flex items-start gap-3">
@@ -548,35 +591,49 @@ export function TryoutPage() {
 
       <section aria-label="Aturan tryout">
         <h2 className="mb-2 font-display text-base font-extrabold">Aturan main</h2>
-        <Card>
-          <ul className="flex flex-col gap-1.5 text-sm leading-relaxed text-ink/80">
-            <li>
-              <strong>TWK & TIU:</strong> jawaban benar = 5 poin,
-              salah/kosong = 0.
-            </li>
-            <li>
-              <strong>TKP:</strong> tiap opsi bernilai 1–5 poin sesuai bobot
-              karakternya.
-            </li>
-            <li>
-              Timer berjalan terus: {TRYOUT_TIME_LIMIT_MINUTES} menit untuk
-              tryout kilat, {SIMULASI_TIME_LIMIT_MINUTES} menit untuk
-              simulasi CAT. Jawabanmu tersimpan otomatis kalau waktu habis.
-            </li>
-            <li>
-              Kamu bebas pindah soal lewat navigator, dan boleh menandai soal
-              yang ragu-ragu.
-            </li>
-            <li>
-              Selesaikan tryout dan dapat{' '}
-              <strong>
-                +{XP_TRYOUT_COMPLETE} XP (kilat) atau +{XP_SIMULASI_COMPLETE} XP
-                (simulasi CAT)
-              </strong>
-              .
-            </li>
-          </ul>
-        </Card>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          <RuleCard
+            icon={<CheckIcon width={20} height={20} />}
+            title="TWK dan TIU"
+          >
+            Jawaban benar {TWK_TIU_CORRECT_POINTS} poin, salah atau kosong 0.
+          </RuleCard>
+          <RuleCard
+            icon={<SparklesIcon width={20} height={20} />}
+            title="TKP"
+          >
+            Tiap opsi bernilai {TKP_FALLBACK_WRONG}–{TKP_FALLBACK_CORRECT}{' '}
+            poin sesuai bobot karakternya.
+          </RuleCard>
+          <RuleCard
+            icon={<ClockIcon width={20} height={20} />}
+            title="Timer jalan terus"
+          >
+            Kilat {TRYOUT_TIME_LIMIT_MINUTES} menit, simulasi{' '}
+            {SIMULASI_TIME_LIMIT_MINUTES} menit. Waktu habis, jawabanmu
+            tersimpan otomatis.
+          </RuleCard>
+          <RuleCard
+            icon={<FlagIcon width={20} height={20} />}
+            title="Tandai yang ragu"
+          >
+            Bebas pindah soal lewat navigator, dan boleh menandai soal yang
+            masih ragu-ragu.
+          </RuleCard>
+          <RuleCard
+            icon={<InfoIcon width={20} height={20} />}
+            title="Boleh ganti jawaban"
+          >
+            Jawaban masih bisa diubah sampai kamu ketuk selesai.
+          </RuleCard>
+          <RuleCard
+            icon={<ZapIcon width={20} height={20} />}
+            title="Dapat XP"
+          >
+            +{XP_TRYOUT_COMPLETE} XP kalau selesai kilat, +
+            {XP_SIMULASI_COMPLETE} XP kalau selesai simulasi CAT.
+          </RuleCard>
+        </div>
       </section>
 
       <section aria-label="Passing grade">
@@ -675,6 +732,24 @@ export function TryoutPage() {
           </div>
         </section>
       )}
+
+      {/* Konfirmasi sebelum mulai: timer baru jalan setelah user ketuk Mulai. */}
+      <ConfirmModal
+        open={pendingMode !== null}
+        title="Mulai sekarang?"
+        modeLabel={pendingMode ? MODE_LABEL[pendingMode] : ''}
+        summary={
+          pendingMode === 'full'
+            ? `${SIMULASI_TOTAL_QUESTIONS} soal · ${SIMULASI_TIME_LIMIT_MINUTES} menit`
+            : `${TRYOUT_TOTAL_QUESTIONS} soal · ${TRYOUT_TIME_LIMIT_MINUTES} menit`
+        }
+        onConfirm={() => {
+          const sessionMode = pendingMode
+          setPendingMode(null)
+          if (sessionMode) startTryout(sessionMode)
+        }}
+        onCancel={() => setPendingMode(null)}
+      />
     </div>
   )
 }

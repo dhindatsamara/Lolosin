@@ -4,6 +4,7 @@ import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { Mascot } from '../components/Mascot'
+import { InteractiveMascot } from '../components/InteractiveMascot'
 import {
   BookIcon,
   CheckIcon,
@@ -15,6 +16,8 @@ import {
   ZapIcon,
 } from '../components/icons'
 import { BADGES } from '../lib/badges'
+import { MASCOT_NAME } from '../lib/mascot'
+import { getPetStage } from '../lib/pet'
 import { MISSION_POOL, type MissionDef } from '../lib/missions'
 import { getRankTitle } from '../lib/ranks'
 import { REVIEW_INTERVALS } from '../lib/review'
@@ -95,6 +98,8 @@ const DEMO_XP = 2150
 const DEMO_LEVEL = getLevel(DEMO_XP)
 const DEMO_PROGRESS = xpProgress(DEMO_XP)
 const DEMO_STREAK = 12
+/** Stage peliharaan pada streak contoh (12 hari = kacamata keren). */
+const DEMO_PET_STAGE = getPetStage(DEMO_STREAK).stage
 const DEMO_ULAS_JATUH_TEMPO = 8
 /** Tangga gelar di sekitar level contoh (2 di bawah, 2 di atas). */
 const DEMO_LADDER_LEVELS = [5, 6, 7, 8, 9]
@@ -136,15 +141,18 @@ const SIMULASI_SEKSI = [
  * yang mengajak daftar atau masuk. Muncul hanya saat Supabase
  * terkonfigurasi dan belum ada sesi login (lihat HomePage).
  *
- * v2.1: marketing-first dan gamified. Hero menampilkan Lolo besar,
+ * v2.1: marketing-first dan gamified. Hero menampilkan maskot besar,
  * lalu seksi gamifikasi dengan preview visual (bar XP, lencana, misi,
  * streak, leaderboard, ulas soal, simulasi CAT) memakai data nyata
  * app dengan progres contoh yang diberi label jelas.
+ *
+ * v2.2: maskot hero interaktif (bisa ditekan, balon ucapan berganti)
+ * dan kartu streak menampilkan teaser peliharaan.
  */
 export function LandingPage() {
   return (
     <div className="flex flex-col gap-14 lg:gap-20">
-      {/* Hero: panel hijau solid tanpa tekstur, Lolo besar di kanan */}
+      {/* Hero: panel hijau solid tanpa tekstur, maskot besar di kanan */}
       <section className="overflow-hidden rounded-3xl bg-primary-800 px-6 py-10 text-white shadow-soft-lg lg:px-12 lg:py-14">
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-6">
           <div>
@@ -184,7 +192,7 @@ export function LandingPage() {
             </p>
           </div>
 
-          {/* Panggung Lolo: blob lembut + balon ucapan + chip melayang */}
+          {/* Panggung maskot: blob lembut + maskot interaktif + chip melayang */}
           <div className="relative mx-auto w-full max-w-xs sm:max-w-sm">
             <div
               className="blob-soft absolute inset-x-6 top-10 bottom-4 bg-primary-700/70"
@@ -194,25 +202,15 @@ export function LandingPage() {
               className="blob-soft absolute inset-x-14 top-4 bottom-14 bg-accent-400/25"
               aria-hidden="true"
             />
-            <div className="relative z-10 mx-auto w-fit max-w-full rounded-2xl bg-white px-4 py-2.5 text-center shadow-soft">
-              <p className="text-sm leading-snug font-bold text-ink">
-                Hai! Aku Lolo, teman belajarmu.
-              </p>
-              <span
-                className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-white"
-                aria-hidden="true"
-              />
-            </div>
-            <Mascot
-              mood="semangat"
+            <InteractiveMascot
               size={220}
-              className="float-soft relative z-10 mx-auto mt-2 h-auto w-44 sm:w-52 lg:w-60"
+              mascotClassName="float-soft h-auto w-44 sm:w-52 lg:w-60"
             />
-            <p className="relative z-10 mx-auto mt-1 w-fit rounded-full bg-white px-4 py-1 font-display text-base font-extrabold text-primary-800 shadow-soft">
-              Lolo
-            </p>
             <p className="relative z-10 mt-1 text-center text-xs font-bold text-primary-200">
               maskot Lolosin
+            </p>
+            <p className="relative z-10 mt-1 text-center text-xs font-bold text-primary-200/80">
+              Coba tekan {MASCOT_NAME}!
             </p>
             <span
               className="float-soft absolute top-16 -right-1 z-20 inline-flex items-center gap-1 rounded-full bg-accent-400 px-3 py-1.5 text-xs font-extrabold text-ink shadow-soft sm:right-0"
@@ -495,6 +493,10 @@ export function LandingPage() {
               <p className="mt-3 text-center text-xs font-bold text-ink/60">
                 6 dari 7 hari minggu ini sudah belajar
               </p>
+              <p className="mt-2 border-t border-dashed border-line pt-2 text-center text-xs leading-relaxed font-bold text-ink/60">
+                {MASCOT_NAME} juga ikut tumbuh: streak {DEMO_STREAK} hari
+                bikin dia jadi {DEMO_PET_STAGE.nama}.
+              </p>
             </div>
           </Card>
 
@@ -659,9 +661,9 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Kenalan, ini Lolo! */}
+      {/* Kenalan dengan maskot */}
       <section
-        aria-label="Kenalan dengan Lolo"
+        aria-label={`Kenalan dengan ${MASCOT_NAME}`}
         className="reveal rounded-3xl border border-accent-200 bg-accent-50 px-6 py-8 lg:px-10 lg:py-10"
       >
         <div className="grid items-center gap-6 lg:grid-cols-[auto_1fr] lg:gap-10">
@@ -670,24 +672,23 @@ export function LandingPage() {
               className="blob-soft absolute inset-2 bg-accent-200/70"
               aria-hidden="true"
             />
-            <Mascot
-              mood="kagum"
+            <InteractiveMascot
+              baseMood="kagum"
               size={180}
-              className="float-soft relative h-auto w-36 sm:w-44 lg:w-48"
+              withBubble={false}
+              mascotClassName="float-soft h-auto w-36 sm:w-44 lg:w-48"
+              className="relative"
             />
-            <p className="relative mx-auto mt-1 w-fit rounded-full bg-white px-4 py-1 font-display text-base font-extrabold text-primary-800 shadow-soft">
-              Lolo
-            </p>
           </div>
           <div>
             <p className="kicker">Teman belajarmu</p>
             <h2 className="mt-2 font-display text-3xl font-extrabold lg:text-4xl">
-              Kenalan, ini Lolo!
+              Kenalan, ini {MASCOT_NAME}!
             </h2>
             <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink/70">
-              Lolo nemenin kamu dari drill pertama sampai hari-H. Dia yang
-              ngerayain tiap kamu naik level, ngasih semangat pas streak mau
-              padam, dan ikut bangga pas kamu lulus simulasi.
+              {MASCOT_NAME} nemenin kamu dari drill pertama sampai hari-H.
+              Dia yang ngerayain tiap kamu naik level, ngasih semangat pas
+              streak mau padam, dan ikut bangga pas kamu lulus simulasi.
             </p>
             <ul className="mt-5 grid gap-3 sm:grid-cols-3">
               {[

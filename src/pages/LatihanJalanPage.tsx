@@ -60,9 +60,10 @@ function pickReviewQuestions(): DrillPick {
 }
 
 /**
- * Sesi drill 10 soal: satu soal per layar, feedback langsung setelah
- * memilih, lalu pembahasan per opsi. +10 XP per jawaban benar, +50 XP
- * saat sesi selesai. Soal baru selalu didahulukan (anti-ulang).
+ * Sesi drill 10 soal: satu soal per layar, pilih opsi lalu kunci lewat
+ * tombol Jawab (mencegah salah pencet), baru pembahasan per opsi muncul.
+ * +10 XP per jawaban benar, +50 XP saat sesi selesai. Soal baru selalu
+ * didahulukan (anti-ulang).
  *
  * Mode `review` memakai ulang layar yang sama untuk ulasan soal yang
  * pernah salah: soalnya dari antrean yang jatuh tempo (maks 10 per
@@ -100,6 +101,8 @@ export function LatihanJalanPage({
   })
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState<TryoutAnswers>({})
+  // Opsi yang baru dipilih tapi belum dikunci (belum dinilai).
+  const [pending, setPending] = useState<Opsi | undefined>(undefined)
   const [xpEarned, setXpEarned] = useState(0)
   const [finished, setFinished] = useState(false)
   const finishedRef = useRef(false)
@@ -179,8 +182,18 @@ export function LatihanJalanPage({
   const isLast = index === total - 1
   const answeredCount = Object.keys(answers).length
 
+  // Pilih saja: sorot opsi, jawaban belum dikunci dan belum dinilai.
+  // Masih bisa ganti pilihan sampai tombol Jawab ditekan.
   function handleSelect(opsi: Opsi) {
     if (revealed) return
+    setPending(opsi)
+  }
+
+  // Kunci jawaban: baru di sini jawaban dinilai, dicatat, dan XP dihitung.
+  function handleJawab() {
+    if (revealed || pending === undefined) return
+    const opsi = pending
+    setPending(undefined)
     setAnswers((prev) => ({ ...prev, [question.id]: opsi }))
     markSeen([question.id])
     // "Benar" = jawaban sama dengan kunci; untuk TKP berarti opsi terbaik.
@@ -224,6 +237,7 @@ export function LatihanJalanPage({
     if (isLast) {
       handleFinish()
     } else {
+      setPending(undefined)
       setIndex((i) => i + 1)
     }
   }
@@ -240,6 +254,7 @@ export function LatihanJalanPage({
     setSession(fresh)
     setIndex(0)
     setAnswers({})
+    setPending(undefined)
     setXpEarned(0)
     setFinished(false)
     finishedRef.current = false
@@ -409,24 +424,32 @@ export function LatihanJalanPage({
           question={question}
           nomor={index + 1}
           total={total}
-          selected={selected}
+          selected={revealed ? selected : pending}
           revealed={revealed}
           onSelect={handleSelect}
         />
       </Card>
 
-      <Button
-        size="lg"
-        fullWidth
-        onClick={handleNext}
-        disabled={!revealed}
-      >
-        {isLast ? 'Lihat hasil' : 'Soal berikutnya'}
-        <ChevronRightIcon width={18} height={18} />
-      </Button>
+      {revealed ? (
+        <Button size="lg" fullWidth onClick={handleNext}>
+          {isLast ? 'Lihat hasil' : 'Soal berikutnya'}
+          <ChevronRightIcon width={18} height={18} />
+        </Button>
+      ) : (
+        <Button
+          size="lg"
+          fullWidth
+          onClick={handleJawab}
+          disabled={pending === undefined}
+        >
+          Jawab
+        </Button>
+      )}
       {!revealed && (
         <p className="-mt-3 text-center text-xs font-medium text-ink/60">
-          Pilih satu jawaban dulu, pembahasannya langsung muncul.
+          {pending === undefined
+            ? 'Pilih satu jawaban dulu.'
+            : 'Yakin dengan pilihanmu? Ketuk Jawab buat mengunci.'}
         </p>
       )}
 

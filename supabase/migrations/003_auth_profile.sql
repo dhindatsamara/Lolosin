@@ -1,0 +1,34 @@
+-- ============================================================================
+-- Lolosin: migrasi 003, kolom Premium Beta di profiles
+-- ============================================================================
+--
+-- CARA PAKAI:
+--   1. Buka dashboard Supabase proyek "lolosin".
+--   2. Masuk ke SQL Editor, buat query baru.
+--   3. Paste seluruh isi file ini, lalu klik Run.
+--   4. Skrip ini aman di-run ulang: perintah memakai IF NOT EXISTS.
+--
+-- YANG DITAMBAH:
+--   - profiles.is_premium: boolean, default false. Dipakai toggle
+--     "Premium Beta" di halaman Profil (v2.2): selama beta, user bisa
+--     mengaktifkan premium gratis untuk mencoba fitur premium,
+--     termasuk jadi host sesi live.
+--
+-- YANG TIDAK DITAMBAH (sengaja):
+--   - TIDAK ada unique constraint baru untuk username. Kolom
+--     profiles.username sudah didefinisikan sebagai
+--     "text unique not null" sejak migrasi 001, jadi tidak perlu
+--     constraint tambahan.
+--
+-- CATATAN:
+--   - App tetap jalan bila migrasi ini belum dijalankan: select profil
+--     otomatis fallback ke kolom lama, dan toggle Premium Beta
+--     menampilkan pesan "Jalankan dulu migrasi 003 di SQL Editor".
+--   - Tidak ada perubahan RLS: policy profiles_update_own dari 001
+--     sudah mengizinkan user memperbarui barisnya sendiri, termasuk
+--     kolom baru ini.
+--
+-- ============================================================================
+
+alter table public.profiles
+  add column if not exists is_premium boolean not null default false;

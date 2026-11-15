@@ -1,9 +1,9 @@
 import type { Materi, Opsi, Question } from '../../lib/questions'
+import { visibleOptions } from '../../lib/quiz'
 import { Badge } from '../ui/Badge'
 import { ExplanationPanel } from './ExplanationPanel'
 import { OptionButton, type OptionState } from './OptionButton'
 
-const OPSI_LIST: Opsi[] = ['A', 'B', 'C', 'D', 'E']
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
 
 export interface QuestionCardProps {
@@ -15,8 +15,9 @@ export interface QuestionCardProps {
   /** Opsi yang dipilih pengguna. */
   selected?: Opsi
   /**
-   * Mode drill: `true` setelah pengguna memilih. Opsi disorot benar/salah
-   * dan panel pembahasan muncul. Mode tryout: selalu `false`.
+   * Mode drill: `true` setelah pengguna mengunci jawaban lewat tombol
+   * Jawab. Opsi disorot benar/salah dan panel pembahasan muncul.
+   * Mode tryout: selalu `false`.
    */
   revealed?: boolean
   onSelect?: (opsi: Opsi) => void
@@ -94,7 +95,7 @@ export function QuestionCard({
       )}
 
       <div className="flex flex-col gap-2" role="radiogroup" aria-label="Pilihan jawaban">
-        {OPSI_LIST.map((opsi) => (
+        {visibleOptions(question).map((opsi) => (
           <OptionButton
             key={opsi}
             huruf={opsi}

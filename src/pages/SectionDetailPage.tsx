@@ -6,13 +6,11 @@ import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { MarkdownLite } from '../components/belajar/MarkdownLite'
 import { PangkatTable } from '../components/belajar/PangkatTable'
+import { StickyBackButton } from '../components/belajar/StickyBackButton'
 import { CheckIcon, ChevronRightIcon } from '../components/icons'
 import {
   cleanJudul,
   docReadProgress,
-  estimasiBacaMenit,
-  formatDurasi,
-  formatKata,
   getDocument,
   getGroupForDocument,
   getSection,
@@ -58,7 +56,6 @@ export function SectionDetailPage() {
   // Kembali ke tampilan grup materi (judul sudah tanpa atribusi sumber).
   const group = getGroupForDocument(doc.id)
   const backTarget = group ? `/belajar/${group.id}` : `/belajar/${doc.id}`
-  const backLabel = group ? group.judul : cleanJudul(doc.judul)
 
   function handleMarkRead() {
     if (completeSectionRead(section!.id, doc!.materi)) {
@@ -68,14 +65,10 @@ export function SectionDetailPage() {
 
   return (
     <div className="flex flex-col gap-5">
+      <StickyBackButton to={backTarget} />
+
       <header>
-        <Link
-          to={backTarget}
-          className="text-sm font-semibold text-primary-700 hover:underline"
-        >
-          ← {backLabel}
-        </Link>
-        <div className="mt-2 flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Badge tone={MATERI_TONE[doc.materi]}>{doc.materi}</Badge>
           <Badge tone="neutral">{section.subtopik}</Badge>
           {isRead && (
@@ -89,19 +82,16 @@ export function SectionDetailPage() {
           {section.judul}
         </h1>
         <p className="mt-1 text-sm font-medium text-ink/60">
-          Seksi {nav.index + 1} dari {nav.total} · {formatKata(section.kata)}{' '}
-          · {formatDurasi(estimasiBacaMenit(section.kata))} baca
+          Seksi {nav.index + 1} dari {nav.total}
         </p>
-        <div className="mt-3 flex items-center gap-2">
+        <div className="mt-3 flex items-center gap-3">
           <ProgressBar
             value={progress.read}
             max={progress.total}
             tone={MATERI_TONE[doc.materi]}
             label={`Progres baca ${cleanJudul(doc.judul)}`}
+            className="flex-1"
           />
-          <span className="shrink-0 text-xs font-extrabold text-ink/60">
-            {progress.percent}%
-          </span>
         </div>
       </header>
 
@@ -147,7 +137,7 @@ export function SectionDetailPage() {
           </Link>
         ) : (
           <span className="rounded-2xl border border-dashed border-line-strong bg-paper p-3 text-xs font-semibold text-ink/60">
-            Ini seksi pertama
+            Ini bagian pertama
           </span>
         )}
         {nav.next ? (
@@ -164,7 +154,7 @@ export function SectionDetailPage() {
           </Link>
         ) : (
           <span className="rounded-2xl border border-dashed border-line-strong bg-paper p-3 text-right text-xs font-semibold text-ink/60">
-            Ini seksi terakhir
+            Ini bagian terakhir
           </span>
         )}
       </nav>
@@ -185,7 +175,7 @@ export function SectionDetailPage() {
         )}
       >
         <p className="rounded-full bg-ink px-4 py-2.5 text-sm font-bold text-white shadow-soft-lg">
-          +{XP_SECTION_READ} XP! Seksi ini sudah kamu baca
+          +{XP_SECTION_READ} XP! Bagian ini sudah kamu baca
         </p>
       </div>
     </div>

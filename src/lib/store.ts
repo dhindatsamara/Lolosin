@@ -17,7 +17,7 @@
  * ikut berubah saat store berubah.
  */
 import { useSyncExternalStore } from 'react'
-import type { Materi } from './questions'
+import { canonicalTopicDisplay, type Materi } from './questions'
 import type { TryoutMode } from './quiz'
 
 export const STORE_KEY = 'lolosin:v1'
@@ -474,7 +474,9 @@ export function setReviewQueue(queue: ReviewEntry[]): ReviewEntry[] {
 /**
  * Tambah satu hasil jawaban ke tally per subtopik. Kunci gabungan
  * "MATERI|Subtopik", dipanggil dari pencatatan jawaban (drill, tryout,
- * dan ulasan) supaya ketiganya terhitung.
+ * dan ulasan) supaya ketiganya terhitung. Subtopik dikanonisasi dulu
+ * (tanpa peduli huruf) supaya varian ejaan ("Analogi Verbal" vs
+ * "analogi verbal") tidak memecah tally menjadi dua kunci.
  */
 export function bumpTopicStat(
   materi: Materi,
@@ -482,7 +484,7 @@ export function bumpTopicStat(
   correct: boolean,
 ): void {
   const state = getStore()
-  const key = `${materi}|${subtopik}`
+  const key = `${materi}|${canonicalTopicDisplay(materi, subtopik)}`
   const prev = state.topicStats[key] ?? { correct: 0, total: 0 }
   update({
     topicStats: {

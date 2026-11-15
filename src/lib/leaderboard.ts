@@ -5,6 +5,9 @@
  * Aturan main:
  * - Hanya simulasi CAT lengkap (mode 'full', 110 soal) yang masuk
  *   leaderboard. Tryout kilat (mode 'mini') tidak diranking.
+ * - Email user harus sudah terkonfirmasi; skor dari user yang belum
+ *   verifikasi tidak dikirim dan masuk antrean, lalu dicoba lagi
+ *   otomatis setelah email terverifikasi.
  * - Satu user satu skor per minggu: skor TERBAIK yang tampil.
  * - Minggu berjalan Senin sampai Minggu, zona Asia/Makassar (WITA).
  * - Semua fungsi aman saat Supabase belum terkonfigurasi (client null):
@@ -242,6 +245,17 @@ async function submitInner(
       status: 'not-logged-in',
       error: 'Login dulu biar skormu masuk leaderboard.',
     }
+  }
+
+  // Email belum terverifikasi: jangan kirim skor. Skor masuk antrean
+  // supaya bisa terkirim otomatis setelah user verifikasi email.
+  // Status 'failed' dipakai supaya halaman hasil tetap menampilkan
+  // pesan percobaan ulang yang sudah ada (tanpa status baru).
+  if (!user.email_confirmed_at) {
+    enqueuePending(record)
+    return FAILED_RESULT(
+      'Konfirmasi dulu emailmu biar skormu masuk leaderboard.',
+    )
   }
 
   try {

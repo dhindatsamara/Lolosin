@@ -1,21 +1,35 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import type { Session } from '@supabase/supabase-js'
 import {
+  completeProfile,
+  getMyProfile,
+  getSession,
+  isEmailVerified,
   isUsernameAvailable,
   isValidUsername,
+  onAuthChange,
   resendConfirmation,
   signIn,
+  signInWithGoogle,
   signUp,
-  getSession,
+  USERNAME_FORMAT_MESSAGE,
   USERNAME_MAX_LENGTH,
-  USERNAME_MIN_LENGTH,
   USERNAME_TAKEN_MESSAGE,
 } from '../lib/auth'
+import { MASCOT_NAME } from '../lib/mascot'
 import { isSupabaseConfigured } from '../lib/supabase'
 import { cx } from '../lib/utils'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
-import { CheckIcon } from '../components/icons'
+import { Mascot } from '../components/Mascot'
+import {
+  CheckIcon,
+  CrownIcon,
+  GamepadIcon,
+  GoogleIcon,
+  SparklesIcon,
+} from '../components/icons'
 
 type Mode = 'masuk' | 'daftar'
 
@@ -36,6 +50,11 @@ type FieldErrors = Partial<Record<'email' | 'password' | 'username', string>>
  * email, jadi daftar bisa sukses TANPA session. Bila begitu, halaman
  * menampilkan state "Cek emailmu" dan TIDAK menganggap user sudah login.
  * User masuk dari halaman ini setelah mengklik tautan di emailnya.
+ *
+ * Alur login Google: setelah redirect kembali, Supabase menukar code
+ * jadi session otomatis. Email Google sudah terkonfirmasi, tapi user
+ * belum punya profil/username, jadi halaman menampilkan form
+ * "Lengkapi profilmu" (username saja) sebelum masuk ke beranda.
  */
 export default function AuthPage() {
   const navigate = useNavigate()
@@ -49,7 +68,6 @@ export default function AuthPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
-  const [formasi, setFormasi] = useState('')
   const [errors, setErrors] = useState<FieldErrors>({})
   const [submitError, setSubmitError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -59,17 +77,48 @@ export default function AuthPage() {
   const [resendSent, setResendSent] = useState(false)
   const [resendError, setResendError] = useState('')
   const [checkingUsername, setCheckingUsername] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
+  const [needsProfile, setNeedsProfile] = useState(false)
   const usernameRef = useRef('')
+  const emailInputRef = useRef<HTMLInputElement>(null)
+  const passwordInputRef = useRef<HTMLInputElement>(null)
+  const usernameInputRef = useRef<HTMLInputElement>(null)
 
-  // Bila sudah login, tidak ada urusan di halaman ini, balik ke beranda.
+  // Bila sudah login, tidak ada urusan di halaman ini, kecuali user
+  // baru login Google yang belum punya profil (tampilkan form lengkapi
+  // profil). User yang emailnya belum terverifikasi diarahkan ke
+  // beranda, tempat gate verifikasi di App menampilkan layar "Cek
+  // emailmu". Listener onAuthStateChange menutupi callback OAuth yang
+  // session-nya belum siap saat halaman pertama dimuat.
   useEffect(() => {
     if (!configured) return
     let cancelled = false
+
+    async function checkSession(session: Session | null) {
+      if (!session) return
+      const user = session.user
+      if (!isEmailVerified(user)) {
+        navigate('/', { replace: true })
+        return
+      }
+      const profile = await getMyProfile().catch(() => null)
+      if (cancelled) return
+      if (profile) {
+        navigate('/', { replace: true })
+      } else {
+        setNeedsProfile(true)
+      }
+    }
+
     getSession().then((session) => {
-      if (!cancelled && session) navigate('/', { replace: true })
+      if (!cancelled) void checkSession(session)
+    })
+    const unsubscribe = onAuthChange((_event, session) => {
+      if (!cancelled) void checkSession(session)
     })
     return () => {
       cancelled = true
+      unsubscribe()
     }
   }, [configured, navigate])
 
@@ -92,16 +141,24 @@ export default function AuthPage() {
     }
     if (mode === 'daftar') {
       if (!isValidUsername(username)) {
-        next.username = `Username ${USERNAME_MIN_LENGTH}-${USERNAME_MAX_LENGTH} karakter, huruf, angka, atau underscore aja ya`
+        next.username = USERNAME_FORMAT_MESSAGE
       }
     }
     setErrors(next)
+    // Fokus ke field pertama yang salah, supaya keyboard dan screen
+    // reader langsung tahu apa yang harus diperbaiki.
+    if (next.email) {
+      emailInputRef.current?.focus()
+    } else if (next.password) {
+      passwordInputRef.current?.focus()
+    } else if (next.username) {
+      usernameInputRef.current?.focus()
+    }
     return Object.keys(next).length === 0
   }
 
-  /** Cek ketersediaan username saat field ditinggalkan (mode daftar). */
+  /** Cek ketersediaan username saat field ditinggalkan. */
   async function handleUsernameBlur() {
-    if (mode !== 'daftar') return
     const value = username.trim()
     if (!isValidUsername(value)) return
     usernameRef.current = value
@@ -135,18 +192,53 @@ export default function AuthPage() {
         return
       }
 
-      const { needsConfirmation } = await signUp(
-        email,
-        password,
-        username,
-        formasi,
-      )
+      const { needsConfirmation } = await signUp(email, password, username)
       if (needsConfirmation) {
         // Daftar sukses tapi belum login: email wajib dikonfirmasi dulu.
         setConfirmationEmail(email.trim())
       } else {
         navigate('/', { replace: true })
       }
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : 'Ada yang salah, coba lagi ya.',
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  /** Masuk dengan Google: browser dialihkan ke Google, lalu kembali ke sini. */
+  async function handleGoogle() {
+    if (googleLoading) return
+    setSubmitError('')
+    setGoogleLoading(true)
+    try {
+      await signInWithGoogle()
+      // Berhasil: browser dialihkan ke Google, jadi baris setelah ini
+      // umumnya tidak tercapai.
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : 'Ada yang salah, coba lagi ya.',
+      )
+      setGoogleLoading(false)
+    }
+  }
+
+  /** Form lengkapi profil (login Google): username saja. */
+  async function handleCompleteProfile(event: React.FormEvent) {
+    event.preventDefault()
+    if (loading) return
+    setSubmitError('')
+    if (!isValidUsername(username)) {
+      setErrors({ username: USERNAME_FORMAT_MESSAGE })
+      usernameInputRef.current?.focus()
+      return
+    }
+    setLoading(true)
+    try {
+      await completeProfile(username)
+      navigate('/', { replace: true })
     } catch (err) {
       setSubmitError(
         err instanceof Error ? err.message : 'Ada yang salah, coba lagi ya.',
@@ -255,10 +347,102 @@ export default function AuthPage() {
     )
   }
 
+  // Login Google berhasil tapi belum punya profil: pilih username dulu.
+  if (needsProfile) {
+    return (
+      <div className="mx-auto flex w-full max-w-md flex-col gap-5">
+        <header className="flex flex-col items-center text-center">
+          <span className="blob-soft flex h-28 w-28 items-center justify-center bg-primary-100">
+            <Mascot mood="kagum" size={88} className="float-soft" />
+          </span>
+          <p className="mt-4 rounded-full bg-white px-3 py-1.5 text-sm font-bold text-ink shadow-soft">
+            Hai! Aku {MASCOT_NAME}, teman belajarmu.
+          </p>
+          <p className="kicker mt-4">satu langkah lagi</p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold">
+            Lengkapi profilmu
+          </h1>
+          <p className="mt-1 text-sm leading-relaxed text-ink/60">
+            Login Googlemu berhasil. Pilih username yang tampil di
+            leaderboard, lalu mulai main.
+          </p>
+        </header>
+
+        <Card padding="lg">
+          <form
+            onSubmit={handleCompleteProfile}
+            noValidate
+            className="flex flex-col gap-4"
+          >
+            <Field
+              id="auth-username"
+              label="Username"
+              error={errors.username}
+              hint={
+                checkingUsername
+                  ? 'Lagi ngecek username...'
+                  : 'Nama yang tampil di leaderboard. Huruf kecil, angka, atau underscore.'
+              }
+            >
+              <input
+                id="auth-username"
+                ref={usernameInputRef}
+                name="username"
+                type="text"
+                autoComplete="username"
+                autoCorrect="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                enterKeyHint="done"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value)
+                  usernameRef.current = e.target.value.trim()
+                  setErrors((prev) => ({ ...prev, username: undefined }))
+                }}
+                onBlur={handleUsernameBlur}
+                placeholder="pejuangnip"
+                maxLength={USERNAME_MAX_LENGTH}
+                aria-invalid={Boolean(errors.username)}
+                aria-describedby={
+                  errors.username ? 'auth-username-error' : undefined
+                }
+                className={INPUT_CLASS}
+              />
+            </Field>
+
+            {submitError && (
+              <p
+                role="alert"
+                className="rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-semibold text-red-800"
+              >
+                {submitError}
+              </p>
+            )}
+
+            <Button type="submit" size="lg" fullWidth disabled={loading}>
+              {loading ? 'Sebentar ya...' : 'Simpan dan mulai'}
+            </Button>
+          </form>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-5">
-      <header>
-        <p className="kicker">
+      <header className="flex flex-col items-center text-center">
+        <span className="blob-soft flex h-28 w-28 items-center justify-center bg-primary-100">
+          <Mascot
+            mood={mode === 'daftar' ? 'semangat' : 'senang'}
+            size={88}
+            className="float-soft"
+          />
+        </span>
+        <p className="mt-4 rounded-full bg-white px-3 py-1.5 text-sm font-bold text-ink shadow-soft">
+          Hai! Aku {MASCOT_NAME}, teman belajarmu.
+        </p>
+        <p className="kicker mt-4">
           {mode === 'masuk'
             ? 'selamat datang kembali'
             : 'gabung dan mulai naik peringkat'}
@@ -304,27 +488,44 @@ export default function AuthPage() {
           ))}
         </div>
 
+        <Button
+          variant="outline"
+          size="lg"
+          fullWidth
+          onClick={handleGoogle}
+          disabled={googleLoading}
+          className="mt-5"
+        >
+          <GoogleIcon width={20} height={20} />
+          {googleLoading ? 'Mengalihkan ke Google...' : 'Masuk dengan Google'}
+        </Button>
+
+        <div className="mt-5 flex items-center gap-3" aria-hidden="true">
+          <span className="h-px flex-1 bg-line" />
+          <span className="text-xs font-bold text-ink/50">
+            atau pakai email
+          </span>
+          <span className="h-px flex-1 bg-line" />
+        </div>
+
         <form
           onSubmit={handleSubmit}
           noValidate
           className="mt-5 flex flex-col gap-4"
         >
-          <Field
-            id="auth-email"
-            label="Email"
-            error={errors.email}
-          >
+          <Field id="auth-email" label="Email" error={errors.email}>
             <input
               id="auth-email"
+              ref={emailInputRef}
+              name="email"
               type="email"
-              autoComplete="email"
+              autoComplete="username"
+              enterKeyHint="next"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nama@email.com"
               aria-invalid={Boolean(errors.email)}
-              aria-describedby={
-                errors.email ? 'auth-email-error' : undefined
-              }
+              aria-describedby={errors.email ? 'auth-email-error' : undefined}
               className={INPUT_CLASS}
             />
           </Field>
@@ -341,10 +542,13 @@ export default function AuthPage() {
           >
             <input
               id="auth-password"
+              ref={passwordInputRef}
+              name="password"
               type="password"
               autoComplete={
                 mode === 'daftar' ? 'new-password' : 'current-password'
               }
+              enterKeyHint={mode === 'daftar' ? 'next' : 'done'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password-mu"
@@ -357,54 +561,42 @@ export default function AuthPage() {
           </Field>
 
           {mode === 'daftar' && (
-            <>
-              <Field
+            <Field
+              id="auth-username"
+              label="Username"
+              error={errors.username}
+              hint={
+                checkingUsername
+                  ? 'Lagi ngecek username...'
+                  : 'Nama yang tampil di leaderboard. Huruf kecil, angka, atau underscore.'
+              }
+            >
+              <input
                 id="auth-username"
-                label="Username"
-                error={errors.username}
-                hint={
-                  checkingUsername
-                    ? 'Lagi ngecek username...'
-                    : 'Nama yang tampil di leaderboard. Huruf kecil, angka, atau underscore.'
+                ref={usernameInputRef}
+                name="username"
+                type="text"
+                autoComplete="username"
+                autoCorrect="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                enterKeyHint="done"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value)
+                  usernameRef.current = e.target.value.trim()
+                  setErrors((prev) => ({ ...prev, username: undefined }))
+                }}
+                onBlur={handleUsernameBlur}
+                placeholder="pejuangnip"
+                maxLength={USERNAME_MAX_LENGTH}
+                aria-invalid={Boolean(errors.username)}
+                aria-describedby={
+                  errors.username ? 'auth-username-error' : undefined
                 }
-              >
-                <input
-                  id="auth-username"
-                  type="text"
-                  autoComplete="username"
-                  value={username}
-                  onChange={(e) => {
-                    setUsername(e.target.value)
-                    usernameRef.current = e.target.value.trim()
-                    setErrors((prev) => ({ ...prev, username: undefined }))
-                  }}
-                  onBlur={handleUsernameBlur}
-                  placeholder="pejuangnip"
-                  maxLength={USERNAME_MAX_LENGTH}
-                  aria-invalid={Boolean(errors.username)}
-                  aria-describedby={
-                    errors.username ? 'auth-username-error' : undefined
-                  }
-                  className={INPUT_CLASS}
-                />
-              </Field>
-
-              <Field
-                id="auth-formasi"
-                label="Formasi yang dituju"
-                hint="Opsional. Boleh dikosongkan, dan dipakai buat leaderboard per formasi."
-              >
-                <input
-                  id="auth-formasi"
-                  type="text"
-                  autoComplete="off"
-                  value={formasi}
-                  onChange={(e) => setFormasi(e.target.value)}
-                  placeholder="Mis. Analis Kebijakan"
-                  className={INPUT_CLASS}
-                />
-              </Field>
-            </>
+                className={INPUT_CLASS}
+              />
+            </Field>
           )}
 
           {submitError && (
@@ -416,17 +608,8 @@ export default function AuthPage() {
             </p>
           )}
 
-          <Button
-            type="submit"
-            size="lg"
-            fullWidth
-            disabled={loading}
-          >
-            {loading
-              ? 'Sebentar ya...'
-              : mode === 'masuk'
-                ? 'Masuk'
-                : 'Buat akun'}
+          <Button type="submit" size="lg" fullWidth disabled={loading}>
+            {loading ? 'Sebentar ya...' : mode === 'masuk' ? 'Masuk' : 'Buat akun'}
           </Button>
 
           <p className="text-center text-xs leading-relaxed font-medium text-ink/60">
@@ -456,6 +639,37 @@ export default function AuthPage() {
           </p>
         </form>
       </Card>
+
+      {mode === 'daftar' && (
+        <Card padding="md" className="card-lift flex flex-col gap-2">
+          <p className="flex items-center gap-2 font-display text-base font-extrabold">
+            <SparklesIcon
+              width={18}
+              height={18}
+              className="shrink-0 text-accent-500"
+            />
+            Daftar gratis, langsung dapat misi harian
+          </p>
+          <ul className="flex flex-col gap-1.5 text-sm font-medium text-ink/70">
+            <li className="flex items-center gap-2">
+              <GamepadIcon
+                width={18}
+                height={18}
+                className="shrink-0 text-primary-600"
+              />
+              Kumpulin XP dan naik level tiap latihan
+            </li>
+            <li className="flex items-center gap-2">
+              <CrownIcon
+                width={18}
+                height={18}
+                className="shrink-0 text-primary-600"
+              />
+              Rebut peringkat 1 leaderboard mingguan
+            </li>
+          </ul>
+        </Card>
+      )}
     </div>
   )
 }
@@ -471,10 +685,7 @@ interface FieldProps {
 function Field({ id, label, hint, error, children }: FieldProps) {
   return (
     <div>
-      <label
-        htmlFor={id}
-        className="mb-1.5 block text-sm font-extrabold"
-      >
+      <label htmlFor={id} className="mb-1.5 block text-sm font-extrabold">
         {label}
       </label>
       {children}
