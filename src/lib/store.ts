@@ -31,9 +31,14 @@ import { useSyncExternalStore } from 'react'
 import { canonicalTopicDisplay, type Materi } from './questions'
 import type { TryoutMode } from './quiz'
 import {
+  declineProgressRepair as declineRepairFlag,
   getCurrentUserId,
+  GUEST_NAMESPACE,
+  hasDeclinedProgressRepair,
   migrateLegacyKey,
+  moveGuestDataToUser,
   scopedKey,
+  setAuthResolved,
   setCurrentUserId,
 } from './storage'
 
@@ -452,19 +457,94 @@ export function useStore(): StoreState {
 }
 
 /**
- * Ganti namespace progres aktif saat user berubah (login, logout,
- * ganti akun). Dipanggil dari App lewat efek yang memantau auth user.
- * Cache memori dibersihkan supaya load berikutnya membaca namespace
- * baru, lalu semua listener useStore diberi tahu agar UI (header
- * XP/streak, dashboard) langsung me-render data user yang baru tanpa
- * reload. Bila userId sama dengan yang aktif, tidak ngapa-ngapain
- * (menutupi event refresh token Supabase yang mengirim user yang sama).
+ * Terapkan status auth yang sudah diketahui (login, logout, ganti
+ * akun). Dipanggil dari App lewat efek yang memantau auth user, HANYA
+ * setelah loading auth selesai (v2.2.3): menandai auth resolved
+ * supaya migrasi legacy boleh jalan (dengan namespace yang benar),
+ * mengganti namespace progres aktif, membersihkan cache memori supaya
+ * load berikutnya membaca namespace baru, lalu memberi tahu semua
+ * listener useStore agar UI langsung me-render data user yang baru
+ * tanpa reload. Sengaja SELALU reload (tanpa early return saat
+ * userId sama): resolusi pertama setelah mount harus memuat ulang
+ * supaya migrasi legacy jalan, dan efek App tidak jalan ulang saat
+ * Supabase me-refresh token (dependensinya id + loading, bukan objek
+ * user).
  */
-export function setStoreUserId(userId: string | null): void {
-  if (getCurrentUserId() === userId) return
+export function resolveAuth(userId: string | null): void {
+  setAuthResolved()
   setCurrentUserId(userId)
   cached = null
   emit()
+}
+
+/** Tawaran pindah progres tamu ke akun (perbaikan bug migrasi v2.2.1). */
+export interface ProgressRepairOffer {
+  xp: number
+  streak: number
+}
+
+/** Apakah sebuah state store tersimpan punya progres yang berarti. */
+function hasMeaningfulProgress(parsed: unknown): boolean {
+  if (typeof parsed !== 'object' || parsed === null) return false
+  const p = parsed as Partial<StoreState>
+  return (
+    (typeof p.xp === 'number' && p.xp > 0) ||
+    (typeof p.streak === 'number' && p.streak > 0) ||
+    (Array.isArray(p.seenQuestionIds) && p.seenQuestionIds.length > 0) ||
+    (Array.isArray(p.readSections) && p.readSections.length > 0)
+  )
+}
+
+/**
+ * Cek apakah ada progres tamu yang bisa dipindahkan ke akun yang
+ * sedang login. Tawaran hanya muncul bila: user login, user belum
+ * pernah menolak, namespace user masih kosong (belum ada progres),
+ * dan namespace tamu punya progres yang berarti (korban bug migrasi
+ * v2.2.1: progres akun lama tersalin ke tamu). Mengembalikan null
+ * bila tidak ada tawaran.
+ */
+export function getProgressRepairOffer(): ProgressRepairOffer | null {
+  const userId = getCurrentUserId()
+  if (!userId) return null
+  try {
+    if (hasDeclinedProgressRepair(userId)) return null
+    const userRaw = localStorage.getItem(scopedKey(STORE_KEY))
+    if (userRaw) {
+      try {
+        if (hasMeaningfulProgress(JSON.parse(userRaw))) return null
+      } catch {
+        return null
+      }
+    }
+    const guestRaw = localStorage.getItem(
+      `${STORE_KEY}:${GUEST_NAMESPACE}`,
+    )
+    if (!guestRaw) return null
+    const guest = JSON.parse(guestRaw) as Partial<StoreState>
+    if (!hasMeaningfulProgress(guest)) return null
+    return {
+      xp: typeof guest.xp === 'number' ? guest.xp : 0,
+      streak: typeof guest.streak === 'number' ? guest.streak : 0,
+    }
+  } catch {
+    return null
+  }
+}
+
+/** Pindahkan progres tamu ke akun yang login, lalu muat ulang store. */
+export function applyProgressRepair(): void {
+  const userId = getCurrentUserId()
+  if (!userId) return
+  moveGuestDataToUser(userId)
+  cached = null
+  emit()
+}
+
+/** Catat user menolak tawaran pindah progres (tidak ditanya lagi). */
+export function declineProgressRepair(): void {
+  const userId = getCurrentUserId()
+  if (!userId) return
+  declineRepairFlag(userId)
 }
 
 /* ------------------------------------------------------------------ */

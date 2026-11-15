@@ -1,8 +1,10 @@
 # Panduan Google OAuth dan Perbaikan Redirect Email Lolosin
 
 Kode di app sudah siap: tombol "Masuk dengan Google" ada di halaman
-masuk/daftar, dan semua email auth sudah mengarah balik ke
-`https://lolosin.netlify.app/#/auth`. Tapi fitur ini baru jalan setelah
+masuk/daftar, dan semua email auth dan login Google mengarah balik ke
+domain produksi `https://lolosin.netlify.app/` (tanpa rute hash,
+karena Supabase menitipkan token sesi di fragment URL dan rute hash
+akan merusak pembacaan token). Tapi fitur ini baru jalan setelah
 langkah dashboard di bawah selesai. Sampai langkah (c) dilakukan,
 tautan verifikasi email tetap mengarah ke localhost dan login Google
 belum bisa dipakai.
@@ -52,7 +54,11 @@ default localhost.
 1. Di dashboard Supabase proyek "lolosin", masuk ke
    **Authentication** lalu **URL Configuration**.
 2. Atur **Site URL** menjadi: `https://lolosin.netlify.app`
-3. Di **Redirect URLs**, tambahkan: `https://lolosin.netlify.app/#/auth`
+3. Tidak perlu menambah Redirect URL lagi: app mengarah balik ke
+   Site URL itu sendiri, dan Site URL selalu diizinkan. Bila dulu
+   sempat menambahkan `https://lolosin.netlify.app/#/auth` di sini,
+   entri itu tidak terpakai lagi dan boleh dihapus (dibiarkan pun
+   tidak merusak apa-apa).
 4. Klik **Save**.
 
 Setelah langkah ini, email konfirmasi baru akan berisi tautan ke

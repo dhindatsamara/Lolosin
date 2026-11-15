@@ -350,6 +350,21 @@ export function LeaderboardPage() {
               </div>
             )}
 
+            <Card className="mt-4 p-4">
+              <h3 className="font-display text-sm font-extrabold">
+                Hadiah juara mingguan
+              </h3>
+              <ul className="mt-2 flex flex-col gap-1 text-sm font-medium text-ink/70">
+                <li>Juara 1: premium 7 hari + lencana prestise</li>
+                <li>Juara 2: premium 5 hari + lencana prestise</li>
+                <li>Juara 3: premium 3 hari + lencana prestise</li>
+              </ul>
+              <p className="mt-2 text-xs leading-relaxed font-medium text-ink/60">
+                Juara per formasi dapat lencana prestise. Hadiah masuk
+                sebagai gift lewat notifikasi tiap Senin.
+              </p>
+            </Card>
+
             <p className="mt-3 text-xs leading-relaxed font-medium text-ink/60">
               Leaderboard dihitung dari simulasi CAT (110 soal). Tryout
               kilat tidak masuk ranking. Ranking reset tiap Senin.

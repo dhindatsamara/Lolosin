@@ -27,6 +27,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
+import { ConfirmModal } from '../components/quiz/ConfirmModal'
 import {
   ArrowLeftIcon,
   CheckIcon,
@@ -158,6 +159,7 @@ export function BenarSalahKilatPage() {
     correct: boolean
     points: number
   } | null>(null)
+  const [showEndConfirm, setShowEndConfirm] = useState(false)
 
   const endTimeRef = useRef<number | null>(null)
   const finishedRef = useRef(false)
@@ -460,7 +462,14 @@ export function BenarSalahKilatPage() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
       <header>
-        <div className="flex flex-wrap items-center justify-between gap-2">
+        <button
+          type="button"
+          onClick={() => setShowEndConfirm(true)}
+          className="text-sm font-semibold text-primary-700 hover:underline"
+        >
+          ← Akhiri sesi
+        </button>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
           <p className="kicker flex items-center gap-1.5">
             <TargetIcon width={16} height={16} />
             Benar/Salah Kilat
@@ -560,6 +569,20 @@ export function BenarSalahKilatPage() {
           </p>
         )}
       </div>
+
+      <ConfirmModal
+        open={showEndConfirm}
+        title="Akhiri sesi sekarang?"
+        body="Skor yang sudah kamu kumpulkan tetap tersimpan, dan XP-nya tetap masuk."
+        confirmLabel="Ya, akhiri"
+        cancelLabel="Lanjut main"
+        icon={<XIcon width={22} height={22} />}
+        onConfirm={() => {
+          setShowEndConfirm(false)
+          finishGame()
+        }}
+        onCancel={() => setShowEndConfirm(false)}
+      />
     </div>
   )
 }

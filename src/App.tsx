@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import type { User } from '@supabase/supabase-js'
 import { Layout } from './components/Layout'
 import { Button } from './components/ui/Button'
@@ -7,12 +7,19 @@ import { Card } from './components/ui/Card'
 import { ConfirmModal } from './components/quiz/ConfirmModal'
 import { CheckIcon, XIcon } from './components/icons'
 import {
+  ensureMyProfile,
   isEmailVerified,
   resendConfirmation,
   signOut,
   useAuthUser,
 } from './lib/auth'
-import { setStoreUserId } from './lib/store'
+import {
+  applyProgressRepair,
+  declineProgressRepair,
+  getProgressRepairOffer,
+  resolveAuth,
+  type ProgressRepairOffer,
+} from './lib/store'
 import AuthPage from './pages/AuthPage'
 import { BattlePage } from './pages/BattlePage'
 import { BelajarPage } from './pages/BelajarPage'
@@ -176,15 +183,56 @@ export default function App() {
   const { user, loading } = useAuthUser()
   const { pathname } = useLocation()
 
-  // Namespacing progres per user (v2.2.1): setiap user berubah
-  // (masuk, keluar, ganti akun), store beralih ke namespace user itu
-  // dan UI langsung me-render progres yang benar tanpa reload.
-  // Dependensi memakai id (string stabil), bukan objek user, supaya
-  // efek tidak jalan ulang saat Supabase me-refresh token.
+  // Namespacing progres per user (v2.2.1, diperbaiki v2.2.3): setiap
+  // user berubah (masuk, keluar, ganti akun), store beralih ke
+  // namespace user itu dan UI langsung me-render progres yang benar
+  // tanpa reload. Efek HANYA jalan setelah loading auth selesai:
+  // sebelumnya migrasi legacy jalan saat auth masih loading (user
+  // masih null) sehingga progres akun lama tersalin ke namespace
+  // tamu. Dependensi memakai id (string stabil), bukan objek user,
+  // supaya efek tidak jalan ulang saat Supabase me-refresh token.
   const userId = user?.id ?? null
   useEffect(() => {
-    setStoreUserId(userId)
-  }, [userId])
+    if (!loading) resolveAuth(userId)
+  }, [userId, loading])
+
+  // Tawaran pindah progres (v2.2.3, perbaikan korban bug migrasi
+  // v2.2.1): user yang login dengan namespace kosong sementara
+  // namespace tamu punya progres ditawari memindahkan progres itu
+  // ke akunnya. Sekali saja; menolak dicatat dan tidak ditanya lagi.
+  const [repairOffer, setRepairOffer] =
+    useState<ProgressRepairOffer | null>(null)
+  useEffect(() => {
+    if (!loading && user) {
+      setRepairOffer(getProgressRepairOffer())
+    } else {
+      setRepairOffer(null)
+    }
+  }, [user, loading])
+
+  // Gate lengkapi profil (v2.2.3): user yang login dan emailnya sudah
+  // terverifikasi tapi belum punya baris profiles (kasus utama: login
+  // Google pertama kali) diarahkan ke /auth, tempat AuthPage
+  // menampilkan form "Lengkapi profilmu". ensureMyProfile dipanggil
+  // dulu supaya user daftar email yang username-nya tersimpan di
+  // metadata langsung dibuatkan profilnya dan tidak diarahkan.
+  // Gagal jaringan bukan alasan mengarahkan (profil mungkin ada).
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (loading || !user || pathname === '/auth') return
+    if (!isEmailVerified(user)) return
+    let cancelled = false
+    void ensureMyProfile()
+      .then((profile) => {
+        if (!cancelled && !profile) navigate('/auth', { replace: true })
+      })
+      .catch(() => {
+        // Gagal cek profil: biarkan user tetap di halaman ini.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [user, loading, pathname, navigate])
 
   // Gate verifikasi email: user login yang emailnya belum terkonfirmasi
   // tidak bisa memakai app apa pun kecuali halaman /auth (supaya tetap
@@ -242,6 +290,27 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
+      )}
+      {/* Tawaran pindah progres tamu ke akun (v2.2.3). Hanya di-render
+          saat ada tawaran, supaya elemen dialog tertutup tidak menumpuk
+          di DOM dan mengganggu pencari dialog lain. */}
+      {repairOffer !== null && (
+        <ConfirmModal
+          open
+          title="Pindahkan progres lamamu?"
+          body={`Kami menemukan progres (${repairOffer.xp} XP, streak ${repairOffer.streak} hari) yang tersimpan di browser ini sebelum perbaikan akun. Pindahkan ke akunmu?`}
+          confirmLabel="Ya, pindahkan"
+          cancelLabel="Tidak, mulai dari nol"
+          icon={<CheckIcon width={22} height={22} />}
+          onConfirm={() => {
+            applyProgressRepair()
+            setRepairOffer(null)
+          }}
+          onCancel={() => {
+            declineProgressRepair()
+            setRepairOffer(null)
+          }}
+        />
       )}
     </>
   )

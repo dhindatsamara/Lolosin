@@ -17,10 +17,15 @@
  * ensureMyProfile supaya pendaftaran lama tidak rusak.
  *
  * Catatan redirect: semua email auth dan login Google memakai
- * AUTH_REDIRECT_URL di bawah. Supabase tetap memakai Site URL dari
- * dashboard sebagai fallback, jadi Site URL harus diatur ke domain
- * produksi (lihat docs/PANDUAN-GOOGLE-OAUTH.md). Tanpa itu, tautan
- * verifikasi email bisa mengarah ke localhost.
+ * AUTH_REDIRECT_URL di bawah, yaitu domain produksi TANPA rute hash.
+ * Supabase mengembalikan sesi lewat fragment URL
+ * (`#access_token=...`); bila redirect-nya berisi rute hash
+ * (`/#/auth`), hasilnya URL ber-hash ganda yang tidak bisa dibaca
+ * client Supabase, sehingga user kembali ke halaman daftar dalam
+ * keadaan belum login (bug yang dilaporkan 2026-11-15). Site URL di
+ * dashboard harus diatur ke domain produksi yang sama (lihat
+ * docs/PANDUAN-GOOGLE-OAUTH.md). Tanpa itu, tautan verifikasi email
+ * bisa mengarah ke localhost.
  */
 import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
 import { useEffect, useState } from 'react'
@@ -36,8 +41,13 @@ export interface Profile {
   is_premium?: boolean
 }
 
-/** URL kembali setelah verifikasi email dan login Google. */
-export const AUTH_REDIRECT_URL = 'https://lolosin.netlify.app/#/auth'
+/**
+ * URL kembali setelah verifikasi email dan login Google: domain
+ * produksi tanpa rute hash (lihat catatan redirect di atas). User
+ * mendarat di beranda dalam keadaan login; user Google baru yang
+ * belum punya profil diarahkan App ke /auth untuk melengkapi username.
+ */
+export const AUTH_REDIRECT_URL = 'https://lolosin.netlify.app/'
 
 /** Pesan saat Supabase belum terkonfigurasi. */
 export const AUTH_NOT_CONFIGURED_MESSAGE = 'Fitur akun belum aktif'
@@ -277,8 +287,11 @@ export async function signIn(
 
 /**
  * Masuk dengan Google (OAuth). Browser dialihkan ke Google, lalu
- * kembali ke AUTH_REDIRECT_URL; Supabase menukar code jadi session
- * secara otomatis dan onAuthStateChange memberi tahu app.
+ * kembali ke AUTH_REDIRECT_URL (beranda); Supabase menitipkan token
+ * sesi di fragment URL dan client membacanya otomatis, lalu
+ * onAuthStateChange memberi tahu app. User Google baru belum punya
+ * profil/username, jadi App mengarahkan mereka ke /auth untuk
+ * melengkapi profil sebelum memakai app.
  *
  * Provider Google harus diaktifkan dulu di dashboard Supabase
  * (lihat docs/PANDUAN-GOOGLE-OAUTH.md). Bila belum aktif, Supabase

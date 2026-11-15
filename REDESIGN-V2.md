@@ -649,3 +649,52 @@ maskable) mengikuti. 'Marah' tetap hanya untuk streak putus. Build
 lolos; PNG logo email diregenerasi dari SVG baru; tangkapan layar
 dashboard terverifikasi sesuai referensi. Perubahan visual saja
 (SVG + Mascot.tsx), tanpa perubahan logika.
+
+## v2.2.3 — Perbaikan progres tamu, login Google, Akhiri sesi game (2026-11-15)
+
+Tiga laporan user, satu build:
+- BUG MIGRASI PROGRES (dilaporkan user: riwayat masih tampil padahal
+  belum login). Akar masalah: migrasi legacy key jalan saat store
+  pertama dimuat, padahal auth Supabase masih loading (user masih
+  null), sehingga progres akun lama tersalin ke namespace TAMU dan key
+  legacy-nya terhapus. Akun yang login lalu mulai dari 0, sementara
+  tampilan tamu masih menunjukkan progres lama. Perbaikan: migrasi
+  ditahan sampai status auth diketahui (gate `authResolved` di
+  storage.ts, `resolveAuth` di App hanya dipanggil setelah loading
+  auth selesai). Perbaikan untuk yang sudah terkena: saat user login
+  dengan namespace kosong sementara namespace tamu punya progres,
+  muncul tawaran satu kali "Pindahkan progres lamamu?" (pindah semua
+  key per-user tamu ke akun, lalu tamu mulai dari nol; menolak
+  dicatat dan tidak ditanya lagi).
+- BUG LOGIN GOOGLE (dilaporkan user: login berhasil tapi kembali ke
+  menu daftar, tetap belum login). Akar masalah: redirect OAuth
+  `https://lolosin.netlify.app/#/auth` berisi rute hash; Supabase
+  menitipkan token sesi di fragment URL, sehingga hasilnya URL
+  ber-hash ganda yang tidak bisa dibaca client Supabase dan sesi
+  tidak pernah terbentuk. Perbaikan: `AUTH_REDIRECT_URL` jadi domain
+  polos tanpa rute hash; user mendarat di beranda dalam keadaan
+  login. Gate baru di App: user terverifikasi tanpa profil diarahkan
+  ke /auth untuk melengkapi username (kasus login Google pertama
+  kali); `ensureMyProfile` dipanggil dulu supaya user daftar email
+  langsung dibuatkan profil dari metadata. Panduan dashboard
+  diperbaiki (tidak perlu entri Redirect URL tambahan).
+- GAME TIDAK BISA DIAKHIRI: Kuis Kilat dan Benar/Salah Kilat tidak
+  punya tombol akhiri sesi; user harus menunggu 60 detik penuh.
+  Ditambah tautan "Akhiri sesi" di arena kedua game + modal
+  konfirmasi (skor dan XP tetap tersimpan, sama seperti waktu habis).
+- Copy hadiah juara mingguan (keputusan user 2026-11-15): juara 1
+  premium 7 hari, juara 2 lima hari, juara 3 tiga hari, semua plus
+  lencana prestise; juara per formasi badge saja. Ditulis di landing
+  (bento leaderboard + seksi Free vs Premium) dan kartu baru di
+  halaman Peringkat. Draf otomatisasi diperbarui mengikuti keputusan
+  ini (hadiah 7/5/3, per-formasi tanpa premium, gift via notifikasi,
+  kode klaim dev, tryout akbar sebagai cakupan tambahan).
+- Pelajaran QA: server `vite preview` harus dijalankan dengan
+  `VITE_BASE_PATH=/Lolosin/` yang sama seperti build, kalau tidak
+  server berjalan dengan base `/` dan semua aset jatuh ke fallback
+  SPA (index.html). Build QA utama memakai env placeholder
+  (Supabase tidak terkonfigurasi, mode lokal, dashboard langsung
+  tampil); build fake 4174 memakai URL + key palsu.
+- QA: dialog perbaikan progres hanya di-render saat ada tawaran,
+  supaya elemen dialog tertutup tidak menumpuk di DOM dan merusak
+  pencari `dialog`/`form button[type=submit]` di QA.

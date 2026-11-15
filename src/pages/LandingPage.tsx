@@ -508,8 +508,9 @@ export function LandingPage() {
               </h3>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-ink/70">
-              Adu skor simulasi CAT sama pejuang lain. Juara 1 sampai 3 tiap
-              minggu dapat akses premium gratis.
+              Adu skor simulasi CAT sama pejuang lain. Juara 1 dapat
+              premium 7 hari, juara 2 premium 5 hari, juara 3 premium 3
+              hari, semuanya plus lencana prestise.
             </p>
             <ol className="mt-4 space-y-2">
               {DEMO_PODIUM.map(({ nama, skor }, i) => (
@@ -828,8 +829,9 @@ export function LandingPage() {
                   height={18}
                   className="mt-0.5 shrink-0 text-primary-600"
                 />
-                Juara 1 sampai 3 leaderboard mingguan dapat akses premium
-                gratis, plus lencana prestise yang bisa dipamerin
+                Juara leaderboard mingguan dapat premium (juara 1 tujuh
+                hari, juara 2 lima hari, juara 3 tiga hari), plus lencana
+                prestise yang bisa dipamerin
               </li>
             </ul>
             <Link to="/leaderboard" className="mt-6 block">
