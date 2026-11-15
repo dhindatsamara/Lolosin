@@ -15,6 +15,7 @@ import { PredictionPanel } from '../components/PredictionPanel'
 import { LandingPage } from './LandingPage'
 import {
   BookIcon,
+  BriefcaseIcon,
   CheckIcon,
   ChevronRightIcon,
   ClockIcon,
@@ -368,6 +369,42 @@ function GameTeaserCard() {
 }
 
 /**
+ * Teaser formasi CPNS (v2.3): CPNS 2026 dibuka November ini. Kartu
+ * mengarah ke menu browser formasi. Label BETA + "Data contoh"
+ * ditampilkan jujur di sini juga, bukan cuma di halaman formasinya.
+ */
+function FormasiTeaserCard() {
+  return (
+    <Card className="p-5">
+      <div className="flex items-center gap-2">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-tiu-soft text-tiu">
+          <BriefcaseIcon width={20} height={20} />
+        </span>
+        <h2 className="font-display text-lg font-extrabold">
+          Cari formasi CPNS
+        </h2>
+        <Badge tone="amber">BETA</Badge>
+      </div>
+      <p className="mt-3 text-sm leading-relaxed text-ink/70">
+        CPNS 2026 dibuka November ini, sekitar 160 ribu formasi. Intip
+        jabatan yang cocok dengan jurusanmu, filter berdasarkan wilayah,
+        gaji, dan instansi.
+      </p>
+      <p className="mt-2 text-xs leading-relaxed font-semibold text-ink/50">
+        Menu masih beta, datanya masih contoh. Data resmi menyusul begitu
+        BKN mengumumkan.
+      </p>
+      <Link to="/formasi" className="mt-4 block">
+        <Button fullWidth variant="outline">
+          Lihat formasi
+          <ChevronRightIcon width={16} height={16} />
+        </Button>
+      </Link>
+    </Card>
+  )
+}
+
+/**
  * Kartu "Bujuk Osi": tampil saat streak putus dan masih bisa dibujuk
  * kembali (mekanik "Bujuk Osi", v2.2.1). Sebelum dibujuk: jelaskan
  * streak yang putus dan tawarkan tombol Bujuk Osi (persenjatai revive
@@ -656,10 +693,11 @@ function DashboardPage() {
         <DailyMissions />
       </div>
 
-      {/* Teaser peringkat minggu ini + teaser game */}
+      {/* Teaser peringkat minggu ini + teaser game + teaser formasi */}
       <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
         <LeaderboardTeaser />
         <GameTeaserCard />
+        <FormasiTeaserCard />
       </div>
 
       {/* Ulas soal salah + fokus hari ini */}

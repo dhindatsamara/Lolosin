@@ -24,6 +24,7 @@ import AuthPage from './pages/AuthPage'
 import { BattlePage } from './pages/BattlePage'
 import { BelajarPage } from './pages/BelajarPage'
 import { BenarSalahKilatPage } from './pages/BenarSalahKilatPage'
+import { FormasiPage } from './pages/FormasiPage'
 import { HomePage } from './pages/HomePage'
 import { KartuKilatPage } from './pages/KartuKilatPage'
 import { KuisKilatPage } from './pages/KuisKilatPage'
@@ -270,6 +271,7 @@ export default function App() {
             <Route path="tryout" element={<TryoutPage />} />
             <Route path="tryout/hasil" element={<TryoutHasilPage />} />
             <Route path="leaderboard" element={<LeaderboardPage />} />
+            <Route path="formasi" element={<FormasiPage />} />
             <Route path="auth" element={<AuthPage />} />
             <Route path="profil" element={<ProfilPage />} />
             <Route path="main" element={<MainHubPage />} />

@@ -698,3 +698,51 @@ Tiga laporan user, satu build:
 - QA: dialog perbaikan progres hanya di-render saat ada tawaran,
   supaya elemen dialog tertutup tidak menumpuk di DOM dan merusak
   pencari `dialog`/`form button[type=submit]` di QA.
+
+## v2.3: Menu browser formasi CPNS (beta, data contoh nasional) (2026-11-15)
+
+Keputusan user 2026-11-15 12:59: bangun UI sekarang dengan data
+contoh berlabel jelas (versi beta), cakupan nasional, karena rincian
+formasi resmi 2026 belum diumumkan BKN saat riset dilakukan (riset di
+FORMASI-RESEARCH.md: CPNS 2026 dibuka November 2026, sekitar 160 ribu
+formasi, tanggal pasti belum diumumkan; portal resmi hanya
+https://sscasn.bkn.go.id; waspada situs palsu typo sacasn/ssacsn/scasn
+yang mencuri NIK dan nomor KK).
+
+- DATA CONTOH: 34 formasi di src/data/formasi-contoh.ts, lintas
+  instansi pusat (Kemenkeu, Mahkamah Agung, Kemenkes, Kejaksaan,
+  Polri, BKN, KemenPANRB, Komdigi, ATR/BPN, Kemenag, PUPR, BPS,
+  Kemendiktisaintek) dan daerah (Pemprov NTB, Pemkab Lombok Barat,
+  Pemprov Jabar/Jatim/DKI/Sulsel/Sumut, Pemkot Yogyakarta), 9
+  provinsi. Tiap item: instansi, jabatan, kualifikasi, unit
+  penempatan, provinsi, kota/kab, kuota, rentang gaji, jenis
+  instansi. Flag IS_DATA_CONTOH = true. TIDAK ADA tautan PDF
+  pengumuman palsu; semua tautan mengarah ke halaman Formasi SSCASN.
+- JALUR PENGGANTIAN DATA RESMI: begitu BKN mengumumkan rincian
+  formasi di menu Informasi Formasi SSCASN (tidak ada API publik,
+  pengambilan manual per instansi), ganti isi FORMASI_CONTOH dengan
+  data resmi, ubah IS_DATA_CONTOH jadi false, dan banner "Data
+  contoh" hilang sendiri. Skema Formasi mengikuti kolom tabel SSCASN,
+  jadi komponen tidak perlu diubah.
+- HALAMAN /formasi (FormasiPage, bisa diakses tamu tanpa login):
+  banner BETA + "Data contoh" yang eksplisit (teks tegas: ini bukan
+  formasi resmi 2026; data resmi menyusul begitu BKN mengumumkan)
+  plus peringatan situs palsu dan tautan SSCASN; filter pencarian
+  teks, provinsi, kualifikasi, gaji minimal, instansi, jenis
+  instansi; jumlah hasil + tombol reset; kartu per formasi (jabatan,
+  instansi, penempatan, kuota, rentang gaji singkat, kualifikasi)
+  dengan detail expand (unit penempatan, rentang gaji lengkap,
+  tautan SSCASN); empty state ramah; responsif, tanpa overflow.
+- INTEGRASI: route "formasi" di App; "Formasi" ditambah ke nav
+  desktop (7 item) dan footer. Bottom nav mobile TETAP 6 item
+  (Formasi tidak dimasukkan, grid sudah penuh); di mobile Formasi
+  terjangkau lewat footer dan kartu teaser di dashboard logged-in
+  (FormasiTeaserCard di HomePage, berlabel BETA + "Data contoh").
+  Nav desktop dirampingkan sedikit (px-2.5) supaya 7 item tetap
+  muat satu baris di 1280px.
+- QA: seksi "Formasi" ditambahkan ke qa.mjs (halaman termuat,
+  banner beta + data contoh, tiap filter berfungsi dan jumlah hasil
+  berubah, empty state, reset, detail expand, tanpa overflow desktop
+  + mobile, tautan nav/footer/dashboard); cek top nav diperbarui
+  dari 6 jadi 7 item (Formasi di posisi terakhir); cek bottom nav
+  mobile tetap 6 item.

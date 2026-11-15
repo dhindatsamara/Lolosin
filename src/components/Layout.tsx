@@ -8,6 +8,7 @@ import { AuthStatus } from './AuthStatus'
 import { CelebrationHost } from './gamifikasi/Celebration'
 import {
   BookIcon,
+  BriefcaseIcon,
   FlameIcon,
   GamepadIcon,
   HomeIcon,
@@ -26,6 +27,17 @@ const NAV_ITEMS = [
   { to: '/leaderboard', label: 'Peringkat', icon: RankingIcon, end: false },
 ]
 
+/**
+ * Navigasi desktop = NAV_ITEMS + Formasi. Formasi sengaja TIDAK masuk
+ * bottom nav mobile (v2.3): grid bawah sudah penuh 6 item, dan QA
+ * mengunci jumlahnya. Di mobile, Formasi tetap terjangkau lewat
+ * footer dan kartu teaser di dashboard.
+ */
+const NAV_ITEMS_DESKTOP = [
+  ...NAV_ITEMS,
+  { to: '/formasi', label: 'Formasi', icon: BriefcaseIcon, end: false },
+]
+
 function LogoMark() {
   return (
     <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-primary-100">
@@ -41,6 +53,7 @@ const FOOTER_LINKS = [
   { to: '/latihan', label: 'Latihan' },
   { to: '/tryout', label: 'Tryout' },
   { to: '/leaderboard', label: 'Peringkat' },
+  { to: '/formasi', label: 'Formasi' },
 ] as const
 
 /** Ikon chevron atas/bawah inline (gaya Lucide, seperti icons.tsx):
@@ -185,19 +198,20 @@ export function Layout() {
             </span>
           </NavLink>
 
-          {/* Navigasi atas (desktop) */}
+          {/* Navigasi atas (desktop): 7 item, termasuk Formasi (v2.3).
+              Padding dirampingkan supaya muat satu baris di 1280px. */}
           <nav
             aria-label="Navigasi utama"
             className="hidden items-center gap-1 lg:flex"
           >
-            {NAV_ITEMS.map(({ to, label, end }) => (
+            {NAV_ITEMS_DESKTOP.map(({ to, label, end }) => (
               <NavLink
                 key={to}
                 to={to}
                 end={end}
                 className={({ isActive }) =>
                   cx(
-                    'rounded-lg px-3 py-2 text-[15px] font-semibold transition-colors',
+                    'rounded-lg px-2.5 py-2 text-[15px] font-semibold transition-colors',
                     isActive
                       ? 'bg-primary-50 text-primary-700'
                       : 'text-ink/65 hover:bg-ink/5 hover:text-ink',
