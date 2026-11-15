@@ -16978,9 +16978,15 @@
    "E": "Hal semacam itu memang sudah menjadi tradisi yang tidak baik di lingkungan kerja mana pun."
   },
   "kunci": "C",
-  "pembahasan": "Saya mengetahui bahwa atasan Saya di kantor melakukan rekayasa laporan keuangan untuk kepentingan pribadi. Sikap Saya sebaiknya ... A. Hanya dalam hati saja Saya tidak menyetujui hal tersebut. Skor 3: Diam adalah tindakan dalam tingkatan paling rendah. B. Wajar karlena hal tersebut sering terjadi di kantor mana pun. Skor 1: Menganggap hal yang tidak baik menjadi suatu hal yang sudah wajar, semakin lama akan membuat Anda juga akan terdorong melakukannya. C. Tidak ingin terlibat dalam proses rekayasa tersebut dan sebisa mungkin mengingatkan bahwa hal itu tidak baik. Skor 5: Menunjukkan pribadi yang memiliki prinsip. D. Melaporkan atasan tersebut kepada pihak yang berwenang. Skor 4: Masih ada hal yang perlu dilengkapi sebelum melaporkan, yaitu adanya bukti, karena Jika tidak memiliki bukti maka termasuk fitnah. Risiko yang ditanggung adalah terkena pasal pencemaran nama baik. E. Hal semacam itu memang sudah menjadi tradisi yang tidak baik di lingkungan kerja mana pun. Skor 2:",
+  "pembahasan": "A (3 poin): Tidak menyetujui dalam hati saja berarti diam, dan diam adalah tindakan dalam tingkatan paling rendah.\n\nB (1 poin): Menganggap hal yang tidak baik menjadi suatu hal yang sudah wajar, semakin lama akan membuat Anda juga akan terdorong melakukannya.\n\nC (5 poin, terbaik): Tidak mau terlibat dan berani mengingatkan bahwa hal itu tidak baik menunjukkan pribadi yang memiliki prinsip.\n\nD (4 poin): Masih ada hal yang perlu dilengkapi sebelum melaporkan, yaitu adanya bukti, karena jika tidak memiliki bukti maka termasuk fitnah. Risiko yang ditanggung adalah terkena pasal pencemaran nama baik.\n\nE (2 poin): Mengetahui hal yang tidak baik apalagi terjadi di banyak tempat, tapi hanya menganggapnya tradisi, merupakan tindakan permisif.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 3,
+   "B": 1,
+   "C": 5,
+   "D": 4,
+   "E": 2
+  }
  },
  {
   "id": "materi-297",
@@ -16995,9 +17001,15 @@
    "E": "Berusaha semampunya untuk tidak melakukannya, namun jika ada kesempatan tidak apa-apa."
   },
   "kunci": "B",
-  "pembahasan": "Dalam suatu pengurusan administrasi atau surat izin di kantor tempat Saya bekerja, ternyata banyak pegawai yang merupakan rekan kerja Saya meminta uang tanda terima kasih atas pengurusan tersebut. Hal ini bertolak belakang dengan peraturan kantor bahwa setiap pegawai dilarang memungut upah atas kepengurusan surat. Tindakan Saya adalah ... A. Ikut melakukannya karena ternyata banyak rekan kerja yang melakukannya. Skor 1: Ikut melakukan tindakan tersebut menandakan Anda bukan pribadi yang baik. Tidak terlintas di benak sedikit pun, sehingga tidak ingin melakukannya sama sekali. Skor 5: Menunjukkan pribadi yang memiliki prinsip. Melakukannya hanya jika terpaksa membutuhkan uang tambahan untuk keperluan keluarga, sebab gaji kantor memang kecil. Skor 2: Alasan gaji kecil tidak dapat dibenarkan. Uang tambahan yang Anda dapatkan berasal dari sumber yang tidak baik. Terkadang saja melakukan hal tersebut, sebagai rasa solidaritas antarrekan kerja. Skor 4: Terkadang berawal dari solidaritas, Anda bisa menyelami atas dasar apa rekan-rekan kerja melakukan halitu. Barulah ambil cara agar bisa menyadarkan rekan-rekan agar meninggalkan hal yang tidak baik itu. Namun bukan berarti tindakan ini tanpa risiko jika Anda tidak mampu mengendalikan diri, karena Anda bisa terjerumus. E. Berusaha semampunya untuk tidak melakukannya, namun jika ada kesempatan tidak apa-apa. Skor 3: Usaha agar tidak melakukan hal tersebut sudah baik, namun kuatkan hati agar tidak tergoda. digunakan untuk mengukur tingkat kejujuran sesuai norma agama yang dianut. Hal ini terindikasi dari: » ketulusan hati Anda dalam perbuatan, “selalu berkata yang benar, “ tidak melakukan kecurangan, baik itu yang besar maupun yang kecil. Contoh kecurangan-kecurangan kecil seperti mencurangi waktu kerja dan mencurangi penggunaan fasilitas kantor. Sementara contoh kecurangan-kecurangan besar seperti korupsi, suap-menyuap, rekayasa kasus, menjual aset negara, mark-up nilai proyek, pemufakatan jahatan, dan lain-lain. Tips: » Ikuti gerakan pemerintah: Berani jujur itu hebat! - Biasakan berbuat jujur, karena hidup Anda akan lebih tenang. - Pahamilah jika Anda mulai tergoda melakukan kecurangan-kecurangan kecil, sering kali karena terbiasa maka muncul dorongan melakukan kecurangan-kecurangan besar. »- Kejujuran sangatlah penting, karena setiap tindakan pasti akan diminta pertanggungjawabannya baik selagi masih di dunia atau nanti jika sudah di akhirat. Contoh:",
+  "pembahasan": "A (1 poin): Ikut melakukan tindakan tersebut menandakan Anda bukan pribadi yang baik.\n\nB (5 poin, terbaik): Tidak terlintas sedikit pun untuk melakukannya menunjukkan pribadi yang memiliki prinsip.\n\nC (2 poin): Alasan gaji kecil tidak dapat dibenarkan. Uang tambahan yang Anda dapatkan berasal dari sumber yang tidak baik.\n\nD (4 poin): Terkadang berawal dari solidaritas, Anda bisa menyelami atas dasar apa rekan-rekan kerja melakukan hal itu. Barulah ambil cara agar bisa menyadarkan rekan-rekan agar meninggalkan hal yang tidak baik itu. Namun bukan berarti tindakan ini tanpa risiko jika Anda tidak mampu mengendalikan diri, karena Anda bisa terjerumus.\n\nE (3 poin): Usaha agar tidak melakukan hal tersebut sudah baik, namun kuatkan hati agar tidak tergoda.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 5,
+   "C": 2,
+   "D": 4,
+   "E": 3
+  }
  },
  {
   "id": "materi-298",
@@ -17012,9 +17024,15 @@
    "E": "Saya tidak akan melakukannya agar dinilai sebagai pegawai yang paling rajin oleh atasan."
   },
   "kunci": "D",
-  "pembahasan": "Hampir setiap hari, sebagian besar rekan kerja di kantor pulang lebih awal dari jam kerja yang seharusnya. Melihat hal tersebut, tindakan Saya adalah ... A. Saya melakukannya demi masih dianggap pertemanannya. Skor 3: Terkadang berawal dari solidaritas pertemanan, Anda bisa menyelami atas dasar apa rekan-rekan kerja melakukan hal itu. Barulah ambil cara agar bisa menyadarkan rekan-rekan agar meninggalkan hal yang tidak baik itu. Namun, bukan berarti tindakan ini tanpa risiko jika Anda tidak mampu mengendalikan diri, karena Anda bisa terjerumus. B. Sudah menjadi hal yang biasa karena terjadi hampir setiap hari dan banyak yang melakukannya sehingga mestinya bisa dimaklumi. Skor 1: Menganggap hal yang tidak baik menjadi suatu hal yang sudah wajar, semakin lama akan membuat Anda juga akan terdorong melakukannya. C. Banyak yang melakukannya sehingga tidak apa-apa jika Saya juga melakukannya. Skor 2: Banyak yang melakukan terkadang bukan menjadi alasan yang baik kita mengikuti tindakan mayoritas tersebut. Mestinya setiap tindakan tetap dipertimbangkan baik dan buruknya, bukan dari banyak atau sedikit pelakunya. D. Saya akan tetap mengikuti aturan yang berlaku sehingga pulang sesuai jam kerja. Skor 5: Pegawai yang baik akan selalu menjalankan aturan yang berlaku di tempatnya bekerja. E. Saya tidak akan melakukannya agar dinilai sebagai pegawai yang paling rajin oleh atasan. Skor 4: Menjadi pegawai yang baik memang suatu keharusan, namun hindari mengharapkan pamrih.",
+  "pembahasan": "A (3 poin): Terkadang berawal dari solidaritas pertemanan, Anda bisa menyelami atas dasar apa rekan-rekan kerja melakukan hal itu. Barulah ambil cara agar bisa menyadarkan rekan-rekan agar meninggalkan hal yang tidak baik itu. Namun, bukan berarti tindakan ini tanpa risiko jika Anda tidak mampu mengendalikan diri, karena Anda bisa terjerumus.\n\nB (1 poin): Menganggap hal yang tidak baik menjadi suatu hal yang sudah wajar, semakin lama akan membuat Anda juga akan terdorong melakukannya.\n\nC (2 poin): Banyak yang melakukan terkadang bukan menjadi alasan yang baik kita mengikuti tindakan mayoritas tersebut. Mestinya setiap tindakan tetap dipertimbangkan baik dan buruknya, bukan dari banyak atau sedikit pelakunya.\n\nD (5 poin, terbaik): Pegawai yang baik akan selalu menjalankan aturan yang berlaku di tempatnya bekerja.\n\nE (4 poin): Menjadi pegawai yang baik memang suatu keharusan, namun hindari mengharapkan pamrih.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 3,
+   "B": 1,
+   "C": 2,
+   "D": 5,
+   "E": 4
+  }
  },
  {
   "id": "materi-299",
@@ -17029,9 +17047,15 @@
    "E": "Segera meminta pertimbangan keluarga atau orang yang berpengalaman dalam hal tes CPNS."
   },
   "kunci": "A",
-  "pembahasan": "Suatu hari pada saat penerimaan CPNS, Saya dihubungi oleh seorang oknum yang mengaku salah satu panitia seleksi penerimaan CPNS. Dalam pembicaraan, tampaknya orang tersebut menawarkan bantuan agar bisa diterima menjadi PNS dengan cara memberikan sejumlah dana yang ditetapkan. Sikap Saya adalah ... A. Tanpa ragu, Saya menolaknya karena ingin diterima sebagai PNS dengan cara yang sah, dan resmi. Skor 5: Menunjukkan Anda adalah pribadi yang memiliki prinsip. B. Dihubungi oleh panitia seleksi penerimaan CPNS adalah momentum yang langka, maka Saya akan menerima tawaran tersebut. Apalagi persaingan tes CPNS terkenal sangat ketat. Skor 1: Panitia seleksi yang baik tentunya harus mengikuti aturan yang ada, yaitu tidak ada hubungan dengan peserta tes. Hubungan yang terjadi selama proses seleksi apalagi mengarah pada tindakan yang tidak baik maka bisa dipastikan itu hanya penipuan. Anda semestinya bisa berpikir karena pola ini sudah banyak terjadi, dan mengantisipasi hal-hal yang demikian meskipun tidak harus mengalami sendiri. C. Mempertimbangkan terlebih dahulu, jika ada waktu akan Saya komunikasikan dengan keluarga siapa tahu ada keluarga yang mau membantu mengenai dana tersebut. Skor 2: Berpikir sebelum bertindak sangat dianjurkan dalam hal ini. Pikirkan juga risiko dari tindakan yang akan Anda ambil, misalnya ada unsur penipuan dari orang yang menghubungi Anda, lilitan hutang karena bantuan dana, atau hidup menjadi tidak tenang. D. Pada tes CPNS yang Saya ikuti ini sebisa mungkin Saya lakukan dengan cara resmi terlebih dahulu. Skor 4: Jika hal ini adalah tindakan yang baru bisa Anda lakukan saat ini, tidak masalah. Ke depannya pikirkan lagi, jangan sampai niat yang tidak baik mengotori usaha Anda. E. Segera meminta pertimbangan keluarga atau orang yang berpengalaman dalam hal tes CPNS. Skor 3: Apabila tidak bisa memikirkan penyelesaian suatu masalah secara sendiri maka ada baiknya meminta pertimbangan dari orang lain yang dipercaya, tentunya memiliki keahlian di bidang yang Anda tanyakan.",
+  "pembahasan": "A (5 poin, terbaik): Menunjukkan Anda adalah pribadi yang memiliki prinsip.\n\nB (1 poin): Panitia seleksi yang baik tentunya harus mengikuti aturan yang ada, yaitu tidak ada hubungan dengan peserta tes. Hubungan yang terjadi selama proses seleksi apalagi mengarah pada tindakan yang tidak baik maka bisa dipastikan itu hanya penipuan. Anda semestinya bisa berpikir karena pola ini sudah banyak terjadi, dan mengantisipasi hal-hal yang demikian meskipun tidak harus mengalami sendiri.\n\nC (2 poin): Berpikir sebelum bertindak sangat dianjurkan dalam hal ini. Pikirkan juga risiko dari tindakan yang akan Anda ambil, misalnya ada unsur penipuan dari orang yang menghubungi Anda, lilitan hutang karena bantuan dana, atau hidup menjadi tidak tenang.\n\nD (4 poin): Jika hal ini adalah tindakan yang baru bisa Anda lakukan saat ini, tidak masalah. Ke depannya pikirkan lagi, jangan sampai niat yang tidak baik mengotori usaha Anda.\n\nE (3 poin): Apabila tidak bisa memikirkan penyelesaian suatu masalah secara sendiri maka ada baiknya meminta pertimbangan dari orang lain yang dipercaya, tentunya memiliki keahlian di bidang yang Anda tanyakan.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 5,
+   "B": 1,
+   "C": 2,
+   "D": 4,
+   "E": 3
+  }
  },
  {
   "id": "materi-300",
@@ -17046,9 +17070,15 @@
    "E": "Hal itu mutlak menjadi kekeliruan anak buah yang terbukti bersalah."
   },
   "kunci": "B",
-  "pembahasan": "Dalam suatu proyek kerja lapangan, saya diberi kepercayaan untuk memimpin sebuah tim. Pada akhir laporan kerja yang diberikan ternyata hasilnya mengecewakan. Setelah ditelusuri, salah satu anggota tim telah melakukan kesalahan maka ... A. Saya tidak dapat dipersalahkan dengan alasan apa pun. Skor 2: Sifat otoriter dalam kepemimpinan tidak akan bisa membuat kepemimpinan Anda berlangsung lama. B. Saya turut bertanggung jawab karena bagaimanapun juga saya adalah pimpinan proyek tersebut. Skor 5: Sebagai pimpinan proyek, sebaiknya selalu memantau dan mengamati perkembangan pekerjaan sehingga hal-hal yang sekiranya bisa mengganggu hasil pekerjaan maka sudah dapat tertangani sebelum telanjur terjadi. Seharusnya hal tersebut tidak termasuk dalam tanggung jawab Saya. Skor 1: Mengabaikan hal yang semestinya menjadi tugas seorang pemimpin adalah tindakan permisif. Saya akan menelusuri lebih lanjut, dan memaksa orang tersebut bertanggung jawab atas semuanya. Skor 4: Introspeksi ke dalam memang harus dilakukan, namun Anda selaku pimpinan tetap yang paling bertanggung jawab dan harus mampu memberikan pertanggungjawaban ke publik. Hal itu mutlak menjadi kekeliruan anak buah yang terbukti bersalah. Skor 3:",
+  "pembahasan": "A (2 poin): Sifat otoriter dalam kepemimpinan tidak akan bisa membuat kepemimpinan Anda berlangsung lama.\n\nB (5 poin, terbaik): Sebagai pimpinan proyek, sebaiknya selalu memantau dan mengamati perkembangan pekerjaan sehingga hal-hal yang sekiranya bisa mengganggu hasil pekerjaan maka sudah dapat tertangani sebelum telanjur terjadi.\n\nC (1 poin): Mengabaikan hal yang semestinya menjadi tugas seorang pemimpin adalah tindakan permisif.\n\nD (4 poin): Introspeksi ke dalam memang harus dilakukan, namun Anda selaku pimpinan tetap yang paling bertanggung jawab dan harus mampu memberikan pertanggungjawaban ke publik.\n\nE (3 poin): Setelah melakukan penelusuran dan menemukan anak buah yang melakukan kesalahan, bukan berarti melimpahkan seluruh pertanggungjawaban ke orang tersebut. Bagaimanapun semua juga turut andil atas kesalahan yang terjadi.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 2,
+   "B": 5,
+   "C": 1,
+   "D": 4,
+   "E": 3
+  }
  },
  {
   "id": "materi-301",
@@ -17063,9 +17093,15 @@
    "E": "Tetap bertanggung jawab dengan hasil apa pun, dan mencari solusi dari masalah tersebut."
   },
   "kunci": "E",
-  "pembahasan": "Biasanya, ketika muncul suatu masalah dalam pekerjaan yang ada kaitannya dengan kewajiban Saya, tindakan yang sering Saya lakukan adalah ... A. Langsung mencari kambing hitam penyebab masalah, agar beban Saya lebih ringan. Skor 2: Mengalihkan masalah ke orang lain bukanlah hal yang baik karena bisa menjadi fitnah. B. Mencari tahu apakah ada orang/pihak lain yang juga ikut bersalah dalam masalah tersebut, agar beban Saya lebih ringan. Skor 4: Introspeksi diri perlu dilakukan, namun perlu diingat bahwa yang paling harus bertanggung jawab adalah diri Anda karena menjadi yang utama dalam hal tersebut. C. Membiarkan masalah terus berlangsung, nanti juga akan selesai dengan sendirinya. Skor 1: Merupakan tindakan yang mengabaikan. Apabila hal ini terus Anda lakukan maka tidak akan terjadi perubahan dalam diri Anda maupun lingkungan. D. Seharusnya ada orang lain yang membantu menyelesaikan hal ini sebagai sikap empati. Skor 3: Anda tidak bisa mengharapkan orang lain selalu berempati dengan Anda. Masing-masing orang pastinya memiliki kesibukan sendiri sehingga mesti melihat situasi dan kondisi sebelumnya, karena apabila tidak mengetahui situasi dan kondisi bisa saja menjadi fitnah. E. Tetap bertanggung jawab dengan hasil apa pun, dan mencari solusi dari masalah tersebut. Skor 5: Menunjukkan bahwa Anda paham betul aturan mainnya. Aspek kemampuan beradaptasi juga diuji dalam tes TKP CPNS karena memiliki tujuan untuk mengukur tingkat kedewasaan Anda dalam menyesuaikan diri. Indikasinya adalah mampu beradaptasi dengan segala bentuk penyesuaian diri, seperti beradaptasi dengan lingkungan yang baru, suasana baru, rekan kerja baru, atasan baru, peraturan baru, dan hal lainnya yang berbeda dari yang biasa dialami: menyukai perubahan sehinggatidak takut lagi dengan perubahan: menjadi pribadi yang selalu berpikiran maju: mau belajar hal-hal yang baru. Kemampuan beradaptasi seseorang sangatlah beragam. Oleh karena itu, beberapa tips berikut bisa dicoba dalam rangka melatih kemampuan beradaptasi Anda. Tips: - Pahamilah bahwa segala sesuatu cepat atau lambat pasti akan mengalami perubahan. Berkompromilah dengan perubahan yang ada dalam hal kebaikan. Biasakanlah untuk selalu dapat menyesuaikan diri dengan lingkungan yang baru. Berlatihlah untuk senantiasa memperbaiki diri agar selalu lebih baik. Amatilah perubahan-perubahan di sekitar lingkungan Anda untuk mengoptimalkan prestasi. Contoh:",
+  "pembahasan": "A (2 poin): Mengalihkan masalah ke orang lain bukanlah hal yang baik karena bisa menjadi fitnah.\n\nB (4 poin): Introspeksi diri perlu dilakukan, namun perlu diingat bahwa yang paling harus bertanggung jawab adalah diri Anda karena menjadi yang utama dalam hal tersebut.\n\nC (1 poin): Merupakan tindakan yang mengabaikan. Apabila hal ini terus Anda lakukan maka tidak akan terjadi perubahan dalam diri Anda maupun lingkungan.\n\nD (3 poin): Anda tidak bisa mengharapkan orang lain selalu berempati dengan Anda. Masing-masing orang pastinya memiliki kesibukan sendiri sehingga mesti melihat situasi dan kondisi sebelumnya, karena apabila tidak mengetahui situasi dan kondisi bisa saja menjadi fitnah.\n\nE (5 poin, terbaik): Tetap bertanggung jawab dengan hasil apa pun dan mencari solusi dari masalah menunjukkan bahwa Anda paham betul aturan mainnya.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 2,
+   "B": 4,
+   "C": 1,
+   "D": 3,
+   "E": 5
+  }
  },
  {
   "id": "materi-302",
@@ -17097,9 +17133,15 @@
    "E": "Pasrah dengan keadaan karena yang akan terjadi biarlah terjadi."
   },
   "kunci": "D",
-  "pembahasan": "Berita di stasiun-stasiun televisi nasional sedang hangat membicarakan kondisi perekonomian Indonesia saat ini. Sampai-sampai di setiap tayangan talk show selalu menghadirkan pengamat ekonomi dengan prediksi-prediksinya bahwa bulan depan akan terjadi inflasi besar di Indonesia. Hal ini membuat saya menjadi ... A. Tidak mempercayai prediksi tersebut karena prediksi yang buruk seperti itu tidak perlu dipercayai. Skor 3: Tidak mempercayai prediksi boleh saja, namun perlu dipertimbangkan atau buatlah perencanaan seandainya hal itu terjadi. B. Susah tidur memikirkan keadaan ke depan yang berat. Skor 4: Masa depan memang perlu setiap malam direncanakan, namun harus sesuai dengan porsinya dan tidak berlebihan. C. Depresi karena inflasi erat kaitannya dengan kenaikan harga barang. Skor 1: Menunjukkan hidup tanpa perencanaan, tidak dapat beradaptasi dengan baik. D. Berhati-hati dan dalam membelanjakan uang. Skor 5: Merupakan hal yang bijak. berhemat E. Pasrah dengan keadaan karena yang biarlah terjadi. Skor 2: Menunjukkan hidup tanpa peakan terjadi rencanaan, cara beradaptasi paling bawah. Ketika seseorang menghadapi situasi tertentu, apalagi situasi yang tidak disukai maka cenderung emosinya akan muncul. Pada kondisi itu, orang tersebut sedang diuji aspek pengendalian diri. Oleh karena itu pada tes TKP CPNS, aspek pengendalian diri juga diujikan dengan untuk tujuan mengukur tingkat kedewasaan seseorang daam mengontrol emosinya ketika menghadapi situasi tertentu yang tidak disukainya. Sikap seseorang yang » memiliki second opinion atau pilihan Tips: . Pa d terhindar d ki .” Apabila Anda ingin meluapca angan agar terhindar dari sikap kan emosi, maka pilihlah emosi yang merusak. kegiatan positif yang mampu menyalurkan emosi Anda contohnya olahraga. Beberapametode pengendalian diri yang dapat dilakukan adalah puasa, yoga, atau meditasi. Anjuran berpuasa dapat diikuti oleh semua agama, karena dapat diambil manfaatnya dari segi kesehatan seperti men-stabilkan gula darah. Dari sigi psikis, puasa dikenal mampu mendidik agar jadi lebih sabar, lebih tahan banting terhadap masalah, dan lebih kuat mengendalikan amarah serta hawa nafsu yang merusak. Yoga atau meditasi dikenal mampu melatih ketenangan batin, dan berpikir jernih. Pahamilah bahwa saat Anda menghadapi cobaan, maka kesabaran adalah kunci suksesnya. memiliki kemampuan pengendalian diri terindikasi dari: berpikiran terbuka: kedewasaan dalam bersikap: senang berinteraksi, dan memiliki interaksi sosial yang baik: mampu berkomunikasi dengan baik: Setiap orang pastinya akan bertambah tua, namun tidak setiap orang mampu bertambah dewasa. Tidak bisa dimungkiri, aspek pengendalian diri merupakan salah satu inti kedewasaan seseorang. Contoh:",
+  "pembahasan": "A (3 poin): Tidak mempercayai prediksi boleh saja, namun perlu dipertimbangkan atau buatlah perencanaan seandainya hal itu terjadi.\n\nB (4 poin): Masa depan memang perlu direncanakan, namun harus sesuai dengan porsinya dan tidak berlebihan.\n\nC (1 poin): Menunjukkan hidup tanpa perencanaan, tidak dapat beradaptasi dengan baik.\n\nD (5 poin, terbaik): Berhati-hati dan berhemat dalam membelanjakan uang merupakan hal yang bijak.\n\nE (2 poin): Menunjukkan hidup tanpa perencanaan, cara beradaptasi paling bawah.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 3,
+   "B": 4,
+   "C": 1,
+   "D": 5,
+   "E": 2
+  }
  },
  {
   "id": "materi-304",
@@ -17114,9 +17156,15 @@
    "E": "Keliru menulis gelar bukanlah masalah yang besar bagi saya."
   },
   "kunci": "C",
-  "pembahasan": "Bila ada rekan kerja yang salah menuliskan gelar Saya di dalam surat, maka Saya ... A. Tersinggung karena gelar tersebut Saya peroleh dengan susah payah dan merupakan kehormatan Saya. Skor 2: Gelar ' memang diperoleh dengan cara yang tidak mudah, kehormatan juga perlu dijaga, dan tersinggung adalah hal yang wajar. Biasa saja, tidak tersinggung sama sekali. Skor 3: Namun perlu diwaspadai karena bisa mengarah ke sifat permisif. Saya mengingatkan kekeliruannya dengan baik-baik. Skor 5: Menunjukkan sikap yang bijaksana dan mampu mengendalikan diri dengan baik. Saya mengingatkannya dengan tegas agar dia jera. Skor 1: Mengingatkan kekeliruan orang lainmemang diperlukan. Namun, pribadi yang mempunyai pengendalian diri yang baik tidak akan menunjukkan secara terang-terangan di depan umum. Dirinya akan memilih cara mengungkapkan yang lebih halus. Keliru menulis gelar bukanlah masalah yang besar bagi saya. Skor 4:",
+  "pembahasan": "A (2 poin): Gelar memang diperoleh dengan cara yang tidak mudah, kehormatan juga perlu dijaga, dan tersinggung adalah hal yang wajar.\n\nB (3 poin): Biasa saja dan tidak tersinggung itu baik, namun perlu diwaspadai karena bisa mengarah ke sifat permisif.\n\nC (5 poin, terbaik): Menunjukkan sikap yang bijaksana dan mampu mengendalikan diri dengan baik.\n\nD (1 poin): Mengingatkan kekeliruan orang lain memang diperlukan. Namun, pribadi yang mempunyai pengendalian diri yang baik tidak akan menunjukkan secara terang-terangan di depan umum. Dirinya akan memilih cara mengungkapkan yang lebih halus.\n\nE (4 poin): Kekeliruan tersebut masih bisa diperbaiki dengan cara-cara yang baik sehingga tidak perlu dianggap sebagai masalah besar karena masih tergolong mudah ditangani.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 2,
+   "B": 3,
+   "C": 5,
+   "D": 1,
+   "E": 4
+  }
  },
  {
   "id": "materi-305",
@@ -17131,9 +17179,15 @@
    "E": "Memarahi semua pihak yang juga ikut bertanggung jawab akan hal ini sampai rasa panas di hati reda."
   },
   "kunci": "B",
-  "pembahasan": "Rumah impian yang Saya idamtelah bangunannya. Rencananya mingidamkan selesai pemgu depan Saya ingin me-ngadakan acara syukuran atas selesainya pembangunan tersebut dengan acara makan-makan. Namun ada hal kecil yang merusak rencana tersebut, maka Saya akan ... sedih dan sekali, karena hal kecil mampu A. Sangat marah merusak rencana besar yang telah Saya atur. Skor 2: Termasuk sikap yang tidak dapat mengendalikan diri dengan baik. B. Melakukanevaluasi menyeluruh. Skor 5: Menunjukkan sikap yang bijaksana, mampu mengendalikan diri dan berpikir jernih. C. Tidak bisa dimungkiri, tentu saja saya marah. Skor 4: Marah adalah hal yang wajar. Pada saat orang marah maka terkumpullah energi. Energi ini perlu disalurkan. Orang dengan pengendalian diri yang baik tentunya akan menyalurkan energi ini ke hal-hal yang positif seperti olahraga. D. Menarik diri darirencanakarena butuh waktu menenangkan diri. Skor 3: Mengambil sedikit waktu untuk menenangkan diri atau berpikir ada baiknya, namun jangan terlalu lama, tanpa permisi sehingga terkesan lari dari masalah. E. Memarahi semua pihak yang juga ikut bertanggung jawab akan hal ini sampai rasa panas di hati reda. Skor 1: Menunjukkan sikap yang tidak dapat mengendalikan diri dengan baik. Tidak setiap pegawai memiliki semangat untuk terus berprestasi. Sebagian besar hanya berkeinginan bekerja sesuai standar. Menjadi seorang CPNS diperlukan sifat yang haus akan prestasi sehingga dalam tes TKP CPNS terdapat soal yang mengujikan tentang aspek semangat berprestasi. Hal ini bertujuan untuk mengukur tingkat motivasi serta kekuatan tekad seseorang dalam melaksanakan tugasnya dengan baik dan meraih target-target tertentu. Pencapaian target yang diharapkan tentunya hasil yang signifikan kenaikannya dan penting. CPNS yang memiliki karakter demikian, biasanya terindikasi: «akan meraih kesuksesan karier yang gemilang: » hampirselalumendapatkan promosi kenaikan jabatan dari atasan atas kinerjanya: - mendapatkan kenaikan jabatan dengan cepat karena prestasinya: . gemar belajar hal-hal yang baru: “ pikirannya terbuka. Tips: - Selalu berpikir positif. - Berusahalah untuk menjadi yang terbaik. Minimal apabila tidak tercapai, Anda sudah memiliki niat menjadi baik. Setelah itu, tetap menjaga kualitas kerja. - Jauhkan pikiran dari keinginan untuk memperoleh promosi dengan cara-cara yang tidak baik karena hal itu akan mematikan daya inovasi, pikiran, dan semangat berprestasi Anda. - Masuk dalam kumpulan orang-orang baik karena akan terbiasa dengan kultur yang baik pula. - Bergaul dengan orang yang selalu punya semangat untuk mendapatkan prestasi tinggi agar Anda ikut tertular olehnya. Contoh:",
+  "pembahasan": "A (2 poin): Termasuk sikap yang tidak dapat mengendalikan diri dengan baik.\n\nB (5 poin, terbaik): Menunjukkan sikap yang bijaksana, mampu mengendalikan diri dan berpikir jernih.\n\nC (4 poin): Marah adalah hal yang wajar. Pada saat orang marah maka terkumpullah energi. Energi ini perlu disalurkan. Orang dengan pengendalian diri yang baik tentunya akan menyalurkan energi ini ke hal-hal yang positif seperti olahraga.\n\nD (3 poin): Mengambil sedikit waktu untuk menenangkan diri atau berpikir ada baiknya, namun jangan terlalu lama dan tanpa permisi sehingga terkesan lari dari masalah.\n\nE (1 poin): Menunjukkan sikap yang tidak dapat mengendalikan diri dengan baik.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 2,
+   "B": 5,
+   "C": 4,
+   "D": 3,
+   "E": 1
+  }
  },
  {
   "id": "materi-306",
@@ -17148,9 +17202,15 @@
    "E": "Meminta tolong rekan lain agar tidak terlambat mengumpulkan tugasnya."
   },
   "kunci": "C",
-  "pembahasan": "Saya harus menyelesaikan tugas dengan cepat karena tugas tersebut telah dibatasi atasan di kantor. Beliau memberikan waktu pengerjaannya oleh batas waktu, yaitu hari Jumat dalam minggu ini. Saya akan ... A. Meminta perpanjangan waktu sekitar satu atau dua hari apabila ada tugas lain dari kantor yang menumpuk yang dikerjakan dalam waktu bersamaan. Skor 1: Batas waktu sudah sangat jelas artinya pekerjaan yang memiliki batas waktu terdekat masuk dalam skala prioritas yang harus dikerjakan terlebih dahulu. Menyelesaikan tepat waktu pada hari Jumat, maksimal diakhir jam kerja kantor. Skor 4: Menunjukkan sikap tanggung jawab. Mencoba menyelesaikannya di hari Kamis jika memungkinkan. Skor 5: Menunjukkan semangat berprestasi. Menegosiasikan batas waktu yang ditetapkan oleh atasan dengan baik-baik agar tidak terlalu memberatkan dan buru-buru. Skor 2: Batas waktu sudah sangat jelas, sehingga yang harus ditaati adalah mengerjakan semaksimal mungkin sebelum batas waktu yang ditentukan. Meminta tolong rekan lain agar tidak terlambat mengumpulkan tugasnya. Skor 3:",
+  "pembahasan": "A (1 poin): Batas waktu sudah sangat jelas artinya pekerjaan yang memiliki batas waktu terdekat masuk dalam skala prioritas yang harus dikerjakan terlebih dahulu.\n\nB (4 poin): Menunjukkan sikap tanggung jawab.\n\nC (5 poin, terbaik): Menunjukkan semangat berprestasi.\n\nD (2 poin): Batas waktu sudah sangat jelas, sehingga yang harus ditaati adalah mengerjakan semaksimal mungkin sebelum batas waktu yang ditentukan.\n\nE (3 poin): Perlu memastikan bahwa teman yang dimintai tolong sedang dalam kondisi luang sehingga tidak merepotkan.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 4,
+   "C": 5,
+   "D": 2,
+   "E": 3
+  }
  },
  {
   "id": "materi-307",
@@ -17165,9 +17225,15 @@
    "E": "Bersedih hati, menangisi kenapa keadaan seperti ini."
   },
   "kunci": "B",
-  "pembahasan": "Suatu ketika Saya gagal mencapai sesuatu yang telah saya idamidamkan. Oleh karena itu, Saya akan... A. Meminta bantuan kepada lebih banyak orang, terutama yang bisa memenuhi ambisi Saya. Skor 4: Terkadang, kita, meminta bantuan dari pihak lain di saat usaha yang dilakukan sendiri belum membuahkan hasil. Namun, yang perlu dilakukan adalah meminta bantuan pada orang yang ahli di bidang yang kita perlu bantuannya. Bantuan yang diberikan tentunya tanpa pamrih. Melakukan menganalisis dan memperbaiki introspeksi diri, upaya yang telah Saya lakukan. Skor 5: Sikap terbaik yang harus dilakukan. Mencari tahu siapa yang bertanggung jawab terhadap kegagalan Saya. Skor 2: Hanya sebatas mencari tahu siapa penyebabnya namun tidak memiliki langkah atau solusi yang konkret juga tidak akan mengubah keadaan. untuk tidak ingin bertemu dengan orang Mengambil, waktu menenangkan diri, lain dulu karena Saya malu apalagi banyak orang yang menceritakan di belakang Saya mengenai kegagalan tersebut. Skor 3: Perluwaktuuntukmenenangkan diri adalah hal yang wajar, dan menyikapi kegagalan sebagai yang Daripada berprasangka buruk kesuksesan tertunda. terhadap orang lain, atau menarik diri dari pergaulan maka akan lebih baik jika waktu yang dihabiskan untuk menenangkan diri digunakan untuk instropeksi diri. E. Bersedih hati, menangisi kenapa keadaan seperti ini. Skor 1: Bersedih hati adalah wajar, namun jika berlarut-larut maka akan menjauhkan kita dari keinginan untuk maju. Tindakan diperoleh dari inisiatif diri. Inisiatif ini erat kaitannya dengan kreativitas kerja, namun keduanya memiliki perbedaan. Inisiatif adalah tentang idenya, sedangkan kreativitas adalah penerapan dari ide tersebut. tentang pelaksanaan atau Daya inisiatif diperlukan untuk membuat situasi menjadi lebih baik. memerlukan aspek Oleh karena itu, setiap CPNS inisiatif. ' Aspek inisiatif juga diujikan pada tes TKP CPNS dengan tujuan untuk mengukur tingkat kedewasaan dalam mencetuskan suatu ide tertentu yang berguna bagi khalayak, seperti masyarakat, organisasi, atau swas instansi baik milik pemerintah atau ta. Tips: Buka pikiran Anda. Perbanyak wawasan. Berlatihlah berpikir cepat, detail, logis, dan terstruktur. Jadilah pendengar yang baik. Jadilah yang pertama memberikan ide-ide segar dalam pekerjaan. Jadilah pribadi yang aktif, jangan hanya diam atau hanya menunggu perintah atasan saja. Contoh:",
+  "pembahasan": "A (4 poin): Terkadang, kita meminta bantuan dari pihak lain di saat usaha yang dilakukan sendiri belum membuahkan hasil. Namun, yang perlu dilakukan adalah meminta bantuan pada orang yang ahli di bidang yang kita perlu bantuannya. Bantuan yang diberikan tentunya tanpa pamrih.\n\nB (5 poin, terbaik): Melakukan introspeksi diri, menganalisis dan memperbaiki upaya yang telah dilakukan adalah sikap terbaik yang harus dilakukan.\n\nC (2 poin): Hanya sebatas mencari tahu siapa penyebabnya namun tidak memiliki langkah atau solusi yang konkret juga tidak akan mengubah keadaan.\n\nD (3 poin): Perlu waktu untuk menenangkan diri adalah hal yang wajar, dan menyikapi kegagalan sebagai kesuksesan tertunda. Daripada berprasangka buruk terhadap orang lain, atau menarik diri dari pergaulan maka akan lebih baik jika waktu yang dihabiskan untuk menenangkan diri digunakan untuk introspeksi diri.\n\nE (1 poin): Bersedih hati adalah wajar, namun jika berlarut-larut maka akan menjauhkan kita dari keinginan untuk maju.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 4,
+   "B": 5,
+   "C": 2,
+   "D": 3,
+   "E": 1
+  }
  },
  {
   "id": "materi-308",
@@ -17182,9 +17248,15 @@
    "E": "Ragu-ragu untuk mengajukan suatu ide kegiatan karena akan kecewa jika tidak diterima."
   },
   "kunci": "A",
-  "pembahasan": "Pimpinan kantor menggelar rapat kerja membahas penyusunan rencana kerja untuk tahun anggaran depan. Setiap pegawai diharapkan mempersiapkan usulan untuk kegiatan tahun depan. Respons saya A. Berminat mengajukan suatu ide kegiatan yang akan dilaksanakan meskipun nantinya ide tersebut belum tentu diterima. Skor 5: Menunjukkan tingkat inisiatif tinggi. Mengurungkan diri mengajukan suatu ide kegiatan, karena biasanya orang yang mengajukan ide akan dipilih sebagai penanggung jawab kegiatan sehingga pekerjaan saya akan bertambah banyak. Skor 1: Menunjukkan sikap pasif tanpa inisiatif. Akan mengajukan suatu ide kegiatan jika diminta oleh pimpinan. Skor 4: Menunjukkan sifat inisiatif kurang karena perlu paksaan dari pimpinan. Mungkin berminat untuk mengajukan suatu ide kegiatan yang akan dilaksanakan. Namun, tergantung situasi dan kondisi. Skor 3: Mengajukan ide pada dasarnya tidak pernah salah sehingga tidak perlu terlalu banyak pertimbangan. Jika terlalu banyak pertimbangan maka pada akhirnya tidak ada ide yang dilontarkan. E. Ragu-ragu untuk mengajukan suatu ide kegiatan karena akan kecewa jika tidak diterima. Skor 2:",
+  "pembahasan": "A (5 poin, terbaik): Menunjukkan tingkat inisiatif tinggi.\n\nB (1 poin): Menunjukkan sikap pasif tanpa inisiatif.\n\nC (4 poin): Menunjukkan sifat inisiatif kurang karena perlu paksaan dari pimpinan.\n\nD (3 poin): Mengajukan ide pada dasarnya tidak pernah salah sehingga tidak perlu terlalu banyak pertimbangan. Jika terlalu banyak pertimbangan maka pada akhirnya tidak ada ide yang dilontarkan.\n\nE (2 poin): Mengajukan ide pada dasarnya tidak pernah salah sehingga tidak perlu ragu meskipun nantinya ide tersebut belum tentu diterima.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 5,
+   "B": 1,
+   "C": 4,
+   "D": 3,
+   "E": 2
+  }
  },
  {
   "id": "materi-309",
@@ -17199,9 +17271,15 @@
    "E": "Ditolak bukanlah sesuatu yang baru bagi saya karena kendali penuh ada di atasan."
   },
   "kunci": "B",
-  "pembahasan": "Pada akhir tahun kerja berjalan akan ditutup dengan acara bebas berupa outbond. Oleh karena itu, dibentuklah tim outbond untuk mengurusi segala keperluan yang perlu disiapkan dengan saya sebagai salah satu anggota dari tim tersebut. Agenda pertama yang kami lakukan adalah menentukan lokasi outbond. Setelah menempuh perjalanan survei ke beberapa lokasi outbond, Saya mengajukan suatu usulan lokasi kepada atasan. Namun, usulan tersebut menurut atasan kurang tepat. Sikap saya adalah ... A. Merasa sangat kecewa, setelah semua usaha yang telah dikeluarkan. Skor 1: Kecewa adalah hal yang wajar, namun jangan sampai rasa kecewa yang berlebihan menjadikan pribadi yang suka mengeluh dan tidak memiliki inisiatif. Mencari alternatif usulan lokasi lain yang lebih tepat. Skor 5: Menunjukkan sikap yang paling tepat, memiliki inisiatif tinggi. Kecewa, namun berusaha melupakan hal tersebut. Ikuti saja kemauan atasan. Skor 4: Kecewa adalah hal yang wajar. Masukan dari atasan sebagai orang yang lebih banyak pengalamannya perlu didengarkan. Namun, apabila hanya mengikuti tanpa ada inovasi maka menunjukkan kurangnya inisiatif. Saya bersikeras mencari upaya pembenaran terhadap usulan tersebut agar atasan mau menerimanya, sebagai balasan yang setimpal dari usaha yang dikeluarkan. Skor 2: Upaya pembenaran perlu didasari atas dasar yang jelas, namun apabila ada upaya paksaan agar alasan dapat dibenarkan atau dapat diterima maka hal tersebut menjadi upaya yang kurang tepat. E. Ditolak bukanlah sesuatu yang baru bagi saya, karena kendali penuh ada di atasan. Skor 3: Ditolak adalah hal yang wajar, apalagi ditolak oleh atasan yang profesional tentunya ada alasan yang mendasar. Perlu dipahami penolakan tersebut sebagai upaya agar Anda ada usaha untuk memperbaiki. Aspek kreativitas kerja dan inovasi bertujuan untuk mengukur apakah Anda memiliki kreativitas atau daya cipta untuk membuat sesuatu yang baru/inovasi. Inovasi dapat berupa benda secara fisik, cara melakukan, sistem yang akan digunakan, ataupun hal lainnya. Seseorang yang membuat inovasi akan terindikasi bahwa inovasi yang ditemukan memiliki: Sifat keterbaruan Keterbaruan yang dimaksud adalah tidak bersifat sama dengan inovasi yang sudah ada (tidak plagiat). Sifat optimal Misalnya: hasil yang dicapai lebih cepat pencapaiannya, lebih hemat sumber daya, dan sebagainya. Kelebihan tertentu jika dibandingkan dengan yang lama Misalnya: sistem yang ditemukan lebih baik daripada sistem yang sedang digunakan saat ini, ataupun kelebihan lain yang signifikan. Kreativitas kerja dan inovasi dalam jangka panjang dan kontinu mampu membawa perubahan yang mengarah ke keadaan yang lebih baik. Tips: - Beranimencobamengerjakan suatu rutinitas dengan cara yang berbeda dari biasanya. Misalnya: pergi ke kantor dengan rute atau kendaraan yang berbeda. Melatih diri memikirkan suatu ide yang belum pernah terlintas dalam benak (thinking out of the box). Menyelesaikan masalah dengan cara yang optimal. Selalu menyiapkan rencana cadangan. Perbanyak referensi dengan membaca. Latihlah untuk bertukar ide dan gagasan dengan orang lain yang lebih ahli. Mau menerima masukan. Contoh:",
+  "pembahasan": "A (1 poin): Kecewa adalah hal yang wajar, namun jangan sampai rasa kecewa yang berlebihan menjadikan pribadi yang suka mengeluh dan tidak memiliki inisiatif.\n\nB (5 poin, terbaik): Menunjukkan sikap yang paling tepat, memiliki inisiatif tinggi.\n\nC (4 poin): Kecewa adalah hal yang wajar. Masukan dari atasan sebagai orang yang lebih banyak pengalamannya perlu didengarkan. Namun, apabila hanya mengikuti tanpa ada inovasi maka menunjukkan kurangnya inisiatif.\n\nD (2 poin): Upaya pembenaran perlu didasari atas dasar yang jelas, namun apabila ada upaya paksaan agar alasan dapat dibenarkan atau dapat diterima maka hal tersebut menjadi upaya yang kurang tepat.\n\nE (3 poin): Ditolak adalah hal yang wajar, apalagi ditolak oleh atasan yang profesional tentunya ada alasan yang mendasar. Perlu dipahami penolakan tersebut sebagai upaya agar Anda ada usaha untuk memperbaiki.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 5,
+   "C": 4,
+   "D": 2,
+   "E": 3
+  }
  },
  {
   "id": "materi-310",
@@ -17216,9 +17294,15 @@
    "E": "Usulan yang ditolak seperti itu sudah sering kali terjadi bagi saya."
   },
   "kunci": "D",
-  "pembahasan": "Pada rapat kerja yang diselenggarakan secara terbatas, Saya mengajukan suatu usulan di forum rapat tersebut. Namun, usulan itu dikritisi oleh atasan saya dengan alasan usulan Saya kurang tepat. Sikap saya adalah ... A. Merasa sangat kecewa, Saya mengira kedekatan dengan atasan mampu membuat usulan Saya diterima. Skor 1: Kecewa adalah hal yang wajar dan memanfaatkan kedekatan dengan atasan untuk alasan apa pun tidak bisa dibenarkan. Kecewa dan segera berusaha melupakan hal tersebut karena menurut Saya itu hal yang memalukan. Skor 2: Kecewa adalah hal yang wajar sehingga sikapi penolakan tersebut sewajarnya, tidak perlu berlebihansampaimenganggap hal tersebut adalah kejadian yang memalukan. Anda perlu membebaskan diri dari perasaan-perasaan seperti itu agar muncul kreativitas dan inovasi dalam diri Anda. Saya bersikeras mencari upaya pembenaran terhadap usulan tersebut agar dia mau menerimanya. Skor 3: Usulan yang disampaikan tidak harus diterima oleh forum. Adanya penolakan adalah wajar. Mengemukakan alasan atau pembenaran atas usulan juga halyangwajar,namunbersikeras agar tetap diterima adalah hal yang keliru. Sikapi penolakan tersebut dengan meningkatkan kreativitas kerja pribadi sehingga dapat menemukan suatu usulan yang inovatif, memiliki pembeda dan alasan yang mendasar dari usulan sebelumnya serta kemanfaatan yang lebih baik lagi. D. Mencari alternatif usulan lain yang lebih tepat. Skor 5: Dengan mencari alternatif usulan yang lain maka melatih diri untuk lebih kreatif dalam memunculkan inovasi. E. Usulan yang ditolak seperti itu sudah sering kali terjadi bagi saya. Skor 4:",
+  "pembahasan": "A (1 poin): Kecewa adalah hal yang wajar dan memanfaatkan kedekatan dengan atasan untuk alasan apa pun tidak bisa dibenarkan.\n\nB (2 poin): Kecewa adalah hal yang wajar sehingga sikapi penolakan tersebut sewajarnya, tidak perlu berlebihan sampai menganggap hal tersebut adalah kejadian yang memalukan. Anda perlu membebaskan diri dari perasaan-perasaan seperti itu agar muncul kreativitas dan inovasi dalam diri Anda.\n\nC (3 poin): Usulan yang disampaikan tidak harus diterima oleh forum. Adanya penolakan adalah wajar. Mengemukakan alasan atau pembenaran atas usulan juga hal yang wajar, namun bersikeras agar tetap diterima adalah hal yang keliru. Sikapi penolakan tersebut dengan meningkatkan kreativitas kerja pribadi sehingga dapat menemukan suatu usulan yang inovatif, memiliki pembeda dan alasan yang mendasar dari usulan sebelumnya serta kemanfaatan yang lebih baik lagi.\n\nD (5 poin, terbaik): Dengan mencari alternatif usulan yang lain maka melatih diri untuk lebih kreatif dalam memunculkan inovasi.\n\nE (4 poin): Perlu disikapi bahwa penolakan adalah ujian agar Anda lebih kreatif lagi dalam memberikan usulan yang inovatif.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 2,
+   "C": 3,
+   "D": 5,
+   "E": 4
+  }
  },
  {
   "id": "materi-311",
@@ -17233,9 +17317,15 @@
    "E": "Mengawasi pelatih, jika mulai terlihat terganggu saat jalan baru saya beri tahu bahwa tadi tali sepatunya longgar sambil mengingatkan beliau agar lebih hati-hati lagi."
   },
   "kunci": "A",
-  "pembahasan": "Ketika sedang melakukan acara outbond, sebelum dimulai acara biasanya pelatih memberikan arahan. Saat pemberian arahan tersebut, tampak dengan jelas tali sepatu pelatih lepas dari ikatannya. Hal ini sangat mengganggu jalannya pengarahan. Namun, setelah ditunggu beberapa saat, tampaknya tak ada yang berani memberi tahu pelatih mengenai hal tersebut. Sikap Saya sebaiknya adalah ... A. Menuliskan pesan ke secarik kertas dan memberikannya ke pelatih mengenai hal tersebut. Skor 5: Menunjukkan cara mengingatkan yang kreatif, yaitu meminimalisir yang diingatkan menjadi tersinggung, malu, atau dipermalukan di depan umum. B. Terpaksamengingatkan karena peserta yang lainnya tidak ada yang bertindak. Skor 4: Semestinya mengingatkan tidak perlu ada rasa keterpaksaan. C. Meskipun hal itu mengganggu konsentrasi Saya saat mendengarkan arahan pelatih, Saya tidak mau mengambil risiko dengan memberitahunya karena bisa jadi yang terganggu hanya Saya saja, sedangkan peserta outbond lainnya tidak terganggu sambil berha-rap ada peserta lain yang mengingatkannya sebelum Saya. Skor 2: Merupakan tindakan yang kurang berani dan tidak kreatif karena menunggu ada orang lain yang memulai terlebih dahulu. D. Tidak memberi tahu dengan alasan bisa saja pelatih tersinggung jika diingatkan hal-hal yang kecil. Skor 1: Merupakan tindakan pembiaran. E. Mengawasi pelatih, jika mulai terlihat terganggu saat jalan baru saya beri tahu bahwa tadi tali sepatunya longgar sambil mengingatkan beliau agar lebih hati-hati lagi. Skor 3: Cara yang kreatif. namun kurang tepat karena mesti menunggu dulu baru ada tindakan. publik sangatlah banyak. Tentunya diperlukan sifat tekun dalam diri PNS sehingga tidak mengherankan apabila tes CPNS terutama dalam tes TKP terdapat soal yang menguji aspek ketekunan. Hal ini bertujuan untuk mengukur tingkat ketekunan seseorang. Indikasinya adalah mempunyai performa kerja yang kontinu (terus-menerus) dan berkesinambungan: mampu mengerjakan tugas-tugas rutinnya dengan baik tanpa bosan: tetap menjaga kualitas pekerjaan: tidak terlalu pekerjaan dalam waktu yang relatif sering ganti-ganti dekat, apalagi saat ganti pekerjaan ternyata hasil dari pekerjaan sebelumnya tidak terlalu bagus kualitasnya. Memiliki sangatlah penting bagi Anda karena karakter tekun ini tugas rutin Anda harus dikerjakan baik tercapainya tujuan dari instansi tempat Anda bekerja. dengan untuk mendukung Tips: - Pahamilah bahwa bekerja adalah ibadah. - Ikhlas menerima pekerjaan yang sudah menjadi tanggung jawabnya, tanpa pamrih. - Mau membantu pekerjaan rekan kerja yang lain. «Cobalah untuk melaksanakan pekerjaan dengan suasana hati yang riang. Sesekali bisa diselingi dengan mendengarkan musik yang bisa membangkitkan semangat kerja, asalkan tetap fokus pada pekerjaannya. » Cobalah untuk berusaha mengerjakan suatu pekerjaan dengan rajin. Contoh:",
+  "pembahasan": "A (5 poin, terbaik): Menunjukkan cara mengingatkan yang kreatif, yaitu meminimalisir yang diingatkan menjadi tersinggung, malu, atau dipermalukan di depan umum.\n\nB (4 poin): Semestinya mengingatkan tidak perlu ada rasa keterpaksaan.\n\nC (2 poin): Merupakan tindakan yang kurang berani dan tidak kreatif karena menunggu ada orang lain yang memulai terlebih dahulu.\n\nD (1 poin): Merupakan tindakan pembiaran.\n\nE (3 poin): Cara yang kreatif, namun kurang tepat karena mesti menunggu dulu baru ada tindakan.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 2,
+   "D": 1,
+   "E": 3
+  }
  },
  {
   "id": "materi-312",
@@ -17250,9 +17340,15 @@
    "E": "Membaca koran terbitan hari ini agar update."
   },
   "kunci": "C",
-  "pembahasan": "Setelah berhasil ' menyelesaikan pekerjaan yang diberikan oleh atasan di kantor, biasanya saya akan .... A. Melakukan pekerjaan selanjutnya, apalagi melihat rekan-rekan saya belum selesai melakukan pekerjaannya, pasti saya akan menawarkan bantuan ke mereka. Skor 4: Menunjukkan pribadi yang tekun. B. Istirahat dulu, hal itu biasa dilakukan agar tetap bugar dalam bekerja. Skor 3: Istirahat diperlukan di sela-sela jam kerja, namun ada waktu istirahat yang sudah ditentukan oleh kantor. C. Meneliti pekerjaan tersebut masih ada kekeliruan atau tidak, lalu melakukan aktivitas lain. Skor 5: Menunjukkan pribadi yang tekun bekerja, teliti dan bertanggung jawab. Lebih baik melakukan evaluasi setelah selesai mengerjakan suatu pekerjaan, daripada harus mengerjakan berulang-ulang kali karena ada kesalahan. D. Mengakses situs jejaring sosial semacam facebook untuk mengetahui kabar terbaru dari kerabat dan kawan saya. Skor 1: Urusan pribadi sebaiknya dikerjakan di luar jam kerja, tentunya dengan tidak menggunakan fasilitas kantor. Membaca koran terbitan hari ini agar update. Skor 2:",
+  "pembahasan": "A (4 poin): Menunjukkan pribadi yang tekun.\n\nB (3 poin): Istirahat diperlukan di sela-sela jam kerja, namun ada waktu istirahat yang sudah ditentukan oleh kantor.\n\nC (5 poin, terbaik): Menunjukkan pribadi yang tekun bekerja, teliti dan bertanggung jawab. Lebih baik melakukan evaluasi setelah selesai mengerjakan suatu pekerjaan, daripada harus mengerjakan berulang-ulang kali karena ada kesalahan.\n\nD (1 poin): Urusan pribadi sebaiknya dikerjakan di luar jam kerja, tentunya dengan tidak menggunakan fasilitas kantor.\n\nE (2 poin): Update berita adalah hal yang wajar, namun sebaiknya tidak dilakukan pada saat jam kerja.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 4,
+   "B": 3,
+   "C": 5,
+   "D": 1,
+   "E": 2
+  }
  },
  {
   "id": "materi-313",
@@ -17267,9 +17363,15 @@
    "E": "sering marah terhadap pekerjaan yang tidak beres"
   },
   "kunci": "A",
-  "pembahasan": "Sering kali saya dinilai sebagai orang yang ... oleh rekan-rekan kerja di kantor. A. memiliki ketekunan dalam mengerjakan pekerjaan rutin Skor 5: Jika rekan-rekan menilai Anda memiliki, ketekunan dalam melakukan pekerjaan rutin maka jangan sombong, setelah itu tetap mempertahankan kinerja atau lebih baik lagi. B. kurang tekun dalam apa pun Skor 1: Mendapat penilaian kurang tekun dalam bentuk apapun oleh rekan-rekan kerja merupakan peringatan awal bahwa Anda harus memperbaiki diri. C. tekun menyelesaikan tugas walaupun perlu lebih banyak waktu Skor 4: Mendapat penilaian tekun oleh rekan-rekan kerja artinya sudah baik, setelah itu tingkatkan kecepatan dalam menyelesaikan pekerjaan rutin. D. mudah bosan dan jengkel dengan pekerjaan yang di luar kebiasaan Skor 3: Bosan dan jengkel dengan pekerjaanyang diluar kebiasaan akan berangsur pudar jika Anda mengerjakannya secara rutin dan tekun. E. sering marah terhadap pekerjaan yang tidak beres Skor 2: Sikap sering marah kurang tepat apalagi saat pekerjaan tidak beres, sebaiknya lakukan evaluasi menyeluruh daripada mesti marah-marah. PNS sudah tentu harus siap dengan pekerjaan yang bersifat pelayanan. Hal itu merupakan suatu bentuk pengabdian bagi negara karena melayani masyarakat. Aspek orientasi pada pelayanan yang diujikan di tes TKP CPNS, bertujuan untuk mengukur kesiapan dan kesigapan pada tugas pelayanan yang diberikan. Seseorang yang berorientasi pada pelayanan akan terindikasi dari: selalu mendahulukan kepentingan umum daripada kepentingan pribadi: senang melayani terutama untuk kepentingan orang banyak. TIPS: “ Biasakan untuk tidak menunda-nunda pekerjaan. “ Melatih diri untuk disiplin. » Menyelesaikan pekerjaan sesuai dengan skala prioritas. - Mempergunakan waktu secara optimal, terutama saat jam kerja. “ Manfaatkan waktu luang dengan hal-hal yang positif dan produktif. Contoh:",
+  "pembahasan": "A (5 poin, terbaik): Jika rekan-rekan menilai Anda memiliki ketekunan dalam melakukan pekerjaan rutin maka jangan sombong, setelah itu tetap mempertahankan kinerja atau lebih baik lagi.\n\nB (1 poin): Mendapat penilaian kurang tekun dalam bentuk apapun oleh rekan-rekan kerja merupakan peringatan awal bahwa Anda harus memperbaiki diri.\n\nC (4 poin): Mendapat penilaian tekun oleh rekan-rekan kerja artinya sudah baik, setelah itu tingkatkan kecepatan dalam menyelesaikan pekerjaan rutin.\n\nD (3 poin): Bosan dan jengkel dengan pekerjaan yang di luar kebiasaan akan berangsur pudar jika Anda mengerjakannya secara rutin dan tekun.\n\nE (2 poin): Sikap sering marah kurang tepat apalagi saat pekerjaan tidak beres, sebaiknya lakukan evaluasi menyeluruh daripada mesti marah-marah.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 5,
+   "B": 1,
+   "C": 4,
+   "D": 3,
+   "E": 2
+  }
  },
  {
   "id": "materi-314",
@@ -17284,9 +17386,15 @@
    "E": "Mencari rekan pengganti untuk loket yang saya jaga, kemudian membantu konsumen untuk kepengurusan administrasi menuju lantai dua."
   },
   "kunci": "E",
-  "pembahasan": "Saat bertugas di bagian pelayanan, Saya ditempatkan di loket pengaduan konsumen yang terletak di lantai satu. Suatu hari datang konsumen yang merupakan difabel, meminta tolong untuk dibantu dalam proses kepengurusan administrasi tempat letak loket kepengurusan tersebut berada di lantai dua. Sikap Saya adalah ... A. Mengarahkan konsumen ke loket lainnya, dengan melihat bahwa penjaga loket yang merupakan rekan Saya waktunya lebih luang. Skor 4: Mengarahkan ke pegawai lain yang lebih fleksibel boleh-boleh saja, namun apabila Anda mampu menyelesaikan sendiri tentunya lebih baik. Mengarahkan konsumen ke satpam karena satpam lebih mudah dimintai bantuan. Skor 3: Mengarahkan ke pegawai lain yang lebih fleksibel tetap harus memperhatikan bahwa pegawai tersebut tidak menjadi terganggu tugas utamanya. Mengarahkan konsumen ke loket yang seharusnya, yaitu loket administrasi yang berada di lantai dua. Semua itu sudah sesuai dengan aturan yang diberlakukan. Skor 2: Mengarahkan sesuai aturan memang baik, namun tidak ada salahnya jika mengusahakan pelayanan yang terbaik dengan memberikan kemudahan akses bagi konsumen. Memberi saran ke konsumen bahwasebaiknyadiamembawa rekan atau saudara yang bisa membantu keperluannya karena perlu diingat bahwa dia difabel. Skor 1: Tindakan yang kurang tepat karena berpotensi menyinggung perasaan orang lain dan menunjukkan sikap yang tidak berorientasi pada pelayanan. E. Mencari rekan pengganti untuk loket yang saya jaga, kemudian membantu konsumen untuk kepengurusan administrasi menuju lantai dua. Skor 5:",
+  "pembahasan": "A (4 poin): Mengarahkan ke pegawai lain yang lebih fleksibel boleh-boleh saja, namun apabila Anda mampu menyelesaikan sendiri tentunya lebih baik.\n\nB (3 poin): Mengarahkan ke pegawai lain yang lebih fleksibel tetap harus memperhatikan bahwa pegawai tersebut tidak menjadi terganggu tugas utamanya.\n\nC (2 poin): Mengarahkan sesuai aturan memang baik, namun tidak ada salahnya jika mengusahakan pelayanan yang terbaik dengan memberikan kemudahan akses bagi konsumen.\n\nD (1 poin): Tindakan yang kurang tepat karena berpotensi menyinggung perasaan orang lain dan menunjukkan sikap yang tidak berorientasi pada pelayanan.\n\nE (5 poin, terbaik): Tindakan paling tepat karena berorientasi pada pelayanan dengan tidak membedakan golongan konsumen.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1,
+   "E": 5
+  }
  },
  {
   "id": "materi-315",
@@ -17301,9 +17409,15 @@
    "E": "Menerapkan gerakan 3S seperti yang diajarkan di pelatihan hanya pada saat awal bekerja saja biar seragam dengan bagian lainnya."
   },
   "kunci": "D",
-  "pembahasan": "Dalam suatu pelatihan kepegawaian yang Saya ikuti, ada gerakan 3S, yaitu Senyum, Sapa, dan Salam yang harus diterapkan di seluruh bagian instansi. Saat ini, Saya ditempatkan di bagian front office yang merupakan bagian terdepan di instansi tempat Saya bekerja. Sikap saya setelah pelatihan kepegawaian tersebut adalah .... A. Melakukan seperti yang saya lakukan setiap hari karena khawatir gerakan 3S akan tampak seperti suatu hal yang aneh bagi orang lain. Skor 1: Perlu keberanian, percaya diri dan cepat beradaptasi untuk menerapkan gerakan 35. Saya akan mulai gerakan 3S hanya jika Saya sudah siap. Skor 2: Perlu kesiapan diri dalam waktu yang cepat untuk menerapkan 3S segera mungkin. Cukup dengan memasang poster yang bertuliskan gerakan 3S dan artinya, itu sudah membuat semua orang memahami bahwa Saya sudah melakukan anjuran pelatihan tersebut. Skor 3: Gerakan 3S akan lebih baik Jika diterapkan bukan sekadar slogan. Menerapkan gerakan 3Sseperti yang diajarkan di pelatihan. Skor 5: Tindakan yang paling tepat, gerakan 3S diterapkan untuk mengoptimalkan pelayanan. Menerapkan gerakan 3S seperti yang diajarkan di pelatihan hanya pada saat awal bekerja saja biar seragam dengan bagian lainnya. Skor 4: Menerapkan gerakan 3S pada saat awal bekerja sudah baik, namun akan lebih baik jika berlanjut di setiap pekerjaan dan di seluruh bagian. Aspek menghargai orang lain pada tes TKP CPNS bertujuan untuk mengukur Anda lain. tingkat kedewasaan dalam menghargai orang Indikasinya adalah menerapkan beberapa penghargaan, yaitu menghargai baik itu berupa pendapat, eksistensi, maupun kapasitas, sebagai entitas yang ada di luar diri Anda. Menghargai orang lain sangatlah penting dalam karier dan kehidupan, sebab pada dasarnya, setiap orang ingin dihormati dan dihargai sebagaimana mestinya, siapapun dia,apapuntugasnya, dan bagaimanapun pendapatnya dalam memandang sesuatu. Pada dasarnya, manusia adalah makhluk sosial yaitu hidup di dunia dan butuh pertolongan dari orang lain. Oleh karena itu, manusia diciptakan untuk saling menolong. Meskipun manusia diciptakan sebagai makhluk yang paling sempurna, setiap orang pasti mempunyai kelemahan dan kekurangan. Tujuan saling menolong untuk menciptakan keharmonisan satu sama lain. Tips: juaga punya kelebihan. Pahamilah bahwa setiap orang memiliki kelebihan dan kekurangan masing-masing. Hargailah orang lain dengan tulus tanpa pamrih. Tidak ada manusia yang sempurna, jadi sadarilah bahwa Anda pun memiliki banyak kekurangan. Terhadap kekurangan orang lain, janganlah selalu dicari kesalahannya. Pikirkanlah bahwa orang tersebut pasti Menghargai dan menghormati orang lain bukannlah hal yang merendahkan diri sendiri, melainkan justru membuat Anda menjadi orang terhormat. Berikanlah penghargaan atau pujian secara proporsional kepada orang lain yang berprestasi. Contoh:",
+  "pembahasan": "A (1 poin): Perlu keberanian, percaya diri dan cepat beradaptasi untuk menerapkan gerakan 3S.\n\nB (2 poin): Perlu kesiapan diri dalam waktu yang cepat untuk menerapkan 3S segera mungkin.\n\nC (3 poin): Gerakan 3S akan lebih baik jika diterapkan bukan sekadar slogan.\n\nD (5 poin, terbaik): Tindakan yang paling tepat, gerakan 3S diterapkan untuk mengoptimalkan pelayanan.\n\nE (4 poin): Menerapkan gerakan 3S pada saat awal bekerja sudah baik, namun akan lebih baik jika berlanjut di setiap pekerjaan dan di seluruh bagian.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 2,
+   "C": 3,
+   "D": 5,
+   "E": 4
+  }
  },
  {
   "id": "materi-316",
@@ -17318,9 +17432,15 @@
    "E": "Menanyakan alasannya kenapa berani berbeda pendapat dengan Saya."
   },
   "kunci": "A",
-  "pembahasan": "Pada saat Saya ditugaskan sebagai pemimpin rapat dalam suatu kegiatan, terjadi perbedaan pendapat antara Saya dan rekan kerja Saya selaku anggota rapat. Sikap Saya adalah ... A. Mempertimbangkan pendapat tersebut, bisa sebagai alternatif cara. Skor 5: Tindakan yang paling tepat sebagai pimpinan rapat, yaitu menghargai pendapat orang lain. B. Mempertahankan pendapat saya, perlu diingatkan ke rekan kerja bahwa Sayalah pimpinan rapatnya. Skor 1: Apabila pendapat yang dikemukakan adalah pendapatyang bagus, tepat, efektif dan efisien dengan alasan yang mendasar maka perlu dipertahankan, namun tidak perlu sampai memanfaatkan posisi selaku pimpinan rapat. Wajar karena perbedaan pendapat bukan masalah besar. Skor 4: Perbedaan pendapat perlu disikapi dengan wajar. Mengingatkan ke rekan tersebut bahwa anggota semestinya lebih patuh. Skor 2: Mengingatkan anggota adalah hal yang wajar dalam hal jika ada sesuatu yang dilanggar, bukan dalam hal karena berbeda pendapat. Menanyakan alasannya kenapa berani berbeda pendapat dengan Saya. Skor 3:",
+  "pembahasan": "A (5 poin, terbaik): Tindakan yang paling tepat sebagai pimpinan rapat, yaitu menghargai pendapat orang lain.\n\nB (1 poin): Apabila pendapat yang dikemukakan adalah pendapat yang bagus, tepat, efektif dan efisien dengan alasan yang mendasar maka perlu dipertahankan, namun tidak perlu sampai memanfaatkan posisi selaku pimpinan rapat.\n\nC (4 poin): Perbedaan pendapat perlu disikapi dengan wajar.\n\nD (2 poin): Mengingatkan anggota adalah hal yang wajar dalam hal jika ada sesuatu yang dilanggar, bukan dalam hal karena berbeda pendapat.\n\nE (3 poin): Perlu dipahami bahwa menanyakan alasan mengapa berbeda pendapat sangat diperlukan dalam hal menggali informasi yang bisa saja Anda lewatkan, namun hal ini semestinya disampaikan dengan cara baik-baik.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 5,
+   "B": 1,
+   "C": 4,
+   "D": 2,
+   "E": 3
+  }
  },
  {
   "id": "materi-317",
@@ -17335,9 +17455,15 @@
    "E": "Biasa saja dan berpurapura tidak tahu akan keberhasilannya, melakukan tugas."
   },
   "kunci": "C",
-  "pembahasan": "Dalam kegiatan kantor yang sedang saya koordinir, ternyata ada rekan kerja yang saya tunjuk telah melakukan tugas yang saya berikan kepadanya dengan sangat baik. Sikap Saya adalah .... A. Puas, namun tidak perlu memuji karena hal itu akan membuatnya sombong. Skor 3: Perlu dipahami bahwa pujian adalah bentuk dari menghargai orang lain, dan disampaikan dengan cara yang proporsional sehingga rekan kerja tidak menjadi sombong. Tak akan memuji, nanti jika dipuji akan membuat saya tampak lebih rendah. Skor 2: Perlu dipahami bahwa memuji atau menghargai orang lain tidak akan menjadikan Anda lebih rendah dibandingkan orang tersebut. Memuji secara proporsional. Skor 5: Menunjukkan tindakan menghargai orang lain. Mengumumkan ke semua orang bahwa dia lah yang terbaik yang pernah ada. Skor 4: Menunjukkan tindakan menghargai orang lain, namun caranya terlalu berlebihan. Biasa saja dan berpura-pura tidaktahuakan keberhasilannya melakukan tugas. Skor 1: Menunjukkan tindakan tidak menghargai orang lain. Anda dalam membuat keputusankeputusan yang sangat sulit dan dilematis. Karakter ketegasan ini sangat penting dimiliki oleh semua pegawai, terutama untuk yang menduduki posisi pengambil keputusan. Indikasi bahwa seseorang memiliki ketegasan adalah: “ tidak ragu dalam membuat keputusan: “ berani mengambil keputusan yang benar meskipun hal itu menimbulkan efek-efek tertentu bagi orang di sekitarnya. Orang yang tidak memiliki kete-gasan, cenderung ragu-ragu dalam mengambil keputusan karena biasanya takut akan sesuatu bisa berupa tekanan atau karena jabatan seseorang lebih tinggi. Tips: - Pahamilah bahwa aturan ditegakkan demi ketertiban dan keteraturan. Dalam penegakan aturan dibutuhkan adanya ketegasan dan kedisiplinan. - Bedakan dengan jelas antara ketegasan dan galak. - Ketegasan membuat orang lain akan hormat dan segan kepada Anda. » Ketidaktegasan membuat orang lain akan menyepelekan Anda. Contoh:",
+  "pembahasan": "A (3 poin): Perlu dipahami bahwa pujian adalah bentuk dari menghargai orang lain, dan disampaikan dengan cara yang proporsional sehingga rekan kerja tidak menjadi sombong.\n\nB (2 poin): Perlu dipahami bahwa memuji atau menghargai orang lain tidak akan menjadikan Anda lebih rendah dibandingkan orang tersebut.\n\nC (5 poin, terbaik): Menunjukkan tindakan menghargai orang lain.\n\nD (4 poin): Menunjukkan tindakan menghargai orang lain, namun caranya terlalu berlebihan.\n\nE (1 poin): Menunjukkan tindakan tidak menghargai orang lain.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 3,
+   "B": 2,
+   "C": 5,
+   "D": 4,
+   "E": 1
+  }
  },
  {
   "id": "materi-318",
@@ -17352,9 +17478,15 @@
    "E": "Menasihatinya agar anggota tim segera sadar akan penyelesaian tugas yang diberikan."
   },
   "kunci": "D",
-  "pembahasan": "Saya ditugaskan untuk memimpin tim dengan waktu kerja yang sangat terbatas. Saat Saya mensosialisasikan mengenai hal ini ke anggota tim kerja yang terbentuk, mereka menunjukkan sikap tidak peduli dengan tugas yang diberikan. Sikap saya adalah ... A. Bekerja sendiri asalkan tugas selesai. Skor 1: Tindakan bekerja sendiri adalah akibat dari sifat pemimpin yang kurang tegas. B. Memberi ancaman yang efektif seperti akan dikeluarkan dari tim, bagi anggota tim yang tidak serius kerjanya. Skor 2: Perlu ada pemahaman bahwa ketegasan dan tindakan mengancam adalah halyang berbeda. C. Mudahssekali, tinggal melaporkan ke atasan Saya agar orang tersebut diberi sanksi yang pantas. Skor 3: Perlu dipahami bahwa permasalahan yang ada di tim, sebaiknya diselesaikan terlebih dahulu di tingkat tim. Apabila penyelesaian di tingkat tim tidak menjumpai perubahan yang berarti, barulah dilanjutkan ke tingkat berikutnya. D. Membagi tugas secara adil sesuai porsinya, mengarahkan, mendampingi dan memotivasi selalu anggota tim untuk menyelesaikannya, serta jika ada kekeliruan akan memberi teguran. Skor 5: Tindakan ketegasan yang paling tepat. E. Menasihatinya agar anggota tim segera sadar akan penyelesaian tugas yang diberikan. Skor 4:",
+  "pembahasan": "A (1 poin): Tindakan bekerja sendiri adalah akibat dari sifat pemimpin yang kurang tegas.\n\nB (2 poin): Perlu ada pemahaman bahwa ketegasan dan tindakan mengancam adalah hal yang berbeda.\n\nC (3 poin): Perlu dipahami bahwa permasalahan yang ada di tim, sebaiknya diselesaikan terlebih dahulu di tingkat tim. Apabila penyelesaian di tingkat tim tidak menjumpai perubahan yang berarti, barulah dilanjutkan ke tingkat berikutnya.\n\nD (5 poin, terbaik): Tindakan ketegasan yang paling tepat.\n\nE (4 poin): Menunjukkan sikap yang tepat.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 2,
+   "C": 3,
+   "D": 5,
+   "E": 4
+  }
  },
  {
   "id": "materi-319",
@@ -17369,9 +17501,15 @@
    "E": "Menolak dan menjelaskan alasannya."
   },
   "kunci": "E",
-  "pembahasan": "Suatu hari atasan di kantor meminta bantuan saya untuk melakukan hal yang cenderung melanggar aturan, maka tindakan saya ... A. Menolak keras, Saya tidak mau dianggap bodoh. Skor 4: Penolakan perlu disampaikan dengan cara baik-baik. B. Membantunya, namun itu untuk pertama dan terakhir kalinya. Skor 3: Menunjukkan sikap tidak memiliki ketegasan. C. Karena dia atasan Saya, Saya harus membantunya demi kelangsungan karier. Skor 1: Menunjukkan sikap tidak memiliki ketegasan, alasan karena yang memberi perintah adalah atasan tidak dapat dibenarkan. D. Jika risikonya masih bisa saya tanggung, saya mau membantunya karena pertimbangan karier. Skor 2: Menunjukkan sikap tidak memiliki ketegasan, alasan karier tidak dapat dibenarkan. E. Menolak dan menjelaskan alasannya. Skor 5: Menunjukkan sikap ketegasan dan memiliki prinsip. Setiap hari, kita dihadapkan pada berbagai pilihan. Setiap hari pula kita membuat keputusan, baik keputusan kecil maupun keputusan besar. Rasa percaya diri yang proporsional (tidak berlebihan) akan membantu kita dalam memilih satu pilihan terbaik setelah melalui pertimbangan matang, di antara berbagai pilihan yang ada. Oleh karena itu, tes TKP CPNS menguji aspek kepercayaan diri dengan tujuan Untuk mengukur tingkat rasa percaya terhadap diri sendiri terutama saat mengambil keputusan, maupun pada saat menghadapi hal penting lainnya. Tips: » Pahamilah manusia harus berusaha sebaik-baiknya, namun hasil akhir ditentukan oleh Tuhan. . Setelah berusaha sebaik mungkin, yakinlah bahwa Tuhan akan memberikan hasil yang terbaik. “- Tidak perlu takut dengan hal yang belum terjadi, yang sudah terjadi, maupun yang sedang terjadi. - Hasil yang tidak sesuai dengan harapan bukanlah akhir, segalanya, Anda tetap harus bangkit dan memperbaiki diri. Contoh:",
+  "pembahasan": "A (4 poin): Penolakan perlu disampaikan dengan cara baik-baik.\n\nB (3 poin): Menunjukkan sikap tidak memiliki ketegasan.\n\nC (1 poin): Menunjukkan sikap tidak memiliki ketegasan, alasan karena yang memberi perintah adalah atasan tidak dapat dibenarkan.\n\nD (2 poin): Menunjukkan sikap tidak memiliki ketegasan, alasan karier tidak dapat dibenarkan.\n\nE (5 poin, terbaik): Menunjukkan sikap ketegasan dan memiliki prinsip.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 4,
+   "B": 3,
+   "C": 1,
+   "D": 2,
+   "E": 5
+  }
  },
  {
   "id": "materi-320",
@@ -17386,9 +17524,15 @@
    "E": "Mencari orang yang bertanggungjawab jika presentasi Saya tidak lancar, pasti ada orang yang iri atas keberhasilan Saya."
   },
   "kunci": "A",
-  "pembahasan": "Saya telah mempersiapkan diri dengan sebaik mungkin sebelum melakukan presentasi laporan pertanggungjawaban di kantor esok hari. Oleh karena itu, Saya ... A. Yakin dengan pasti bahwa besok presentasi saya berjalan dengan baik. Skor 5: Menunjukkan sikap percaya diri. B. Cemas, memikirkan andai saja esok presentasi saya kurang lancar. Skor 2: Perlu dipahami bahwa kecemasan disikapi secara wajar. C. Tidak mungkin presentasi saya tidak lancar apabila sudah sempurna persiapannya. Skor 4: Menunjukkan sikap percaya diri yang berlebihan sehingga bisa mengarah ke sikap sombong. D. Pasrah saja apabila ada kendala yang membuat presentasi saya nanti menjadi tidak lancar. Skor 3: Menunjukkan sikap kurang percaya diri dan kurang persiapan/rencana yang baik apabila dihadapkan dengan suatu kendala. Mencari orang yang bertanggungjawab jika presentasi Saya tidak lancar, pasti ada orang yang iri atas keberhasilan Saya. Skor 1:",
+  "pembahasan": "A (5 poin, terbaik): Menunjukkan sikap percaya diri.\n\nB (2 poin): Perlu dipahami bahwa kecemasan disikapi secara wajar.\n\nC (4 poin): Menunjukkan sikap percaya diri yang berlebihan sehingga bisa mengarah ke sikap sombong.\n\nD (3 poin): Menunjukkan sikap kurang percaya diri dan kurang persiapan atau rencana yang baik apabila dihadapkan dengan suatu kendala.\n\nE (1 poin): Menunjukkan sikap tidak percaya diri.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 5,
+   "B": 2,
+   "C": 4,
+   "D": 3,
+   "E": 1
+  }
  },
  {
   "id": "materi-321",
@@ -17403,9 +17547,15 @@
    "E": "Saya minta pendapat orang lain terlebih dulu mengenai rencana ini sebab pendapat banyak orang lebih baik daripada pendapat satu orang."
   },
   "kunci": "C",
-  "pembahasan": "Biasanya apabila Saya mematangkan rencana kerja maka ... A. Saya masih terus khawatir apakah rencana tersebut bisa berhasil. Skor 1: Menunjukkan sikap tidak percaya diri. B. Berhasil tidaknya tak lepas dari pihak lain juga. Skor 2: Perlu diwaspadai karena apabila rencana kerja tidak berjalan sebagaimana mestinya maka akan, cenderung, mencari kambing hitam sebagai penyebabnya. C. Manusia berusaha sebaik-baiknya, Tuhan yang menentukan. Skor 5: Menunjukkan sikap percaya diri. D. Bagaimanapun caranya rencana kerja Saya harus berhasil dengan gemilang. Skor 4: Menunjukkan sikap percaya diri, namun berlebihan. E. Saya minta pendapat orang lain terlebih dulu mengenai rencana ini sebab pendapat banyak orang lebih baik daripada pendapat satu orang. Skor 3: Menunjukkan sikap percaya diri dengan mempertimbangkan orang lain, namun perlu dipahami bahwa banyak pendapat yang dikemukakan disikapi sebagai alternatif cara/rencana. kedewasaan Anda dalam bertoleransi. Toleransi adalah sikap menerima dan membantu orang lain yang sedang mengalami kesulitan tertentu sehingga, meskipun hal tersebut membuat Anda kehilangan sumber daya (seperti: materi, waktu, dan perhatian), maka Anda tetap melakukannya dengan tulus. Contohnya sikap toleransi dalam dunia pekerjaan diperlukan untuk saling membantu sesama rekan kerja dan sekaligus menjaga kekompakan tim, baik dalam maupun luar kantor. Tips: - Tidakadamanusiayangdapat hidup sendiri di dunia ini. Pahamilah bahwa manusia adalah makhluk sosial yaitu hidup saling menolong. - Tidak ada manusia yang sempurna, semua orang memiliki kelebihan dan kekurangan. Contoh:",
+  "pembahasan": "A (1 poin): Menunjukkan sikap tidak percaya diri.\n\nB (2 poin): Perlu diwaspadai karena apabila rencana kerja tidak berjalan sebagaimana mestinya maka akan cenderung mencari kambing hitam sebagai penyebabnya.\n\nC (5 poin, terbaik): Menunjukkan sikap percaya diri.\n\nD (4 poin): Menunjukkan sikap percaya diri, namun berlebihan.\n\nE (3 poin): Menunjukkan sikap percaya diri dengan mempertimbangkan orang lain, namun perlu dipahami bahwa banyak pendapat yang dikemukakan disikapi sebagai alternatif cara atau rencana.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 2,
+   "C": 5,
+   "D": 4,
+   "E": 3
+  }
  },
  {
   "id": "materi-322",
@@ -17420,9 +17570,15 @@
    "E": "sama sekali tidak punya rasa toleransi"
   },
   "kunci": "B",
-  "pembahasan": "Saya termasuk orang yang ... di mata rekan-rekan kerja. A. memiliki sikap toleransi yang biasa saja Skor 3: Perlu introspeksi diri, perbaiki kekurangan yang ada, dan segeralah berubah untuk lebih baik lagi. memiliki sikap toleransi tinggi Skor 5: Apabila rekan-rekan, kerja menilai Anda memiliki sikap toleransi tinggi, maka memang seperti adanya. Namun, perlu diwaspadai dari sikap sombong. Tetaplah rendah hati dan selalu menjaga sikap toleransi yang Anda miliki. C. terkadang toleran terhadap kesulitan kawan Skor 4: Perlu dibedakan antara sikap toleransi dan bantu-membantu. Sikap toleransi tidak hanya dalam hal teman sedang dalam kesulitan. D. memiliki sikap toleransi rendah Skor 2: Perlu introspeksi diri dan segeralah berubah untuk lebih baik lagi. E. sama sekali tidak punya rasa toleransi Skor 1:",
+  "pembahasan": "A (3 poin): Perlu introspeksi diri, perbaiki kekurangan yang ada, dan segeralah berubah untuk lebih baik lagi.\n\nB (5 poin, terbaik): Apabila rekan-rekan kerja menilai Anda memiliki sikap toleransi tinggi, maka memang seperti adanya. Namun, perlu diwaspadai dari sikap sombong. Tetaplah rendah hati dan selalu menjaga sikap toleransi yang Anda miliki.\n\nC (4 poin): Perlu dibedakan antara sikap toleransi dan bantu-membantu. Sikap toleransi tidak hanya dalam hal teman sedang dalam kesulitan.\n\nD (2 poin): Perlu introspeksi diri dan segeralah berubah untuk lebih baik lagi.\n\nE (1 poin): Segeralah berubah untuk lebih baik lagi.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 3,
+   "B": 5,
+   "C": 4,
+   "D": 2,
+   "E": 1
+  }
  },
  {
   "id": "materi-323",
@@ -17437,9 +17593,15 @@
    "E": "melaporkan kepada atasan tentang hal ini"
   },
   "kunci": "A",
-  "pembahasan": "Kabar yang Saya terima, ayah dari rekan kerja di kantor sedang sakit keras dan rekan kerja tersebut tak punya biaya untuk membawanya ke rumah sakit. Semestinya yang Saya lakukan adalah ... A. memberinya bantuan semampu saya Skor 5: Menunjukkan sikap yang paling tepat. B. menasihatinya untuk lain kali mencari fasilitas kesehatan yang dianjurkan oleh pemerintah Skor 2: Perlu dipahami bahwa menasihati orang yang sedang dalam kesulitan dapat mengakibatkan perasaan tersinggung karena yang lebih dibutuhkan, adalah solusi. Oleh karena itu, perlu adanya pendampingan dan bantuan. Bantuan yang diberikan tidak harus berupa keringanan biaya, namun bisa berupa tenaga atau pikiran, misalnya membantu mencarikan informasi fasilitas kesehatan yang dianjurkan pemerintah, atau membantu dalam proses bagaimana memperoleh fasilitas kesehatan tersebut, dan sebagainya. menganjurkannya untuk mengikuti asuransi kesehatan Skor 3: Hal ini sebaiknya dilakukan setelah ada proses kesembuhan, sehingga tidak akan menyinggung perasaan teman dan sebagai langkah antisipasi untuk kejadian di masa yang akan datang. mengoordinir, rekan-rekan lain untuk turut membantu Skor 4: Sikap ini dapat meringankan beban rekan karena semakin banyak yang membantu, namun perlu dipahami bahwa membantu yang paling utama adalah dari diri Anda sendiri terlebih dahulu. melaporkan kepada atasan tentang hal ini Skor 1: Menunjukkan tindakan yang kurang tepat. Aspek kepedulian lingkungan yang diujikan dalam tes TKP CPNS bertujuan untuk mengukur tingkat kematangan atau kedewasaan sikap Anda dalam mengambil tindakan yang diperlukan ketika mendapati lingkungan memerlukan peran serta Anda. Seseorang yang memiliki kepedulian lingkungan terlihat dari yang memperhatikan dan berkomitmen akan sikapnya menjaga lingkungan dengan baik. Kematangan sikap peduli lingkungan diyakini sangat membantu tugas seorang PNS terutama bagi PNS yang menduduki posisi sebagai pengambil keputusan. Tips: - Tidak ada manusia yang dapat hidup sendiri di dunia ini. Pahamilah bahwa manusia adalah makhluk sosial yaitu hidup saling tolong menolong. - Tidakada manusia yang sempurna, semua orang memiliki kelebihan dan kekurangan. Contoh:",
+  "pembahasan": "A (5 poin, terbaik): Menunjukkan sikap yang paling tepat.\n\nB (2 poin): Perlu dipahami bahwa menasihati orang yang sedang dalam kesulitan dapat mengakibatkan perasaan tersinggung karena yang lebih dibutuhkan adalah solusi. Oleh karena itu, perlu adanya pendampingan dan bantuan. Bantuan yang diberikan tidak harus berupa keringanan biaya, namun bisa berupa tenaga atau pikiran, misalnya membantu mencarikan informasi fasilitas kesehatan yang dianjurkan pemerintah, atau membantu dalam proses bagaimana memperoleh fasilitas kesehatan tersebut, dan sebagainya.\n\nC (3 poin): Hal ini sebaiknya dilakukan setelah ada proses kesembuhan, sehingga tidak akan menyinggung perasaan teman dan sebagai langkah antisipasi untuk kejadian di masa yang akan datang.\n\nD (4 poin): Sikap ini dapat meringankan beban rekan karena semakin banyak yang membantu, namun perlu dipahami bahwa membantu yang paling utama adalah dari diri Anda sendiri terlebih dahulu.\n\nE (1 poin): Menunjukkan tindakan yang kurang tepat.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 5,
+   "B": 2,
+   "C": 3,
+   "D": 4,
+   "E": 1
+  }
  },
  {
   "id": "materi-324",
@@ -17454,9 +17616,15 @@
    "E": "laporkan kepada pengurus tempat ibadah yang sesuai keyakinannya agar menyalurkan sumbangan"
   },
   "kunci": "D",
-  "pembahasan": "Telah terjadi kebakaran di tempat ibadah yang ada di lingkungan tempat tinggal Saya. Namun, tempat ibadah tersebut beda dengan keyakinan yang Saya anut. Semestinya Saya ... A. percaya bahwa solidaritas umat mereka tinggi sehingga pasti ada yang sudah mengaturnya. Skor 1: Menunjukkan sikap tidak peduli pada lingkungan. B. menyumbangkan seluruh gaji yang baru Saya terima untuk pembangunan tempat ibadah itu kembali, tidak peduli bahwa keyakinan Saya berbeda. Skor 4: Menunjukkan sikap peduli pada lingkungan, namun sedikit berlebihan. C. hanya akan menyumbangkan sebagian gaji yang Saya terima karena masih ada kebutuhan hidup lainnya, dan lagi karena berbeda keyakinan sehingga Saya rasa hal itu sudah sangat baik untuk dilakukan. Skor 3: Menunjukkan sikap peduli pada lingkungan. D. mengajak warga di lingkungan tempat tinggal, rekan-rekan kerja di kantor, kerabat, atau siapa pun untuk menyumbang sesuai dengan kemampuannya untuk membantu pembangunan kembali tempat ibadah tersebut. Skor 5: Menunjukkan sikap terbaik. E. laporkan kepada pengurus tempat ibadah yang sesuai keyakinannya agar menyalurkan sumbangan. Skor 2: Menunjukkan sikap peduli pada lingkungan, namun semestinya yang utama adalah dari Anda sendiri terlebih dahulu.",
+  "pembahasan": "A (1 poin): Menunjukkan sikap tidak peduli pada lingkungan.\n\nB (4 poin): Menunjukkan sikap peduli pada lingkungan, namun sedikit berlebihan.\n\nC (3 poin): Menunjukkan sikap peduli pada lingkungan.\n\nD (5 poin, terbaik): Menunjukkan sikap terbaik.\n\nE (2 poin): Menunjukkan sikap peduli pada lingkungan, namun semestinya yang utama adalah dari Anda sendiri terlebih dahulu.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 4,
+   "C": 3,
+   "D": 5,
+   "E": 2
+  }
  },
  {
   "id": "materi-325",
@@ -17471,9 +17639,15 @@
    "E": "Melaporkan kepada bagian perlengkapan agar diambil tindakan seperlunya."
   },
   "kunci": "E",
-  "pembahasan": "Saat menggunakan inventaris kantor ternyata Saya menjumpai ada beberapa yang sudah tidak layak pakai. Tindakan Saya adalah ... A. Diam saja karena jika saya melaporkan hal ini ke bagian perlengkapan, maka akan dikira yang telah merusaknya. B. Memberi tahu hanya pada rekan kerja terdekat di kantor. C. Mencari tahu siapa yang telah merusaknya, jelas bahwa dia yang paling bertanggung jawab. D. Tetap melanjutkan tugastugas Saya yang masih banyak, melaporkan hal ini ke bagian perlengkapan, maka akan dikira yang telah merusaknya. Skor 1: Menunjukkan sikap permisif. Memberi tahu hanya pada rekan kerja terdekat di kantor. Skor 3: Perlu diketahui bahwa memberi tahu semestinya pada ahlinya, bukan hanya kepada rekan terdekat. Mencari tahu siapa yang telah merusaknya, jelas bahwa dia yang paling bertanggung jawab. Skor 4: Perlu dipahami bahwa mencari tahu siapa yang telah merusaknya agar bertanggung jawab akan memerlukan banyak waktu sehingga perlu sambil melaporkan ke teknisi/ bagian perlengkapan agar ada tindakan pembenahan seperlunya. D. Tetap melanjutkan tugas-tugas Saya yang masih banyak karena sudah ada bagian tersendiri yang kompeten mengurusinya. Skor 2: Menunjukkan sikap tidak peduli, apabila terus berlanjut maka tidak akan ada perubahan keadaan meski tugas-tugas Anda telah selesai. E. Melaporkan kepada bagian perlengkapan agar diambil tindakan seperlunya. Skor 5: Menunjukkan tindakan yang paling tepat, yaitu peduli terhadap lingkungan.",
+  "pembahasan": "A (1 poin): Menunjukkan sikap permisif.\n\nB (3 poin): Perlu diketahui bahwa memberi tahu semestinya pada ahlinya, bukan hanya kepada rekan terdekat.\n\nC (4 poin): Perlu dipahami bahwa mencari tahu siapa yang telah merusaknya agar bertanggung jawab akan memerlukan banyak waktu sehingga perlu sambil melaporkan ke teknisi atau bagian perlengkapan agar ada tindakan pembenahan seperlunya.\n\nD (2 poin): Menunjukkan sikap tidak peduli, apabila terus berlanjut maka tidak akan ada perubahan keadaan meski tugas-tugas Anda telah selesai.\n\nE (5 poin, terbaik): Menunjukkan tindakan yang paling tepat, yaitu peduli terhadap lingkungan.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 3,
+   "C": 4,
+   "D": 2,
+   "E": 5
+  }
  },
  {
   "id": "materi-326",
@@ -17488,9 +17662,15 @@
    "E": "menyelesaikan pekerjaan yang tertunda kemarin"
   },
   "kunci": "B",
-  "pembahasan": "Hampir setiap hari, saya terdaftar sebagai pegawai dengan presensi paling awal datangnya jika dibandingkan dengan rekan kerja lainnya. Setiba di kantor, Saya melakukan kegiatan ... A. membaca koran dulu agar update Skor 3: Perlu dipahami bahwa mengetahui informasi agar update memang diperlukan. Apabila koran digunakan sebagai sumber informasi maka ada teknik membaca cepat yang bisa diterapkan sehingga tidak akan memakan banyak waktu kerja membuat daftar rencana kerja yang akan dilakukan dan diselesaikan hari ini Skor 5: Menunjukkan sikap efisiensi kerja. santai di luar kantor menikmati udara pagi Skor 1: Menunjukkan sikap tidak efiensi dalam kerjanya. mengobrol dengan rekan sejawat, menanyakan kabar harian mereka Skor 2: Perlu dipahami bahwa mengobrol dengan rekan sejawat dengan menanyakan kabar harian mereka memang diperlukan dalam hal keakraban dan kekeluargaan, namun jangan sampai terlena dan memakan banyak waktu kerja apalagi belum tahu arah pembicaraannya. menyelesaikan pekerjaan yang tertunda kemarin Skor 4:",
+  "pembahasan": "A (3 poin): Perlu dipahami bahwa mengetahui informasi agar update memang diperlukan. Apabila koran digunakan sebagai sumber informasi maka ada teknik membaca cepat yang bisa diterapkan sehingga tidak akan memakan banyak waktu kerja.\n\nB (5 poin, terbaik): Menunjukkan sikap efisiensi kerja.\n\nC (1 poin): Menunjukkan sikap tidak efisien dalam kerjanya.\n\nD (2 poin): Perlu dipahami bahwa mengobrol dengan rekan sejawat dengan menanyakan kabar harian mereka memang diperlukan dalam hal keakraban dan kekeluargaan, namun jangan sampai terlena dan memakan banyak waktu kerja apalagi belum tahu arah pembicaraannya.\n\nE (4 poin): Menunjukkan sikap yang kurang efisien dalam bekerja karena ada pekerjaan yang tertunda sehingga mesti diselesaikan keesokan harinya.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 3,
+   "B": 5,
+   "C": 1,
+   "D": 2,
+   "E": 4
+  }
  },
  {
   "id": "materi-327",
@@ -17505,9 +17685,15 @@
    "E": "Percakapan online dengan kawan lama dari sosial media yang dapat diakses dari telepon genggam."
   },
   "kunci": "D",
-  "pembahasan": "Semua rencana kerja yang Saya buat tadi pagi telah selesai Saya kerjakan, namun jam kerja hari ini masih ada sisa waktu. Sebaiknya Saya... A. Membaca buku-buku pengembangan dan motivasi diri di sisa waktu kerja. Skor 4: Menunjukkan sikap yang tepat, selain efisien kerja karena pekerjaan telah selesai juga bisa digunakan sebagai cara pengembangan diri. B. Melakukan aktivitas mengakses berita dan situs jejaring sosial facebook. Skor 2: Aktivitas mengakses berita boleh saja, namun membuka situs jejaring sosial facebook akan membuat kecanduan dan menurunkan efisiensi kerja. C. Mengobrol dengan rekan-rekan kerja lain untuk sekadar mengisi waktu setelah lelah bekerja hari ini, jadi saya rasa tak ada salahnya. Skor 3: Mengambil waktu istirahat dilakukan secukupnya dan sebaiknya pada saat jam istirahat yang telah ditentukan. D. Mereviu hasil pekerjaan hari Ini. Skor 5: Menunjukkan sikap yang paling tepat karena apabila ditemukan kekeliruan maka bisa segera dibenahi. E. Percakapan online dengan kawan lama dari sosial media yang dapat diakses dari telepon genggam. Skor 1: Menunjukkan tindakan yang tidak tepat karena semestinya dilakukan di luar jam kerja. Berkelanjutan Saat ini zaman telah berubah dengan cepat. Banyak ditemukan teknologi baru yang membantu dalam pekerjaan, tidak lagi hanya mengandalkan dari alat bantu contohnya menghitung hitung seperti kalkulator namun bisa dilakukan beberapa program yang bisa dijalankan dengan memanfaatkan di komputer. Program-program ini menyertakan tidak hanya sekadar angka tetapi juga hasil analisis data yang dibutuhkan. Penggunaan program secara optimal tidak lepas dari orang selaku operatornya. Oleh karena itu, seseorang harus terus belajar agar tidak tertinggal. Aspek kemauan dan kemampuan belajar berkelanjutan yang diujikan di tes TKP CPNS bertujuan untuk mengukur keinginan dan tindakan yang Anda lakukan untuk terus maju dengan belajar terus-menerus. adalah gemar membaca, mengikuti pela- Indikasinya tihan pengembangan diri: tidak protes jika ditugaskan mengikuti seminar atau pelatihan: berpikir maju: tertantang untuk maju. TIPS: “ Belajarlah menghargai orang lain, tanpa mencari kesalahan dan kelemahannya. Kita manusia pasti mempunyai kekurangan, namun dengan sabar belajar secara kontinu akan menghasilkan sesuatu yang lebih baik. Contoh:",
+  "pembahasan": "A (4 poin): Menunjukkan sikap yang tepat, selain efisien kerja karena pekerjaan telah selesai juga bisa digunakan sebagai cara pengembangan diri.\n\nB (2 poin): Aktivitas mengakses berita boleh saja, namun membuka situs jejaring sosial facebook akan membuat kecanduan dan menurunkan efisiensi kerja.\n\nC (3 poin): Mengambil waktu istirahat dilakukan secukupnya dan sebaiknya pada saat jam istirahat yang telah ditentukan.\n\nD (5 poin, terbaik): Menunjukkan sikap yang paling tepat karena apabila ditemukan kekeliruan maka bisa segera dibenahi.\n\nE (1 poin): Menunjukkan tindakan yang tidak tepat karena semestinya dilakukan di luar jam kerja.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 4,
+   "B": 2,
+   "C": 3,
+   "D": 5,
+   "E": 1
+  }
  },
  {
   "id": "materi-328",
@@ -17522,9 +17708,15 @@
    "E": "Menghadiri seminar dan mengerjakan laporannya nanti saja karena laporan belum harus segera diserahkan kepada atasan."
   },
   "kunci": "D",
-  "pembahasan": "Saya ditugaskan untuk menghadiri seminar menggantikan atasan. Pada saat yang bersamaan, Saya sedang mengerjakan laporan yang tidak terlalu mendesak. Sikap Saya akan... A. Menyelesaikan laporan terlebih dahulu karena bisa saja diminta oleh atasan sewaktu-waktu. Skor 2: Menunjukkan sikap hanya fokus pada pekerjaan rutin. B. Laporan tersebut akan menjadi merepotkan kalau tertunda. Skor 1: Menunjukkan sikap hanya fokus pada pekerjaan rutin dan kurang memiliki kemauan belajar berkelanjutan C. Menghadiri seminar tersebut agar dapat menghindar dari tugas laporan. Skor 3: Menunjukkan sikap kemauan dan kemampuan belajar berkelanjutan, namun alasan tidak dapat dibenarkan karena untuk menghindar dari tugas laporan yang menjadi kewajibannya. D. Menghadiri seminar tersebut. Skor 5: Menunjukkan sikap kemauan dan kemampuan belajar berkelanjutan. E. Menghadiri seminar dan mengerjakan laporannya nanti saja karena laporan belum harus segera diserahkan kepada atasan. Skor 4:",
+  "pembahasan": "A (2 poin): Menunjukkan sikap hanya fokus pada pekerjaan rutin.\n\nB (1 poin): Menunjukkan sikap hanya fokus pada pekerjaan rutin dan kurang memiliki kemauan belajar berkelanjutan.\n\nC (3 poin): Menunjukkan sikap kemauan dan kemampuan belajar berkelanjutan, namun alasan tidak dapat dibenarkan karena untuk menghindar dari tugas laporan yang menjadi kewajibannya.\n\nD (5 poin, terbaik): Menunjukkan sikap kemauan dan kemampuan belajar berkelanjutan.\n\nE (4 poin): Menunjukkan sikap kemauan dan kemampuan belajar berkelanjutan, namun sebaiknya laporan juga harus tetap diselesaikan sebelum waktunya.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 2,
+   "B": 1,
+   "C": 3,
+   "D": 5,
+   "E": 4
+  }
  },
  {
   "id": "materi-329",
@@ -17539,9 +17731,15 @@
    "E": "Berangkat seminar dan setelah presensi kehadiran maka segera pulang secepatnya."
   },
   "kunci": "A",
-  "pembahasan": "Saya ditugaskan untuk mengikuti acara seminar di luar kota. Saat yang bersamaan, keluarga Saya mengadakan acara besar di rumah. Tindakan Saya adalah ... A. Tetap berangkat seminar, dan memberikan pengertian ke keluarga bahwa hal itu merupakan tugas dari kantor yang harus dijalankan. Skor 5: Menunjukkan sikap paling tepat, memiliki kemauan untuk belajar berkelanjutan. Namun perlu dipastikan terlebih dahulu bahwa acara besar di rumah dapat berjalan sebagaimana mestinya dan tidak mengganggu tugas yang sedang dijalankan. Meminta salah seorang rekan kerja yang waktunya luang untuk menggantikan tugas Saya berangkat seminar. Skor 4: Tindakan yang tepat dilakukan jika memang mendesak tidak dapat menghadiri seminar yang ditugaskan, namun perlu dipastikan ada transfer ilmu dari rekan yang menghadiri seminar dan menggantikan Anda agar Anda memperoleh ilmu yang sama. Meminta cuti agar acara di rumah dapat berlangsung dengan baik. Skor 2: Tindakan yang tepat dilakukan jika memang mendesak tidak dapat menghadiri seminar yang ditugaskan, sehingga dapat fokus pada acara besar di rumah. Namun, perlu dipastikan ada rekan yang menggantikan tugas Anda untuk menghadiri seminar. D. Berangkat seminar setengah hari dan segera pulang secepatnya. Skor 3: Perlu dipastikan bahwa izin menghadiri seminar setengah hari diketahui dan diizinkan oleh penyelenggara dan pemberi tugas. E. Berangkat seminar dan setelah presensi kehadiran maka segera pulang secepatnya. Skor 1: Tindakan yang kurang tepat karena berbohong. Manusia sebagai makhluk sosial tidak dapat hidup sendiri, selalu membutuhkan bantuan dari orang lain. Di sini diperlukan interaksi sosial yang baik. Apabila seseorang dimasukkan pada suatu kelompok, tentulah orang tersebut harus bisa bekerja sama dengan baik dalam kelompoknya agar tujuan kelompok dapat tercapai. PNS adalah bentuk pengabdian kepada negara. Bekerja sebagai Pekerjaan tersebut banyak dilakukan secara bersama-sama, diambil keputusan bersama, dan dibuat kebijakan untuk semua. Kemampuan seorang CPNS bekerja sama dalam kelompok diuji tahap awal pada tes TKP CPNS dalam aspek bekerja sama dalam kelompok. TIPS: “ Setiap tindakan pasti akan dimintai pertanggungjawabnya, begitu pula ketika bekerja dalam kelompok. Berusahalah Anda menjadi bagian yang berguna di dalam kelompok itu. Apabila Anda ditugaskan sebagai pemimpin maka bagilah, tugas-tugas ke anak buah secara adil dan proporsional agar tim solid dan mampu bekerja sama dengan baik. Contoh:",
+  "pembahasan": "A (5 poin, terbaik): Menunjukkan sikap paling tepat, memiliki kemauan untuk belajar berkelanjutan. Namun perlu dipastikan terlebih dahulu bahwa acara besar di rumah dapat berjalan sebagaimana mestinya dan tidak mengganggu tugas yang sedang dijalankan.\n\nB (4 poin): Tindakan yang tepat dilakukan jika memang mendesak tidak dapat menghadiri seminar yang ditugaskan, namun perlu dipastikan ada transfer ilmu dari rekan yang menghadiri seminar dan menggantikan Anda agar Anda memperoleh ilmu yang sama.\n\nC (2 poin): Tindakan yang tepat dilakukan jika memang mendesak tidak dapat menghadiri seminar yang ditugaskan, sehingga dapat fokus pada acara besar di rumah. Namun, perlu dipastikan ada rekan yang menggantikan tugas Anda untuk menghadiri seminar.\n\nD (3 poin): Perlu dipastikan bahwa izin menghadiri seminar setengah hari diketahui dan diizinkan oleh penyelenggara dan pemberi tugas.\n\nE (1 poin): Tindakan yang kurang tepat karena berbohong.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 2,
+   "D": 3,
+   "E": 1
+  }
  },
  {
   "id": "materi-330",
@@ -17556,9 +17754,15 @@
    "E": "Selalu aktif berpendapat dan mengarahkan teman-teman untuk berpendapat juga."
   },
   "kunci": "D",
-  "pembahasan": "Pada sebuah diskusi dengan tim kerja yang terdiri dari rekan-rekan kerja Anda di kantor biasanya Saya adalah ... A. Pendengar dan pengamat yang baik dalam diskusi. Skor 1: Perlu lebih aktif lagi. Lebih banyak mendengar dan berbicara sekedarnya. Skor 2: Menunjukkan sikap mau bekerja sama dengan kelompok, namun perlu lebih aktif lagi. C. Jika perlu bicara maka saya utarakan, jika tidak maka saya cukup mendengar. Skor 3: Menunjukkan sikap mau bekerja sama dengan kelompok. D. Mengamati sejenak lalu aktif berpendapat. Skor 5: Menunjukkan sikap yang paling tepat. E. Selalu aktif berpendapat dan mengarahkan teman-teman untuk berpendapat juga. Skor 4: Menunjukkan sikap yang tepat, dan berusaha untuk bekerja sama dengan baik. (Problem Solving) Masalah akan selalu ada di mana pun kita berada dan bisa terjadi kapan saja. Masalah bukan untuk dihindari namun dihadapi dengan cara yang tepat. Oleh karena itu dibutuhkan teknik pemecahan masalah. Aspek teknik pemecahan masalah diujikan untuk mengukur kemampuan Anda dalam memecahkan suatu permasalahan yang dihadapi seharihari, serta menunjukkan respons terbaik yang Anda tampilkan saat menghadapi masalah tersebut. Respons terburuk dari menghadapi masalah adalah menghindari atau emosi. Kemampuan memecahkan masalah tidak didapat dengan cara instan, namun merupakan proses belajar yang panjang. Semakin banyak pengalaman hidup seseorang maka semakin matang pula pemikirannya untuk memecahkan masalah. TIPS: - Perbanyak berinteraksi dengan orang lain tanpa membedakan golongan. - Perbanyak membaca dari berbagai sumber referensi. » Kenali beberapa teknik memecahkan masalah dari beberapa rekan kerja yang ahli di bidangnya. Contoh:",
+  "pembahasan": "A (1 poin): Perlu lebih aktif lagi.\n\nB (2 poin): Menunjukkan sikap mau bekerja sama dengan kelompok, namun perlu lebih aktif lagi.\n\nC (3 poin): Menunjukkan sikap mau bekerja sama dengan kelompok.\n\nD (5 poin, terbaik): Menunjukkan sikap yang paling tepat.\n\nE (4 poin): Menunjukkan sikap yang tepat, dan berusaha untuk bekerja sama dengan baik.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 1,
+   "B": 2,
+   "C": 3,
+   "D": 5,
+   "E": 4
+  }
  },
  {
   "id": "materi-331",
@@ -17573,9 +17777,15 @@
    "E": "Just do it! Lakukan saja untuk menyelesaikannya."
   },
   "kunci": "C",
-  "pembahasan": "Bagaimana Anda menilai sebuah permasalahan? A. Mempertimbangkan terlebih dahulu dengan memikirkannya. Skor 4: Menunjukkan sikap yang tepat dalam pemecahan masalah, namun perlu ditambah dengan keberanian dalam mengambil tindakan. B. Meminta pendapat untuk mencari solusi. Skor 3: Meminta pendapat orang lain untuk mencari solusi adalah salah satu teknik pemecahan masalah apabila Anda per-lu pertimbangan dalam memecahkan masalah yang dihadapi. C. Menambah informasi, mempertimbangkan, kemudian eksekusi. Skor 5: Menunjukkan sikap yang paling tepat dalam pemecahan masalah. D. Melakukan sebisa mungkin sambil berpikir cara terbaik. Skor 2: Perlu ada pemahaman dalam skala prioritas yang dikerjakan sambil memikirkan cara terbaik barulah diambil tindakan yang diperlukan. E. Just do it! Lakukan saja untuk menyelesaikannya. Skor 1:",
+  "pembahasan": "A (4 poin): Menunjukkan sikap yang tepat dalam pemecahan masalah, namun perlu ditambah dengan keberanian dalam mengambil tindakan.\n\nB (3 poin): Meminta pendapat orang lain untuk mencari solusi adalah salah satu teknik pemecahan masalah apabila Anda perlu pertimbangan dalam memecahkan masalah yang dihadapi.\n\nC (5 poin, terbaik): Menunjukkan sikap yang paling tepat dalam pemecahan masalah.\n\nD (2 poin): Perlu ada pemahaman dalam skala prioritas yang dikerjakan sambil memikirkan cara terbaik barulah diambil tindakan yang diperlukan.\n\nE (1 poin): Perlu dipahami bahwa daripada melakukan tindakan yang keliru maka lebih baik nol tindakan, dan memikirkan serta mencari solusi yang terbaik dalam waktu secepatnya baru bertindak sesuai yang diperlukan.",
   "sumber": "materi-mod-tkp",
-  "bobot": 5
+  "bobot": {
+   "A": 4,
+   "B": 3,
+   "C": 5,
+   "D": 2,
+   "E": 1
+  }
  },
  {
   "id": "materi-332",
@@ -19052,23 +19262,6 @@
   "subtopik": "Profesionalisme"
  },
  {
-  "id": "komunitas-69",
-  "materi": "TKP",
-  "soal": "Saya sangat senang dengan atasan yang...",
-  "pilihan": {
-   "A": "Dekat dengan anak buah KARAKTERISTIKPRIBADI",
-   "B": "Disiplin dan mempunyai etos kerja tinggi",
-   "C": "Bertanggung jawab",
-   "D": "Mau mendengar masukan dari bawahan",
-   "E": "Memberi tahu hal-hal yang harus dikerjakan"
-  },
-  "kunci": "D",
-  "pembahasan": "Bobot per opsi: D=5, B=4, C=3, A=2, E=1.",
-  "sumber": "komunitasbelajar",
-  "bobot": 5,
-  "subtopik": "Kepemimpinan"
- },
- {
   "id": "komunitas-162",
   "materi": "TKP",
   "soal": "Setiap pagi teman selalu mengajak sarapan pagi terlebih dahulu setelah absen masuk, memang biasnya tiap pagi masih belum ada pekerjaan, maka sikap saya ...",
@@ -19082,7 +19275,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19099,7 +19298,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, C=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "C": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19116,7 +19321,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19133,7 +19344,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19150,7 +19367,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19167,7 +19390,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, B=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "B": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19184,7 +19413,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19201,7 +19436,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19218,7 +19459,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, A=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "A": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19235,7 +19482,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19252,7 +19505,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19269,7 +19528,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, B=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "B": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19286,7 +19551,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, D=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "D": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Pelayanan Publik"
  },
  {
@@ -19303,7 +19574,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19320,7 +19597,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19337,7 +19620,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, A=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "A": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19354,7 +19643,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, B=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "B": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19371,7 +19666,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, D=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "D": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19388,7 +19689,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19405,7 +19712,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, E=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "E": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19422,7 +19735,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19439,7 +19758,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, A=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "A": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19456,7 +19781,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, A=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "A": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19473,7 +19804,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, E=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "E": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19490,7 +19827,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, D=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "D": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19507,7 +19850,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, E=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "E": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19524,7 +19873,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, D=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "D": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19541,7 +19896,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19558,7 +19919,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, C=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "C": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19575,7 +19942,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, A=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "A": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19592,7 +19965,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, A=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "A": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19609,7 +19988,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, D=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "D": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Semangat Berprestasi"
  },
  {
@@ -19626,7 +20011,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, E=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "E": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19643,7 +20034,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, E=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "E": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19660,7 +20057,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, B=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "B": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19677,7 +20080,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19694,7 +20103,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, E=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "E": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19711,7 +20126,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19728,7 +20149,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, A=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "A": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19745,7 +20172,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, A=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19762,7 +20195,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Profesionalisme"
  },
  {
@@ -19779,7 +20218,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19796,7 +20241,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, B=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "B": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19813,7 +20264,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, C=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "C": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19830,7 +20287,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -19847,7 +20310,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19864,7 +20333,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19881,7 +20356,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Pelayanan Publik"
  },
  {
@@ -19898,7 +20379,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, C=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "C": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19915,7 +20402,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19932,7 +20425,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -19949,7 +20448,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -19966,7 +20471,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Adaptasi"
  },
  {
@@ -19983,7 +20494,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, C=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20000,7 +20517,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20017,7 +20540,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20034,7 +20563,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, C=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "C": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20051,7 +20586,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, A=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "A": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20068,7 +20609,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, E=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "E": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20085,7 +20632,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20102,7 +20655,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20119,7 +20678,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, C=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "C": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Pelayanan Publik"
  },
  {
@@ -20136,7 +20701,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, D=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "D": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20153,7 +20724,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, C=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20170,7 +20747,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, C=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20187,7 +20770,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, E=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "E": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20204,7 +20793,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, A=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "A": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20221,7 +20816,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, A=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "A": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20238,7 +20839,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, B=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "B": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20255,7 +20862,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, A=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "A": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20272,7 +20885,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20289,7 +20908,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20306,7 +20931,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, A=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "A": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20323,7 +20954,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, C=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20340,7 +20977,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, D=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "D": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20357,7 +21000,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20374,7 +21023,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, B=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "B": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20391,7 +21046,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20408,7 +21069,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, B=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "B": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20425,7 +21092,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, D=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "D": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20442,7 +21115,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, E=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "E": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20459,7 +21138,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, D=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "D": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20476,7 +21161,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20493,7 +21184,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, E=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "E": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Pengembangan Diri"
  },
  {
@@ -20510,7 +21207,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, D=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "D": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20527,7 +21230,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, C=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "C": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -20544,7 +21253,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, E=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20561,7 +21276,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, E=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "E": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20578,7 +21299,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, E=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "E": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20595,7 +21322,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, D=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "D": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20612,7 +21345,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, B=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "B": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -20629,7 +21368,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20646,7 +21391,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, B=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "B": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20663,7 +21414,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20680,7 +21437,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, C=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20697,7 +21460,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, A=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "A": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20714,7 +21483,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, C=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "C": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20731,7 +21506,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, D=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "D": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20748,7 +21529,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, C=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "C": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20765,7 +21552,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, E=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Pengembangan Diri"
  },
  {
@@ -20782,7 +21575,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, A=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "A": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20799,7 +21598,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, D=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "D": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20816,7 +21621,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, E=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "E": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20833,7 +21644,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20850,7 +21667,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, B=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "B": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20867,7 +21690,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -20884,7 +21713,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -20901,7 +21736,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, E=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "E": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20918,7 +21759,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20935,7 +21782,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20952,7 +21805,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -20969,7 +21828,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, A=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "A": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -20986,7 +21851,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21003,7 +21874,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, B=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "B": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21020,7 +21897,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, D=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "D": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21037,7 +21920,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, D=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "D": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21054,7 +21943,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, C=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21071,7 +21966,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21088,7 +21989,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, A=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "A": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21105,7 +22012,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, C=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "C": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21122,7 +22035,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, A=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "A": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21139,7 +22058,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21156,7 +22081,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, E=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "E": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21173,7 +22104,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21190,7 +22127,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, D=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "D": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -21207,7 +22150,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, B=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "B": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -21224,7 +22173,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21241,7 +22196,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, B=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "B": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21258,7 +22219,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21275,7 +22242,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21292,7 +22265,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21309,7 +22288,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, B=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "B": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21326,7 +22311,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, A=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "A": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21343,7 +22334,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, B=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "B": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21360,7 +22357,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, D=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "D": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21377,7 +22380,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, C=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "C": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -21394,7 +22403,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, A=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "A": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21411,7 +22426,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21428,7 +22449,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21445,25 +22472,14 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, A=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
-  "subtopik": "Kerja Sama Tim"
- },
- {
-  "id": "komunitas-553",
-  "materi": "TKP",
-  "soal": "Saya menggunakan kendaraan dinas tanpa sepengetahuan kepala kendaraan pada hari libur. Secara tidak sengaja saya menabrakkan kendaraan tersebut. Tindakan saya adalah….",
-  "pilihan": {
-   "A": "Diam-diam menyimpan kendaraan tersebut karena tidak seorang pun tau saya yang menggunakannya",
-   "B": "Kepala kendaraan adalah sahabat saya, sehingga kami mampu menyelesaikannya secara kekeluargaan",
-   "C": "Melaporkan kejadian tersebut kepada pimpinan dan siap menerima hukuman/petunjuk dari pimpinan",
-   "D": "Membawa kendaraan tersebut ke bengkel atas biaya pribadi dan mengembalikannya",
-   "E": "Membawa kendaraan tersebut kebengkel, melaporkan kepada pimpinan dan menyerahkan keputusan sepenuhnya kepada pimpinan"
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "A": 3,
+   "D": 2,
+   "B": 1
   },
-  "kunci": "B",
-  "pembahasan": "Bobot per opsi: B=5, A=4, D=3, C=2, E=1.",
-  "sumber": "komunitasbelajar",
-  "bobot": 5,
-  "subtopik": "Campuran"
+  "subtopik": "Kerja Sama Tim"
  },
  {
   "id": "komunitas-554",
@@ -21479,7 +22495,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, B=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "B": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21496,7 +22518,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21513,25 +22541,14 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
-  "subtopik": "Kepemimpinan"
- },
- {
-  "id": "komunitas-557",
-  "materi": "TKP",
-  "soal": "Ada tawaran beasiswa belajar keluar negeri ditempat saya bekerja, sikap saya…",
-  "pilihan": {
-   "A": "Melihat syarat dan pra-syarat untuk mengikutinya",
-   "B": "Mempersiapkan diri untuk mengikutinya",
-   "C": "Mendaftarkan diri, karena saya yakin akan kemampuan saya",
-   "D": "Jika itu bukan bidang saya, saya lebih baik menolaknya",
-   "E": "Mendaftar dan mempersiapkan diri"
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
   },
-  "kunci": "A",
-  "pembahasan": "Bobot per opsi: A=5, D=4, C=3, B=2, E=1.",
-  "sumber": "komunitasbelajar",
-  "bobot": 5,
-  "subtopik": "Pengembangan Diri"
+  "subtopik": "Kepemimpinan"
  },
  {
   "id": "komunitas-558",
@@ -21547,7 +22564,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, D=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "D": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21564,7 +22587,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -21581,7 +22610,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21598,7 +22633,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21615,7 +22656,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Adaptasi"
  },
  {
@@ -21632,7 +22679,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, A=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "A": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21649,7 +22702,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, B=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21666,7 +22725,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, D=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "D": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21683,7 +22748,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21700,7 +22771,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, B=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "B": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21717,7 +22794,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, D=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "D": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21734,7 +22817,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, B=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "B": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -21751,7 +22840,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, D=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "D": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Semangat Berprestasi"
  },
  {
@@ -21768,7 +22863,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21785,7 +22886,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -21802,7 +22909,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -21819,7 +22932,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -21836,7 +22955,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, E=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "E": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21853,7 +22978,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21870,7 +23001,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, E=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "E": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21887,7 +23024,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21904,7 +23047,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21921,7 +23070,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, C=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "C": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21938,7 +23093,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, A=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "A": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -21955,7 +23116,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21972,7 +23139,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -21989,7 +23162,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, E=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22006,7 +23185,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, D=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "D": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22023,7 +23208,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22040,7 +23231,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, E=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "E": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -22057,7 +23254,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22074,7 +23277,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22091,7 +23300,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, E=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "E": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -22108,7 +23323,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -22125,7 +23346,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, D=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "D": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Pelayanan Publik"
  },
  {
@@ -22142,7 +23369,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22159,7 +23392,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Pelayanan Publik"
  },
  {
@@ -22176,7 +23415,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22193,7 +23438,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22210,7 +23461,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, A=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "A": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22227,7 +23484,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22244,7 +23507,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22261,7 +23530,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, A=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "A": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22278,7 +23553,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, E=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Integritas"
  },
  {
@@ -22295,7 +23576,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, A=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "A": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22312,7 +23599,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22329,7 +23622,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, D=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "D": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22346,7 +23645,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22363,7 +23668,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, D=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "D": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22380,7 +23691,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, C=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "C": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22397,7 +23714,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22414,7 +23737,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, E=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "E": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22431,7 +23760,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22448,7 +23783,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22465,7 +23806,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, A=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "A": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22482,7 +23829,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, D=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "D": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22499,7 +23852,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, C=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "C": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22516,7 +23875,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, D=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "D": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22533,7 +23898,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, E=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22550,7 +23921,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, B=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "B": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Pengembangan Diri"
  },
  {
@@ -22567,7 +23944,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, C=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "C": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -22584,7 +23967,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, A=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "A": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22601,7 +23990,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, B=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "B": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22618,7 +24013,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, B=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "B": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22635,7 +24036,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, C=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "C": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22652,7 +24059,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, A=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "A": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22669,7 +24082,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -22686,7 +24105,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, A=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "A": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22703,7 +24128,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22720,7 +24151,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, D=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "D": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22737,7 +24174,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, B=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22754,7 +24197,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22771,7 +24220,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22788,7 +24243,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, A=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "A": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -22805,7 +24266,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, A=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "A": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -22822,7 +24289,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, A=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "A": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22839,7 +24312,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, A=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "A": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22856,7 +24335,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, A=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "A": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22873,24 +24358,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, E=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
-  "subtopik": "Campuran"
- },
- {
-  "id": "komunitas-765",
-  "materi": "TKP",
-  "soal": "Prediksi pengamat ekonomi bahwa bulan depan akan terjadi inflasi besar di Indonesia membuat saya ...",
-  "pilihan": {
-   "A": "Susah tidur",
-   "B": "Depresi berat, karena inflasi berarti harga barang naik",
-   "C": "Berhati-hati dan berhemat dalam membelanjakn uang",
-   "D": "Yang akan terjadi biarlah terjadi",
-   "E": "Prediksi yang menyusahkan seperti itu tak perlu saya percayai"
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "E": 3,
+   "D": 2,
+   "B": 1
   },
-  "kunci": "C",
-  "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
-  "sumber": "komunitasbelajar",
-  "bobot": 5,
   "subtopik": "Campuran"
  },
  {
@@ -22907,7 +24381,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22924,7 +24404,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -22941,7 +24427,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, B=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "B": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -22958,7 +24450,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, C=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "C": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -22975,7 +24473,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, C=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "C": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Profesionalisme"
  },
  {
@@ -22992,7 +24496,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Manajemen Waktu"
  },
  {
@@ -23009,7 +24519,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, C=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "C": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23026,7 +24542,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, C=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "C": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -23043,7 +24565,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, A=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "A": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23060,7 +24588,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, E=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "E": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -23077,7 +24611,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, E=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -23094,7 +24634,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -23111,7 +24657,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, C=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23128,7 +24680,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, B=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23145,7 +24703,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, D=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "D": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23162,24 +24726,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, B=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
-  "subtopik": "Campuran"
- },
- {
-  "id": "komunitas-846",
-  "materi": "TKP",
-  "soal": "Setelah menyelesaikan pekerjaan tertentu, saya ...",
-  "pilihan": {
-   "A": "Langsung melakukan aktifitas lain",
-   "B": "Istirahat sejenak",
-   "C": "Mengakses situs jejaring sosial semacam facebook untuk mengetahui KARAKTERISTIKPRIBADI kabar terbaru dari kerabat dan kawan saya",
-   "D": "Membaca koran",
-   "E": "Meneliti pekerjaan tersebut apakah m asih ada kekeliruan, lalumelakukan aktifitas lain"
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "B": 3,
+   "D": 2,
+   "A": 1
   },
-  "kunci": "E",
-  "pembahasan": "Bobot per opsi: E=5, A=4, B=3, D=2, C=1.",
-  "sumber": "komunitasbelajar",
-  "bobot": 5,
   "subtopik": "Campuran"
  },
  {
@@ -23196,7 +24749,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, B=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "B": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -23213,7 +24772,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -23230,7 +24795,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, A=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "A": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23247,7 +24818,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23264,7 +24841,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23281,7 +24864,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, A=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "A": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23298,7 +24887,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23315,7 +24910,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, A=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "A": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -23332,7 +24933,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, C=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "C": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23349,7 +24956,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23366,7 +24979,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23383,7 +25002,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, D=4, E=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "D": 4,
+   "E": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23400,7 +25025,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, B=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "B": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Kreativitas & Inovasi"
  },
  {
@@ -23417,7 +25048,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, E=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "E": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -23434,7 +25071,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, A=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "A": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23451,7 +25094,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23468,7 +25117,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -23485,7 +25140,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, A=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "A": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23502,7 +25163,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, C=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -23519,7 +25186,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, E=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "E": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23536,7 +25209,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23553,7 +25232,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, C=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "C": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23570,7 +25255,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, A=3, D=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "A": 3,
+   "D": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23587,7 +25278,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, B=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "B": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23604,7 +25301,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, E=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23621,7 +25324,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -23638,7 +25347,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23655,7 +25370,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, D=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "D": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23672,7 +25393,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, D=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "D": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23689,7 +25416,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23706,7 +25439,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, A=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "A": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23723,7 +25462,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, A=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "A": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23740,7 +25485,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23757,7 +25508,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, E=4, B=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "E": 4,
+   "B": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23774,24 +25531,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, E=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
-  "subtopik": "Campuran"
- },
- {
-  "id": "komunitas-942",
-  "materi": "TKP",
-  "soal": "Anda senang tinggal dalam lingkungan yang...",
-  "pilihan": {
-   "A": "Rumahnya berdekatan",
-   "B": "Tertutup",
-   "C": "Sepi",
-   "D": "Suasananya individual",
-   "E": "Suasananya penuh kekeluargaan"
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "D": 1
   },
-  "kunci": "E",
-  "pembahasan": "Bobot per opsi: E=5, A=4, C=3, B=2, D=1.",
-  "sumber": "komunitasbelajar",
-  "bobot": 5,
   "subtopik": "Campuran"
  },
  {
@@ -23808,7 +25554,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23825,7 +25577,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, B=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "B": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23842,7 +25600,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -23859,7 +25623,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23876,7 +25646,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, E=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "E": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23893,7 +25669,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23910,7 +25692,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23927,7 +25715,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, E=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "E": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23944,7 +25738,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, C=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "C": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23961,7 +25761,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, C=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "C": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23978,7 +25784,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, A=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "A": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -23995,7 +25807,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, E=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "E": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24012,7 +25830,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, C=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "C": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24029,7 +25853,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24046,7 +25876,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, A=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "A": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24063,7 +25899,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24080,7 +25922,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, B=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "B": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24097,7 +25945,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, A=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "A": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24114,7 +25968,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, E=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "E": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24131,7 +25991,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, A=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "A": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24148,7 +26014,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24165,7 +26037,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, B=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "B": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -24182,7 +26060,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, A=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "A": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24199,7 +26083,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, D=4, E=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "D": 4,
+   "E": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24216,7 +26106,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, A=4, D=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "A": 4,
+   "D": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24233,7 +26129,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, D=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "D": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24250,7 +26152,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24267,7 +26175,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24284,7 +26198,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, B=3, C=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "B": 3,
+   "C": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24301,7 +26221,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, E=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "E": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24318,7 +26244,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, E=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "E": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24335,7 +26267,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24352,7 +26290,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, B=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "B": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24369,7 +26313,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, C=4, D=3, A=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "C": 4,
+   "D": 3,
+   "A": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24386,7 +26336,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24403,7 +26359,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, B=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "B": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Pelayanan Publik"
  },
  {
@@ -24420,7 +26382,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Pelayanan Publik"
  },
  {
@@ -24437,7 +26405,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, A=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "A": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Pelayanan Publik"
  },
  {
@@ -24454,7 +26428,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24471,7 +26451,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, B=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "B": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24488,7 +26474,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, D=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "D": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24505,7 +26497,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, C=4, A=3, B=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "C": 4,
+   "A": 3,
+   "B": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24522,7 +26520,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24539,7 +26543,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, E=3, A=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "E": 3,
+   "A": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24556,7 +26566,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, D=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "D": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24573,7 +26589,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, D=3, E=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "D": 3,
+   "E": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24590,7 +26612,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24607,7 +26635,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, A=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "A": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24624,7 +26658,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, E=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "E": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24641,7 +26681,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, D=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "D": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24658,7 +26704,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, E=4, A=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "E": 4,
+   "A": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24675,7 +26727,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, B=4, C=3, D=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24692,7 +26750,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Pengendalian Diri"
  },
  {
@@ -24709,7 +26773,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, B=3, C=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "B": 3,
+   "C": 2,
+   "D": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -24726,7 +26796,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -24743,7 +26819,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, A=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "A": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -24760,7 +26842,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24777,7 +26865,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, D=4, E=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "D": 4,
+   "E": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24794,7 +26888,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, D=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "D": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24811,7 +26911,13 @@
   "kunci": "B",
   "pembahasan": "Bobot per opsi: B=5, E=4, A=3, D=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "B": 5,
+   "E": 4,
+   "A": 3,
+   "D": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24828,7 +26934,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, B=3, C=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "B": 3,
+   "C": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24845,7 +26957,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, A=4, B=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "A": 4,
+   "B": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24862,7 +26980,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24879,7 +27003,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, C=4, D=3, E=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "C": 4,
+   "D": 3,
+   "E": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24896,7 +27026,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, A=3, B=2, D=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "A": 3,
+   "B": 2,
+   "D": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24913,7 +27049,13 @@
   "kunci": "C",
   "pembahasan": "Bobot per opsi: C=5, B=4, D=3, E=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "C": 5,
+   "B": 4,
+   "D": 3,
+   "E": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24930,7 +27072,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, B=4, E=3, A=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "B": 4,
+   "E": 3,
+   "A": 2,
+   "C": 1
+  },
   "subtopik": "Kepemimpinan"
  },
  {
@@ -24947,7 +27095,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24964,7 +27118,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, B=4, C=3, D=2, E=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "B": 4,
+   "C": 3,
+   "D": 2,
+   "E": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24981,7 +27141,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, C=4, D=3, A=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "C": 4,
+   "D": 3,
+   "A": 2,
+   "B": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -24998,7 +27164,13 @@
   "kunci": "A",
   "pembahasan": "Bobot per opsi: A=5, E=4, D=3, B=2, C=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "A": 5,
+   "E": 4,
+   "D": 3,
+   "B": 2,
+   "C": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -25015,7 +27187,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
@@ -25032,7 +27210,13 @@
   "kunci": "D",
   "pembahasan": "Bobot per opsi: D=5, A=4, E=3, C=2, B=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "D": 5,
+   "A": 4,
+   "E": 3,
+   "C": 2,
+   "B": 1
+  },
   "subtopik": "Kerja Sama Tim"
  },
  {
@@ -25049,7 +27233,13 @@
   "kunci": "E",
   "pembahasan": "Bobot per opsi: E=5, D=4, C=3, B=2, A=1.",
   "sumber": "komunitasbelajar",
-  "bobot": 5,
+  "bobot": {
+   "E": 5,
+   "D": 4,
+   "C": 3,
+   "B": 2,
+   "A": 1
+  },
   "subtopik": "Campuran"
  },
  {
