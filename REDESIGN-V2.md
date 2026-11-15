@@ -636,3 +636,16 @@ yang ada (tidak ada konten karangan).
   ganti akun A/B untuk namespacing; foto profil + avatar +
   pill username panjang; verifikasi live end-to-end (daftar +
   1 simulasi full + cek Peringkat).
+
+## v2.2.2 — Wajah Osi: mata merem + senyum terbuka (2026-11-15)
+
+User menilai ikon v2.2.1 MASIH seram (mata bulat terbuka terlihat
+melotot), lalu putaran 1 (mata merem + senyum garis tipis) masih
+dinilai suspicious. Referensi user: Osi di landing page (mood
+'semangat': mata merem + senyum terbuka terisi). Perbaikan: wajah
+default 'senang' dan 'kagum' bermata merem (^ ^, tanpa bola mata);
+senyum 'senang' jadi terbuka terisi; ketiga ikon SVG (favicon, icon,
+maskable) mengikuti. 'Marah' tetap hanya untuk streak putus. Build
+lolos; PNG logo email diregenerasi dari SVG baru; tangkapan layar
+dashboard terverifikasi sesuai referensi. Perubahan visual saja
+(SVG + Mascot.tsx), tanpa perubahan logika.

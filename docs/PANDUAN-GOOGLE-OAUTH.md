@@ -61,29 +61,54 @@ sudah terkirim sebelumnya tetap mengarah ke localhost dan tidak bisa
 dipakai; minta tautan baru lewat tombol "Kirim ulang verifikasi" di
 app setelah langkah ini selesai.
 
-## (d) Branding email: ubah template konfirmasi jadi Lolosin
+## (d) Branding email: custom SMTP dulu, baru template bisa diubah
 
-1. Di dashboard Supabase, masuk ke **Authentication** lalu
-   **Email Templates**.
-2. Pilih template **Confirm signup**.
-3. Ubah **Subject** jadi mis. `Konfirmasi emailmu di Lolosin`.
-4. Ubah isi email: sambutan dan penutup memakai nama Lolosin, dan
-   bahasa santai. Jangan hapus variabel tautan `{{ .ConfirmationURL }}`
-   karena itu tautan konfirmasinya.
+KOREKSI 2026-11-15: di dashboard Supabase sekarang, template email
+TIDAK BISA diubah sebelum custom SMTP dipasang ("Set up custom SMTP
+to edit templates"). Jadi urutannya: pasang SMTP dulu, baru subjek
+dan isi template bisa diedit. Template siap pakai ada di
+`email-assets/template-konfirmasi-email.html` + logo PNG
+`email-assets/lolosin-logo-email.png`.
+
+### (d1) Pasang custom SMTP pakai Gmail (tanpa email baru)
+
+1. Di akun Google yang mau dipakai, aktifkan verifikasi 2 langkah
+   (Google Account lalu Security lalu 2-Step Verification).
+2. Masih di Security, buat **App password** (pilih Mail), salin
+   sandi 16 karakter yang muncul. Ini BUKAN sandi Gmail biasa, dan
+   jangan dibagikan ke siapa pun.
+3. Di dashboard Supabase proyek "lolosin", masuk ke **Authentication**
+   lalu **Emails**, klik **Set up SMTP** (atau **SMTP Settings**).
+4. Isi: Sender email = alamat Gmail-mu; Sender name = `Lolosin`;
+   Host = `smtp.gmail.com`; Port = `587`; Username = alamat
+   Gmail-mu; Password = app password 16 karakter tadi.
+5. Klik **Save**. Mulai sekarang email dikirim lewat Gmail-mu dengan
+   nama pengirim Lolosin (limit Gmail gratis sekitar 500 email/hari,
+   cukup untuk sekarang). Email khusus (mis. lolosin.app@gmail.com)
+   boleh dipakai supaya lebih rapi, tapi tidak wajib.
+6. Catatan limit: Supabase membatasi email auth (anti-spam; tanpa
+   batas, bot bisa menyalahgunakan form daftar untuk mengirim spam).
+   Setelah custom SMTP aktif, limitnya naik jadi 30 email/jam, dan
+   bisa diubah kapan pun di **Authentication** lalu **Rate Limits**.
+   Untuk tahap beta sekarang, 30/jam sudah lebih dari cukup.
+
+### (d2) Ubah template konfirmasi jadi Lolosin
+
+1. Setelah SMTP aktif, kolom Subject dan Body di halaman yang sama
+   sudah bisa diedit. Pilih template **Confirm signup**.
+2. Ubah **Subject** jadi `Konfirmasi emailmu di Lolosin`.
+3. Ubah isi email: salin seluruh isi
+   `email-assets/template-konfirmasi-email.html` ke kolom Body
+   (tab Source). Jangan hapus variabel tautan
+   `{{ .ConfirmationURL }}` karena itu tautan konfirmasinya.
+4. Logo: di dalam template ada `LOGO_URL` yang harus diganti dengan
+   URL publik logo PNG. Caranya: upload
+   `email-assets/lolosin-logo-email.png` ke Supabase Storage (buat
+   bucket public, mis. "assets"), salin Public URL-nya, lalu ganti
+   `LOGO_URL` di template. Alternatif cepat: pakai
+   `https://lolosin.netlify.app/icons/icon.svg`, tapi Gmail kadang
+   tidak menampilkan gambar SVG, jadi PNG lebih aman.
 5. Klik **Save**.
-
-Catatan jujur soal nama pengirim: lewat template, yang bisa diubah
-hanya subjek dan isi email. Alamat pengirim tetap dari Supabase
-(`noreply@mail.app.supabase.io`) selama belum memakai SMTP sendiri.
-Supaya pengirim tampil sebagai Lolosin, perlu custom SMTP
-(**Authentication** lalu **SMTP Settings**, mis. memakai Resend atau
-Gmail). Itu langkah lanjutan dan tidak wajib untuk membuat verifikasi
-email jalan.
-
-Logo di email: template Supabase adalah HTML, jadi logo bisa
-ditambahkan lewat tag `<img>` yang mengarah ke URL gambar yang
-di-host publik (mis. file di folder `public` app yang sudah live).
-Bila belum ada URL logo, lewati dulu, template teks saja sudah cukup.
 
 ## (e) Cara mengetes
 

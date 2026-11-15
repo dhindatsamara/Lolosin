@@ -13,15 +13,14 @@
  * Outfit peliharaan (syal/kacamata/mahkota/jubah) mengikuti streak,
  * lihat src/lib/pet.ts.
  *
- * v2.2.1: mood 'kagum' didesain ulang jadi cute (mata kecil, senyum
- * terbuka kecil, tanpa mata membelalak dan tanpa mulut "o") karena
- * versi lamanya terlihat melotot dan seram di favicon/ikon. Mood
- * baru 'marah' (cute marah: alis miring, cemberut kecil, mata normal)
- * HANYA dipakai saat streak putus, lihat mekanik "Bujuk Osi" di
- * src/lib/store.ts. Jangan pakai 'marah' di tempat lain. Prop aditif
- * 'showCap' (default true) dan 'headphones' (default false) dipakai
- * varian avatar di pemilih avatar; pemakaian lama tanpa kedua prop
- * itu tampil sama persis seperti sebelumnya.
+ * v2.2.2: wajah default ('senang') diganti jadi MATA MEREM bahagia
+ * (^ ^, sama seperti 'semangat') + SENYUM TERBUKA yang terisi, dan
+ * ketiga ikon SVG (favicon, icon, maskable) mengikuti. Mata bulat
+ * terbuka dihapus dari wajah default karena user tetap menilai versi
+ * v2.2.1 (mata diperkecil) terlihat melotot dan seram; senyum garis
+ * tipis juga diganti karena dinilai suspicious bila dipasangkan
+ * dengan mata terbuka. 'Kagum' ikut bermata merem (alis naik +
+ * senyum terbuka kecil). 'Marah' tetap hanya untuk streak putus.
  */
 import { MASCOT_NAME } from '../lib/mascot'
 import type { PetOutfit } from '../lib/pet'
@@ -29,11 +28,11 @@ import type { PetOutfit } from '../lib/pet'
 export type MascotMood = 'senang' | 'semangat' | 'sedih' | 'kagum' | 'marah'
 
 interface MascotProps {
-  /** Ekspresi: senang (default), semangat (mata tertawa + mulut terbuka),
-      sedih (alis turun, mulut cemberut ringan), kagum (mata kecil +
-      alis naik + senyum terbuka kecil, untuk momen perkenalan atau
-      kejutan seru), marah (cute marah: alis miring + cemberut kecil,
-      HANYA untuk streak putus). */
+  /** Ekspresi: senang (default, mata merem + senyum terbuka), semangat
+      (mata merem + mulut terbuka lebar), sedih (alis turun, mulut
+      cemberut ringan), kagum (mata merem + alis naik + senyum terbuka
+      kecil, untuk momen perkenalan atau kejutan seru), marah (cute
+      marah: alis miring + cemberut kecil, HANYA untuk streak putus). */
   mood?: MascotMood
   /** Ukuran kotak SVG dalam px (default 64). */
   size?: number
@@ -49,8 +48,12 @@ interface MascotProps {
 }
 
 function Eyes({ mood }: { mood: MascotMood }) {
-  if (mood === 'semangat') {
-    // Mata tertawa tertutup (^ ^).
+  if (mood === 'semangat' || mood === 'senang') {
+    // Mata tertawa tertutup (^ ^). Dipakai 'semangat' DAN 'senang'
+    // (default): mata terbuka dihapus dari wajah default karena user
+    // menilai versi mata bulat terbuka terlihat melotot dan seram,
+    // terutama di favicon/ikon. Wajah default Osi sekarang selalu
+    // merem bahagia; beda 'senang' dan 'semangat' tinggal di mulut.
     return (
       <g
         stroke="#1B1E1C"
@@ -98,17 +101,21 @@ function Eyes({ mood }: { mood: MascotMood }) {
     )
   }
   if (mood === 'kagum') {
-    // Kagum versi cute (v2.2.1): mata lebih kecil dari 'senang', pupil
-    // kecil, alis naik. Sengaja tanpa mata membelalak supaya tidak
-    // terlihat melotot atau seram.
+    // Kagum versi cute (v2.2.2): mata MEREM bahagia + alis naik +
+    // senyum terbuka kecil. Mata bulat terbuka dihapus dari sini juga:
+    // user menilai semua mata terbuka + senyum terlihat suspicious
+    // dan seram, dan minta semua mata Osi seperti referensi (merem).
     return (
       <g>
-        <circle cx="36" cy="52" r="6.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
-        <circle cx="60" cy="52" r="6.5" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
-        <circle cx="36" cy="52" r="2.8" fill="#1B1E1C" />
-        <circle cx="60" cy="52" r="2.8" fill="#1B1E1C" />
-        <circle cx="37.2" cy="50.2" r="1.2" fill="#FFFFFF" />
-        <circle cx="61.2" cy="50.2" r="1.2" fill="#FFFFFF" />
+        <g
+          stroke="#1B1E1C"
+          strokeWidth="3.2"
+          strokeLinecap="round"
+          fill="none"
+        >
+          <path d="M29 53 Q36 45 43 53" />
+          <path d="M53 53 Q60 45 67 53" />
+        </g>
         <g stroke="#1B1E1C" strokeWidth="2.5" strokeLinecap="round" fill="none">
           <path d="M29 41 Q36 38 43 41" />
           <path d="M53 41 Q60 38 67 41" />
@@ -116,15 +123,16 @@ function Eyes({ mood }: { mood: MascotMood }) {
       </g>
     )
   }
-  // Senang: mata bulat terbuka.
+  // Fallback (semua mood sudah ditangani di atas): mata merem bahagia.
   return (
-    <g>
-      <circle cx="36" cy="52" r="7" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
-      <circle cx="60" cy="52" r="7" fill="#FFFFFF" stroke="#1B1E1C" strokeWidth="2.5" />
-      <circle cx="37" cy="53" r="3.2" fill="#1B1E1C" />
-      <circle cx="61" cy="53" r="3.2" fill="#1B1E1C" />
-      <circle cx="38.5" cy="51" r="1.3" fill="#FFFFFF" />
-      <circle cx="62.5" cy="51" r="1.3" fill="#FFFFFF" />
+    <g
+      stroke="#1B1E1C"
+      strokeWidth="3.2"
+      strokeLinecap="round"
+      fill="none"
+    >
+      <path d="M29 53 Q36 45 43 53" />
+      <path d="M53 53 Q60 45 67 53" />
     </g>
   )
 }
@@ -133,6 +141,14 @@ function Mouth({ mood }: { mood: MascotMood }) {
   if (mood === 'semangat') {
     // Mulut terbuka lebar (senyum besar).
     return <path d="M39 60 Q48 74 57 60 Z" fill="#1B1E1C" />
+  }
+  if (mood === 'senang') {
+    // Senyum terbuka lebar (v2.2.2): mulut terisi, seperti referensi
+    // user. Senyum garis tipis sebelumnya dinilai suspicious dan
+    // seram bila dipasangkan dengan mata terbuka; versi terbuka ini
+    // terbaca jelas bahagia. Sedikit lebih lebar dan dangkal dari
+    // 'semangat' supaya kedua mood tidak identik persis.
+    return <path d="M37 61 Q48 72 59 61 Z" fill="#1B1E1C" />
   }
   if (mood === 'sedih') {
     // Cemberut ringan.
@@ -162,16 +178,9 @@ function Mouth({ mood }: { mood: MascotMood }) {
     // Senyum terbuka kecil (bukan lingkaran "o").
     return <path d="M42 62 Q48 70 54 62 Z" fill="#1B1E1C" />
   }
-  // Senyum biasa.
-  return (
-    <path
-      d="M37 63 Q48 71 59 63"
-      fill="none"
-      stroke="#1B1E1C"
-      strokeWidth="3"
-      strokeLinecap="round"
-    />
-  )
+  // Senyum biasa (fallback, semua mood sudah ditangani di atas):
+  // senyum terbuka kecil yang terisi, bukan garis tipis.
+  return <path d="M42 62 Q48 70 54 62 Z" fill="#1B1E1C" />
 }
 
 /**
