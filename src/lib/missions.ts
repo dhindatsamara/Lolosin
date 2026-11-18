@@ -52,8 +52,8 @@ export const MISSION_POOL: MissionDef[] = [
     kind: 'baca',
     target: 2,
     xp: 20,
-    judul: 'Baca 2 seksi materi',
-    deskripsi: 'Dua seksi hari ini, besok terasa bedanya.',
+    judul: 'Baca 2 bagian materi',
+    deskripsi: 'Dua bagian hari ini, besok terasa bedanya.',
   },
   {
     id: 'benar-10',
@@ -78,7 +78,7 @@ export const MISSION_POOL: MissionDef[] = [
     materi: 'TWK',
     target: 1,
     xp: 15,
-    judul: 'Baca 1 seksi TWK',
+    judul: 'Baca 1 bagian TWK',
     deskripsi: 'Pancasila dan wawasan kebangsaan, gas!',
   },
   {
@@ -103,7 +103,7 @@ export const MISSION_POOL: MissionDef[] = [
     materi: 'TKP',
     target: 1,
     xp: 15,
-    judul: 'Baca 1 seksi TKP',
+    judul: 'Baca 1 bagian TKP',
     deskripsi: 'Latih karakter dan cara berpikir ASN.',
   },
   {

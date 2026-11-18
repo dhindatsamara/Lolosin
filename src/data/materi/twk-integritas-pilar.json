@@ -2,10 +2,10 @@
   "id": "twk-integritas-pilar",
   "judul": "Integritas dan Pilar Negara",
   "materi": "TWK",
-  "deskripsi": "Pendalaman dua subtopik TWK: sembilan nilai integritas versi KPK, korupsi dan gratifikasi, serta Empat Pilar MPR RI sebagai satu kesatuan.",
-  "sumber": "baru/twk-integritas.md + baru/twk-pilar-negara.md (riset free-access, 2026-11-15)",
+  "deskripsi": "Pendalaman integritas dan pilar negara: sembilan nilai integritas versi KPK, pembeda gratifikasi, suap, dan pemerasan, LHKPN dan jalur pelaporan, serta Empat Pilar MPR RI sebagai satu kesatuan.",
+  "sumber": "baru/twk-integritas.md + baru/twk-pilar-negara.md + baru/twk-gratifikasi-suap-pemerasan.md + baru/twk-lhkpn-whistleblowing.md (riset free-access, 2026-11-15)",
   "halaman": 0,
-  "kata": 1808,
+  "kata": 2628,
   "subtopik": [
     "Integritas",
     "Pilar Negara"
@@ -37,6 +37,34 @@
         "Pembukaan UUD 1945 tidak boleh diubah, sedangkan batang tubuhnya sudah diamandemen empat kali.",
         "Bhinneka Tunggal Ika berasal dari Kakawin Sutasoma karya Mpu Tantular dan berarti berbeda-beda tetapi tetap satu.",
         "Pancasila memberi nilai, UUD 1945 memberi aturan, NKRI memberi wadah, dan Bhinneka Tunggal Ika memberi semangat persatuan."
+      ]
+    },
+    {
+      "id": "twk-integritas-pilar-s03",
+      "subtopik": "Integritas",
+      "judul": "Gratifikasi, Suap, dan Pemerasan",
+      "konten": "## Tiga perbuatan yang sering tertukar\n\nGratifikasi, suap, dan pemerasan sama-sama termasuk tindak pidana korupsi menurut UU Nomor 31 Tahun 1999 jo. UU Nomor 20 Tahun 2001 tentang Pemberantasan Tindak Pidana Korupsi. Ketiganya melibatkan pemberian kepada pegawai negeri atau penyelenggara negara, tetapi siapa yang berinisiatif dan apakah ada paksaan membuat ketiganya berbeda.\n\n## Gratifikasi: hadiah yang datang sendiri\n\nGratifikasi adalah pemberian dalam arti luas (uang, barang, diskon, komisi, tiket perjalanan, fasilitas) kepada pegawai negeri atau penyelenggara negara yang berhubungan dengan jabatannya. Cirinya: tidak selalu ada kesepakatan di awal, pemberi tidak selalu menuntut sesuatu secara langsung. Bila berhubungan dengan jabatan dan berlawanan dengan kewajiban, gratifikasi dianggap suap. Jalan amannya: laporkan ke KPK paling lambat 30 hari kerja sejak diterima.\n\n## Suap: transaksi dua arah\n\nSuap adalah pemberian atau janji kepada pegawai negeri atau penyelenggara negara agar berbuat atau tidak berbuat sesuatu dalam jabatannya, yang bertentangan dengan kewajibannya. Cirinya: transaksional, ada maksud mempengaruhi keputusan. Pemberi dan penerima sama-sama dapat dipidana. Berbeda dengan gratifikasi, suap tidak punya jalan lapor aman: satu-satunya sikap yang benar adalah menolak sejak awal.\n\n## Pemerasan: pejabat yang memaksa\n\nPemerasan dalam jabatan terjadi ketika pegawai negeri atau penyelenggara negara menyalahgunakan kekuasaannya untuk memaksa seseorang memberikan sesuatu, membayar, atau mengerjakan sesuatu. Cirinya: inisiatif dan paksaan datang dari pejabat. Pihak yang dipaksa umumnya berposisi sebagai korban, dan dapat melapor sebagai korban.\n\n## Tabel pembeda\n\n| Aspek | Gratifikasi | Suap | Pemerasan |\n| --- | --- | --- | --- |\n| Inisiatif | Pemberi memberi, tidak selalu ada tuntutan di awal | Pemberi dan penerima bertransaksi | Pejabat memaksa |\n| Sifat | Pemberian terkait jabatan | Transaksional, mempengaruhi keputusan | Paksaan dengan kekuasaan jabatan |\n| Yang dapat dipidana | Penerima (bila tidak melapor) | Pemberi dan penerima | Pejabat yang memeras |\n| Jalan keluar | Lapor ke KPK dalam 30 hari kerja | Tolak sejak awal | Korban dapat melapor |\n\n## Cara menolaknya\n\n1. Tolak dengan sopan dan tegas di awal, dengan alasan yang jelas: aturan melarang menerima pemberian terkait jabatan.\n2. Jangan memberi harapan atau menunda-nunda penolakan. Penolakan yang menggantung sering dibaca sebagai undangan untuk mencoba lagi.\n3. Bila pemberian terlanjur diterima (misalnya dititipkan lewat orang lain atau tidak diketahui siapa pengirimnya), segera laporkan ke KPK dalam 30 hari kerja. Pelaporan adalah perlindungan, bukan pengakuan bersalah.\n4. Bila diminta memberi sesuatu oleh pejabat (pemerasan), jangan penuhi, simpan bukti komunikasinya, dan laporkan lewat jalur resmi.",
+      "kata": 400,
+      "poin_inti": [
+        "Gratifikasi adalah pemberian terkait jabatan yang tidak selalu diawali kesepakatan.",
+        "Suap bersifat transaksional untuk mempengaruhi keputusan, pemberi dan penerima sama-sama dapat dipidana.",
+        "Pemerasan adalah pejabat yang memaksa, dan pihak yang dipaksa berposisi sebagai korban.",
+        "Gratifikasi yang dilaporkan ke KPK dalam 30 hari kerja tidak dipidana, tetapi suap tidak punya jalan lapor aman.",
+        "Tolak pemberian terkait jabatan sejak awal dengan sopan dan tegas."
+      ]
+    },
+    {
+      "id": "twk-integritas-pilar-s04",
+      "subtopik": "Integritas",
+      "judul": "LHKPN dan Jalur Pelaporan",
+      "konten": "## LHKPN: laporan harta kekayaan penyelenggara negara\n\nLHKPN adalah Laporan Harta Kekayaan Penyelenggara Negara, yaitu laporan resmi tentang seluruh harta kekayaan yang dimiliki penyelenggara negara. Tujuannya: transparansi dan akuntabilitas, serta menjadi alat bagi KPK untuk menilai potensi konflik kepentingan dan memeriksa kewajaran kekayaan pejabat.\n\nDasar hukumnya: UU Nomor 28 Tahun 1999 tentang Penyelenggaraan Negara yang Bersih dan Bebas dari Korupsi, Kolusi, dan Nepotisme mewajibkan setiap penyelenggara negara melaporkan dan mengumumkan harta kekayaannya sebelum dan setelah menjabat, serta bersedia diperiksa kekayaannya sebelum, selama, dan setelah menjabat. UU Nomor 30 Tahun 2002 memberi mandat kepada KPK untuk menerima, memeriksa, dan mengumumkan LHKPN.\n\nLHKPN disampaikan pada saat pertama kali menjabat, saat terjadi perubahan jabatan, dan setelah masa jabatan berakhir, serta secara berkala setiap satu tahun sekali selama menjabat, paling lambat 31 Maret tahun berikutnya.\n\nYang wajib melapor antara lain pejabat negara di lembaga eksekutif, legislatif, dan yudikatif, serta pejabat lain yang memiliki fungsi strategis, termasuk pejabat eselon dan pemegang jabatan yang ditetapkan rawan korupsi, kolusi, dan nepotisme di tiap instansi.\n\n## Melaporkan pelanggaran: whistleblowing\n\nPelapor (whistleblower) adalah orang yang melaporkan perbuatan yang berindikasi tindak pidana korupsi di organisasi tempat ia bekerja, dan ia memiliki akses informasi yang memadai atas indikasi tersebut. KPK menyediakan Whistleblowing System (KWS) sebagai saluran pelaporan dugaan tindak pidana korupsi.\n\nMelapor lewat jalur resmi adalah sikap berintegritas, bukan pengkhianatan. UU Tipikor menjamin peran serta masyarakat dalam upaya pencegahan dan pemberantasan korupsi.\n\n## Perlindungan bagi pelapor\n\n- UU Nomor 13 Tahun 2006 jo. UU Nomor 31 Tahun 2014 tentang Perlindungan Saksi dan Korban mengatur perlindungan bagi saksi dan korban, termasuk pelapor. Lembaga Perlindungan Saksi dan Korban (LPSK) adalah lembaga yang melaksanakan perlindungan tersebut.\n- Pelapor dan saksi tidak dapat dituntut, baik secara pidana maupun perdata, atas laporan atau kesaksian yang diberikannya dengan iktikad baik.\n- Surat Edaran Mahkamah Agung (SEMA) Nomor 4 Tahun 2011 mengatur perlakuan khusus terhadap pelapor (whistleblower) dan saksi pelaku yang bekerja sama (justice collaborator) dalam perkara pidana tertentu.\n- Identitas pelapor dirahasiakan. Meski begitu, laporan yang disertai identitas yang jelas dan bukti yang memadai lebih mudah ditindaklanjuti daripada laporan anonim tanpa bukti.\n\n## Apa yang dilakukan bila melihat penyimpangan\n\n1. Catat fakta yang dilihat: apa, kapan, di mana, siapa yang terlibat, dan bukti apa yang ada. Laporan yang baik berisi fakta, bukan dugaan.\n2. Laporkan lewat jalur resmi di instansi (misalnya inspektorat atau unit pengaduan) atau langsung ke KPK. Jangan menyebarkan dugaan ke media sosial sebelum ada proses resmi.\n3. Simpan salinan bukti dan bukti pelaporan dengan aman.\n4. Bila merasa terancam, ajukan permohonan perlindungan ke LPSK.",
+      "kata": 420,
+      "poin_inti": [
+        "LHKPN adalah laporan harta kekayaan penyelenggara negara untuk transparansi dan akuntabilitas.",
+        "LHKPN disampaikan saat pertama menjabat, saat berubah jabatan, setelah berakhir, dan berkala tiap tahun.",
+        "KPK menyediakan Whistleblowing System sebagai saluran pelaporan dugaan tindak pidana korupsi.",
+        "Pelapor yang beriktikad baik tidak dapat dituntut pidana maupun perdata atas laporannya.",
+        "Laporan yang baik berisi fakta dan bukti, disampaikan lewat jalur resmi, bukan disebar ke media sosial."
       ]
     }
   ],

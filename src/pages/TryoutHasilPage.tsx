@@ -20,12 +20,19 @@ import {
   getLastSubmitPromise,
   type LeaderboardSubmitStatus,
 } from '../lib/leaderboard'
+import {
+  hasCelebratedFirstWin,
+  markFirstWinCelebrated,
+  tryoutShareText,
+} from '../lib/firstWin'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { Mascot } from '../components/Mascot'
+import { FirstWinCard } from '../components/FirstWinCard'
 import { PredictionPanel } from '../components/PredictionPanel'
+import { DiscussionThread } from '../components/quiz/DiscussionThread'
 import { CheckIcon } from '../components/icons'
 
 const MATERI_TONE = { TWK: 'twk', TIU: 'tiu', TKP: 'tkp' } as const
@@ -130,7 +137,7 @@ function normalize(state: unknown): NormalizedResult | null {
 }
 
 /**
- * Halaman hasil tryout: skor per seksi, status lulus per seksi dan
+ * Halaman hasil tryout: skor per bagian, status lulus per bagian dan
  * keseluruhan, XP didapat, dan breakdown per soal. Mode-aware:
  * tryout kilat menampilkan skor mini + terskala, simulasi CAT
  * menampilkan skor asli (maks 150/175/225, total 550).
@@ -140,6 +147,21 @@ export function TryoutHasilPage() {
   const navigate = useNavigate()
   const { tryoutHistory } = useStore()
   const result = normalize(location.state)
+
+  // Kemenangan pertama (v2.8): hasil segar (bukan dari riwayat) +
+  // ini tryout pertama di riwayat + belum pernah dirayakan.
+  // Keputusan ditangkap sekali di state awal supaya kartu tidak
+  // hilang saat render ulang setelah penanda ditulis.
+  const [showFirstWin] = useState(
+    () =>
+      result !== null &&
+      result.questions !== null &&
+      tryoutHistory.length === 1 &&
+      !hasCelebratedFirstWin(),
+  )
+  useEffect(() => {
+    if (showFirstWin) markFirstWinCelebrated()
+  }, [showFirstWin])
 
   // Status pengiriman skor ke leaderboard. Bila masih 'sending',
   // selesaikan dari promise pengiriman terakhir (fire-and-forget dari
@@ -176,7 +198,7 @@ export function TryoutHasilPage() {
         </p>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink/60">
           Selesaikan satu tryout kilat atau simulasi CAT dulu, nanti skor,
-          status lulus per seksi, dan perkiraan kelolosanmu muncul di sini.
+          status lulus per bagian, dan perkiraan kelolosanmu muncul di sini.
         </p>
         <Link to="/tryout" className="mt-4 inline-block">
           <Button>Ke halaman Tryout</Button>
@@ -269,10 +291,22 @@ export function TryoutHasilPage() {
               </>
             )}
             {submitStatus === 'not-configured' &&
-              'Leaderboard online belum aktif, skormu tersimpan di perangkat ini dulu.'}
+              'Leaderboard online belum aktif, skormu hanya dicatat selama halaman ini terbuka.'}
           </p>
         )}
       </header>
+
+      {showFirstWin && (
+        <FirstWinCard
+          heading="Kemenangan pertamamu!"
+          body={
+            isFull
+              ? `Simulasi CAT pertamamu selesai dengan total ${score.total}/550. Bagikan hasilnya, siapa tahu temanmu ikut semangat latihan.`
+              : `Tryout kilat pertamamu selesai dengan total ${score.total}/150. Bagikan hasilnya, siapa tahu temanmu ikut semangat latihan.`
+          }
+          shareText={tryoutShareText(score.mode, score.total)}
+        />
+      )}
 
       <div className="grid gap-3 lg:grid-cols-3">
         {MATERI_LIST.map((materi) => {
@@ -350,7 +384,8 @@ export function TryoutHasilPage() {
               const benar = dijawab && answer === q.kunci
               const poin = scoreQuestion(q, answer)
               return (
-                <Card key={q.id} className="py-3">
+                <div key={q.id} className="flex flex-col gap-2">
+                  <Card className="py-3">
                   <div className="flex items-start gap-3">
                     <span
                       className={cx(
@@ -406,7 +441,12 @@ export function TryoutHasilPage() {
                       </p>
                     </div>
                   </div>
-                </Card>
+                  </Card>
+                  {/* Diskusi per soal (v2.8): thread di bawah tiap
+                      kartu ringkasan, supaya user bisa bertanya soal
+                      soal ini langsung dari ulasan tryout. */}
+                  <DiscussionThread questionId={q.id} mulaiTertutup />
+                </div>
               )
             })}
           </div>

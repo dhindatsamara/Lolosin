@@ -5,7 +5,7 @@ import { Layout } from './components/Layout'
 import { Button } from './components/ui/Button'
 import { Card } from './components/ui/Card'
 import { ConfirmModal } from './components/quiz/ConfirmModal'
-import { CheckIcon, XIcon } from './components/icons'
+import { CheckIcon, TrophyIcon, XIcon } from './components/icons'
 import {
   ensureMyProfile,
   isEmailVerified,
@@ -20,6 +20,13 @@ import {
   resolveAuth,
   type ProgressRepairOffer,
 } from './lib/store'
+import { startSync, stopSync } from './lib/sync'
+import {
+  checkWeeklyWins,
+  dismissGiftNotice,
+  useGiftNotices,
+  type GiftNotice,
+} from './lib/leaderboard'
 import AuthPage from './pages/AuthPage'
 import { BattlePage } from './pages/BattlePage'
 import { BelajarPage } from './pages/BelajarPage'
@@ -33,10 +40,13 @@ import { LatihanPage } from './pages/LatihanPage'
 import { LeaderboardPage } from './pages/LeaderboardPage'
 import { MainHubPage } from './pages/MainHubPage'
 import { MateriDetailPage } from './pages/MateriDetailPage'
+import { PetaKelemahanPage } from './pages/PetaKelemahanPage'
 import ProfilPage from './pages/ProfilPage'
 import { SectionDetailPage } from './pages/SectionDetailPage'
 import { SessionHostPage } from './pages/SessionHostPage'
 import { SessionJoinPage } from './pages/SessionJoinPage'
+import { TipsTrikPage } from './pages/TipsTrikPage'
+import { TryoutAkbarPage } from './pages/TryoutAkbarPage'
 import { TryoutHasilPage } from './pages/TryoutHasilPage'
 import { TryoutPage } from './pages/TryoutPage'
 
@@ -180,10 +190,95 @@ function VerifyGate({ user }: { user: User }) {
   )
 }
 
+/**
+ * Banner hadiah juara mingguan (v2.7, diperbaiki v2.8 jadi code-only):
+ * kartu kecil di bawah layar yang bisa ditutup, satu per kemenangan
+ * baru. Lencana sudah tersimpan saat banner muncul; premium TIDAK
+ * aktif otomatis lagi, juara global menebus kode hadiahnya di Profil
+ * (banner menampilkan kode + tombol salin + CTA tebus). Menutup
+ * banner hanya menyembunyikan pemberitahuannya. Di mobile banner
+ * duduk di atas bottom nav (bottom-20), di desktop menempel bawah
+ * layar.
+ */
+function GiftNoticeCard({ notice }: { notice: GiftNotice }) {
+  const navigate = useNavigate()
+  const [copied, setCopied] = useState(false)
+
+  async function handleCopy() {
+    if (!notice.code) return
+    try {
+      await navigator.clipboard.writeText(notice.code)
+      setCopied(true)
+    } catch {
+      // Clipboard tidak tersedia (misal konteks tidak aman): biarkan
+      // user menyalin manual dari teks kode yang tampil.
+    }
+  }
+
+  function handleRedeem() {
+    dismissGiftNotice(notice.id)
+    navigate('/profil')
+  }
+
+  return (
+    <Card className="flex items-start gap-3 border-accent-200 bg-accent-50 p-4 shadow-soft-lg">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-100 text-accent-700">
+        <TrophyIcon width={20} height={20} />
+      </span>
+      <div className="flex min-w-0 flex-1 flex-col gap-2">
+        <p className="text-sm leading-relaxed font-semibold text-ink">
+          {notice.message}
+        </p>
+        {notice.code ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <code className="rounded-lg border border-accent-200 bg-white px-2 py-1 font-mono text-sm font-bold tracking-widest text-ink">
+              {notice.code}
+            </code>
+            <button
+              type="button"
+              onClick={() => void handleCopy()}
+              className="inline-flex items-center gap-1 rounded-lg bg-accent-100 px-2 py-1 text-xs font-bold text-accent-700 transition-colors hover:bg-accent-200"
+            >
+              {copied ? <CheckIcon width={14} height={14} /> : null}
+              {copied ? 'Disalin' : 'Salin'}
+            </button>
+            <button
+              type="button"
+              onClick={handleRedeem}
+              className="rounded-lg bg-accent-600 px-2 py-1 text-xs font-bold text-white transition-colors hover:bg-accent-700"
+            >
+              Tebus di Profil
+            </button>
+          </div>
+        ) : null}
+      </div>
+      <button
+        type="button"
+        aria-label="Tutup pemberitahuan hadiah"
+        onClick={() => dismissGiftNotice(notice.id)}
+        className="shrink-0 rounded-lg p-1 text-ink/60 transition-colors hover:bg-accent-100 hover:text-ink"
+      >
+        <XIcon width={18} height={18} />
+      </button>
+    </Card>
+  )
+}
+
+function GiftNotices() {
+  const notices = useGiftNotices()
+  if (notices.length === 0) return null
+  return (
+    <div className="fixed inset-x-4 bottom-20 z-50 mx-auto flex w-auto max-w-md flex-col gap-2 lg:bottom-4">
+      {notices.map((notice: GiftNotice) => (
+        <GiftNoticeCard key={notice.id} notice={notice} />
+      ))}
+    </div>
+  )
+}
+
 export default function App() {
   const { user, loading } = useAuthUser()
   const { pathname } = useLocation()
-
   // Namespacing progres per user (v2.2.1, diperbaiki v2.2.3): setiap
   // user berubah (masuk, keluar, ganti akun), store beralih ke
   // namespace user itu dan UI langsung me-render progres yang benar
@@ -201,15 +296,52 @@ export default function App() {
   // v2.2.1): user yang login dengan namespace kosong sementara
   // namespace tamu punya progres ditawari memindahkan progres itu
   // ke akunnya. Sekali saja; menolak dicatat dan tidak ditanya lagi.
+  // repairChecked menandai pengecekan tawaran sudah jalan, supaya
+  // sinkronisasi (efek di bawah) menunggu alur ini selesai dulu.
   const [repairOffer, setRepairOffer] =
     useState<ProgressRepairOffer | null>(null)
+  const [repairChecked, setRepairChecked] = useState(false)
   useEffect(() => {
     if (!loading && user) {
       setRepairOffer(getProgressRepairOffer())
+      setRepairChecked(true)
     } else {
       setRepairOffer(null)
+      setRepairChecked(false)
     }
   }, [user, loading])
+
+  // Sinkronisasi progres + cek juara mingguan (v2.7): jalan setelah
+  // status auth diketahui, email terverifikasi, dan alur "Pindahkan
+  // progres lamamu?" selesai (diterima, ditolak, atau memang tidak
+  // ada tawaran), supaya data hasil perbaikan ikut tersinkron dan
+  // sync tidak menimpa tawaran yang belum dijawab. Tamu tidak pernah
+  // disinkron (startSync mengabaikan userId null). Logout atau ganti
+  // akun menghentikan sesi sync lewat cleanup.
+  const userVerified = Boolean(user && isEmailVerified(user))
+  useEffect(() => {
+    if (
+      loading ||
+      !userVerified ||
+      !userId ||
+      !repairChecked ||
+      repairOffer !== null
+    ) {
+      return
+    }
+    startSync(userId)
+    void checkWeeklyWins()
+    return () => {
+      stopSync()
+    }
+  }, [loading, userVerified, userId, repairChecked, repairOffer])
+
+  // Cek juara mingguan juga saat halaman Peringkat dibuka (v2.7):
+  // pengumuman yang terbit setelah login terakhir tetap ketemu di sini.
+  useEffect(() => {
+    if (pathname !== '/leaderboard' || loading || !userVerified) return
+    void checkWeeklyWins()
+  }, [pathname, loading, userVerified])
 
   // Gate lengkapi profil (v2.2.3): user yang login dan emailnya sudah
   // terverifikasi tapi belum punya baris profiles (kasus utama: login
@@ -246,6 +378,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <GiftNotices />
       {gateActive && unverifiedUser ? (
         <Routes>
           <Route element={<Layout />}>
@@ -262,14 +395,17 @@ export default function App() {
               path="belajar/:materiId/:sectionId"
               element={<SectionDetailPage />}
             />
+            <Route path="tips-trik" element={<TipsTrikPage />} />
             <Route path="latihan" element={<LatihanPage />} />
             <Route path="latihan/jalan" element={<LatihanJalanPage />} />
             <Route
               path="latihan/ulas"
               element={<LatihanJalanPage mode="review" />}
             />
+            <Route path="peta-kelemahan" element={<PetaKelemahanPage />} />
             <Route path="tryout" element={<TryoutPage />} />
             <Route path="tryout/hasil" element={<TryoutHasilPage />} />
+            <Route path="tryout-akbar" element={<TryoutAkbarPage />} />
             <Route path="leaderboard" element={<LeaderboardPage />} />
             <Route path="formasi" element={<FormasiPage />} />
             <Route path="auth" element={<AuthPage />} />

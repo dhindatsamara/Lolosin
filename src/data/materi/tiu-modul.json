@@ -5,7 +5,7 @@
   "deskripsi": "Ringkasan materi TIU: penalaran verbal, analitis, logis, silogisme, aritmetika, deret angka, dan hitung cepat.",
   "sumber": "ocr/Mod-MATERI-TIU-CPNS.txt",
   "halaman": 98,
-  "kata": 15479,
+  "kata": 15507,
   "subtopik": [
     "Penalaran verbal: sinonim, antonim, analogi",
     "Penalaran analitis",
@@ -200,8 +200,8 @@
       "id": "tiu-modul-s15",
       "subtopik": "Aritmetika dan aljabar",
       "judul": "Pengurangan Bilangan: Bulat Bertanda",
-      "konten": "## Pengurangan bilangan bulat bertanda\n\nPengurangan dapat diartikan sebagai menambah dengan lawan. Jadi `a - b` sama dengan `a + (-b)`.\n\nContoh:\n\n- `-4 - 7 = -4 + (-7) = -11`\n- `-3 - (-5) = -3 + 5 = 2`\n- `3 - (-7) = 3 + 7 = 10`\n\n## Perkalian\n\nSifat-sifat perkalian:\n\n- **Komutatif (pertukaran):** `a x b = b x a`. Pertukaran letak bilangan tidak mengubah hasil.\n- **Asosiatif (pengelompokan):** `(a x b) x c = a x (b x c)`. Perubahan pengelompokan bilangan tidak mengubah hasil.\n- **Distributif terhadap penjumlahan:** `a x (b + c) = (a x b) + (a x c)`\n- **Distributif terhadap pengurangan:** `a x (b - c) = (a x b) - (a x c)`\n- **Identitas:** `a x 1 = 1 x a = a`. Bilangan dikali satu hasilnya bilangan itu sendiri.\n\n## Pembagian\n\nPembagian dapat diartikan sebagai lawan dari perkalian. Notasinya adalah tanda `:` atau `/`.\n\nSifat-sifat pembagian:\n\n- Setiap bilangan dibagi 1 hasilnya bilangan itu sendiri: `a : 1 = a`\n- Setiap bilangan dibagi dengan bilangan itu sendiri sama dengan 1: `a : a = 1`\n- Bilangan nol dibagi bilangan berapa saja sama dengan 0: `0 : a = 0`\n- Bilangan berapa saja dibagi nol sama dengan tidak terdefinisi: `a : 0 = tidak terdefinisi`\n\n## Aturan tanda pada perkalian dan pembagian\n\n- Apabila tanda bilangan yang dikalikan atau dibagi **sama**, hasilnya bertanda positif (+).\n- Apabila tanda bilangan yang dikalikan atau dibagi **beda**, hasilnya bertanda negatif (-).\n\nContoh: `(-4) x (-3) = 12`, sedangkan `(-4) x 3 = -12`.",
-      "kata": 267,
+      "konten": "## Pengurangan bilangan bulat bertanda\n\nPengurangan dapat diartikan sebagai menambah dengan lawan. Jadi `a - b` sama dengan `a + (-b)`.\n\nContoh:\n\n- `-4 - 7 = -4 + (-7) = -11`\n- `-3 - (-5) = -3 + 5 = 2`\n- `3 - (-7) = 3 + 7 = 10`\n\n## Perkalian\n\nSifat-sifat perkalian:\n\n- **Komutatif (pertukaran):** `a x b = b x a`. Pertukaran letak bilangan tidak mengubah hasil.\n- **Asosiatif (pengelompokan):** `(a x b) x c = a x (b x c)`. Perubahan pengelompokan bilangan tidak mengubah hasil.\n- **Distributif terhadap penjumlahan:** `a x (b + c) = (a x b) + (a x c)`\n- **Distributif terhadap pengurangan:** `a x (b - c) = (a x b) - (a x c)`\n- **Identitas:** `a x 1 = 1 x a = a`. Bilangan dikali satu hasilnya bilangan itu sendiri.\n\n## Pembagian\n\nPembagian dapat diartikan sebagai lawan dari perkalian. Notasinya adalah tanda `:` atau `/`.\n\nSifat-sifat pembagian:\n\n- Setiap bilangan dibagi 1 hasilnya bilangan itu sendiri: `a : 1 = a`\n- Setiap bilangan dibagi dengan bilangan itu sendiri sama dengan 1: `a : a = 1`, dengan `a` bukan nol\n- Bilangan nol dibagi bilangan berapa saja sama dengan 0: `0 : a = 0`, dengan `a` bukan nol\n- Bilangan berapa saja dibagi nol sama dengan tidak terdefinisi: `a : 0 = tidak terdefinisi`\n\n## Aturan tanda pada perkalian dan pembagian\n\n- Apabila tanda bilangan yang dikalikan atau dibagi **sama**, hasilnya bertanda positif (+).\n- Apabila tanda bilangan yang dikalikan atau dibagi **beda**, hasilnya bertanda negatif (-).\n\nContoh: `(-4) x (-3) = 12`, sedangkan `(-4) x 3 = -12`.",
+      "kata": 275,
       "poin_inti": [
         "Pengurangan sama dengan menambah dengan lawan bilangan.",
         "Perkalian bersifat komutatif, asosiatif, distributif, dan punya identitas satu.",
@@ -319,7 +319,8 @@
         "Bilangan a disebut pembilang dan bilangan b disebut penyebut.",
         "Pecahan adalah bagian yang sama besar dari sesuatu yang utuh.",
         "Satu dari tiga bagian roti yang sama besar nilainya sepertiga."
-      ]
+      ],
+      "gambar": "gambar:pecahan"
     },
     {
       "id": "tiu-modul-s24",
@@ -442,7 +443,8 @@
         "Setiap langkah jarum panjang jam adalah 6 derajat.",
         "Sudut jarum jam yang dicari adalah sudut terkecilnya.",
         "Turun satu tingkat satuan panjang dikali 10 dan satuan luas dikali 100."
-      ]
+      ],
+      "gambar": "gambar:jam"
     },
     {
       "id": "tiu-modul-s33",
@@ -524,7 +526,8 @@
         "Sisi miring adalah sisi terpanjang segitiga siku-siku.",
         "Tripel 3, 4, 5 adalah tripel Pythagoras yang sering muncul.",
         "Segitiga siku-siku 3 cm dan 4 cm punya sisi miring 5 cm."
-      ]
+      ],
+      "gambar": "gambar:pythagoras"
     },
     {
       "id": "tiu-modul-s39",
@@ -614,8 +617,8 @@
       "id": "tiu-modul-s45",
       "subtopik": "Aritmetika dan aljabar",
       "judul": "Ringkas 9: Sistem Koordinat: A. Sistem Koordinat",
-      "konten": "Bidang koordinat adalah perpotongan dua garis yang saling tegak lurus. Kedua garis tersebut disebut garis sumbu. Sumbu mendatar disebut sumbu X dan sumbu tegak disebut sumbu Y.\n\nKedua garis sumbu berpotongan di sebuah titik yang disebut titik pusat atau titik asal dan diberi nama titik O (0,0). Sumbu X dan sumbu Y dibagi dalam skala yang sama.\n\nKoordinat adalah pasangan bilangan yang dipakai untuk menunjukkan letak titik dalam bidang. Sistem penulisan pasangan bilangan absis dan ordinat disebut sistem koordinat.\n\nPerhatikan titik A(3, 4). Pasangan bilangan (3, 4) disebut koordinat titik A. Bilangan yang ditulis pertama, yaitu 3, disebut absis, artinya x = 3. Bilangan yang ditulis kedua, yaitu 4, disebut ordinat, artinya y = 4.\n\nContoh:\n\n- Titik A(3, 4) artinya memiliki absis 3 dan ordinat 4.\n- Titik B(4, -1) artinya memiliki absis 4 dan ordinat -1.\n- Titik C(0, -3) artinya memiliki absis 0 dan ordinat -3.\n- Titik D(-6, -4) artinya memiliki absis -6 dan ordinat -4.\n\nContoh: tuliskan koordinat titik A, B, C, D, dan E pada gambar!\n\nJawab:\n\n- Titik A(4, 4), absis = 4 dan ordinat = 4\n- Titik B(-5, 2), absis = -5 dan ordinat = 2\n- Titik C(2, -4), absis = 2 dan ordinat = -4\n- Titik D(-3, -2), absis = -3 dan ordinat = -2\n- Titik E(0, -5), absis = 0 dan ordinat = -5",
-      "kata": 228,
+      "konten": "Bidang koordinat adalah perpotongan dua garis yang saling tegak lurus. Kedua garis tersebut disebut garis sumbu. Sumbu mendatar disebut sumbu X dan sumbu tegak disebut sumbu Y.\n\nKedua garis sumbu berpotongan di sebuah titik yang disebut titik pusat atau titik asal dan diberi nama titik O (0,0). Sumbu X dan sumbu Y dibagi dalam skala yang sama.\n\nKoordinat adalah pasangan bilangan yang dipakai untuk menunjukkan letak titik dalam bidang. Sistem penulisan pasangan bilangan absis dan ordinat disebut sistem koordinat.\n\nPerhatikan titik A(3, 4). Pasangan bilangan (3, 4) disebut koordinat titik A. Bilangan yang ditulis pertama, yaitu 3, disebut absis, artinya x = 3. Bilangan yang ditulis kedua, yaitu 4, disebut ordinat, artinya y = 4.\n\nContoh:\n\n- Titik A(3, 4) artinya memiliki absis 3 dan ordinat 4.\n- Titik B(4, -1) artinya memiliki absis 4 dan ordinat -1.\n- Titik C(0, -3) artinya memiliki absis 0 dan ordinat -3.\n- Titik D(-6, -4) artinya memiliki absis -6 dan ordinat -4.\n\nContoh membaca koordinat: lima titik berikut ditulis lengkap dengan absis dan ordinatnya.\n\n- Titik A(4, 4), absis = 4 dan ordinat = 4\n- Titik B(-5, 2), absis = -5 dan ordinat = 2\n- Titik C(2, -4), absis = 2 dan ordinat = -4\n- Titik D(-3, -2), absis = -3 dan ordinat = -2\n- Titik E(0, -5), absis = 0 dan ordinat = -5",
+      "kata": 227,
       "poin_inti": [
         "Sumbu mendatar disebut sumbu X dan sumbu tegak sumbu Y.",
         "Kedua sumbu berpotongan di titik asal O nol koma nol.",
@@ -655,8 +658,8 @@
       "id": "tiu-modul-s48",
       "subtopik": "Aritmetika dan aljabar",
       "judul": "C. Penyajian Data",
-      "konten": "Data yang telah dikumpulkan dapat disajikan dalam beberapa bentuk, antara lain tabel, diagram batang, diagram garis, diagram lingkaran, dan diagram gambar.\n\nTujuan data disajikan dalam bentuk tabel atau diagram adalah untuk memudahkan orang lain dalam membaca data yang disajikan.\n\nContoh: Amin mengumpulkan data hasil panen palawija di Desa Suka Makmur selama 4 tahun. Data yang diperoleh adalah sebagai berikut.\n\n- Tahun 2005 hasilnya 25 ton\n- Tahun 2006 hasilnya 30 ton\n- Tahun 2007 hasilnya 45 ton\n- Tahun 2008 hasilnya 40 ton\n- Jumlah seluruhnya 140 ton\n\n## Tabel\n\nData di atas dapat disajikan dalam tabel dengan kolom tahun dan kolom hasil panen (dalam ton): 2005 menghasilkan 25 ton, 2006 menghasilkan 30 ton, 2007 menghasilkan 45 ton, 2008 menghasilkan 40 ton, dengan jumlah 140 ton.\n\n## Diagram batang\n\nDiagram batang adalah diagram yang disajikan menggunakan batang atau balok. Tinggi setiap batang menunjukkan besarnya data. Misalnya batang tahun 2007 paling tinggi karena hasilnya 45 ton, dan batang tahun 2005 paling pendek karena hasilnya 25 ton.\n\n## Diagram garis\n\nDiagram garis adalah diagram yang disajikan dalam bentuk garis.\n\nTitik-titik data dihubungkan dengan garis sehingga terlihat naik turunnya hasil panen dari tahun ke tahun: naik dari 25 ton (2005) ke 30 ton (2006), naik lagi ke 45 ton (2007), lalu turun ke 40 ton (2008).\n\n## Diagram lingkaran\n\nDiagram lingkaran adalah diagram yang disajikan menggunakan lingkaran yang dibagi menjadi beberapa bagian.\n\nJumlah sudut dalam satu lingkaran adalah 360 derajat. Besar sudut untuk masing-masing data dapat dihitung dengan cara membagi data dengan jumlah seluruh data, lalu dikali 360 derajat.\n\n- Hasil panen tahun 2005: `(25/140) x 360 derajat = 64 derajat`\n- Hasil panen tahun 2006: `(30/140) x 360 derajat = 77 derajat`\n- Hasil panen tahun 2007: `(45/140) x 360 derajat = 116 derajat`\n- Hasil panen tahun 2008: `(40/140) x 360 derajat = 103 derajat`\n\nJumlah keempat sudutnya adalah 360 derajat.\n\n## Diagram gambar\n\nDiagram gambar adalah diagram yang disajikan dalam bentuk gambar yang mewakili data. Misalnya satu gambar mewakili 2 ton, sehingga hasil panen 25 ton digambarkan dengan gambar sebanyak 25 dibagi 2.",
-      "kata": 343,
+      "konten": "Data yang telah dikumpulkan dapat disajikan dalam beberapa bentuk, antara lain tabel, diagram batang, diagram garis, diagram lingkaran, dan diagram gambar.\n\nTujuan data disajikan dalam bentuk tabel atau diagram adalah untuk memudahkan orang lain dalam membaca data yang disajikan.\n\nContoh: Amin mengumpulkan data hasil panen palawija di Desa Suka Makmur selama 4 tahun. Data yang diperoleh adalah sebagai berikut.\n\n- Tahun 2005 hasilnya 25 ton\n- Tahun 2006 hasilnya 30 ton\n- Tahun 2007 hasilnya 45 ton\n- Tahun 2008 hasilnya 40 ton\n- Jumlah seluruhnya 140 ton\n\n## Tabel\n\nData di atas dapat disajikan dalam tabel dengan kolom tahun dan kolom hasil panen (dalam ton):\n\n| Tahun | Hasil panen (ton) |\n|---|---:|\n| 2005 | 25 |\n| 2006 | 30 |\n| 2007 | 45 |\n| 2008 | 40 |\n| Jumlah | 140 |\n\n## Diagram batang\n\nDiagram batang adalah diagram yang disajikan menggunakan batang atau balok. Tinggi setiap batang menunjukkan besarnya data. Misalnya batang tahun 2007 paling tinggi karena hasilnya 45 ton, dan batang tahun 2005 paling pendek karena hasilnya 25 ton.\n\n## Diagram garis\n\nDiagram garis adalah diagram yang disajikan dalam bentuk garis.\n\nTitik-titik data dihubungkan dengan garis sehingga terlihat naik turunnya hasil panen dari tahun ke tahun: naik dari 25 ton (2005) ke 30 ton (2006), naik lagi ke 45 ton (2007), lalu turun ke 40 ton (2008).\n\n## Diagram lingkaran\n\nDiagram lingkaran adalah diagram yang disajikan menggunakan lingkaran yang dibagi menjadi beberapa bagian.\n\nJumlah sudut dalam satu lingkaran adalah 360 derajat. Besar sudut untuk masing-masing data dapat dihitung dengan cara membagi data dengan jumlah seluruh data, lalu dikali 360 derajat. Hasilnya di bawah ini dibulatkan ke derajat terdekat.\n\n- Hasil panen tahun 2005: `(25/140) x 360 derajat = 64 derajat`\n- Hasil panen tahun 2006: `(30/140) x 360 derajat = 77 derajat`\n- Hasil panen tahun 2007: `(45/140) x 360 derajat = 116 derajat`\n- Hasil panen tahun 2008: `(40/140) x 360 derajat = 103 derajat`\n\nJumlah keempat sudutnya adalah 360 derajat.\n\n## Diagram gambar\n\nDiagram gambar adalah diagram yang disajikan dalam bentuk gambar yang mewakili data. Misalnya satu gambar mewakili 2 ton, sehingga hasil panen 25 ton digambarkan dengan gambar sebanyak 25 dibagi 2.",
+      "kata": 364,
       "poin_inti": [
         "Data dapat disajikan dalam tabel dan berbagai diagram.",
         "Diagram batang memakai tinggi batang untuk menunjukkan besar data.",

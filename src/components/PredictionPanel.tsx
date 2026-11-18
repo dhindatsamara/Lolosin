@@ -51,7 +51,7 @@ function teksSelisih(diff: number): string {
   return `${fmt(Math.abs(diff))} poin lagi`
 }
 
-/** Tren per seksi, atau null bila baru ada 1 tryout. */
+/** Tren per bagian, atau null bila baru ada 1 tryout. */
 function teksTren(trend: number | null): string | null {
   if (trend === null) return null
   if (trend > 0) return `Naik ${fmt(trend)} poin dari tryout sebelumnya.`
@@ -72,7 +72,7 @@ function formatTanggalTryout(iso: string): string {
 interface PredictionPanelProps {
   /** Riwayat tryout dari store; panel menghitung sendiri lewat predictFromHistory. */
   history: readonly TryoutRecord[]
-  /** Varian ringkas untuk dashboard: satu kartu, satu baris per seksi. */
+  /** Varian ringkas untuk dashboard: satu kartu, satu baris per bagian. */
   compact?: boolean
 }
 
@@ -89,8 +89,15 @@ export function PredictionPanel({
   const prediction = useMemo(() => predictFromHistory(history), [history])
 
   if (!prediction) {
+    // Bagian flex-col + kartu flex-1 hanya di varian compact
+    // (beranda): kartunya mengisi tinggi grid supaya tepi bawahnya
+    // sejajar dengan kartu Tryout terakhir (poin 1, v2.5).
+    // Varian penuh (halaman hasil tryout) tidak berubah.
     return (
-      <section aria-label="Perkiraan kelolosan">
+      <section
+        aria-label="Perkiraan kelolosan"
+        className={compact ? 'flex h-full flex-col' : undefined}
+      >
         {!compact && (
           <div className="mb-3">
             <p className="kicker">kira kira peluangmu</p>
@@ -99,7 +106,12 @@ export function PredictionPanel({
             </h2>
           </div>
         )}
-        <Card className="p-5 text-center">
+        <Card
+          className={cx(
+            'p-5 text-center',
+            compact && 'flex flex-1 flex-col justify-center',
+          )}
+        >
           <Mascot
             mood="semangat"
             size={compact ? 56 : 72}
@@ -143,7 +155,10 @@ export function PredictionPanel({
 
   if (compact) {
     return (
-      <section aria-label="Perkiraan kelolosan">
+      <section
+        aria-label="Perkiraan kelolosan"
+        className="flex h-full flex-col"
+      >
         <div className="mb-3">
           <p className="kicker">kira kira peluangmu</p>
           <h2 className="mt-1 font-display text-xl font-extrabold">
@@ -153,7 +168,7 @@ export function PredictionPanel({
             {ringkasanRiwayat}
           </p>
         </div>
-        <Card className="p-5">
+        <Card className="flex-1 p-5">
           <div className="flex flex-col gap-4">
             {sections.map((s) => (
               <CompactRow key={s.materi} section={s} />
@@ -200,7 +215,7 @@ export function PredictionPanel({
   )
 }
 
-/** Satu seksi versi penuh: kartu putih dengan garis aksen warna subtes. */
+/** Satu bagian versi penuh: kartu putih dengan garis aksen warna subtes. */
 function FullCard({ section: s }: { section: SectionPrediction }) {
   const tren = teksTren(s.trend)
   return (
@@ -245,7 +260,7 @@ function FullCard({ section: s }: { section: SectionPrediction }) {
   )
 }
 
-/** Satu seksi versi ringkas: satu baris di dalam kartu dashboard. */
+/** Satu bagian versi ringkas: satu baris di dalam kartu dashboard. */
 function CompactRow({ section: s }: { section: SectionPrediction }) {
   const tren = teksTren(s.trend)
   return (

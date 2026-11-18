@@ -1,4 +1,5 @@
 import type { Opsi, Question } from '../../lib/questions'
+import { MathText } from '../MathText'
 import { scoreQuestion, visibleOptions } from '../../lib/quiz'
 import { cx } from '../../lib/utils'
 import { CheckIcon } from '../icons'
@@ -121,7 +122,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
         </p>
         {pembahasan ? (
           <p className="text-sm leading-relaxed whitespace-pre-line text-ink/80">
-            {pembahasan}
+            <MathText text={pembahasan} />
           </p>
         ) : (
           <p className="text-sm leading-relaxed text-ink/60">

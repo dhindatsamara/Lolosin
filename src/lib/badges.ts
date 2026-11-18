@@ -5,6 +5,11 @@
  * (lihat `checkNewBadges`). Pengecekan hanya dilakukan di titik-titik
  * aktivitas (selesai drill, selesai tryout, tandai baca, aktivitas
  * harian, klaim misi) lewat `src/lib/gamification.ts`, bukan di render.
+ *
+ * Pengecualian: `juara-mingguan` (lencana ke-14) TIDAK bisa dicek dari
+ * state lokal, karena juaranya ditentukan server. Syaratnya selalu
+ * false di sini; pemberiannya dipicu dari hasil baca
+ * `weekly_winners` lewat `checkWeeklyWins` di `lib/leaderboard.ts`.
  */
 import type { StoreState } from './store'
 
@@ -74,7 +79,7 @@ export const BADGES: BadgeDef[] = [
   {
     id: 'kutu-buku',
     nama: 'Kutu Buku',
-    deskripsi: 'Baca 50 seksi materi.',
+    deskripsi: 'Baca 50 bagian materi.',
     ikon: '📚',
     check: (s) => s.readSections.length >= 50,
   },
@@ -113,6 +118,14 @@ export const BADGES: BadgeDef[] = [
     ikon: '👑',
     check: (s) =>
       s.tryoutHistory.some((r) => r.mode === 'full' && r.passed),
+  },
+  {
+    id: 'juara-mingguan',
+    nama: 'Juara Mingguan',
+    deskripsi: 'Jadi juara 1-3 mingguan di leaderboard.',
+    ikon: '🥇',
+    // Diberikan server lewat weekly_winners, bukan dari state lokal.
+    check: () => false,
   },
 ]
 

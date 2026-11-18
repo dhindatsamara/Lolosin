@@ -1,7 +1,7 @@
 {
   "dibuat": "2026-11-15",
-  "total_dokumen": 19,
-  "total_kata": 77575,
+  "total_dokumen": 21,
+  "total_kata": 86945,
   "total_halaman": 591,
   "dokumen": [
     {
@@ -11,7 +11,7 @@
       "materi": "TWK",
       "deskripsi": "Rangkuman tabel TWK: poin setiap sila Pancasila, timeline UUD 1945, sembilan nilai integritas, penggunaan huruf kapital, prinsip nasionalisme, dan NKRI dalam UUD 1945.",
       "halaman": 121,
-      "kata": 1048,
+      "kata": 1265,
       "subtopik": [
         "Pancasila",
         "Bela Negara",
@@ -47,23 +47,23 @@
       "file": "twk-integritas-pilar.json",
       "judul": "Integritas dan Pilar Negara",
       "materi": "TWK",
-      "deskripsi": "Pendalaman dua subtopik TWK: sembilan nilai integritas versi KPK, korupsi dan gratifikasi, serta Empat Pilar MPR RI sebagai satu kesatuan.",
+      "deskripsi": "Pendalaman integritas dan pilar negara: sembilan nilai integritas versi KPK, pembeda gratifikasi, suap, dan pemerasan, LHKPN dan jalur pelaporan, serta Empat Pilar MPR RI sebagai satu kesatuan.",
       "halaman": 0,
-      "kata": 1808,
+      "kata": 2628,
       "subtopik": [
         "Integritas",
         "Pilar Negara"
       ],
-      "jumlahSections": 2
+      "jumlahSections": 4
     },
     {
       "id": "twk-keyword-bela-negara",
       "file": "twk-keyword-bela-negara.json",
       "judul": "Implementasi Keyword: Bela Negara, Patriotisme, Nasionalisme",
       "materi": "TWK",
-      "deskripsi": "Infografis pembeda empat konsep yang sering tertukar: bela negara, nasionalisme, patriotisme, dan cinta tanah air.",
+      "deskripsi": "Bela negara lengkap: pembeda empat konsep yang sering tertukar, dasar hukum dan lima nilai dasar, bentuk partisipasi warga, dan jenis ancaman terhadap negara.",
       "halaman": 2,
-      "kata": 251,
+      "kata": 1307,
       "subtopik": [
         "Bela Negara",
         "Patriotisme",
@@ -71,7 +71,7 @@
         "Cinta Tanah Air",
         "Perbedaan keyword keempat konsep"
       ],
-      "jumlahSections": 1
+      "jumlahSections": 4
     },
     {
       "id": "twk-modul-ringkasan",
@@ -139,6 +139,19 @@
       "jumlahSections": 1
     },
     {
+      "id": "twk-uud-1945-kelompok-pasal",
+      "file": "twk-uud-1945-kelompok-pasal.json",
+      "judul": "UUD 1945 per Kelompok Pasal: Hafalan Pasal 1-37",
+      "materi": "TWK",
+      "deskripsi": "Cara menghafal UUD 1945 per kelompok pasal, bukan satu per satu: peta 11 kelompok pasal 1-37, isi pokok tiap pasal, dan angka-angka kunci yang sering keluar di ujian.",
+      "halaman": 0,
+      "kata": 4133,
+      "subtopik": [
+        "UUD 1945"
+      ],
+      "jumlahSections": 12
+    },
+    {
       "id": "tiu-analogi-verbal",
       "file": "tiu-analogi-verbal.json",
       "judul": "Materi Analogi Verbal TIU | TemanASN",
@@ -153,6 +166,25 @@
         "Bentuk-bentuk soal analogi (tiga kata)"
       ],
       "jumlahSections": 4
+    },
+    {
+      "id": "tiu-cheat-sheet",
+      "file": "tiu-cheat-sheet.json",
+      "judul": "Cheat Sheet TIU",
+      "materi": "TIU",
+      "deskripsi": "Kartu ringkas TIU: rumus hitung cepat dan persen, pola deret, trik soal cerita numerik, analogi verbal, silogisme dan logika, pola gambar figural, dan strategi soal kecukupan data.",
+      "halaman": 0,
+      "kata": 2543,
+      "subtopik": [
+        "Hitung cepat dan persen",
+        "Deret dan barisan",
+        "Soal cerita numerik",
+        "Analogi dan sinonim-antonim verbal",
+        "Silogisme dan logika",
+        "Figural",
+        "Kecukupan data"
+      ],
+      "jumlahSections": 7
     },
     {
       "id": "tiu-handbook-figural",
@@ -179,7 +211,7 @@
       "materi": "TIU",
       "deskripsi": "Handbook kemampuan numerik: berhitung, deret angka, perbandingan kuantitatif, soal cerita, dan hitung cepat.",
       "halaman": 44,
-      "kata": 3462,
+      "kata": 3483,
       "subtopik": [
         "Berhitung",
         "Deret angka",
@@ -215,7 +247,7 @@
       "materi": "TIU",
       "deskripsi": "Teknik hitung cepat: jenis dan sifat bilangan (ABCSIROPP), pecahan, dan trik berhitung.",
       "halaman": 10,
-      "kata": 2136,
+      "kata": 2250,
       "subtopik": [
         "Jenis bilangan (ABCSIROPP)",
         "Sifat-sifat bilangan",
@@ -231,7 +263,7 @@
       "materi": "TIU",
       "deskripsi": "Ringkasan materi TIU: penalaran verbal, analitis, logis, silogisme, aritmetika, deret angka, dan hitung cepat.",
       "halaman": 98,
-      "kata": 15479,
+      "kata": 15507,
       "subtopik": [
         "Penalaran verbal: sinonim, antonim, analogi",
         "Penalaran analitis",
@@ -284,7 +316,7 @@
       "materi": "TKP",
       "deskripsi": "Pendalaman 12 aspek TKP: integritas, kejujuran, adaptasi, pengendalian diri, semangat berprestasi, inisiatif, kreativitas dan inovasi, ketekunan, orientasi pelayanan, toleransi, kepedulian lingkungan, dan efisiensi kerja.",
       "halaman": 0,
-      "kata": 8388,
+      "kata": 8406,
       "subtopik": [
         "Integritas",
         "Kejujuran",
@@ -308,7 +340,7 @@
       "materi": "TKP",
       "deskripsi": "Referensi cepat TKP: definisi kompetensi, deskripsi level 0–6, dan kata kunci per aspek.",
       "halaman": 7,
-      "kata": 3921,
+      "kata": 4341,
       "subtopik": [
         "Profesionalisme",
         "Jejaring kerja",

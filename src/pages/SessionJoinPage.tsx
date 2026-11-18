@@ -35,6 +35,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
+import { MathText } from '../components/MathText'
 import { OptionButton } from '../components/quiz/OptionButton'
 import { ConfirmModal } from '../components/quiz/ConfirmModal'
 import {
@@ -689,7 +690,7 @@ export function SessionJoinPage() {
               </span>
             </div>
             <p className="text-[15px] leading-relaxed font-medium whitespace-pre-line">
-              {question.soal}
+              <MathText text={question.soal} />
             </p>
             <div
               className="flex flex-col gap-2"

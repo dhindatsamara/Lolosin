@@ -21,6 +21,7 @@ import {
   CheckIcon,
   ChevronRightIcon,
   ClockIcon,
+  CrownIcon,
   TargetIcon,
 } from '../components/icons'
 
@@ -113,6 +114,31 @@ export function LatihanPage() {
           </Button>
         </Link>
       </Card>
+
+      {/* Peta Kelemahan (v2.8, Premium): akurasi per subtopik + latihan
+          yang disarankan untuk bagian yang paling lemah. */}
+      <Link to="/peta-kelemahan" className="block">
+        <Card
+          padding="none"
+          className="flex items-center gap-3 border-accent-200 bg-accent-50 p-3 transition-all hover:shadow-soft-lg active:scale-[0.98]"
+        >
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-400 text-ink">
+            <CrownIcon width={20} height={20} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-extrabold">Peta Kelemahan</p>
+            <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+              Lihat bagian mana yang paling perlu diasah, plus latihan
+              yang disarankan. Fitur Premium.
+            </p>
+          </div>
+          <ChevronRightIcon
+            width={18}
+            height={18}
+            className="shrink-0 text-ink/60"
+          />
+        </Card>
+      </Link>
 
       <section aria-label="Pilih materi">
         <h2 className="mb-2 font-display text-base font-extrabold">Pilih materi</h2>

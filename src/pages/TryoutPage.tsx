@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   MATERI_LIST,
   MATERI_META,
@@ -49,6 +49,11 @@ import {
   submitTryoutResult,
   type LeaderboardSubmitStatus,
 } from '../lib/leaderboard'
+import {
+  formatEventLabel,
+  isEventWindowOpen,
+  nextEventStart,
+} from '../lib/tryoutAkbar'
 import { cx } from '../lib/utils'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -64,7 +69,6 @@ import {
   ClockIcon,
   HandshakeIcon,
   InfoIcon,
-  RankingIcon,
   TrophyIcon,
   XIcon,
   ZapIcon,
@@ -144,7 +148,7 @@ function recordMode(record: TryoutRecord): TryoutMode {
   return record.mode ?? 'mini'
 }
 
-/** Satu baris passing grade per seksi, dipakai kedua kelompok. */
+/** Satu baris passing grade per bagian, dipakai kedua kelompok. */
 function PassingCard({
   materi,
   passing,
@@ -223,11 +227,28 @@ function RuleCard({
  */
 export function TryoutPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { tryoutHistory } = useStore()
   const [mode, setMode] = useState<Mode>('info')
   const [startError, setStartError] = useState<string | null>(null)
   // Mode yang menunggu konfirmasi di modal "Mulai sekarang?".
   const [pendingMode, setPendingMode] = useState<TryoutMode | null>(null)
+
+  // Mulai otomatis dari halaman Tryout Akbar (v2.8): halaman Akbar
+  // mengarahkan ke sini dengan state startMode 'full'. Modal
+  // konfirmasi yang dibuka (bukan langsung mulai), supaya timer
+  // tetap baru jalan setelah user mengetuk Mulai, sama seperti
+  // alur mulai biasa. State dibersihkan supaya modal tidak muncul
+  // lagi saat kembali ke halaman ini.
+  const autoStartRef = useRef(false)
+  useEffect(() => {
+    if (autoStartRef.current) return
+    const state = (location.state ?? {}) as { startMode?: unknown }
+    if (state.startMode !== 'full' && state.startMode !== 'mini') return
+    autoStartRef.current = true
+    setPendingMode(state.startMode)
+    navigate('/tryout', { replace: true })
+  }, [location.state, navigate])
 
   // State sesi jalan
   const [tryoutMode, setTryoutMode] = useState<TryoutMode>('mini')
@@ -457,20 +478,27 @@ export function TryoutPage() {
               : 'Tandai ragu-ragu'}
           </Button>
 
+          {/* Navigasi soal ikon saja (v2.6): chevron tanpa teks,
+              aria-label menjelaskan tujuannya. Tetap disabled di
+              ujung (soal pertama / terakhir). */}
           <div className="grid grid-cols-2 gap-2">
             <Button
               variant="outline"
               onClick={() => goTo(currentIndex - 1)}
               disabled={currentIndex === 0}
+              aria-label="Soal sebelumnya"
+              className="text-lg leading-none"
             >
-              ← Sebelumnya
+              <span aria-hidden="true">‹</span>
             </Button>
             <Button
               variant="outline"
               onClick={() => goTo(currentIndex + 1)}
               disabled={currentIndex === total - 1}
+              aria-label="Soal berikutnya"
+              className="text-lg leading-none"
             >
-              Berikutnya →
+              <span aria-hidden="true">›</span>
             </Button>
           </div>
 
@@ -521,16 +549,51 @@ export function TryoutPage() {
     <div className="flex flex-col gap-5">
       <GuestProgressWarning />
 
-      <header>
-        <p className="kicker">simulasi beneran, deg-degan beneran</p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold">
-          Tryout & Simulasi
-        </h1>
-        <p className="mt-1 text-sm leading-relaxed text-ink/60">
-          Dua mode, satu tujuan: lolos SKD. Pemanasan kilat 30 soal,
-          atau simulasi CAT 110 soal persis ujian beneran.
-        </p>
+      {/* Tombol peringkat di kanan atas header (poin 4a, v2.5):
+          sejajar judul, tombol sekunder dengan ikon trofi. */}
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="kicker">simulasi beneran, deg-degan beneran</p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold">
+            Tryout & Simulasi
+          </h1>
+          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-ink/60">
+            Dua mode, satu tujuan: lolos SKD. Pemanasan kilat 30 soal,
+            atau simulasi CAT 110 soal persis ujian beneran.
+          </p>
+        </div>
+        <Link to="/leaderboard" className="shrink-0">
+          <Button variant="secondary" size="sm">
+            <TrophyIcon width={16} height={16} />
+            Lihat peringkat
+          </Button>
+        </Link>
       </header>
+
+      {/* Tryout Akbar mingguan (v2.8): event simulasi CAT bareng
+          tiap Minggu 09:00-11:00 WITA. */}
+      <Link to="/tryout-akbar" className="block">
+        <Card className="flex items-center gap-3 border-primary-200 bg-primary-50 p-4 transition-all hover:shadow-soft-lg active:scale-[0.98]">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
+            <TrophyIcon width={22} height={22} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-extrabold">
+              Tryout Akbar tiap Minggu 09:00 WITA
+            </p>
+            <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
+              {isEventWindowOpen()
+                ? 'Event sedang berlangsung, ikut sekarang!'
+                : `Berikutnya: ${formatEventLabel(nextEventStart())}. Simulasi CAT bareng, ada papan peringkat khususnya.`}
+            </p>
+          </div>
+          <ChevronRightIcon
+            width={18}
+            height={18}
+            className="shrink-0 text-ink/60"
+          />
+        </Card>
+      </Link>
 
       <section aria-label="Pilih mode tryout">
         <h2 className="mb-2 font-display text-base font-extrabold">
@@ -573,11 +636,11 @@ export function TryoutPage() {
                     XP
                   </p>
                   <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
-                    {TRYOUT_QUESTIONS_PER_SECTION} soal per seksi · passing
+                    {TRYOUT_QUESTIONS_PER_SECTION} soal per bagian · passing
                     grade mini TWK ≥{TRYOUT_PASSING_MINI.TWK} · TIU ≥
                     {TRYOUT_PASSING_MINI.TIU} · TKP ≥
                     {TRYOUT_PASSING_MINI.TKP} (maks {TRYOUT_MAX_PER_SECTION}{' '}
-                    per seksi)
+                    per bagian)
                   </p>
                 </div>
               </div>
@@ -734,18 +797,10 @@ export function TryoutPage() {
           </div>
         </div>
         <p className="mt-2 text-xs leading-relaxed font-medium text-ink/60">
-          Biar lulus keseluruhan, ketiga seksi harus melewati passing
+          Biar lulus keseluruhan, ketiga bagian harus melewati passing
           grade-nya masing-masing. Passing grade aslinya dari KepmenPANRB
           406/2026.
         </p>
-        {/* Peringkat keluar dari header (v2.4): jalan masuknya dari
-            sini dan dari footer. */}
-        <Link to="/leaderboard" className="mt-3 inline-block">
-          <Button variant="outline" size="sm">
-            <RankingIcon width={16} height={16} />
-            Lihat peringkat
-          </Button>
-        </Link>
       </section>
 
       {historyNewestFirst.length > 0 && (

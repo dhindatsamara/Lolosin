@@ -18,8 +18,8 @@ const SECTION_STYLE: Record<Materi, { label: string; answered: string }> = {
 }
 
 /**
- * Palet navigator tryout: grid nomor soal 1–N yang dikelompokkan per seksi.
- * Status tiap nomor: belum dijawab (putih), dijawab (warna seksi),
+ * Palet navigator tryout: grid nomor soal 1–N yang dikelompokkan per bagian.
+ * Status tiap nomor: belum dijawab (putih), dijawab (warna bagian),
  * ragu-ragu (amber), soal aktif (ring tebal).
  */
 export function TryoutPalette({

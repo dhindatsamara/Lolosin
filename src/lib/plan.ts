@@ -139,6 +139,37 @@ function displayLabel(group: TopicGroup): string {
 }
 
 /**
+ * Akurasi SEMUA subtopik yang sudah pernah dijawab dari tally yang
+ * diberikan, tanpa batas jawaban minimum. Urutan: akurasi naik
+ * (paling lemah dulu), lalu total jawaban turun. Dipakai peta
+ * kelemahan (v2.8); weakestTopicsFromStats tetap dipakai rencana
+ * belajar dengan batas minimum 5 jawaban.
+ */
+export function allTopicAccuraciesFromStats(
+  stats: Record<string, TopicStat>,
+): TopicAccuracy[] {
+  const rows: TopicAccuracy[] = []
+  for (const group of groupStats(stats).values()) {
+    if (group.total <= 0) continue
+    rows.push({
+      materi: group.materi,
+      subtopik: displayLabel(group),
+      correct: group.correct,
+      total: group.total,
+      accuracy: group.correct / group.total,
+    })
+  }
+  rows.sort(
+    (a, b) =>
+      a.accuracy - b.accuracy ||
+      b.total - a.total ||
+      a.materi.localeCompare(b.materi) ||
+      a.subtopik.localeCompare(b.subtopik, 'id'),
+  )
+  return rows
+}
+
+/**
  * Subtopik terlemah dari tally yang diberikan: akurasi terendah di
  * antara subtopik yang sudah dijawab minimal `WEAKEST_MIN_ANSWERS`
  * kali. Urutan: akurasi naik, lalu total jawaban turun.
@@ -231,6 +262,11 @@ function topicUniverse(): TopicUniverseEntry[] {
 /** Subtopik terlemah dari store (min 5 jawaban), paling lemah dulu. */
 export function weakestTopics(limit = 3): TopicAccuracy[] {
   return weakestTopicsFromStats(getStore().topicStats, limit)
+}
+
+/** Akurasi semua subtopik yang sudah pernah dijawab dari store. */
+export function allTopicAccuracies(): TopicAccuracy[] {
+  return allTopicAccuraciesFromStats(getStore().topicStats)
 }
 
 /** Subtopik yang belum pernah dicoba sama sekali. */

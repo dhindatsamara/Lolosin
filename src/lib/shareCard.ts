@@ -8,11 +8,13 @@
  *
  * Jalur utama: Web Share API dengan files (bila browser mendukung,
  * mis. Chrome Android) supaya user bisa langsung kirim ke WhatsApp,
- * Instagram, TikTok, dan aplikasi lain. Fallback: unduh PNG.
- * Semua fungsi tidak pernah melempar error ke pemanggil.
+ * Instagram, TikTok, dan aplikasi lain. Fallback: unduh PNG, atau
+ * buka PNG di tab baru di browser yang tidak mendukung atribut
+ * download (mis. iOS Safari). Semua fungsi tidak pernah melempar
+ * error ke pemanggil.
  */
 import { MASCOT_NAME } from './mascot'
-import { LOLOSIN_URL, petShareText } from './share'
+import { LOLOSIN_URL, SHARE_MIN_REALISTIC_MS, petShareText } from './share'
 
 /** Data yang tampil di kartu berbagi. */
 export interface PetShareCardData {
@@ -22,10 +24,15 @@ export interface PetShareCardData {
   stageName: string
 }
 
-/** Hasil berbagi foto: 'cancelled' saat user menutup sheet berbagi. */
+/**
+ * Hasil berbagi foto: 'cancelled' saat user menutup sheet berbagi,
+ * 'opened' saat PNG dibuka di tab baru (fallback iOS Safari, yang
+ * tidak mendukung atribut download).
+ */
 export type SharePetPhotoResult =
   | 'shared'
   | 'downloaded'
+  | 'opened'
   | 'cancelled'
   | 'failed'
 
@@ -211,10 +218,74 @@ function downloadBlob(blob: Blob): boolean {
   }
 }
 
+/** iOS Safari tidak mendukung atribut download pada anchor. */
+function supportsDownloadAttribute(): boolean {
+  try {
+    return 'download' in document.createElement('a')
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Fallback tab baru (iOS Safari): buka PNG di tab baru supaya user
+ * bisa simpan manual dari sana. Mengembalikan false bila window.open
+ * diblokir (return null) atau melempar.
+ */
+function openBlobInNewTab(blob: Blob): boolean {
+  try {
+    const url = URL.createObjectURL(blob)
+    const win = window.open(url, '_blank')
+    if (!win) {
+      URL.revokeObjectURL(url)
+      return false
+    }
+    // Revoke ditunda: tab baru butuh URL-nya masih hidup saat memuat.
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    return true
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Fallback setelah Web Share tidak dipakai atau gagal: unduh PNG bila
+ * atribut download didukung, kalau tidak buka di tab baru. Bila
+ * unduh gagal, buka-tab dicoba sebagai jalan terakhir.
+ */
+function fallbackDeliver(blob: Blob): SharePetPhotoResult {
+  if (supportsDownloadAttribute()) {
+    if (downloadBlob(blob)) return 'downloaded'
+    return openBlobInNewTab(blob) ? 'opened' : 'failed'
+  }
+  return openBlobInNewTab(blob) ? 'opened' : 'failed'
+}
+
+/**
+ * Putuskan apakah Web Share API layak dicoba. canShare dibungkus
+ * try/catch: di beberapa browser/HP canShare melempar exception, dan
+ * itu tidak boleh menggagalkan berbagi tanpa feedback. Bila canShare
+ * tidak ada sebagai fungsi tapi navigator.share ada, coba share
+ * langsung (ketiadaan canShare bukan alasan gagal).
+ */
+function shouldTryWebShare(file: File): boolean {
+  if (typeof navigator === 'undefined') return false
+  if (typeof navigator.share !== 'function') return false
+  if (typeof navigator.canShare !== 'function') return true
+  try {
+    return navigator.canShare({ files: [file] })
+  } catch {
+    // canShare melempar: coba share langsung, kegagalannya ditangkap
+    // pemanggil dan dilanjutkan ke fallback unduh/buka-tab.
+    return true
+  }
+}
+
 /**
  * Bagikan kartu foto peliharaan. Coba Web Share API dengan files
- * dulu, lalu unduh PNG. Mengembalikan 'cancelled' bila user menutup
- * sheet berbagi tanpa memilih tujuan (bukan kegagalan).
+ * dulu, lalu fallback unduh PNG (atau buka di tab baru di iOS).
+ * Mengembalikan 'cancelled' bila user menutup sheet berbagi tanpa
+ * memilih tujuan (bukan kegagalan).
  */
 export async function sharePetPhoto(
   mascotSvg: SVGSVGElement | null,
@@ -228,26 +299,28 @@ export async function sharePetPhoto(
     return 'failed'
   }
   const file = new File([blob], FILE_NAME, { type: 'image/png' })
-  if (
-    typeof navigator !== 'undefined' &&
-    typeof navigator.share === 'function' &&
-    typeof navigator.canShare === 'function' &&
-    navigator.canShare({ files: [file] })
-  ) {
+  if (shouldTryWebShare(file)) {
     try {
+      const startedAt = performance.now()
       await navigator.share({
         title: 'Lolosin',
         text: petShareText(data.streak),
         url: LOLOSIN_URL,
         files: [file],
       })
-      return 'shared'
+      // Resolve instan = no-op (sheet tidak tampil, pola Brave/Chrome
+      // tertentu): jangan pernah laporkan 'shared', lanjut ke
+      // fallback unduh/buka-tab di bawah.
+      if (performance.now() - startedAt >= SHARE_MIN_REALISTIC_MS) {
+        return 'shared'
+      }
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
         return 'cancelled'
       }
-      // Gagal berbagi (mis. tujuan tidak mendukung file): lanjut unduh.
+      // Gagal berbagi (mis. tujuan tidak mendukung file): lanjut ke
+      // fallback unduh/buka-tab di bawah, bukan langsung 'failed'.
     }
   }
-  return downloadBlob(blob) ? 'downloaded' : 'failed'
+  return fallbackDeliver(blob)
 }

@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { getLevel, useStore } from '../lib/store'
 import { getRankTitle } from '../lib/ranks'
 import { FEEDBACK_EMAIL, FEEDBACK_SUBJECT, OFFICIAL_LINKS } from '../lib/site'
 import { cx } from '../lib/utils'
 import { Mascot } from './Mascot'
-import { AuthStatus } from './AuthStatus'
+import { AccountMenu } from './AccountMenu'
 import { NotificationBell } from './NotificationBell'
 import { CelebrationHost } from './gamifikasi/Celebration'
 import {
@@ -14,15 +14,17 @@ import {
   FlameIcon,
   GamepadIcon,
   HomeIcon,
+  RankingIcon,
   TargetIcon,
   TrophyIcon,
   ZapIcon,
 } from './icons'
 
 /**
- * Navigasi utama (v2.4): Peringkat KELUAR dari header karena header
- * sudah kepenuhan. Rute /leaderboard tetap ada dan terjangkau lewat
- * footer ("Jelajahi") dan tombol "Lihat peringkat" di halaman Tryout.
+ * Navigasi utama (v2.6): Main KEMBALI ke baris header karena game
+ * adalah daya jual utama app. Lima tautan: Beranda, Belajar,
+ * Latihan, Tryout, Main. Dropdown "Lainnya" berisi TEPAT DUA item:
+ * Formasi + Peringkat.
  */
 const NAV_ITEMS = [
   { to: '/', label: 'Beranda', icon: HomeIcon, end: true },
@@ -33,14 +35,24 @@ const NAV_ITEMS = [
 ]
 
 /**
- * Navigasi desktop = NAV_ITEMS + Formasi. Formasi sengaja TIDAK masuk
- * bottom nav mobile (v2.3): grid bawah sudah penuh 5 item, dan QA
- * mengunci jumlahnya. Di mobile, Formasi tetap terjangkau lewat
- * footer dan tile pintasan di dashboard.
+ * Navigasi desktop (v2.6): kelima item utama di baris header,
+ * dropdown "Lainnya" menampung Formasi + Peringkat. Peringkat tetap
+ * terjangkau juga lewat footer ("Jelajahi") dan tombol "Lihat
+ * peringkat" di halaman Tryout.
+ *
+ * Formasi dan Peringkat sengaja TIDAK masuk bottom nav mobile:
+ * grid bawah sudah penuh 5 item. Di mobile, keduanya tetap
+ * terjangkau lewat footer dan tile pintasan di dashboard.
  */
-const NAV_ITEMS_DESKTOP = [
-  ...NAV_ITEMS,
+const NAV_ITEMS_MAIN = NAV_ITEMS
+const NAV_ITEMS_MORE = [
   { to: '/formasi', label: 'Formasi', icon: BriefcaseIcon, end: false },
+  {
+    to: '/leaderboard',
+    label: 'Peringkat',
+    icon: RankingIcon,
+    end: false,
+  },
 ]
 
 function LogoMark() {
@@ -97,6 +109,103 @@ function ChevronDownIcon() {
     >
       <polyline points="6 9 12 15 18 9" />
     </svg>
+  )
+}
+
+/**
+ * Dropdown "Lainnya" di navigasi desktop (v2.6): menampung Formasi
+ * dan Peringkat supaya header tidak kepenuhan.
+ *
+ * - Buka/tutup dengan klik tombol. Tombol ikut aktif (gaya aktif)
+ *   saat rute saat ini adalah salah satu isinya.
+ * - Tertutup saat klik di luar, tekan Escape, atau setelah memilih
+ *   item (pola yang sama seperti NotificationBell).
+ * - Bisa diakses keyboard: tombol dan itemnya fokusable, pakai
+ *   aria-expanded dan aria-haspopup.
+ */
+function MoreMenu() {
+  const [open, setOpen] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const { pathname } = useLocation()
+  const isActive = NAV_ITEMS_MORE.some(
+    (item) => pathname === item.to || pathname.startsWith(`${item.to}/`),
+  )
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (event: MouseEvent) => {
+      if (
+        wrapRef.current &&
+        !wrapRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false)
+      }
+    }
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        aria-haspopup="true"
+        className={cx(
+          'flex items-center gap-1 rounded-lg px-2.5 py-2 text-[15px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500',
+          isActive
+            ? 'bg-primary-50 text-primary-700'
+            : 'text-ink/65 hover:bg-ink/5 hover:text-ink',
+        )}
+      >
+        Lainnya
+        <span
+          aria-hidden="true"
+          className={cx(
+            'flex transition-transform [&>svg]:h-4 [&>svg]:w-4',
+            open && 'rotate-180',
+          )}
+        >
+          <ChevronDownIcon />
+        </span>
+      </button>
+      {open && (
+        <div
+          role="menu"
+          aria-label="Menu lainnya"
+          className="absolute top-full left-0 z-50 mt-2 w-48 rounded-2xl border border-line bg-white p-1.5 shadow-soft"
+        >
+          {NAV_ITEMS_MORE.map(({ to, label, icon: Icon, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className={({ isActive: itemActive }) =>
+                cx(
+                  'flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors',
+                  itemActive
+                    ? 'bg-primary-50 text-primary-700'
+                    : 'text-ink hover:bg-ink/5',
+                )
+              }
+            >
+              <Icon width={18} height={18} />
+              {label}
+            </NavLink>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -203,14 +312,15 @@ export function Layout() {
             </span>
           </NavLink>
 
-          {/* Navigasi atas (desktop): 6 item, termasuk Formasi (v2.3).
-              Peringkat keluar dari header (v2.4), rutenya tetap ada.
-              Padding dirampingkan supaya muat satu baris di 1280px. */}
+          {/* Navigasi atas (desktop, v2.6): 5 item utama (Main
+              kembali ke baris header) + dropdown "Lainnya" (Formasi,
+              Peringkat). Peringkat tetap ada lewat footer dan tombol
+              "Lihat peringkat" di halaman Tryout. */}
           <nav
             aria-label="Navigasi utama"
             className="hidden items-center gap-1 lg:flex"
           >
-            {NAV_ITEMS_DESKTOP.map(({ to, label, end }) => (
+            {NAV_ITEMS_MAIN.map(({ to, label, end }) => (
               <NavLink
                 key={to}
                 to={to}
@@ -227,25 +337,28 @@ export function Layout() {
                 {label}
               </NavLink>
             ))}
+            <MoreMenu />
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
+            {/* Satu pill ringkas (v2.5): XP + level + streak digabung,
+                dulu dua pill terpisah. Sembunyi di layar paling kecil
+                supaya header mobile hanya berisi logo, lonceng, dan
+                avatar. */}
             <span
               className="hidden items-center gap-1.5 rounded-full bg-accent-100 px-3 py-2 text-sm font-bold whitespace-nowrap text-accent-800 sm:inline-flex"
-              title={`XP dan level. Gelar: ${rankTitle}`}
+              title={`XP dan level. Gelar: ${rankTitle}. Streak harian: ${streak} hari.`}
             >
               <ZapIcon width={15} height={15} />
               {xp} XP · Lv {level}
-            </span>
-            <span
-              className="hidden items-center gap-1.5 rounded-full bg-twk-soft px-3 py-2 text-sm font-bold whitespace-nowrap text-twk md:inline-flex"
-              title="Streak harian"
-            >
+              <span aria-hidden="true" className="text-accent-800/50">
+                ·
+              </span>
               <FlameIcon width={15} height={15} />
               {streak} hari
             </span>
             <NotificationBell />
-            <AuthStatus />
+            <AccountMenu />
           </div>
         </div>
       </header>
@@ -259,9 +372,15 @@ export function Layout() {
           sendiri (hijau sangat tua + garis atas amber) supaya header,
           body, dan footer terlihat jelas bedanya. */}
       <footer className="border-t-4 border-accent-500 bg-primary-900 pb-24 text-white lg:pb-8">
-        <div className="mx-auto w-full max-w-7xl px-4 pt-8 lg:px-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-start lg:gap-16">
-            <div className="max-w-sm">
+        {/* Grid 3 kolom seimbang (v2.5): brand | Jelajahi | Tautan
+            resmi, masing-masing satu kolom grid yang sama lebarnya,
+            di container max-w-7xl yang sama dengan konten halaman.
+            Padding horizontal dilegakan (px-6, lg:px-10) supaya isi
+            tidak mepet ujung layar. Di mobile kolom menumpuk satu
+            per satu, bukan tiga kolom sempit. */}
+        <div className="mx-auto w-full max-w-7xl px-6 pt-10 lg:px-10">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10">
+            <div>
               <span className="flex items-center gap-2.5">
                 <LogoMark />
                 <span className="font-display text-lg font-extrabold">
@@ -329,7 +448,7 @@ export function Layout() {
               </p>
             </nav>
           </div>
-          <p className="mt-6 border-t border-white/15 pt-4 text-xs leading-relaxed font-medium text-white/50">
+          <p className="mt-10 border-t border-white/15 pt-4 text-xs leading-relaxed font-medium text-white/50">
             © 2026 Lolosin. Dibuat untuk pejuang CPNS.
           </p>
         </div>

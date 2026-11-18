@@ -12,15 +12,15 @@ import { InfoIcon } from './icons'
 const DISMISS_KEY = 'lolosin:dismiss-guest-warning'
 
 /**
- * Peringatan dini untuk tamu (belum login): progres belajar hanya
- * tersimpan di browser ini (localStorage), hilang kalau ganti device
- * atau hapus data browser. Bisa di-dismiss, sekali tutup tidak muncul
- * lagi di browser itu.
+ * Peringatan untuk tamu (belum login): sejak v2.5 progres tamu TIDAK
+ * lagi disimpan di mana pun, hanya hidup di memori selama halaman
+ * terbuka. Refresh atau tutup tab, progres hilang. Bisa di-dismiss,
+ * sekali tutup tidak muncul lagi di browser itu.
  *
  * Hanya tampil saat Supabase terkonfigurasi dan user belum login.
  * Saat mode lokal (Supabase belum aktif) tidak ada sistem akun, jadi
  * peringatan ini tidak ditampilkan. Dipasang di halaman tempat tamu
- * bisa berprogres: Belajar, Latihan, Tryout.
+ * bisa berprogres: Beranda, Belajar, Latihan, Tryout.
  */
 export function GuestProgressWarning() {
   const configured = isSupabaseConfigured()
@@ -57,17 +57,16 @@ export function GuestProgressWarning() {
       />
       <div className="min-w-0 flex-1">
         <p className="text-sm leading-relaxed font-bold text-ink">
-          Kamu lagi belajar tanpa akun
+          Kamu lagi mode tamu
         </p>
         <p className="mt-0.5 text-sm leading-relaxed font-medium text-ink/70">
-          Progresmu cuma tersimpan di browser ini, dan hilang kalau kamu
-          ganti HP atau laptop. Masuk biar progresmu kesimpen di akunmu.
+          Progresmu tidak tersimpan. Daftar gratis biar progresmu aman.
         </p>
         <Link
           to="/auth?mode=daftar"
-          className="mt-2 inline-block text-sm font-extrabold text-primary-700 underline-offset-2 hover:underline"
+          className="mt-2 inline-block rounded-full bg-primary-600 px-3.5 py-1.5 text-sm font-extrabold text-white transition-colors hover:bg-primary-700"
         >
-          Daftar gratis, cuma semenit
+          Daftar
         </Link>
       </div>
       <button

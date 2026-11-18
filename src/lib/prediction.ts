@@ -3,7 +3,7 @@
  * riwayat tryout mini dan simulasi CAT lengkap. Murni hitung-hitungan,
  * tanpa akses store.
  *
- * Skor mini per seksi (maks 50) diskalakan ke nilai CAT asli memakai
+ * Skor mini per bagian (maks 50) diskalakan ke nilai CAT asli memakai
  * `TRYOUT_SCALE_TO_ORIGINAL`, lalu dibandingkan dengan passing grade
  * asli `ORIGINAL_PASSING`. Skor simulasi sudah skala asli, jadi dipakai
  * mentah. Semua angka berasal dari `lib/quiz.ts`, tidak ada angka
@@ -56,7 +56,7 @@ export interface SectionPrediction {
   materi: Materi
   /** Skor terskala tryout terakhir (skala asli CAT). */
   scaled: number
-  /** Skor maksimum asli CAT per seksi. */
+  /** Skor maksimum asli CAT per bagian. */
   max: number
   /** Passing grade asli CAT. */
   passing: number

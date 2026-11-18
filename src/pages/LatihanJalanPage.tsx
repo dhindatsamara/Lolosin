@@ -34,8 +34,15 @@ import {
   recordAnswer,
   REVIEW_SESSION_MAX,
 } from '../lib/review'
+import {
+  drillShareText,
+  hasCelebratedFirstWin,
+  isDrillWin,
+  markFirstWinCelebrated,
+} from '../lib/firstWin'
 import { cx } from '../lib/utils'
 import { Mascot } from '../components/Mascot'
+import { FirstWinCard } from '../components/FirstWinCard'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -107,6 +114,9 @@ export function LatihanJalanPage({
   const [xpEarned, setXpEarned] = useState(0)
   const [finished, setFinished] = useState(false)
   const finishedRef = useRef(false)
+  // Kartu perayaan kemenangan pertama (v2.8): diputuskan sekali saat
+  // sesi selesai, supaya tidak hilang saat render ulang.
+  const [showFirstWin, setShowFirstWin] = useState(false)
   // Kilas "+10 XP" saat jawaban benar (angka = kunci animasi ulang).
   const [xpFlashKey, setXpFlashKey] = useState(0)
   const [showXpFlash, setShowXpFlash] = useState(false)
@@ -241,6 +251,15 @@ export function LatihanJalanPage({
     } else {
       completeDrill(materi as Materi, correctCount, total)
       setXpEarned((xp) => xp + XP_DRILL_COMPLETE)
+      // Kemenangan pertama (v2.8): drill ini mencapai >= 70% dan
+      // belum pernah dirayakan. Ulas tidak dihitung (bukan drill).
+      if (
+        isDrillWin(correctCount, total) &&
+        !hasCelebratedFirstWin()
+      ) {
+        markFirstWinCelebrated()
+        setShowFirstWin(true)
+      }
     }
     setFinished(true)
   }
@@ -270,6 +289,7 @@ export function LatihanJalanPage({
     setPending(undefined)
     setXpEarned(0)
     setFinished(false)
+    setShowFirstWin(false)
     finishedRef.current = false
     recordDailyActivity()
   }
@@ -321,6 +341,18 @@ export function LatihanJalanPage({
             )}
           </p>
         </Card>
+
+        {showFirstWin && (
+          <FirstWinCard
+            heading="Kemenangan pertamamu!"
+            body={`Drill ${materi} pertamamu tembus ${correctCount} dari ${total} jawaban benar. Bagikan hasilnya, siapa tahu temanmu ikut semangat latihan.`}
+            shareText={drillShareText(
+              materi as Materi,
+              correctCount,
+              total,
+            )}
+          />
+        )}
 
         <section aria-label="Ringkasan jawaban">
           <h2 className="mb-2 font-display text-base font-extrabold">
@@ -454,10 +486,25 @@ export function LatihanJalanPage({
       </Card>
 
       {revealed ? (
-        <Button size="lg" fullWidth onClick={handleNext}>
-          {isLast ? 'Lihat hasil' : 'Soal berikutnya'}
-          <ChevronRightIcon width={18} height={18} />
-        </Button>
+        isLast ? (
+          <Button size="lg" fullWidth onClick={handleNext}>
+            Lihat hasil
+            <ChevronRightIcon width={18} height={18} />
+          </Button>
+        ) : (
+          // Lanjut ke soal berikut ikon saja (v2.6): chevron tanpa
+          // teks, aria-label menjelaskan tujuannya. "Lihat hasil"
+          // di soal terakhir bukan tombol next, teksnya dipertahankan.
+          <Button
+            size="lg"
+            fullWidth
+            onClick={handleNext}
+            aria-label="Soal berikutnya"
+            className="text-xl leading-none"
+          >
+            <span aria-hidden="true">›</span>
+          </Button>
+        )
       ) : (
         <Button
           size="lg"

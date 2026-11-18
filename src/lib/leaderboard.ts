@@ -26,13 +26,17 @@
  * saat flush.
  */
 import type { User } from '@supabase/supabase-js'
+import { useSyncExternalStore } from 'react'
 import { getCurrentUser } from './auth'
 import { isSupabaseConfigured, supabase } from './supabase'
-import { migrateLegacyKey, scopedKey } from './storage'
+import { getScopedItem, migrateLegacyKey, setScopedItem } from './storage'
 import {
+  getStore,
   MAKASSAR_TIME_ZONE,
+  markWeeklyWinsSeen,
   shiftDate,
   todayMakassar,
+  unlockBadges,
   type TryoutRecord,
 } from './store'
 
@@ -179,7 +183,7 @@ function loadPending(): PendingScoreRecord[] {
     // Migrasi sekali: antrean lama di key tanpa namespace pindah ke
     // namespace aktif sebelum dibaca.
     migrateLegacyKey(PENDING_SCORES_KEY)
-    const raw = localStorage.getItem(scopedKey(PENDING_SCORES_KEY))
+    const raw = getScopedItem(PENDING_SCORES_KEY)
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
@@ -191,10 +195,7 @@ function loadPending(): PendingScoreRecord[] {
 
 function savePending(records: PendingScoreRecord[]): void {
   try {
-    localStorage.setItem(
-      scopedKey(PENDING_SCORES_KEY),
-      JSON.stringify(records),
-    )
+    setScopedItem(PENDING_SCORES_KEY, JSON.stringify(records))
   } catch {
     // Penyimpanan penuh atau tidak tersedia: abaikan diam-diam.
   }
@@ -470,6 +471,233 @@ export async function fetchLeaderboard(
 export async function fetchLastWeekTop3(): Promise<LeaderboardEntry[]> {
   const entries = await fetchLeaderboard(getPreviousWeekStart())
   return entries.slice(0, 3)
+}
+
+/* ------------------------------------------------------------------ */
+/* Juara mingguan: baca hadiah dari weekly_winners (v2.7, diperbaiki  */
+/* v2.8 jadi code-only: premium HANYA aktif lewat redeem kode, tidak  */
+/* lagi diberikan langsung saat membaca. Lencana juara mingguan       */
+/* tetap diberikan saat membaca, seperti v2.7.)                       */
+/* ------------------------------------------------------------------ */
+
+/** Hadiah premium juara global per peringkat (hari). */
+export function weeklyWinnerPremiumDays(rank: number): number {
+  if (rank === 1) return 7
+  if (rank === 2) return 5
+  return 3
+}
+
+/** Satu baris kemenangan user dari tabel weekly_winners. */
+export interface WeeklyWin {
+  /** Senin minggu kemenangan, YYYY-MM-DD. */
+  weekStart: string
+  /** 'global' atau nama formasi. */
+  scope: string
+  /** Peringkat 1-3. */
+  rank: number
+  /** Skor total kemenangan. */
+  total: number
+  /**
+   * Kode hadiah premium juara global (null untuk juara per formasi).
+   * Ditebus di Profil, bagian Premium; premium aktif lewat redeem.
+   */
+  code: string | null
+  /**
+   * Tanggal kedaluwarsa premium (null untuk juara per formasi).
+   * LEGACY v2.7: sejak v2.8 (migrasi 005) kolom ini selalu NULL,
+   * karena premium tidak lagi diberikan langsung. Dipertahankan di
+   * tipe supaya baris lama tetap terbaca; jangan dipakai untuk
+   * mengaktifkan premium.
+   */
+  premiumUntil: string | null
+}
+
+/**
+ * Kemenangan mingguan user yang login, urut minggu terbaru dulu.
+ * Sengaja TANPA filter premium_until: juara per formasi punya
+ * premium_until NULL (hanya badge) dan tetap harus terbaca. Aman
+ * saat Supabase belum terkonfigurasi: mengembalikan [].
+ */
+export async function fetchMyWins(): Promise<WeeklyWin[]> {
+  if (!isSupabaseConfigured() || !supabase) return []
+  let user: User | null
+  try {
+    user = await getCurrentUser()
+  } catch {
+    return []
+  }
+  if (!user) return []
+  try {
+    const { data, error } = await supabase
+      .from('weekly_winners')
+      .select('week_start, scope, rank, total, code, premium_until')
+      .eq('user_id', user.id)
+      .order('week_start', { ascending: false })
+    if (error || !data) return []
+    const rows = data as Array<{
+      week_start?: unknown
+      scope?: unknown
+      rank?: unknown
+      total?: unknown
+      code?: unknown
+      premium_until?: unknown
+    }>
+    const wins: WeeklyWin[] = []
+    for (const row of rows) {
+      if (
+        typeof row.week_start !== 'string' ||
+        typeof row.scope !== 'string' ||
+        typeof row.rank !== 'number'
+      ) {
+        continue
+      }
+      wins.push({
+        weekStart: row.week_start,
+        scope: row.scope,
+        rank: row.rank,
+        total: typeof row.total === 'number' ? row.total : 0,
+        code: typeof row.code === 'string' ? row.code : null,
+        premiumUntil:
+          typeof row.premium_until === 'string' ? row.premium_until : null,
+      })
+    }
+    return wins
+  } catch {
+    return []
+  }
+}
+
+/** Kunci pelacak kemenangan yang sudah diproses: "week_start|scope". */
+function winKey(win: WeeklyWin): string {
+  return `${win.weekStart}|${win.scope}`
+}
+
+/**
+ * Pesan gift untuk satu kemenangan. Juara global mendapat kode hadiah
+ * (ditampilkan beserta tombol salin di banner, lihat App.tsx): pesan
+ * ini menyebut peringkat, minggu, jumlah hari premium dari rank
+ * (1 jadi 7 hari, 2 jadi 5 hari, 3 jadi 3 hari), dan mengingatkan
+ * untuk cek email. Juara per formasi (tanpa kode) hanya mendapat
+ * lencana. Sengaja TIDAK ada kalimat "Premium sudah aktif": sejak
+ * v2.8 premium baru aktif setelah kode ditebus di Profil.
+ */
+function giftMessage(win: WeeklyWin): string {
+  const minggu = formatWeekRange(win.weekStart)
+  const scopePart = win.scope === 'global' ? '' : ` di formasi ${win.scope}`
+  if (win.scope !== 'global' || !win.code) {
+    return `Kamu juara ${win.rank} minggu ${minggu}${scopePart}! Lencana Juara Mingguan sudah aktif.`
+  }
+  const days = weeklyWinnerPremiumDays(win.rank)
+  return `Kamu juara ${win.rank} minggu ${minggu}! Tebus kode hadiahmu di bawah untuk premium ${days} hari, dan cek email kamu untuk salinan kodenya.`
+}
+
+/* ------------------------------------------------------------------ */
+/* Gift notice (banner hadiah yang bisa ditutup)                       */
+/* ------------------------------------------------------------------ */
+
+/** Satu pemberitahuan hadiah juara mingguan yang belum ditutup. */
+export interface GiftNotice {
+  /** Kunci kemenangan ("week_start|scope"). */
+  id: string
+  /** Pesan gift yang tampil di banner. */
+  message: string
+  /**
+   * Kode hadiah premium juara global (null untuk juara per formasi).
+   * Banner menampilkannya dengan tombol salin + CTA tebus di Profil.
+   */
+  code: string | null
+}
+
+const giftNotices: GiftNotice[] = []
+let giftSnapshot: GiftNotice[] = []
+const giftListeners = new Set<() => void>()
+
+function refreshGiftSnapshot(): void {
+  giftSnapshot = [...giftNotices]
+}
+
+function emitGiftNotices(): void {
+  giftListeners.forEach((listener) => listener())
+}
+
+export function subscribeGiftNotices(listener: () => void): () => void {
+  giftListeners.add(listener)
+  return () => {
+    giftListeners.delete(listener)
+  }
+}
+
+/** Daftar gift notice yang belum ditutup (snapshot stabil untuk hook). */
+export function getGiftNotices(): GiftNotice[] {
+  return giftSnapshot
+}
+
+/** Hook React: gift notice yang reaktif terhadap perubahan. */
+export function useGiftNotices(): GiftNotice[] {
+  return useSyncExternalStore(
+    subscribeGiftNotices,
+    getGiftNotices,
+    getGiftNotices,
+  )
+}
+
+/** Tutup satu gift notice (hadiahnya tetap tersimpan). */
+export function dismissGiftNotice(id: string): void {
+  const index = giftNotices.findIndex((notice) => notice.id === id)
+  if (index === -1) return
+  giftNotices.splice(index, 1)
+  refreshGiftSnapshot()
+  emitGiftNotices()
+}
+
+/* ------------------------------------------------------------------ */
+/* Cek kemenangan baru dan berikan hadiahnya                            */
+/* ------------------------------------------------------------------ */
+
+let checkWinsPromise: Promise<{ newWins: number }> | null = null
+
+async function checkWeeklyWinsInner(): Promise<{ newWins: number }> {
+  const wins = await fetchMyWins()
+  if (wins.length === 0) return { newWins: 0 }
+  const seen = new Set(getStore().seenWeeklyWins)
+  const fresh = wins.filter((win) => !seen.has(winKey(win)))
+  if (fresh.length === 0) return { newWins: 0 }
+  // Berikan hadiah: lencana sekali untuk semua kemenangan baru,
+  // lalu tandai sudah diproses supaya gift tidak muncul dua kali
+  // (pemberian idempotent: unlockBadges melewati lencana yang sudah
+  // dimiliki). Sejak v2.8, premium TIDAK lagi diatur dari sini:
+  // premium juara hanya aktif saat user menebus kodenya di Profil
+  // (redeem_code). Kode hadiah ikut dibawa di gift notice supaya
+  // user bisa menyalin dan menebusnya.
+  unlockBadges(['juara-mingguan'])
+  markWeeklyWinsSeen(fresh.map(winKey))
+  for (const win of fresh) {
+    const id = winKey(win)
+    if (giftNotices.some((notice) => notice.id === id)) continue
+    giftNotices.push({ id, message: giftMessage(win), code: win.code })
+  }
+  refreshGiftSnapshot()
+  emitGiftNotices()
+  return { newWins: fresh.length }
+}
+
+/**
+ * Cek kemenangan mingguan baru dan berikan hadiahnya (lencana
+ * Juara Mingguan + gift notice berisi kode hadiah untuk juara
+ * global). Premium TIDAK diberikan di sini: juara menebus kodenya
+ * sendiri di Profil. Dipanggil saat login dan saat halaman
+ * Peringkat dibuka. Panggilan bersamaan digabung jadi satu; tidak
+ * pernah melempar error.
+ */
+export function checkWeeklyWins(): Promise<{ newWins: number }> {
+  if (!checkWinsPromise) {
+    checkWinsPromise = checkWeeklyWinsInner()
+      .catch(() => ({ newWins: 0 }))
+      .finally(() => {
+        checkWinsPromise = null
+      })
+  }
+  return checkWinsPromise
 }
 
 /* ------------------------------------------------------------------ */

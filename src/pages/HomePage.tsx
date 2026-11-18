@@ -105,7 +105,7 @@ function formatTanggalTryout(iso: string): string {
  * Pintasan beranda (v2.4): 4 tile navigasi ringkas ke menu yang sudah
  * ada. Tiap tile hanya ikon + judul + satu baris pendek + panah, tanpa
  * konten di dalamnya. Menggantikan kartu teaser besar (game, formasi,
- * peringkat) dan seksi "Mau ngapain hari ini?" supaya beranda tidak
+ * peringkat) dan bagian "Mau ngapain hari ini?" supaya beranda tidak
  * lagi terasa penuh. Tile Formasi tetap membawa label BETA karena
  * datanya masih contoh (lihat halaman Formasi).
  */
@@ -117,6 +117,10 @@ const NAV_TILES = [
     icon: GamepadIcon,
     tone: 'bg-primary-100 text-primary-700',
     beta: false,
+    // Sorot (v2.6): game adalah daya jual utama app, jadi tile Main
+    // dibuat paling menonjol di antara tile pintasan (badge "Seru!"
+    // + aksen hijau lembut, tanpa kartu warna penuh).
+    sorot: true,
   },
   {
     to: '/formasi',
@@ -125,6 +129,7 @@ const NAV_TILES = [
     icon: BriefcaseIcon,
     tone: 'bg-tiu-soft text-tiu',
     beta: true,
+    sorot: false,
   },
   {
     to: '/latihan',
@@ -133,6 +138,7 @@ const NAV_TILES = [
     icon: TargetIcon,
     tone: 'bg-accent-100 text-accent-700',
     beta: false,
+    sorot: false,
   },
   {
     to: '/tryout',
@@ -141,6 +147,7 @@ const NAV_TILES = [
     icon: TrophyIcon,
     tone: 'bg-tkp-soft text-tkp',
     beta: false,
+    sorot: false,
   },
 ] as const
 
@@ -156,8 +163,11 @@ function TryoutTerakhirCard({ record }: { record: TryoutRecord }) {
   const maxTotal = isFull
     ? ORIGINAL_MAX.TWK + ORIGINAL_MAX.TIU + ORIGINAL_MAX.TKP
     : TRYOUT_MAX_PER_SECTION * 3
+  // flex-1 + flex-col: kartu mengisi tinggi bagian supaya tepi bawahnya
+  // sejajar dengan kartu Perkiraan di sebelahnya (poin 1, v2.5).
+  // Tombol didorong ke bawah (mt-auto) biar tidak mengambang.
   return (
-    <Card>
+    <Card className="flex flex-1 flex-col">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="font-display text-lg font-extrabold">
@@ -217,7 +227,7 @@ function TryoutTerakhirCard({ record }: { record: TryoutRecord }) {
           )
         })}
       </div>
-      <Link to="/tryout" className="mt-4 block">
+      <Link to="/tryout" className="mt-auto block pt-4">
         <Button variant="outline" fullWidth>
           Coba tryout lagi
         </Button>
@@ -232,7 +242,7 @@ function TryoutTerakhirCard({ record }: { record: TryoutRecord }) {
  * streak yang putus dan tawarkan tombol Bujuk Osi (persenjatai revive
  * lalu arahkan ke Latihan; user juga boleh baca materi, flag armed
  * berlaku untuk keduanya). Sesudah dibujuk: ingatkan tinggal
- * selesaikan 1 drill atau baca 1 seksi materi. Sembunyi bila tidak
+ * selesaikan 1 drill atau baca 1 bagian materi. Sembunyi bila tidak
  * ada streak putus yang pending.
  */
 function BujukOsiCard() {
@@ -262,7 +272,7 @@ function BujukOsiCard() {
             <>
               <p className="mt-1 text-sm leading-relaxed font-medium text-ink/70">
                 {MASCOT_NAME} udah dibujuk. Tinggal selesaikan 1 drill atau
-                baca 1 seksi materi, streak {lostStreak} hari balik lagi.
+                baca 1 bagian materi, streak {lostStreak} hari balik lagi.
               </p>
               <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
                 <Button size="sm" onClick={() => navigate('/latihan')}>
@@ -282,7 +292,7 @@ function BujukOsiCard() {
               <p className="mt-1 text-sm leading-relaxed font-medium text-ink/70">
                 Streak {lostStreak} hari putus karena kemarin kamu nggak
                 belajar, dan {MASCOT_NAME} lagi ngambek. Ketuk tombol di
-                bawah, lalu selesaikan 1 drill atau baca 1 seksi materi
+                bawah, lalu selesaikan 1 drill atau baca 1 bagian materi
                 buat balikin streak ke {lostStreak} hari. Kesempatan ini
                 cuma ada sekali tiap streak putus. Kalau belajar biasa
                 tanpa membujuk, streak mulai lagi dari 1.
@@ -341,17 +351,19 @@ function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-5 lg:gap-8">
-      {/* Hero tipografi: sapaan besar + XP/streak + progres level,
-          ditemani maskot (v2.1: maskot tampil besar dengan namanya) */}
-      <section className="flex flex-col gap-6 rounded-3xl border border-line bg-white p-6 shadow-soft lg:flex-row lg:items-start lg:justify-between lg:p-10">
+      {/* Hero hijau (v2.5, poin 7): panel hijau solid seperti hero
+          landing logged-out (bg-primary-800, teks putih), bukan lagi
+          kartu putih polos. Isinya tetap: sapaan besar + XP/streak +
+          progres level, ditemani maskot. */}
+      <section className="flex flex-col gap-6 overflow-hidden rounded-3xl bg-primary-800 p-6 text-white shadow-soft-lg lg:flex-row lg:items-start lg:justify-between lg:p-10">
         <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-ink/60">
+        <p className="text-sm font-semibold text-primary-200">
           {tanggalHariIni()}
         </p>
         <h1 className="mt-2 font-display text-4xl leading-[1.05] font-extrabold lg:text-5xl">
           {sapaan()}! Siap lolos CPNS?
         </h1>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink/70 lg:text-lg">
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-primary-100 lg:text-lg">
           Materi, latihan, dan tryoutmu udah siap. Lanjutin dari tempatmu
           berhenti.
         </p>
@@ -379,14 +391,15 @@ function DashboardPage() {
             max={progress.needed}
             tone="amber"
             label="Menuju level berikutnya"
+            className="bg-white/20"
           />
-          <p className="mt-1.5 text-sm font-medium text-ink/60">
+          <p className="mt-1.5 text-sm font-medium text-primary-200">
             {progress.needed - progress.current} XP lagi ke Level {level + 1}
           </p>
-          <p className="mt-1 flex items-start gap-1 text-sm leading-snug font-medium text-ink/60">
+          <p className="mt-1 flex items-start gap-1 text-sm leading-snug font-medium text-primary-200">
             {streakAmanHariIni ? (
               <>
-                <CheckIcon width={14} height={14} className="mt-0.5 shrink-0 text-primary-600" />
+                <CheckIcon width={14} height={14} className="mt-0.5 shrink-0 text-accent-300" />
                 Streak aman, kamu sudah belajar hari ini.
               </>
             ) : streakPutus ? (
@@ -397,9 +410,9 @@ function DashboardPage() {
           </p>
         </div>
 
-        <p className="mt-6 border-t border-dashed border-line pt-4 text-sm leading-relaxed font-semibold text-ink/60">
+        <p className="mt-6 border-t border-dashed border-white/20 pt-4 text-sm leading-relaxed font-semibold text-primary-200">
           Passing grade mini:{' '}
-          <span className="text-ink">
+          <span className="text-white">
             TWK ≥{TRYOUT_PASSING_MINI.TWK} · TIU ≥{TRYOUT_PASSING_MINI.TIU} ·
             TKP ≥{TRYOUT_PASSING_MINI.TKP}
           </span>
@@ -416,6 +429,17 @@ function DashboardPage() {
             Key memaksa remount saat status putus atau varian berubah,
             karena InteractiveMascot menyimpan mood dasar di state
             internalnya. */}
+        {/* Panggung maskot: blob lembut seperti hero landing, supaya
+            Osi tidak mengambang di atas hijau polos. */}
+        <div className="relative shrink-0 lg:w-52">
+          <div
+            className="blob-soft absolute inset-x-2 top-6 bottom-2 bg-primary-700/70"
+            aria-hidden="true"
+          />
+          <div
+            className="blob-soft absolute inset-x-8 top-2 bottom-8 bg-accent-400/25"
+            aria-hidden="true"
+          />
         <InteractiveMascot
           key={streakPutus ? 'marah' : `normal-${variantId}`}
           baseMood={streakPutus ? 'marah' : avatarVariant.mood}
@@ -443,65 +467,90 @@ function DashboardPage() {
                 ]
           }
           mascotClassName="float-soft h-auto w-32 lg:w-40"
-          className="shrink-0 lg:w-52"
+          className="relative shrink-0 lg:w-52"
         />
+        </div>
       </section>
 
       {/* Bujuk Osi: tampil hanya saat streak putus dan masih bisa dibujuk */}
       <BujukOsiCard />
 
       {/* Streak mingguan + peliharaan (kolom kiri) dan misi harian
-          (kolom kanan). Kedua kolom dibuat sama tinggi (v2.4): grid
-          meregang ke baris yang sama, PetCard dan daftar misi mengisi
-          sisa ruang supaya tepi bawahnya sejajar tanpa ruang kosong. */}
-      <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
-        <div className="flex flex-col gap-5 lg:gap-6">
+          (kolom kanan). Dipadatkan (v2.6): forced equal-height dari
+          v2.4 dilepas (grid items-start, tanpa flex-1 di PetCard dan
+          daftar misi) supaya section tidak meregang dan jelas lebih
+          pendek; tepi bawah kedua kolom boleh tidak sejajar. */}
+      <div className="grid items-start gap-4 lg:grid-cols-2 lg:gap-5">
+        <div className="flex flex-col gap-4 lg:gap-5">
           <WeekStreak />
-          <PetCard className="flex-1" />
+          <PetCard />
         </div>
         <DailyMissions />
       </div>
 
       {/* Pintasan: 4 tile navigasi ringkas ke menu yang sudah ada.
-          Menggantikan kartu teaser besar dan seksi "Mau ngapain hari
+          Menggantikan kartu teaser besar dan bagian "Mau ngapain hari
           ini?" (v2.4). */}
       <nav
         aria-label="Pintasan"
         className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4"
       >
-        {NAV_TILES.map(({ to, label, deskripsi, icon: Icon, tone, beta }) => (
-          <Link key={to} to={to}>
-            {/* Vertikal di mobile (tile 2 kolom sempit: judul + badge
-                BETA tidak muat sebaris dengan ikon), horizontal mulai
-                sm. Baris judul boleh membungkus supaya badge tidak
-                pernah meluber keluar tile. */}
-            <Card className="flex h-full flex-col gap-2 p-3.5 transition-transform hover:-translate-y-0.5 sm:flex-row sm:items-center sm:gap-3 sm:p-4">
-              <span
+        {NAV_TILES.map(
+          ({ to, label, deskripsi, icon: Icon, tone, beta, sorot }) => (
+            <Link key={to} to={to}>
+              {/* Vertikal di mobile (tile 2 kolom sempit: judul + badge
+                  BETA tidak muat sebaris dengan ikon), horizontal mulai
+                  sm. Baris judul boleh membungkus supaya badge tidak
+                  pernah meluber keluar tile. Tile yang disorot (Main)
+                  memakai border hijau + latar hijau sangat muda,
+                  tanpa kartu warna penuh (aturan Lapang). */}
+              <Card
                 className={cx(
-                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11',
-                  tone,
+                  'flex h-full flex-col gap-2 p-3.5 transition-transform hover:-translate-y-0.5 sm:flex-row sm:items-center sm:gap-3 sm:p-4',
+                  sorot && 'border-primary-300 bg-primary-50/60',
                 )}
               >
-                <Icon width={22} height={22} />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="flex flex-wrap items-center gap-1.5 font-display text-base font-extrabold">
-                  {label}
-                  {beta && <Badge tone="amber">BETA</Badge>}
+                <span
+                  className={cx(
+                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11',
+                    tone,
+                  )}
+                >
+                  <Icon width={22} height={22} />
                 </span>
-                <span className="block truncate text-xs leading-snug font-medium text-ink/60">
-                  {deskripsi}
+                <span className="min-w-0 flex-1">
+                  <span className="flex flex-wrap items-center gap-1.5 font-display text-base font-extrabold">
+                    {label}
+                    {beta && <Badge tone="amber">BETA</Badge>}
+                    {sorot && <Badge tone="green">Seru!</Badge>}
+                  </span>
+                  <span className="block truncate text-xs leading-snug font-medium text-ink/60">
+                    {deskripsi}
+                  </span>
                 </span>
-              </span>
-              <ChevronRightIcon
-                width={18}
-                height={18}
-                className="hidden shrink-0 text-ink/40 sm:block"
-              />
-            </Card>
-          </Link>
-        ))}
+                <ChevronRightIcon
+                  width={18}
+                  height={18}
+                  className="hidden shrink-0 text-ink/40 sm:block"
+                />
+              </Card>
+            </Link>
+          ),
+        )}
       </nav>
+
+      {/* Ajakan main game (v2.6): satu baris singkat di bawah tile
+          pintasan, karena game adalah daya jual utama app. */}
+      <p className="-mt-2 text-center text-sm font-medium text-ink/60 lg:-mt-5">
+        Bosen baca materi?{' '}
+        <Link
+          to="/main"
+          className="font-bold text-primary-700 underline decoration-primary-300 underline-offset-2 hover:text-primary-800"
+        >
+          Main game dulu
+        </Link>
+        , XP-nya tetap jalan.
+      </p>
 
       {/* Fokus hari ini: subtopik terlemah + aksi drill dan saran baca */}
       <section aria-label="Fokus hari ini">
@@ -627,7 +676,7 @@ function DashboardPage() {
                           Materi dibaca
                         </span>
                         <span className="font-extrabold">
-                          {baca.read}/{baca.total} seksi · {baca.percent}%
+                          {baca.read}/{baca.total} bagian · {baca.percent}%
                         </span>
                       </div>
                       <ProgressBar
@@ -711,9 +760,14 @@ function DashboardPage() {
         </div>
       </Card>
 
-      {/* Tryout terakhir + perkiraan kelolosan */}
-      <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
-        <section>
+      {/* Tryout terakhir + perkiraan kelolosan, dibuat sama tinggi
+          (poin 1, v2.5): grid meregang ke baris yang sama, tiap bagian
+          flex-col dan kartunya flex-1, jadi tepi bawah kedua kartu
+          sejajar. Dulu kartu Perkiraan lebih pendek karena
+          isinya lebih sedikit dan tidak ada yang meregangkannya.
+          Di mobile tetap menumpuk 1 kolom. */}
+      <div className="grid items-stretch gap-5 lg:grid-cols-2 lg:gap-6">
+        <section className="flex flex-col">
           <p className="kicker">Riwayat</p>
           <h2 className="mt-1 mb-3 font-display text-xl font-extrabold">
             Tryout terakhir
@@ -721,7 +775,7 @@ function DashboardPage() {
           {tryoutTerakhir ? (
             <TryoutTerakhirCard record={tryoutTerakhir} />
           ) : (
-            <Card className="text-center">
+            <Card className="flex flex-1 flex-col justify-center text-center">
               <Mascot mood="semangat" size={72} className="mx-auto" />
               <p className="mt-1 text-xs font-extrabold text-ink/50">
                 {MASCOT_NAME}

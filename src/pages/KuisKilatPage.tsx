@@ -4,7 +4,8 @@
  * 60 detik, soal acak campur TWK/TIU/TKP dari bank soal lokal.
  * Jawaban benar memberi poin dengan combo multiplier untuk jawaban
  * benar beruntun, jawaban salah memutus combo. Layar akhir menampilkan
- * skor, jumlah jawaban benar, dan skor terbaik (localStorage).
+ * skor, jumlah jawaban benar, dan skor terbaik (localStorage untuk
+ * user login, memori saja untuk tamu sejak v2.5).
  *
  * Hadiah XP: store punya fungsi tambah XP generik (addXp), jadi di
  * akhir permainan pemain mendapat skor/10 XP, maksimal 50 XP.
@@ -24,7 +25,9 @@ import {
   markSeen,
   recordActivity,
 } from '../lib/store'
-import { migrateLegacyKey, scopedKey } from '../lib/storage'
+import { getScopedItem, migrateLegacyKey, setScopedItem } from '../lib/storage'
+import { useAuthUser } from '../lib/auth'
+import { MathText } from '../components/MathText'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -73,7 +76,7 @@ function loadBest(): BestScore | null {
     // Migrasi sekali: skor terbaik lama di key tanpa namespace pindah
     // ke namespace aktif sebelum dibaca.
     migrateLegacyKey(KUIS_KILAT_BEST_KEY)
-    const raw = localStorage.getItem(scopedKey(KUIS_KILAT_BEST_KEY))
+    const raw = getScopedItem(KUIS_KILAT_BEST_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw) as Partial<BestScore>
     if (
@@ -95,13 +98,14 @@ function loadBest(): BestScore | null {
 
 function saveBest(best: BestScore): void {
   try {
-    localStorage.setItem(scopedKey(KUIS_KILAT_BEST_KEY), JSON.stringify(best))
+    setScopedItem(KUIS_KILAT_BEST_KEY, JSON.stringify(best))
   } catch {
     // Penyimpanan tidak tersedia: abaikan diam-diam.
   }
 }
 
 export function KuisKilatPage() {
+  const { user } = useAuthUser()
   const [phase, setPhase] = useState<Phase>('idle')
   const [queue, setQueue] = useState<Question[]>([])
   const [index, setIndex] = useState(0)
@@ -287,8 +291,9 @@ export function KuisKilatPage() {
                 height={18}
                 className="mt-0.5 shrink-0 text-primary-600"
               />
-              Skor terbaikmu tersimpan di perangkat ini. Main tanpa
-              login, gratis.
+              {user
+                ? 'Skor terbaikmu tersimpan di perangkat ini.'
+                : 'Skor terbaikmu hanya dicatat selama halaman ini terbuka. Daftar gratis biar kesimpan.'}
             </li>
           </ul>
           {best && (
@@ -453,7 +458,7 @@ export function KuisKilatPage() {
             </span>
           </div>
           <p className="text-[15px] leading-relaxed font-medium whitespace-pre-line">
-            {question.soal}
+            <MathText text={question.soal} />
           </p>
           <div
             className="flex flex-col gap-2"

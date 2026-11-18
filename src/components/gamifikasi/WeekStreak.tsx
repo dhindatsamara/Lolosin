@@ -22,6 +22,9 @@ export function getWeekDates(todayIso: string): string[] {
 /**
  * Streak mingguan: 7 titik hari (Senin sampai Minggu) yang menunjukkan
  * hari apa saja minggu ini pengguna belajar.
+ *
+ * Dipadatkan (v2.6): padding kartu, ikon judul, dan lingkaran hari
+ * dikecilkan supaya section streak beranda lebih pendek.
  */
 export function WeekStreak() {
   const { activityDates, streak } = useStore()
@@ -32,11 +35,11 @@ export function WeekStreak() {
 
   return (
     <section aria-label="Streak mingguan">
-      <Card className="p-4">
+      <Card className="p-3.5">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-twk-soft text-twk">
-              <FlameIcon width={18} height={18} />
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-twk-soft text-twk">
+              <FlameIcon width={17} height={17} />
             </span>
             <div>
               <h2 className="font-display text-base leading-tight font-extrabold">
@@ -50,16 +53,16 @@ export function WeekStreak() {
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-7 gap-1.5">
+        <div className="mt-3 grid grid-cols-7 gap-1.5">
           {week.map((date, i) => {
             const isToday = date === today
             const isActive = aktif.has(date)
             const isFuture = date > today
             return (
-              <div key={date} className="flex flex-col items-center gap-1.5">
+              <div key={date} className="flex flex-col items-center gap-1">
                 <span
                   className={cx(
-                    'flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold',
+                    'flex h-8 w-8 items-center justify-center rounded-full text-sm font-extrabold',
                     isActive
                       ? 'bg-primary-600 text-white'
                       : isToday

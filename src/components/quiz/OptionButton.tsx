@@ -1,6 +1,7 @@
 import type { Opsi } from '../../lib/questions'
 import { cx } from '../../lib/utils'
 import { CheckIcon } from '../icons'
+import { MathText } from '../MathText'
 
 export type OptionState =
   | 'default'
@@ -75,7 +76,7 @@ export function OptionButton({
         {state === 'correct' ? <CheckIcon width={16} height={16} /> : huruf}
       </span>
       <span className="min-w-0 flex-1 text-sm leading-relaxed font-medium">
-        {teks}
+        <MathText text={teks} />
       </span>
       {badge && (
         <span className="mt-0.5 shrink-0 rounded-full bg-ink/5 px-2 py-0.5 text-xs font-extrabold text-ink">

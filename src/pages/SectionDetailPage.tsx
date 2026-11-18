@@ -19,6 +19,7 @@ import {
   stripTabelContoh,
 } from '../lib/materi'
 import { useStore, XP_SECTION_READ } from '../lib/store'
+import { resolveGambarSrc } from '../lib/materiGambar'
 import { completeSectionRead } from '../lib/gamification'
 import { cx } from '../lib/utils'
 
@@ -33,7 +34,7 @@ export function SectionDetailPage() {
   const section = getSection(materiId, sectionId)
   const nav = getSectionNav(materiId, sectionId)
 
-  // Kembali ke atas setiap pindah seksi.
+  // Kembali ke atas setiap pindah bagian.
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [sectionId])
@@ -51,6 +52,9 @@ export function SectionDetailPage() {
 
   const isRead = readSections.includes(section.id)
   const progress = docReadProgress(doc, readSections)
+  const gambarSrc = section.gambar
+    ? resolveGambarSrc(section.gambar)
+    : null
   const tabel = getTabelForSection(doc, section)
   const konten = tabel ? stripTabelContoh(section.konten) : section.konten
   // Kembali ke tampilan grup materi (judul sudah tanpa atribusi sumber).
@@ -82,7 +86,7 @@ export function SectionDetailPage() {
           {section.judul}
         </h1>
         <p className="mt-1 text-sm font-medium text-ink/60">
-          Seksi {nav.index + 1} dari {nav.total}
+          Bagian {nav.index + 1} dari {nav.total}
         </p>
         <div className="mt-3 flex items-center gap-3">
           <ProgressBar
@@ -110,6 +114,17 @@ export function SectionDetailPage() {
             </div>
           )}
 
+          {gambarSrc && (
+            <figure className="mb-8">
+              <img
+                src={gambarSrc}
+                alt={`Diagram untuk ${section.judul}`}
+                className="mx-auto w-full max-w-md rounded-2xl border border-line bg-white p-3 shadow-soft"
+                loading="lazy"
+              />
+            </figure>
+          )}
+
           <MarkdownLite konten={konten} />
           {tabel && (
             <div className="mt-8">
@@ -132,20 +147,24 @@ export function SectionDetailPage() {
             )}
           </div>
 
-          {/* Navigasi seksi */}
+          {/* Navigasi bagian (v2.6): label teks arah diganti chevron
+              ikon saja; judul bagian tujuan tetap tampil karena itu
+              isi navigasinya, bukan teks tombol. Aria-label
+              menjelaskan arah + tujuan. */}
           <nav
-            aria-label="Navigasi seksi"
+            aria-label="Navigasi bagian"
             className="mt-6 grid grid-cols-2 gap-3"
           >
             {nav.prev ? (
               <Link
                 to={`/belajar/${doc.id}/${nav.prev.id}`}
-                className="rounded-2xl border border-line bg-white p-3 shadow-soft transition-transform hover:-translate-y-px"
+                aria-label={`Bagian sebelumnya: ${nav.prev.judul}`}
+                className="flex items-center gap-1.5 rounded-2xl border border-line bg-white p-3 shadow-soft transition-transform hover:-translate-y-px"
               >
-                <span className="text-xs font-bold text-ink/60">
-                  ← Sebelumnya
+                <span aria-hidden="true" className="text-lg leading-none font-extrabold text-ink/60">
+                  ‹
                 </span>
-                <span className="mt-0.5 block truncate text-sm font-extrabold">
+                <span className="min-w-0 truncate text-sm font-extrabold">
                   {nav.prev.judul}
                 </span>
               </Link>
@@ -157,13 +176,14 @@ export function SectionDetailPage() {
             {nav.next ? (
               <Link
                 to={`/belajar/${doc.id}/${nav.next.id}`}
-                className="rounded-2xl border border-line bg-white p-3 text-right shadow-soft transition-transform hover:-translate-y-px"
+                aria-label={`Bagian berikutnya: ${nav.next.judul}`}
+                className="flex items-center justify-end gap-1.5 rounded-2xl border border-line bg-white p-3 text-right shadow-soft transition-transform hover:-translate-y-px"
               >
-                <span className="text-xs font-bold text-ink/60">
-                  Berikutnya →
-                </span>
-                <span className="mt-0.5 block truncate text-sm font-extrabold">
+                <span className="min-w-0 truncate text-sm font-extrabold">
                   {nav.next.judul}
+                </span>
+                <span aria-hidden="true" className="text-lg leading-none font-extrabold text-ink/60">
+                  ›
                 </span>
               </Link>
             ) : (

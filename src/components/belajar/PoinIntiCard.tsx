@@ -1,7 +1,7 @@
 /**
- * Kartu "Poin inti": ringkasan 3-5 butir terpenting dari satu seksi materi.
+ * Kartu "Poin inti": ringkasan 3-5 butir terpenting dari satu bagian materi.
  * Tampil menonjol sebagai callout kuning/hijau khas Lolosin: di atas isi
- * seksi pada layar kecil, dan di kolom samping (sticky) pada layar lebar.
+ * bagian pada layar kecil, dan di kolom samping (sticky) pada layar lebar.
  */
 import { CheckIcon, SparklesIcon } from '../icons'
 

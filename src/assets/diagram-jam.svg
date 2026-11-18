@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 224" role="img" aria-label="Jam menunjukkan pukul 02.20, sudut terkecil antara kedua jarumnya 50 derajat">
+  <rect x="0" y="0" width="200" height="224" rx="16" fill="#FAF7F2"/>
+  <!-- Muka jam -->
+  <circle cx="100" cy="100" r="80" fill="#FFFFFF" stroke="#D8D0BE" stroke-width="2"/>
+  <!-- Tanda jam -->
+  <g stroke="#1B1E1C" stroke-width="2" stroke-linecap="round">
+    <line x1="100" y1="26" x2="100" y2="20"/>
+    <line x1="137" y1="35.91" x2="140" y2="30.72"/>
+    <line x1="164.09" y1="63" x2="169.28" y2="60"/>
+    <line x1="174" y1="100" x2="180" y2="100"/>
+    <line x1="164.09" y1="137" x2="169.28" y2="140"/>
+    <line x1="137" y1="164.09" x2="140" y2="169.28"/>
+    <line x1="100" y1="174" x2="100" y2="180"/>
+    <line x1="63" y1="164.09" x2="60" y2="169.28"/>
+    <line x1="35.91" y1="137" x2="30.72" y2="140"/>
+    <line x1="26" y1="100" x2="20" y2="100"/>
+    <line x1="35.91" y1="63" x2="30.72" y2="60"/>
+    <line x1="63" y1="35.91" x2="60" y2="30.72"/>
+  </g>
+  <!-- Angka 12, 3, 6, 9 -->
+  <g font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#1B1E1C" text-anchor="middle">
+    <text x="100" y="41">12</text>
+    <text x="164" y="105">3</text>
+    <text x="100" y="169">6</text>
+    <text x="36" y="105">9</text>
+  </g>
+  <!-- Busur sudut 50 derajat (70 ke 120 derajat) -->
+  <path d="M 130.07 89.06 A 32 32 0 0 1 127.71 116" fill="none" stroke="#D97706" stroke-width="2.5"/>
+  <text x="147" y="108" font-family="system-ui, sans-serif" font-size="15" font-weight="800" fill="#B45309" text-anchor="middle">50°</text>
+  <!-- Jarum pendek (70 derajat, pukul 02.20) -->
+  <line x1="100" y1="100" x2="145.11" y2="83.58" stroke="#1B1E1C" stroke-width="5" stroke-linecap="round"/>
+  <!-- Jarum panjang (120 derajat) -->
+  <line x1="100" y1="100" x2="158.89" y2="134" stroke="#1E40AF" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="100" cy="100" r="4.5" fill="#0E5C43"/>
+  <!-- Keterangan -->
+  <text x="100" y="212" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#1B1E1C" text-anchor="middle">Pukul 02.20, sudut terkecil 50°</text>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 190" role="img" aria-label="Dua lingkaran dibagi tiga bagian sama besar: satu bagian diarsir berarti satu per tiga, dua bagian diarsir berarti dua per tiga">
+  <rect x="0" y="0" width="320" height="190" rx="16" fill="#FAF7F2"/>
+  <!-- Lingkaran kiri: 1/3 -->
+  <g>
+    <circle cx="80" cy="75" r="55" fill="#FFFFFF" stroke="#D8D0BE" stroke-width="2"/>
+    <path d="M 80 75 L 80 20 A 55 55 0 0 1 127.63 102.5 Z" fill="#2B8266"/>
+    <g stroke="#D8D0BE" stroke-width="2">
+      <line x1="80" y1="75" x2="80" y2="20"/>
+      <line x1="80" y1="75" x2="127.63" y2="102.5"/>
+      <line x1="80" y1="75" x2="32.37" y2="102.5"/>
+    </g>
+    <text x="80" y="152" font-family="system-ui, sans-serif" font-size="18" font-weight="800" fill="#1B1E1C" text-anchor="middle">1/3</text>
+    <text x="80" y="172" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#1B1E1C" opacity="0.65" text-anchor="middle">1 dari 3 bagian</text>
+  </g>
+  <!-- Lingkaran kanan: 2/3 -->
+  <g>
+    <circle cx="240" cy="75" r="55" fill="#FFFFFF" stroke="#D8D0BE" stroke-width="2"/>
+    <path d="M 240 75 L 240 20 A 55 55 0 0 1 287.63 102.5 Z" fill="#2B8266"/>
+    <path d="M 240 75 L 287.63 102.5 A 55 55 0 0 1 192.37 102.5 Z" fill="#2B8266"/>
+    <g stroke="#D8D0BE" stroke-width="2">
+      <line x1="240" y1="75" x2="240" y2="20"/>
+      <line x1="240" y1="75" x2="287.63" y2="102.5"/>
+      <line x1="240" y1="75" x2="192.37" y2="102.5"/>
+    </g>
+    <text x="240" y="152" font-family="system-ui, sans-serif" font-size="18" font-weight="800" fill="#1B1E1C" text-anchor="middle">2/3</text>
+    <text x="240" y="172" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#1B1E1C" opacity="0.65" text-anchor="middle">2 dari 3 bagian</text>
+  </g>
+</svg>

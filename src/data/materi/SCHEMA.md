@@ -4,7 +4,7 @@ Konten belajar terstruktur untuk halaman Belajar. Dibuat 2026-11-13 dari sumber 
 `~/workspace/cpns/materi/` (modul OCR, PDF berteks, DOCX). Teks dibersihkan dan
 distrukturkan secara programatis; **isi materi tidak ditulis ulang** (kecuali
 penjelasan "Cara Memakai Tabel Pangkat", label struktur Kartu Sakti, dan
-6 seksi Rangkuman Tabel TWK yang dikurasi tulis-ulang pada v2.3.3, lihat
+6 bagian Rangkuman Tabel TWK yang dikurasi tulis-ulang pada v2.3.3, lihat
 `BANG_ARYA_REWRITE` di build_materi.py).
 Script build: `build_materi.py` di folder ini (dapat dijalankan ulang).
 Audit isi 2026-11-15: soal latihan, pengantar, dan duplikat dikeluarkan dari
@@ -16,20 +16,28 @@ Integritas + Pilar Negara, analogi tiga kata TIU) -> 19 dokumen, 284 section,
 + 1 section baru (`tiu-analogi-verbal-s04`). Header sumber file `.md` TIDAK
 masuk JSON (tanpa atribusi "by siapa" di app); sumber tercatat di file `.md`
 internal. Dokumen baru punya `halaman: 0` (riset web, tanpa halaman sumber).
-Tulis-ulang kurasi 2026-11-15 (v2.3.3): 6 seksi Rangkuman Tabel TWK
+Tulis-ulang kurasi 2026-11-15 (v2.3.3): 6 bagian Rangkuman Tabel TWK
 (`twk-bang-arya`) ditulis ulang terstruktur karena ekstraksi mind-map/tabel
 aslinya huruf kapital semua dan tidak berurutan -> 19 dokumen, 284 section,
-79.843 kata. ID seksi tidak berubah (progres baca aman); `catatan` mind-map
+79.843 kata. ID bagian tidak berubah (progres baca aman); `catatan` mind-map
 dihapus; verifikasi `verify_bang_arya_rewrite()` di build_materi.py.
-Keterbacaan 2026-11-15 (v2.5): audit menemukan 43 seksi berupa tembok teks
+Keterbacaan 2026-11-15 (v2.5): audit menemukan 43 bagian berupa tembok teks
 (baris >600 karakter, terpanjang ~5.000, terkonsentrasi di 3 Handbook TIU);
-SEMUA 284 seksi diaudit, yang kurang jelas ditulis ulang terkurasi lewat map
+SEMUA 284 bagian diaudit, yang kurang jelas ditulis ulang terkurasi lewat map
 `READABILITY_REWRITE` + `verify_readability_rewrite()` (pola yang sama seperti
-Bang Arya); setiap seksi mendapat field baru `poin_inti` (3-5 butir ringkasan,
+Bang Arya); setiap bagian mendapat field baru `poin_inti` (3-5 butir ringkasan,
 map `POIN_INTI`, diverifikasi `verify_poin_inti()` yang menggagalkan build
-bila ada seksi tanpa poin inti). ID seksi tidak berubah. Halaman baca
+bila ada bagian tanpa poin inti). ID bagian tidak berubah. Halaman baca
 (`SectionDetailPage`) diubah jadi mode layar penuh: isi memakai lebar viewport
 penuh, kartu Poin Inti di atas isi (HP) / kolom samping sticky (desktop).
+Cheat sheet TIU + penebalan TWK tipis 2026-11-15 (v2.6): dokumen baru
+`tiu-cheat-sheet` (6 seksi rumus cepat + trik, mengikuti pola cheat sheet
+TWK/TKP), `twk-keyword-bela-negara` ditambah 3 seksi (dasar hukum dan
+pengertian, bentuk partisipasi, jenis ancaman), `twk-integritas-pilar`
+ditambah 2 seksi (pembeda gratifikasi/suap/pemerasan, LHKPN dan jalur
+pelaporan) -> 20 dokumen, 295 section, 82.477 kata. ID bagian lama tidak
+berubah; seksi baru masuk lewat `baru/*.md` + `BARU_TIU_CHEAT` /
+`BARU_BELA_NEGARA` / `BARU_TWK` di build_materi.py.
 
 ## File
 
@@ -37,7 +45,7 @@ penuh, kartu Poin Inti di atas isi (HP) / kolom samping sticky (desktop).
 |---|---|
 | `index.json` | Daftar semua dokumen + total + daftar yang dikecualikan dari MVP |
 | `inventaris.json` | Salinan `~/workspace/cpns/materi/inventaris-materi.json` (referensi) |
-| `<id-dokumen>.json` | Satu file per dokumen materi (19 file) |
+| `<id-dokumen>.json` | Satu file per dokumen materi (20 file) |
 | `build_materi.py` | Script pembangun (reproducible; baca `~/workspace/cpns/materi/`). PIN pypdf==7.0.1, lihat docstring script |
 
 ## `index.json`
@@ -45,8 +53,8 @@ penuh, kartu Poin Inti di atas isi (HP) / kolom samping sticky (desktop).
 ```json
 {
   "dibuat": "2026-11-15",
-  "total_dokumen": 19,
-  "total_kata": 79843,
+  "total_dokumen": 20,
+  "total_kata": 82477,
   "total_halaman": 591,
   "dokumen": [
     {
@@ -126,7 +134,8 @@ penuh, kartu Poin Inti di atas isi (HP) / kolom samping sticky (desktop).
 | `judul` | string | ya | Judul section (judul bab/subbab sumber; lanjutan memakai suffix `" (lanjutan 2)"`) |
 | `konten` | string | ya | Teks markdown ringan (lihat bawah) |
 | `kata` | integer | ya | Jumlah kata `konten` (dipisah spasi) |
-| `poin_inti` | string[] | ya (v2.5) | 3–5 butir ringkasan inti, tiap butir satu kalimat pendek (≤200 karakter), teks polos tanpa markdown/em-dash/URL/atribusi. Ditampilkan sebagai kartu callout di halaman baca. Wajib ada di semua seksi; `verify_poin_inti()` menggagalkan build bila ada yang hilang |
+| `poin_inti` | string[] | ya (v2.5) | 3–5 butir ringkasan inti, tiap butir satu kalimat pendek (≤200 karakter), teks polos tanpa markdown/em-dash/URL/atribusi. Ditampilkan sebagai kartu callout di halaman baca. Wajib ada di semua bagian; `verify_poin_inti()` menggagalkan build bila ada yang hilang |
+| `gambar` | string | tidak | Diagram ilustrasi section (v2.5): kunci built-in `gambar:<nama>` (dipetakan ke SVG di `src/assets/` lewat `lib/materiGambar.ts`, aman di bawah base path apa pun) atau URL http(s). Ditampilkan sebagai figure di atas isi. Divalidasi `verify_gambar()` |
 | `catatan` | string | tidak | Peringatan kualitas (OCR kacau / butuh gambar). Tampilkan sebagai notice bila ada |
 | `nomor` | integer | hanya `tkp-kartu-sakti` | Nomor urut kompetensi di tabel sumber (1–33) |
 
@@ -135,6 +144,9 @@ penuh, kartu Poin Inti di atas isi (HP) / kolom samping sticky (desktop).
 - Paragraf dipisah `\n\n`.
 - Subjudul kecil di dalam section: `## Judul` (dipakai saat subbab kecil digabung ke section sebelumnya).
 - Butir daftar: `- teks` (bullet) atau `1. teks` / `(i) teks` (bernomor, penanda asli dipertahankan).
+- Tabel markdown: `| a | b |` + baris pemisah `|---|---|` (perataan `:---:`/`:---`), dirender sebagai tabel ber-style (v2.5).
+- Gambar inline: `![alt](src)` — baris sendiri jadi figure + figcaption, di dalam teks jadi inline. `src` bisa kunci built-in `gambar:<nama>` atau URL (v2.5).
+- Matematika inline (v2.5): pecahan numerik `a/b` dirender bertumpuk, pangkat `x^2` jadi superscript. Tanggal, sitasi peraturan, dan bilangan berformat ribuan sengaja tidak diubah (lihat `lib/mathText.ts`).
 - **Kebijakan isi (audit 2026-11-15):** Belajar hanya berisi materi belajar murni
   (penjelasan, rangkuman, rumus, tabel, contoh pengerjaan). Soal latihan/tryout
   (stem + opsi A-E + kunci/pembahasan), pengantar/cover/daftar isi, dan section
@@ -145,7 +157,7 @@ penuh, kartu Poin Inti di atas isi (HP) / kolom samping sticky (desktop).
   `strip_question_zones`, berjalan setelah ID section ditetapkan) sehingga
   perbaikan tahan rebuild. Laporan: `~/workspace/cpns/materi/AUDIT-ISI-2026-11-15.md`.
 - Materi baru dari `baru/*.md` (v2.3.1, `parse_baru_markdown` di
-  `build_materi.py`): header sumber (blockquote / seksi `## Sumber` + paragraf
+  `build_materi.py`): header sumber (blockquote / bagian `## Sumber` + paragraf
   Catatan), garis `---`, dan kalimat atribusi di dalam konten dibuang; tabel
   markdown dikonversi ke bullet (renderer tidak mendukung tabel); quote isi
   dibuka jadi paragraf biasa; em-dash dibersihkan. `verify_baru_content`

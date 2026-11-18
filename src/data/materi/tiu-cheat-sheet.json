@@ -1,0 +1,119 @@
+{
+  "id": "tiu-cheat-sheet",
+  "judul": "Cheat Sheet TIU",
+  "materi": "TIU",
+  "deskripsi": "Kartu ringkas TIU: rumus hitung cepat dan persen, pola deret, trik soal cerita numerik, analogi verbal, silogisme dan logika, pola gambar figural, dan strategi soal kecukupan data.",
+  "sumber": "baru/tiu-cheat-sheet-*.md (7 file riset, 2026-11-15 dan 2026-11-16)",
+  "halaman": 0,
+  "kata": 2543,
+  "subtopik": [
+    "Hitung cepat dan persen",
+    "Deret dan barisan",
+    "Soal cerita numerik",
+    "Analogi dan sinonim-antonim verbal",
+    "Silogisme dan logika",
+    "Figural",
+    "Kecukupan data"
+  ],
+  "sections": [
+    {
+      "id": "tiu-cheat-sheet-s01",
+      "subtopik": "Hitung cepat dan persen",
+      "judul": "Hitung Cepat dan Persen",
+      "konten": "## Urutan operasi\n\nKerjakan dalam kurung dulu, lalu kali dan bagi dari kiri ke kanan, terakhir tambah dan kurang. Contoh: 6 + 3 x 4 = 6 + 12 = 18, bukan 36. Kesalahan paling sering di hitung cepat adalah mengerjakan tambah dulu sebelum kali.\n\n## Persen kilat\n\nPersen artinya per seratus. 15% dari 200 = 15/100 x 200 = 30.\n\nHafalkan pasangan cepat ini: 50% = 1/2, 25% = 1/4, 20% = 1/5, 10% = 1/10, 12,5% = 1/8. Dengan pasangan ini, 12,5% dari 640 langsung terlihat sama dengan 640/8 = 80.\n\nDiskon: harga Rp240.000 diskon 25%, yang dibayar = 75% x 240.000 = Rp180.000. Cara cepatnya: hitung persen yang dibayar, bukan besar diskonnya.\n\nKenaikan persen: dari 80 menjadi 100 naik (100 - 80)/80 x 100% = 25%. Penyebutnya selalu nilai awal, bukan nilai akhir.\n\nSisa: tabungan Rp500.000 dipakai 35%, sisanya 65% x 500.000 = Rp325.000.\n\n## Perbandingan\n\nPerbandingan A : B = 3 : 5 dengan jumlah 40. Total bagian = 3 + 5 = 8. A = 3/8 x 40 = 15, B = 5/8 x 40 = 25.\n\nKalau yang diketahui selisih: A : B = 5 : 2, selisihnya 12. Satu bagian = 12/(5 - 2) = 4. Total = (5 + 2) x 4 = 28.\n\n## Rata-rata\n\nRata-rata = jumlah semua nilai dibagi banyaknya nilai. Nilai 6, 7, 8, 9, 10 rata-ratanya (6 + 7 + 8 + 9 + 10)/5 = 40/5 = 8.\n\nRata-rata gabungan: kelas A 20 siswa rata-rata 75, kelas B 30 siswa rata-rata 80. Gabungan = (20 x 75 + 30 x 80)/50 = (1.500 + 2.400)/50 = 78. Jangan asal menjumlah dua rata-rata lalu dibagi dua, karena jumlah siswanya berbeda.\n\n## Trik kali cepat\n\nKali 25: bagi 4 lalu kali 100. 25 x 36 = (36/4) x 100 = 9 x 100 = 900.\n\nPecah bilangan: 15 x 14 = (15 x 10) + (15 x 4) = 150 + 60 = 210.\n\nKuadrat bilangan berakhir 5: 35^2. Ambil 3 x (3 + 1) = 12, lalu tempel 25 di belakang: 1.225.\n\n## Tips menjawab soal\n\n1. Cari angka cantik dulu: persen yang gampang (10%, 25%, 50%) sering jadi jalan pintas.\n2. Tulis satuannya: rupiah, km, jam. Satuan yang tertukar adalah jebakan paling sering.\n3. Cek kewajaran hasil: harga setelah diskon tidak mungkin naik, dan rata-rata gabungan selalu berada di antara dua rata-rata asal.",
+      "kata": 397,
+      "poin_inti": [
+        "Kerjakan dalam kurung dulu, lalu kali dan bagi, terakhir tambah dan kurang.",
+        "Hafalkan pasangan persen cepat seperti 25 persen sama dengan 1/4 dan 12,5 persen sama dengan 1/8.",
+        "Untuk diskon, hitung persen yang dibayar, bukan besar diskonnya.",
+        "Rata-rata gabungan memakai bobot jumlah siswa, bukan rata-rata dari dua rata-rata.",
+        "Trik kali 25 adalah bagi 4 lalu kali 100, dan kuadrat bilangan berakhir 5 memakai pola n kali n tambah 1 lalu tempel 25."
+      ]
+    },
+    {
+      "id": "tiu-cheat-sheet-s02",
+      "subtopik": "Deret dan barisan",
+      "judul": "Deret dan Barisan",
+      "konten": "## Deret aritmetika\n\nSelisih antar suku tetap. Rumus suku ke-n: Un = a + (n - 1) x b. Huruf a adalah suku pertama, b adalah selisih, n adalah nomor suku.\n\nContoh: 3, 7, 11, 15. Di sini a = 3 dan b = 4. Suku ke-10: U10 = 3 + (10 - 1) x 4 = 3 + 36 = 39.\n\nJumlah n suku pertama: Sn = n/2 x (a + Un). Jumlah 10 suku pertama deret di atas: S10 = 10/2 x (3 + 39) = 5 x 42 = 210.\n\n## Deret geometri\n\nRasio antar suku tetap. Rumus suku ke-n: Un = a x r^(n - 1). Huruf r adalah rasio, yaitu suku berikut dibagi suku sebelumnya.\n\nContoh: 2, 6, 18, 54. Di sini a = 2 dan r = 3. Suku ke-6: U6 = 2 x 3^5 = 2 x 243 = 486.\n\nJumlah n suku pertama (untuk r tidak sama dengan 1): Sn = a x (r^n - 1)/(r - 1). Jumlah 6 suku pertama: S6 = 2 x (3^6 - 1)/(3 - 1) = 2 x 728/2 = 728.\n\n## Pola deret yang sering muncul\n\nSelisih bertingkat: 2, 5, 10, 17, 26. Selisihnya 3, 5, 7, 9, naik 2 tiap langkah. Selisih berikut 11, jadi suku berikut 26 + 11 = 37.\n\nKuadrat: 1, 4, 9, 16, 25. Ini 1^2, 2^2, 3^2, 4^2, 5^2. Berikutnya 6^2 = 36.\n\nFibonacci: tiap suku adalah jumlah dua suku sebelumnya. 1, 1, 2, 3, 5, 8. Berikutnya 5 + 8 = 13.\n\nOperasi berulang: 3, 5, 9, 17. Polanya kali 2 kurang 1. Berikutnya 17 x 2 - 1 = 33.\n\nPola loncat: suku ganjil dan suku genap punya pola sendiri. Pisahkan keduanya, lalu cari pola masing-masing. Contoh: 2, 5, 4, 7, 6, 9. Suku ganjil (posisi 1, 3, 5) adalah 2, 4, 6, naik 2 tiap langkah. Suku genap (posisi 2, 4, 6) adalah 5, 7, 9, juga naik 2. Suku berikut (posisi 7, ganjil) adalah 6 + 2 = 8.\n\n## Tips menjawab soal\n\n1. Hitung selisih antar suku dulu. Kalau selisihnya tetap, itu deret aritmetika. Kalau selisihnya berpola, cari selisih dari selisihnya.\n2. Kalau angkanya membesar cepat, curigai pola kali (geometri) atau kuadrat.\n3. Uji pola pada tiga suku pertama sebelum dipakai. Pola yang hanya cocok di dua suku sering menjebak.",
+      "kata": 386,
+      "poin_inti": [
+        "Deret aritmetika punya selisih tetap: Un = a + (n - 1) x b, dan jumlahnya Sn = n/2 x (a + Un).",
+        "Deret geometri punya rasio tetap: Un = a x r^(n - 1), dan jumlahnya Sn = a x (r^n - 1)/(r - 1).",
+        "Pola umum lain meliputi selisih bertingkat, kuadrat, Fibonacci, dan operasi berulang.",
+        "Hitung selisih antar suku dulu, lalu selisih dari selisihnya bila belum tetap.",
+        "Uji pola pada tiga suku pertama sebelum dipakai."
+      ]
+    },
+    {
+      "id": "tiu-cheat-sheet-s03",
+      "subtopik": "Soal cerita numerik",
+      "judul": "Soal Cerita Numerik",
+      "konten": "## Kecepatan, jarak, waktu\n\nRumus segitiga: jarak = kecepatan x waktu. Kecepatan = jarak/waktu. Waktu = jarak/kecepatan.\n\nContoh: mobil menempuh 120 km dalam 2 jam. Kecepatannya 120/2 = 60 km/jam. Jarak 90 km dengan kecepatan 45 km/jam ditempuh dalam 90/45 = 2 jam.\n\nBerpapasan: dua orang bergerak saling mendekat, kecepatannya dijumlah. Jarak 300 km, kecepatan 40 km/jam dan 60 km/jam. Bertemu setelah 300/(40 + 60) = 3 jam. Orang pertama sudah menempuh 40 x 3 = 120 km saat bertemu.\n\nMenyusul: kecepatan dikurang. Motor A 60 km/jam menyusul motor B 40 km/jam yang sudah 30 km di depan. Selisih kecepatan 20 km/jam, jadi A menyusul setelah 30/20 = 1,5 jam.\n\n## Kerja bersama\n\nKalau A selesai dalam 6 hari dan B dalam 3 hari, kerja bersama selesai dalam 1/(1/6 + 1/3) hari. 1/6 + 1/3 = 1/2, jadi bersama selesai dalam 2 hari.\n\nRumus cepat dua orang: (a x b)/(a + b). (6 x 3)/(6 + 3) = 18/9 = 2 hari. Hasilnya selalu lebih cepat dari yang tercepat sendirian.\n\n## Campuran dan rata-rata harga\n\n2 kg beras Rp10.000 per kg dicampur 3 kg beras Rp15.000 per kg. Harga rata-rata = (2 x 10.000 + 3 x 15.000)/5 = (20.000 + 45.000)/5 = Rp13.000 per kg. Bobotnya adalah jumlah kilogram masing-masing, bukan jumlah jenis berasnya.\n\n## Umur\n\nTulis umur sekarang sebagai peubah, lalu geser bersama. Contoh: umur ayah 3 kali umur anak. Sepuluh tahun lagi umur ayah 2 kali umur anak. Misal umur anak sekarang x, ayah 3x. Sepuluh tahun lagi: 3x + 10 = 2(x + 10). Maka 3x + 10 = 2x + 20, jadi x = 10. Anak 10 tahun, ayah 30 tahun. Cek: sepuluh tahun lagi 20 dan 40, benar 2 kali lipat.\n\n## Perbandingan senilai dan berbalik nilai\n\nSenilai: makin banyak, makin banyak. 5 buku Rp75.000, maka 8 buku = 8/5 x 75.000 = Rp120.000.\n\nBerbalik nilai: makin banyak pekerja, makin cepat selesai. 4 pekerja selesai 12 hari, 6 pekerja selesai (4 x 12)/6 = 8 hari.\n\n## Tips menjawab soal\n\n1. Tulis yang diketahui dan yang ditanya sebelum menghitung. Separuh kesalahan soal cerita berasal dari salah baca.\n2. Samakan satuan dulu: jam dengan jam, menit dengan menit, km dengan km.\n3. Cek kewajaran: kerja bersama tidak mungkin lebih lama dari kerja sendirian, dan hasil campuran selalu berada di antara dua harga asal.",
+      "kata": 388,
+      "poin_inti": [
+        "Jarak sama dengan kecepatan kali waktu, dan kecepatan sama dengan jarak dibagi waktu.",
+        "Berpapasan menjumlah kecepatan, menyusul mengurang kecepatan.",
+        "Kerja bersama dua orang selesai dalam (a x b)/(a + b) hari.",
+        "Soal umur diselesaikan dengan peubah lalu digeser bersama, dan hasilnya dicek ulang.",
+        "Perbandingan senilai makin banyak makin banyak, berbalik nilai makin banyak pekerja makin cepat selesai."
+      ]
+    },
+    {
+      "id": "tiu-cheat-sheet-s04",
+      "subtopik": "Analogi dan sinonim-antonim verbal",
+      "judul": "Analogi dan Sinonim-Antonim Verbal",
+      "konten": "## Cara membaca soal analogi\n\nAnalogi menanyakan hubungan kata, bukan arti kata. Langkah pertama: rumuskan hubungan dua kata pertama dalam satu kalimat, lalu cari pasangan dengan hubungan yang sama persis.\n\nContoh: Dokter : stetoskop. Hubungannya: dokter memakai stetoskop sebagai alat kerja. Pasangan yang cocok harus mengikuti pola pelaku memakai alat kerjanya, bukan sekadar sama-sama berhubungan dengan kesehatan.\n\n## Pola hubungan yang sering muncul\n\n- Pelaku dan alat: dokter : stetoskop, penulis : pena.\n- Pelaku dan tempat kerja: guru : sekolah, nelayan : laut.\n- Sebab dan akibat: hujan : basah, belajar : pandai.\n- Bagian dan keseluruhan: jari : tangan, roda : mobil.\n- Benda dan fungsi: pisau : memotong, payung : melindungi dari hujan.\n- Kategori dan anggota: buah : mangga, kendaraan : sepeda.\n- Lawan kata: panas : dingin, tinggi : rendah.\n- Urutan atau tingkatan: pagi : siang, letnan : kapten.\n\n## Sinonim dan antonim\n\nSinonim adalah kata yang maknanya sama atau mirip. Antonim adalah lawan katanya. Soal sering memakai kata serapan atau kata yang jarang dipakai sehari-hari.\n\nTrik: cari akar katanya. Kata \"pasif\" berlawanan dengan \"aktif\" karena keduanya bicara soal bergerak atau tidak. Kata yang mirip bentuknya belum tentu mirip artinya. \"Efektif\" dan \"efisien\" itu beda: efektif soal tepat sasaran, efisien soal hemat sumber daya.\n\nPasangan yang sering keluar: abadi (kekal) lawan fana (sementara), akurat (tepat) lawan keliru, kikir lawan dermawan, rajin lawan malas.\n\n## Trik eliminasi\n\n1. Buang dulu pasangan yang hubungannya jelas beda. Biasanya dua atau tiga opsi langsung gugur di sini.\n2. Hati-hati pasangan yang hanya mirip topiknya. Dokter : stetoskop bukan pasangan topik kesehatan, melainkan pelaku dan alat.\n3. Kalau dua opsi tampak sama, periksa arah hubungannya. \"Pisau : memotong\" tidak sama dengan \"memotong : pisau\" bila soalnya menuntut urutan tertentu.\n4. Untuk sinonim dan antonim, ganti kata soal dengan kata yang maknanya dekat, lalu uji ke opsi. Kata yang maknanya berlawanan langsung gugur.",
+      "kata": 313,
+      "poin_inti": [
+        "Rumuskan hubungan dua kata pertama dalam satu kalimat sebelum menilai pasangan pembanding.",
+        "Pola hubungan yang sering muncul meliputi pelaku dan alat, sebab dan akibat, serta bagian dan keseluruhan.",
+        "Efektif soal tepat sasaran, sedangkan efisien soal hemat sumber daya.",
+        "Buang dulu pasangan yang hubungannya jelas beda, biasanya dua atau tiga opsi langsung gugur.",
+        "Periksa arah hubungan bila dua opsi tampak sama."
+      ]
+    },
+    {
+      "id": "tiu-cheat-sheet-s05",
+      "subtopik": "Silogisme dan logika",
+      "judul": "Silogisme dan Logika",
+      "konten": "## Silogisme dasar\n\nSilogisme menarik kesimpulan dari dua pernyataan. Bentuk paling dasar: Semua A adalah B. Semua B adalah C. Maka semua A adalah C.\n\nContoh: Semua siswa rajin belajar. Semua yang rajin belajar lulus ujian. Kesimpulan yang sah: semua siswa lulus ujian.\n\nArahnya tidak bisa dibalik. \"Semua A adalah B\" tidak berarti \"Semua B adalah A\". Semua siswa rajin belajar tidak berarti semua yang rajin belajar adalah siswa.\n\n## Kata kuantitas: semua, ada, tidak ada\n\n- \"Semua\" berarti seluruh anggota, tanpa kecuali.\n- \"Ada\" atau \"beberapa\" berarti minimal satu. \"Ada siswa yang rajin\" tidak menjamin semua siswa rajin.\n- \"Tidak ada\" berarti nol anggota.\n- Dua pernyataan \"Semua A adalah B\" dan \"Ada A yang bukan B\" saling bertentangan, tidak bisa benar bersamaan.\n\n## Negasi (ingkaran)\n\nNegasi membalik nilai benar sebuah pernyataan.\n\n- Negasi \"Semua A adalah B\" adalah \"Ada A yang bukan B\". Bukan \"Semua A bukan B\".\n- Negasi \"Ada A yang B\" adalah \"Tidak ada A yang B\", sama dengan \"Semua A bukan B\".\n- Negasi \"Jika P maka Q\" adalah \"P benar dan Q salah\".\n\nContoh: negasi \"Semua peserta lulus\" adalah \"Ada peserta yang tidak lulus\". Satu peserta gagal saja sudah cukup membuat pernyataan asal salah.\n\n## Jika-maka\n\nPernyataan \"Jika P, maka Q\" hanya salah pada satu keadaan: P benar tetapi Q salah.\n\n- Modus ponens: Jika P maka Q. P benar. Maka Q benar.\n- Modus tollens: Jika P maka Q. Q salah. Maka P salah.\n- Jebakan: Q benar tidak membuktikan P benar. Jika hujan, jalan basah. Jalan basah belum tentu karena hujan, bisa saja karena disiram.\n\nContoh modus tollens: Jika hujan, jalan basah. Jalan tidak basah. Maka tidak hujan. Ini sah.\n\n## Tips menjawab soal\n\n1. Gambar hubungan dengan lingkaran atau diagram garis. Yang masuk lingkaran dalam ikut sifat lingkaran luar, tidak sebaliknya.\n2. Kata \"semua\", \"ada\", \"tidak ada\", dan \"hanya\" adalah penentu sah atau tidaknya kesimpulan. Jangan dibaca sekilas.\n3. Uji kesimpulan dengan contoh tandingan: kalau ada satu keadaan yang membuat premis benar tetapi kesimpulan salah, kesimpulannya tidak sah.",
+      "kata": 338,
+      "poin_inti": [
+        "Silogisme dasar: semua A adalah B dan semua B adalah C, maka semua A adalah C.",
+        "Arah silogisme tidak bisa dibalik: semua A adalah B tidak berarti semua B adalah A.",
+        "Negasi semua A adalah B adalah ada A yang bukan B.",
+        "Modus ponens: P benar maka Q benar; modus tollens: Q salah maka P salah.",
+        "Q benar tidak membuktikan P benar, itu jebakan paling umum pada soal jika-maka."
+      ]
+    },
+    {
+      "id": "tiu-cheat-sheet-s06",
+      "subtopik": "Figural",
+      "judul": "Figural",
+      "konten": "## Cara membaca soal figural\n\nSoal figural menanyakan pola gambar: gambar berubah menurut aturan tertentu dari satu kotak ke kotak berikut. Cari dulu apa yang berubah: bentuk, jumlah, posisi, arah, atau warna. Sering hanya satu hal yang berubah dalam satu waktu.\n\nTrik awal: hitung elemen gambar di tiap kotak. Jumlah yang naik atau turun teratur adalah petunjuk pola yang paling gampang dilihat.\n\n## Pola yang sering muncul\n\n- Rotasi: gambar berputar, biasanya 90 derajat searah jarum jam atau berlawanan. Perhatikan satu ujung atau tanda kecil sebagai patokan arah.\n- Pencerminan: gambar dibalik seperti di cermin. Cermin tegak membalik kiri-kanan, cermin datar membalik atas-bawah.\n- Penambahan dan pengurangan elemen: tiap langkah satu unsur ditambah atau dikurang, misalnya satu garis, satu titik, atau satu sisi.\n- Pergeseran posisi: satu unsur bergerak satu langkah tiap kotak, misalnya titik berpindah dari sudut ke sudut searah jarum jam.\n- Perubahan jumlah sisi: segitiga (3 sisi), segiempat (4 sisi), segilima (5 sisi). Berikutnya segienam (6 sisi).\n- Pengulangan: pola ABAB atau ABCABC. Setelah menemukan satu putaran, gambar berikutnya sudah bisa ditebak.\n- Hitam-putih bergantian: bagian yang diarsir berpindah atau bertambah tiap langkah.\n\n## Analogi gambar\n\nSoal analogi gambar memberi satu pasang gambar yang berhubungan, lalu meminta pasangan kedua dengan hubungan yang sama. Tentukan dulu aturan perubahan pada pasangan pertama: diputar, dibalik, ditambah unsur, atau diwarnai. Lalu terapkan aturan yang sama persis pada gambar ketiga.\n\n## Ketidaksamaan (gambar yang berbeda sendiri)\n\nSatu gambar melanggar pola yang dipenuhi empat gambar lain. Periksa tiap gambar terhadap satu ciri: jumlah sisi, jumlah unsur, arah hadap, atau simetri. Gambar yang ciri itu tidak cocok adalah gambar yang berbeda sendiri. Jangan mencari gambar yang paling aneh, cari yang melanggar satu aturan yang sama.\n\n## Jebakan figural\n\n- Gambar yang tampak sama tetapi satu detail kecil berubah, misalnya arah anak panah atau posisi titik.\n- Pola yang benar tetapi arahnya terbalik: rotasi searah jarum jam bukan berlawanan.\n- Menghitung gambar secara keseluruhan padahal polanya ada pada satu unsur kecil saja.\n\n## Tips menjawab soal\n\n1. Bandingkan dua gambar berurutan dan catat satu perubahan. Lalu cek apakah perubahan yang sama terjadi di pasangan berikutnya.\n2. Kalau polanya tidak ketemu, balik arah: bandingkan gambar pertama dan terakhir, sering polanya terlihat dari ujung ke ujung.\n3. Coret opsi yang jelas melanggar pola sebelum memilih. Biasanya tinggal dua opsi yang perlu dibandingkan detailnya.",
+      "kata": 386,
+      "poin_inti": [
+        "Cari dulu apa yang berubah: bentuk, jumlah, posisi, arah, atau warna.",
+        "Pola umum meliputi rotasi, pencerminan, penambahan dan pengurangan elemen, serta pergeseran posisi.",
+        "Pada analogi gambar, tentukan aturan perubahan pasangan pertama lalu terapkan sama persis.",
+        "Pada ketidaksamaan, cari ciri mayoritas dulu lalu temukan satu pelanggarnya.",
+        "Bandingkan dua gambar berurutan, catat satu perubahan, lalu uji ke pasangan berikutnya."
+      ]
+    },
+    {
+      "id": "tiu-cheat-sheet-s07",
+      "subtopik": "Kecukupan data",
+      "judul": "Kecukupan Data",
+      "konten": "## Apa itu soal kecukupan data\n\nSoal ini tidak selalu memintamu menghitung jawaban akhir. Yang ditanya adalah apakah data yang diberi sudah cukup untuk menjawab pertanyaan. Setiap soal memberi dua pernyataan, (1) dan (2), lalu kamu menilai: cukupkah (1) saja, cukupkah (2) saja, cukupkah keduanya bersama, atau tetap tidak cukup.\n\n\"Cukup\" punya arti tegas: nilai yang ditanya ditentukan secara unik, hanya ada satu jawaban yang mungkin. Kalau masih ada dua kemungkinan jawaban atau lebih, datanya belum cukup.\n\n## Format lima opsi\n\nA: pernyataan (1) saja cukup, (2) saja tidak cukup.\nB: pernyataan (2) saja cukup, (1) saja tidak cukup.\nC: dua pernyataan bersama-sama cukup, satu saja tidak.\nD: (1) saja cukup dan (2) saja cukup.\nE: (1) dan (2) bersama-sama pun tidak cukup.\n\n## Cara menguji kecukupan\n\nUji pernyataan (1) sendiri dulu, seolah (2) tidak ada. Lalu uji (2) sendiri, seolah (1) tidak ada. Kalau satu saja sudah cukup, jawabannya A, B, atau D. Kalau tidak ada yang cukup sendiri, gabungkan keduanya: kalau bersama cukup, jawabannya C; kalau tetap tidak cukup, jawabannya E.\n\nContoh: berapakah nilai x? (1) 2x + 6 = 18. (2) x² = 36. Pernyataan (1) memberi 2x = 12, jadi x = 6, cukup. Pernyataan (2) memberi x = 6 atau x = -6, tidak unik, jadi tidak cukup. Jawabannya A.\n\nContoh lain: berapakah nilai a + b? (1) a = 3. (2) b = 5. Masing-masing sendiri tidak cukup, tetapi bersama-sama a + b = 8. Jawabannya C.\n\n## Jebakan umum\n\nPersamaan kuadrat sering memberi dua nilai. Tanpa batasan tambahan seperti x > 0, jawabannya tidak unik.\n\nPersen tanpa nilai dasar tidak memberi nilai mutlak. \"Naik 20%\" saja tidak cukup untuk tahu harga akhir; kamu butuh harga awalnya.\n\nDua pernyataan yang tampak berbeda bisa jadi setara. Misalnya x + y = 10 dan 2x + 2y = 20 adalah persamaan yang sama, jadi menggabungkannya tidak menambah informasi apa pun.\n\nSelalu cari contoh penyangkal: satu contoh yang memenuhi pernyataan tetapi memberi jawaban berbeda sudah cukup untuk menyatakan pernyataan itu tidak cukup.",
+      "kata": 335,
+      "poin_inti": [
+        "Soal kecukupan data menanyakan apakah data yang diberi sudah cukup untuk menjawab pertanyaan, bukan sekadar jawaban akhirnya.",
+        "\"Cukup\" berarti nilai yang ditanya ditentukan secara unik, hanya ada satu jawaban yang mungkin.",
+        "Uji pernyataan (1) sendiri, lalu (2) sendiri, baru gabungkan keduanya kalau belum ada yang cukup.",
+        "Persamaan kuadrat bisa memberi dua nilai, dan persen tanpa nilai dasar tidak memberi nilai mutlak.",
+        "Satu contoh penyangkal sudah cukup untuk menyatakan sebuah pernyataan tidak cukup."
+      ]
+    }
+  ],
+  "catatan_kualitas": "Materi disusun dari rumus dan kaidah standar pada 2026-11-15, bagian Kecukupan Data ditambahkan 2026-11-16; semua contoh hitung diverifikasi ulang dengan perhitungan mandiri; sumber tiap bagian tercatat di file .md internal."
+}

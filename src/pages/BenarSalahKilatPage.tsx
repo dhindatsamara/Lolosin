@@ -12,7 +12,8 @@
  * berulang dalam satu sesi.
  *
  * Penskoran meniru Kuis Kilat: 10 poin dasar per jawaban benar dengan
- * combo multiplier (1x/2x/3x), skor terbaik di localStorage, XP =
+ * combo multiplier (1x/2x/3x), skor terbaik di localStorage untuk
+ * user login (memori saja untuk tamu sejak v2.5), XP =
  * skor/10 maksimal 50 XP. Soal yang sempat dijawab ditandai sudah
  * dilihat (markSeen) dan aktivitas hari ini dicatat untuk streak.
  */
@@ -21,8 +22,10 @@ import { Link } from 'react-router-dom'
 import { QUIZABLE_QUESTIONS, type Opsi, type Question } from '../lib/questions'
 import { shuffle, visibleOptions } from '../lib/quiz'
 import { addXp, markSeen, recordActivity } from '../lib/store'
-import { migrateLegacyKey, scopedKey } from '../lib/storage'
+import { getScopedItem, migrateLegacyKey, setScopedItem } from '../lib/storage'
+import { useAuthUser } from '../lib/auth'
 import { comboMultiplier } from './KuisKilatPage'
+import { MathText } from '../components/MathText'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -110,7 +113,7 @@ function loadBest(): BestScore | null {
     // Migrasi sekali: skor terbaik lama di key tanpa namespace pindah
     // ke namespace aktif sebelum dibaca.
     migrateLegacyKey(BENAR_SALAH_BEST_KEY)
-    const raw = localStorage.getItem(scopedKey(BENAR_SALAH_BEST_KEY))
+    const raw = getScopedItem(BENAR_SALAH_BEST_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw) as Partial<BestScore>
     if (
@@ -132,16 +135,14 @@ function loadBest(): BestScore | null {
 
 function saveBest(best: BestScore): void {
   try {
-    localStorage.setItem(
-      scopedKey(BENAR_SALAH_BEST_KEY),
-      JSON.stringify(best),
-    )
+    setScopedItem(BENAR_SALAH_BEST_KEY, JSON.stringify(best))
   } catch {
     // Penyimpanan tidak tersedia: abaikan diam-diam.
   }
 }
 
 export function BenarSalahKilatPage() {
+  const { user } = useAuthUser()
   const [phase, setPhase] = useState<Phase>('idle')
   const [queue, setQueue] = useState<Statement[]>([])
   const [index, setIndex] = useState(0)
@@ -345,8 +346,9 @@ export function BenarSalahKilatPage() {
                 height={18}
                 className="mt-0.5 shrink-0 text-primary-600"
               />
-              Skor terbaikmu tersimpan di perangkat ini. Main tanpa
-              login, gratis.
+              {user
+                ? 'Skor terbaikmu tersimpan di perangkat ini.'
+                : 'Skor terbaikmu hanya dicatat selama halaman ini terbuka. Daftar gratis biar kesimpan.'}
             </li>
           </ul>
           {best && (
@@ -512,14 +514,14 @@ export function BenarSalahKilatPage() {
             </span>
           </div>
           <p className="line-clamp-3 text-[15px] leading-relaxed font-medium whitespace-pre-line">
-            {truncate(question.soal, STEM_MAX_CHARS)}
+            <MathText text={truncate(question.soal, STEM_MAX_CHARS)} />
           </p>
           <div className="rounded-2xl border border-line bg-paper px-4 py-4 text-center">
             <p className="text-xs font-extrabold tracking-wide text-ink/50 uppercase">
               Klaim jawaban
             </p>
             <p className="mt-1 text-xl leading-snug font-extrabold">
-              {statement.claim}
+              <MathText text={statement.claim} />
             </p>
           </div>
           <div className="grid grid-cols-2 gap-2">

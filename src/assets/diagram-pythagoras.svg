@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 240" role="img" aria-label="Segitiga siku-siku dengan sisi tegak 3, sisi alas 4, dan sisi miring 5">
+  <rect x="0" y="0" width="300" height="240" rx="16" fill="#FAF7F2"/>
+  <!-- Segitiga 3-4-5 (skala 40 per satuan) -->
+  <polygon points="60,60 60,180 220,180" fill="#E3EAFB" stroke="#1E40AF" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Penanda siku-siku -->
+  <path d="M 78 180 L 78 162 L 60 162" fill="none" stroke="#1E40AF" stroke-width="2"/>
+  <!-- Label sisi -->
+  <g font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#1B1E1C" text-anchor="middle">
+    <text x="36" y="125">a = 3</text>
+    <text x="140" y="206">b = 4</text>
+    <text x="156" y="106">c = 5</text>
+  </g>
+  <!-- Rumus -->
+  <text x="140" y="232" font-family="system-ui, sans-serif" font-size="16" font-weight="800" fill="#0E5C43" text-anchor="middle">3² + 4² = 5²</text>
+</svg>

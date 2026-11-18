@@ -1,6 +1,8 @@
 import type { Materi, Opsi, Question } from '../../lib/questions'
 import { visibleOptions } from '../../lib/quiz'
+import { MathText } from '../MathText'
 import { Badge } from '../ui/Badge'
+import { DiscussionThread } from './DiscussionThread'
 import { ExplanationPanel } from './ExplanationPanel'
 import { OptionButton, type OptionState } from './OptionButton'
 
@@ -21,7 +23,7 @@ export interface QuestionCardProps {
    */
   revealed?: boolean
   onSelect?: (opsi: Opsi) => void
-  /** Tampilkan badge seksi (TWK/TIU/TKP) di atas soal. */
+  /** Tampilkan badge bagian (TWK/TIU/TKP) di atas soal. */
   showMateriBadge?: boolean
 }
 
@@ -84,7 +86,7 @@ export function QuestionCard({
       </div>
 
       <p className="text-[15px] leading-relaxed font-medium whitespace-pre-line">
-        {question.soal}
+        <MathText text={question.soal} />
       </p>
 
       {isTkp && (
@@ -109,7 +111,10 @@ export function QuestionCard({
       </div>
 
       {revealed && (
-        <ExplanationPanel question={question} selected={selected} />
+        <>
+          <ExplanationPanel question={question} selected={selected} />
+          <DiscussionThread questionId={question.id} />
+        </>
       )}
     </div>
   )

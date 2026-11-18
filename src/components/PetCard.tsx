@@ -12,6 +12,12 @@
  * juga mengisi sisa tinggi kolom (flex-1 dari induknya): blok maskot
  * di tengah meregang, picker dan tombol bagikan tetap di bawah.
  *
+ * Dipadatkan lagi (v2.6): peregangan dilepas (tanpa flex-1, blok
+ * maskot tidak lagi meregang), maskot dan picker dikecilkan, dan
+ * blok maskot diubah jadi baris horizontal (maskot di kiri, info
+ * stage di kanan) supaya kartu jauh lebih pendek. Picker outfit
+ * dan tombol bagikan tetap di bawah, menempel tengah seperti dulu.
+ *
  * Picker outfit: user memilih outfit yang sudah TERBUKA sesuai
  * stage streak; outfit terkunci tampil abu-abu dengan syarat
  * streaknya. Pilihan tersimpan per-user (localStorage namespaced,
@@ -21,11 +27,14 @@
  *
  * Bagikan foto: kartu PNG 1080x1350 lewat canvas (lihat
  * src/lib/shareCard.ts), Web Share API dengan files bila didukung,
- * fallback unduh PNG. Bagikan teks: sharePet seperti sebelumnya.
+ * fallback unduh PNG atau buka di tab baru (iOS Safari). Bagikan
+ * teks: sharePet seperti sebelumnya.
  * Umpan balik tampil di bubble role="status" DI LUAR tombol,
  * disembunyikan dengan opacity (bukan display none) supaya tetap
  * diumumkan screen reader, dan tombol tidak pernah di-disable supaya
- * bisa ditekan ulang.
+ * bisa ditekan ulang. Setiap hasil berbagi (shared, downloaded,
+ * opened, copied, failed) punya pesan terlihat sendiri; hanya
+ * 'cancelled' yang diam karena user sengaja menutup sheet berbagi.
  */
 import { useEffect, useRef, useState } from 'react'
 import { Card } from './ui/Card'
@@ -53,6 +62,7 @@ type ShareState =
   | 'copied'
   | 'shared'
   | 'downloaded'
+  | 'opened'
   | 'failed'
   | 'photoFailed'
 
@@ -60,6 +70,7 @@ const SHARE_MESSAGES: Record<Exclude<ShareState, 'idle'>, string> = {
   copied: 'Tautan disalin',
   shared: 'Dibagikan',
   downloaded: 'Foto tersimpan',
+  opened: 'Foto dibuka di tab baru, simpan manual dari sana',
   failed: 'Gagal membagikan, coba lagi',
   photoFailed: 'Gagal membuat foto, coba lagi',
 }
@@ -87,9 +98,11 @@ export function PetCard({ className }: { className?: string }) {
     setShareState(nextState)
     // Tekan beruntun: timer lama dibersihkan, umpan balik mulai lagi.
     window.clearTimeout(timer.current)
+    // Pesan 'opened' berisi instruksi simpan manual: tampil lebih lama.
+    const duration = nextState === 'opened' ? 5000 : 2500
     timer.current = window.setTimeout(() => {
       setShareState('idle')
-    }, 2500)
+    }, duration)
   }
 
   async function handleSharePhoto() {
@@ -117,54 +130,57 @@ export function PetCard({ className }: { className?: string }) {
   }
 
   return (
-    <Card className={cx('border-primary-200 bg-primary-50 p-4', className)}>
-      <div className="flex h-full flex-col items-center text-center">
-        {/* Blok maskot meregang (flex-1) supaya kartu mengisi kolom;
-            picker dan tombol bagikan tetap menempel di bawah. */}
-        <div className="flex flex-1 flex-col items-center justify-center">
+    <Card className={cx('border-primary-200 bg-primary-50 p-3.5', className)}>
+      <div className="flex flex-col items-center text-center">
+        {/* Baris horizontal (v2.6): maskot di kiri, info stage di
+            kanan, supaya kartu jauh lebih pendek daripada tumpukan
+            vertikal. */}
+        <div className="flex w-full items-center gap-3.5 text-left">
           {/* Saat streak putus, Osi ngambek (mood marah). Logika outfit
               streak tidak berubah. */}
-          <span ref={mascotWrapRef} className="inline-flex">
+          <span ref={mascotWrapRef} className="inline-flex shrink-0">
             <Mascot
               mood={streakBroken ? 'marah' : 'senang'}
-              size={96}
+              size={80}
               outfit={outfit}
-              className="float-soft h-auto w-24"
+              className="float-soft h-auto w-20"
             />
           </span>
-          <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-extrabold text-twk shadow-soft">
-            <FlameIcon width={14} height={14} />
-            Streak {streak} hari
-          </span>
-          <p className="kicker mt-2">Peliharaanmu</p>
-          <h2 className="mt-1 font-display text-xl font-extrabold">
-            {stage.nama}
-          </h2>
-          <p className="mt-1 text-sm leading-relaxed font-medium text-ink/70">
-            {stage.deskripsi}
-          </p>
-          {next ? (
-            <div className="mt-2.5 w-full">
-              <ProgressBar
-                value={streak - stage.minStreak}
-                max={next.minStreak - stage.minStreak}
-                tone="primary"
-                label={`Progres menuju ${next.nama}`}
-              />
-              <p className="mt-1.5 text-xs font-bold text-ink/60">
-                {remaining} hari lagi menuju {next.nama}
-              </p>
-            </div>
-          ) : (
-            <p className="mt-2.5 text-sm font-bold text-primary-700">
-              Kamu sudah sampai tahap tertinggi. Pertahankan streak-mu.
+          <div className="min-w-0 flex-1">
+            <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-extrabold text-twk shadow-soft">
+              <FlameIcon width={14} height={14} />
+              Streak {streak} hari
+            </span>
+            <p className="kicker mt-1.5">Peliharaanmu</p>
+            <h2 className="mt-0.5 font-display text-lg leading-tight font-extrabold">
+              {stage.nama}
+            </h2>
+            <p className="mt-0.5 text-sm leading-relaxed font-medium text-ink/70">
+              {stage.deskripsi}
             </p>
-          )}
+            {next ? (
+              <div className="mt-2">
+                <ProgressBar
+                  value={streak - stage.minStreak}
+                  max={next.minStreak - stage.minStreak}
+                  tone="primary"
+                  label={`Progres menuju ${next.nama}`}
+                />
+                <p className="mt-1.5 text-xs font-bold text-ink/60">
+                  {remaining} hari lagi menuju {next.nama}
+                </p>
+              </div>
+            ) : (
+              <p className="mt-2 text-sm font-bold text-primary-700">
+                Kamu sudah sampai tahap tertinggi. Pertahankan streak-mu.
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Picker outfit: mini maskot per outfit, terkunci bila syarat
             streak belum terpenuhi. */}
-        <div className="mt-3 w-full border-t border-dashed border-line pt-3">
+        <div className="mt-2.5 w-full border-t border-dashed border-line pt-2.5">
           <p className="text-xs font-extrabold tracking-wide text-ink/60 uppercase">
             Gaya {MASCOT_NAME}
           </p>
@@ -186,7 +202,7 @@ export function PetCard({ className }: { className?: string }) {
                   }
                   onClick={() => setChosenOutfit(s.outfit)}
                   className={cx(
-                    'flex w-16 flex-col items-center gap-0.5 rounded-2xl border-2 px-1 py-1.5 transition-colors',
+                    'flex w-14 flex-col items-center gap-0.5 rounded-2xl border-2 px-1 py-1 transition-colors',
                     isSelected
                       ? 'border-primary-600 bg-white shadow-soft'
                       : 'border-line bg-white/60 hover:border-primary-300',
@@ -195,10 +211,10 @@ export function PetCard({ className }: { className?: string }) {
                 >
                   <Mascot
                     mood="senang"
-                    size={40}
+                    size={36}
                     outfit={s.outfit}
                     className={cx(
-                      'h-auto w-10',
+                      'h-auto w-9',
                       !isUnlocked && 'opacity-50 grayscale',
                     )}
                   />
@@ -217,7 +233,7 @@ export function PetCard({ className }: { className?: string }) {
         </div>
 
         {/* Bagikan: foto (utama) + teks (opsi kedua). */}
-        <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+        <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
           <Button size="sm" onClick={handleSharePhoto}>
             <CameraIcon width={16} height={16} />
             Bagikan foto

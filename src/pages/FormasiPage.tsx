@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -8,14 +8,15 @@ import {
   FORMASI_CONTOH,
   IS_DATA_CONTOH,
   SSCASN_URL,
-  formatGajiLengkap,
   formatGajiSingkat,
   type Formasi,
   type JenisInstansi,
 } from '../data/formasi-contoh'
-import { cx } from '../lib/utils'
 
 const SEMUA = 'semua'
+
+/** Formasi per halaman (poin 5, v2.5): 34 formasi contoh jadi 2 halaman. */
+const PER_HALAMAN = 18
 
 /** Pilihan filter gaji minimal (batas bawah rentang gaji, rupiah). */
 const PILIHAN_GAJI = [
@@ -54,116 +55,73 @@ function LabelFilter({
 }
 
 /**
- * Satu kartu formasi. Kepala kartu adalah tombol (aria-expanded) yang
- * membuka detail lengkap: unit penempatan, kualifikasi, kuota, dan
- * rentang gaji lengkap plus tautan pengumuman resmi di SSCASN.
+ * Satu kartu formasi, compact (poin 5, v2.5): padding kecil, teks
+ * dipadatkan, hanya field esensial: jabatan, instansi, jumlah
+ * formasi, lokasi, pendidikan, gaji, plus tautan pengumuman resmi.
+ * Tanpa lipatan detail lagi, semua esensial langsung terlihat.
+ *
+ * Batas waktu: data contoh tidak punya kolom batas waktu (lihat
+ * data/formasi-contoh.ts), jadi tidak ada tanggal yang ditampilkan
+ * (tanggal karangan akan menyesatkan). Batas waktu ada di pengumuman
+ * resmi, makanya tautan SSCASN-nya diberi label yang menyebutnya.
  */
-function KartuFormasi({
-  formasi,
-  terbuka,
-  onToggle,
-}: {
-  formasi: Formasi
-  terbuka: boolean
-  onToggle: () => void
-}) {
+function KartuFormasi({ formasi }: { formasi: Formasi }) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-line bg-white shadow-soft">
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={terbuka}
-        className="flex flex-1 flex-col gap-2 rounded-2xl p-4 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 lg:p-5"
+    <article className="flex h-full flex-col rounded-2xl border border-line bg-white p-3.5 shadow-soft">
+      <span className="flex flex-wrap items-center gap-1.5">
+        <Badge tone={formasi.jenisInstansi === 'pusat' ? 'green' : 'amber'}>
+          {formasi.jenisInstansi === 'pusat'
+            ? 'Instansi pusat'
+            : 'Instansi daerah'}
+        </Badge>
+        <Badge tone="neutral">{formasi.provinsi}</Badge>
+      </span>
+      <span className="mt-2 font-display text-base leading-snug font-extrabold">
+        {formasi.jabatan}
+      </span>
+      <span className="mt-0.5 text-xs leading-snug font-semibold text-ink/70">
+        {formasi.instansi}
+      </span>
+      <span className="mt-2.5 grid grid-cols-2 gap-x-3 gap-y-2 border-t border-dashed border-line pt-2.5 text-xs">
+        <span>
+          <span className="block text-[11px] font-semibold text-ink/50">
+            Formasi
+          </span>
+          <span className="font-bold">
+            {formasi.kuota.toLocaleString('id-ID')} formasi
+          </span>
+        </span>
+        <span>
+          <span className="block text-[11px] font-semibold text-ink/50">
+            Lokasi
+          </span>
+          <span className="font-bold">{formasi.kotaKab}</span>
+        </span>
+        <span>
+          <span className="block text-[11px] font-semibold text-ink/50">
+            Pendidikan
+          </span>
+          <span className="font-bold">{formasi.kualifikasi}</span>
+        </span>
+        <span>
+          <span className="block text-[11px] font-semibold text-ink/50">
+            Gaji
+          </span>
+          <span className="font-bold">
+            {formatGajiSingkat(formasi.gajiMin)} -{' '}
+            {formatGajiSingkat(formasi.gajiMax)}
+          </span>
+        </span>
+      </span>
+      <a
+        href={SSCASN_URL}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-auto inline-flex items-center gap-1 pt-2.5 text-xs font-extrabold text-primary-700 underline-offset-2 hover:underline"
       >
-        <span className="flex flex-wrap items-center gap-1.5">
-          <Badge tone={formasi.jenisInstansi === 'pusat' ? 'green' : 'amber'}>
-            {formasi.jenisInstansi === 'pusat'
-              ? 'Instansi pusat'
-              : 'Instansi daerah'}
-          </Badge>
-          <Badge tone="neutral">{formasi.provinsi}</Badge>
-        </span>
-        <span className="font-display text-lg leading-snug font-extrabold">
-          {formasi.jabatan}
-        </span>
-        <span className="text-sm leading-snug font-semibold text-ink/70">
-          {formasi.instansi}
-        </span>
-        <span className="mt-1 grid grid-cols-2 gap-2 border-t border-dashed border-line pt-3 text-sm">
-          <span>
-            <span className="block text-xs font-semibold text-ink/50">
-              Penempatan
-            </span>
-            <span className="font-bold">
-              {formasi.kotaKab}, {formasi.provinsi}
-            </span>
-          </span>
-          <span>
-            <span className="block text-xs font-semibold text-ink/50">
-              Kuota
-            </span>
-            <span className="font-bold">
-              {formasi.kuota.toLocaleString('id-ID')} orang
-            </span>
-          </span>
-          <span>
-            <span className="block text-xs font-semibold text-ink/50">
-              Gaji
-            </span>
-            <span className="font-bold">
-              {formatGajiSingkat(formasi.gajiMin)} -{' '}
-              {formatGajiSingkat(formasi.gajiMax)}
-            </span>
-          </span>
-          <span>
-            <span className="block text-xs font-semibold text-ink/50">
-              Kualifikasi
-            </span>
-            <span className="font-bold">{formasi.kualifikasi}</span>
-          </span>
-        </span>
-        <span className="mt-1 inline-flex items-center gap-1 text-sm font-extrabold text-primary-700">
-          {terbuka ? 'Tutup detail' : 'Lihat detail'}
-          <ChevronRightIcon
-            width={16}
-            height={16}
-            className={cx(
-              'transition-transform',
-              terbuka && 'rotate-90',
-            )}
-          />
-        </span>
-      </button>
-      {terbuka && (
-        <div className="border-t border-line bg-paper px-4 py-3.5 lg:px-5">
-          <dl className="space-y-1.5 text-sm">
-            <div className="flex flex-wrap gap-x-2">
-              <dt className="font-semibold text-ink/60">Unit penempatan:</dt>
-              <dd className="font-bold">{formasi.unitPenempatan}</dd>
-            </div>
-            <div className="flex flex-wrap gap-x-2">
-              <dt className="font-semibold text-ink/60">Rentang gaji:</dt>
-              <dd className="font-bold">
-                {formatGajiLengkap(formasi.gajiMin)} -{' '}
-                {formatGajiLengkap(formasi.gajiMax)} per bulan
-              </dd>
-            </div>
-          </dl>
-          <p className="mt-2 text-xs leading-relaxed font-medium text-ink/60">
-            Rentang gaji di atas adalah angka contoh, bukan angka resmi.
-            Cek pengumuman resmi instansi sebelum mendaftar.
-          </p>
-          <a
-            href={SSCASN_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-primary-700 underline-offset-2 hover:underline"
-          >
-            Lihat pengumuman resmi di SSCASN
-            <ChevronRightIcon width={16} height={16} />
-          </a>
-        </div>
-      )}
+        Pengumuman resmi &amp; batas waktu di SSCASN
+        <ChevronRightIcon width={14} height={14} />
+      </a>
     </article>
   )
 }
@@ -175,7 +133,7 @@ export function FormasiPage() {
   const [gajiMin, setGajiMin] = useState(0)
   const [instansi, setInstansi] = useState(SEMUA)
   const [jenis, setJenis] = useState<JenisInstansi | typeof SEMUA>(SEMUA)
-  const [terbukaId, setTerbukaId] = useState<string | null>(null)
+  const [halaman, setHalaman] = useState(1)
 
   const daftarProvinsi = useMemo(
     () => nilaiUnik(FORMASI_CONTOH, (f) => f.provinsi),
@@ -224,7 +182,31 @@ export function FormasiPage() {
     setGajiMin(0)
     setInstansi(SEMUA)
     setJenis(SEMUA)
-    setTerbukaId(null)
+  }
+
+  // Ganti filter apa pun kembali ke halaman 1, supaya tidak terjebak
+  // di halaman yang sudah tidak ada setelah hasil menyusut.
+  useEffect(() => {
+    setHalaman(1)
+  }, [cari, provinsi, kualifikasi, gajiMin, instansi, jenis])
+
+  const totalHalaman = Math.max(
+    1,
+    Math.ceil(hasil.length / PER_HALAMAN),
+  )
+  const halamanAktif = Math.min(halaman, totalHalaman)
+  const awal = hasil.length === 0 ? 0 : (halamanAktif - 1) * PER_HALAMAN + 1
+  const akhir = Math.min(halamanAktif * PER_HALAMAN, hasil.length)
+  const tampil = hasil.slice(
+    (halamanAktif - 1) * PER_HALAMAN,
+    halamanAktif * PER_HALAMAN,
+  )
+
+  function pindahHalaman(nomor: number) {
+    setHalaman(nomor)
+    document
+      .getElementById('formasi-hasil')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
@@ -382,9 +364,14 @@ export function FormasiPage() {
       </Card>
 
       {/* Jumlah hasil + reset */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div
+        id="formasi-hasil"
+        className="flex flex-wrap items-center justify-between gap-3 scroll-mt-24"
+      >
         <p className="text-sm font-bold" aria-live="polite">
-          Menampilkan {hasil.length} dari {FORMASI_CONTOH.length} formasi
+          {hasil.length === 0
+            ? 'Menampilkan 0 formasi'
+            : `Menampilkan ${awal}–${akhir} dari ${hasil.length} formasi`}
         </p>
         <Button
           variant="outline"
@@ -412,21 +399,69 @@ export function FormasiPage() {
           </Button>
         </Card>
       ) : (
-        <div
-          aria-label="Daftar formasi"
-          className="grid gap-4 lg:grid-cols-2"
-        >
-          {hasil.map((f) => (
-            <KartuFormasi
-              key={f.id}
-              formasi={f}
-              terbuka={terbukaId === f.id}
-              onToggle={() =>
-                setTerbukaId(terbukaId === f.id ? null : f.id)
-              }
-            />
-          ))}
-        </div>
+        <>
+          <div
+            aria-label="Daftar formasi"
+            className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          >
+            {tampil.map((f) => (
+              <KartuFormasi key={f.id} formasi={f} />
+            ))}
+          </div>
+
+          {/* Pagination: prev/next + nomor halaman, muncul bila hasil
+              lebih dari satu halaman. */}
+          {totalHalaman > 1 && (
+            <nav
+              aria-label="Halaman formasi"
+              className="flex flex-wrap items-center justify-center gap-2"
+            >
+              {/* Ikon saja (v2.6): chevron tanpa teks, aria-label
+                  menjelaskan tujuannya. Tetap disabled di halaman
+                  pertama. */}
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={halamanAktif === 1}
+                onClick={() => pindahHalaman(halamanAktif - 1)}
+                aria-label="Halaman sebelumnya"
+                className="px-2.5 text-base leading-none"
+              >
+                <span aria-hidden="true">‹</span>
+              </Button>
+              {Array.from({ length: totalHalaman }, (_, i) => i + 1).map(
+                (nomor) => (
+                  <button
+                    key={nomor}
+                    type="button"
+                    onClick={() => pindahHalaman(nomor)}
+                    aria-current={
+                      nomor === halamanAktif ? 'page' : undefined
+                    }
+                    aria-label={`Halaman ${nomor}`}
+                    className={
+                      nomor === halamanAktif
+                        ? 'rounded-xl border border-primary-600 bg-primary-600 px-3 py-1.5 text-sm font-extrabold text-white'
+                        : 'rounded-xl border border-line bg-white px-3 py-1.5 text-sm font-extrabold text-ink hover:border-primary-300 hover:text-primary-700'
+                    }
+                  >
+                    {nomor}
+                  </button>
+                ),
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={halamanAktif === totalHalaman}
+                onClick={() => pindahHalaman(halamanAktif + 1)}
+                aria-label="Halaman berikutnya"
+                className="px-2.5 text-base leading-none"
+              >
+                <span aria-hidden="true">›</span>
+              </Button>
+            </nav>
+          )}
+        </>
       )}
     </div>
   )

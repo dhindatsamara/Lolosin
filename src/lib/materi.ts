@@ -10,7 +10,7 @@
  * diperbaiki di sini.
  *
  * Progres baca disimpan di store (`readSections`) dengan kunci berupa id
- * seksi (mis. `twk-cheat-sheet-s01`). Id seksi unik secara global karena
+ * bagian (mis. `twk-cheat-sheet-s01`). Id bagian unik secara global karena
  * mengandung id dokumennya.
  */
 import materiIndex from '../data/materi/index.json'
@@ -22,8 +22,14 @@ export interface MateriSection {
   judul: string
   konten: string
   kata: number
-  /** 3-5 butir ringkasan inti seksi (v2.5; dijamin ada oleh build). */
+  /** 3-5 butir ringkasan inti bagian (v2.5; dijamin ada oleh build). */
   poin_inti?: string[]
+  /**
+   * Diagram ilustrasi bagian ini (v2.5, opsional). Nilai berupa kunci
+   * gambar built-in (`gambar:jam`, lihat `lib/materiGambar`) atau URL
+   * http(s). Dirender di SectionDetailPage di atas isi.
+   */
+  gambar?: string
 }
 
 export interface PangkatTabel {
@@ -61,7 +67,7 @@ export interface SubtopikGroup {
 /**
  * Judul dokumen versi tampil: nama materinya saja, tanpa atribusi
  * sumber/penulis. Dipakai di semua tempat judul dirender (daftar
- * Belajar, detail materi, detail seksi). Metadata `sumber` di file
+ * Belajar, detail materi, detail bagian). Metadata `sumber` di file
  * data TIDAK diubah, hanya tampilannya yang dibersihkan.
  *
  * Pola yang dihapus: akhiran "| TemanASN / TemenASN", akhiran
@@ -125,7 +131,7 @@ export const TOTAL_SECTIONS = DOCUMENTS.reduce(
 export const totalKata = TOTAL_KATA
 
 /* ------------------------------------------------------------------ */
-/* Akses dokumen & seksi                                               */
+/* Akses dokumen & bagian                                               */
 /* ------------------------------------------------------------------ */
 
 /** Seluruh dokumen, terurut mengikuti katalog. */
@@ -144,12 +150,12 @@ export function getDocument(id: string | undefined): MateriDoc | undefined {
   return byId.get(id)
 }
 
-/** Seksi-seksi satu dokumen (array kosong bila dokumen tidak ada). */
+/** Bagian-bagian satu dokumen (array kosong bila dokumen tidak ada). */
 export function getSections(docId: string | undefined): MateriSection[] {
   return getDocument(docId)?.sections ?? []
 }
 
-/** Satu seksi berdasarkan id dokumen + id seksi. */
+/** Satu bagian berdasarkan id dokumen + id bagian. */
 export function getSection(
   docId: string | undefined,
   sectionId: string | undefined,
@@ -158,7 +164,7 @@ export function getSection(
   return getDocument(docId)?.sections.find((s) => s.id === sectionId)
 }
 
-/** Seksi sebelum/sesudah dalam satu dokumen, beserta posisinya. */
+/** Bagian sebelum/sesudah dalam satu dokumen, beserta posisinya. */
 export function getSectionNav(
   docId: string | undefined,
   sectionId: string | undefined,
@@ -181,7 +187,7 @@ export function getSectionNav(
   }
 }
 
-/** Kelompokkan seksi dokumen per subtopik, urutan kemunculan pertama. */
+/** Kelompokkan bagian dokumen per subtopik, urutan kemunculan pertama. */
 export function groupSectionsBySubtopik(doc: MateriDoc): SubtopikGroup[] {
   const groups: SubtopikGroup[] = []
   const bySubtopik = new Map<string, SubtopikGroup>()
@@ -204,7 +210,7 @@ export function groupSectionsBySubtopik(doc: MateriDoc): SubtopikGroup[] {
 /**
  * Satu entri materi di daftar Belajar: gabungan satu atau beberapa
  * dokumen yang membahas topik yang sama. Pengelompokan ini HANYA
- * level tampilan: dokumen asli, id seksi, dan metadata `sumber` di
+ * level tampilan: dokumen asli, id bagian, dan metadata `sumber` di
  * file data tidak berubah. Rute detail memakai id grup; id dokumen
  * lama tetap bisa dibuka (lihat `resolveMateriView`).
  *
@@ -220,7 +226,7 @@ export interface MateriGroup {
   docs: MateriDoc[]
 }
 
-/** Satu seksi beserta dokumen asalnya (untuk tautan detail seksi). */
+/** Satu bagian beserta dokumen asalnya (untuk tautan detail bagian). */
 export interface SectionEntry {
   doc: MateriDoc
   section: MateriSection
@@ -366,6 +372,37 @@ export function getGroupForDocument(docId: string): MateriGroup | undefined {
 }
 
 /**
+ * Apakah satu grup tampilan adalah cheat sheet: id grup ATAU salah
+ * satu dokumennya berakhiran `-cheat-sheet`. Deteksi generik, bukan
+ * daftar id hardcode, supaya dokumen cheat sheet baru (mis. TIU)
+ * otomatis ikut tampil sebagai bintang tanpa perubahan kode.
+ */
+export function isCheatSheetGroup(group: MateriGroup): boolean {
+  if (group.id.endsWith('-cheat-sheet')) return true
+  return group.docs.some((doc) => doc.id.endsWith('-cheat-sheet'))
+}
+
+/** Grup cheat sheet satu materi, atau `undefined` bila belum ada. */
+export function getCheatSheetGroupByMateri(
+  materi: Materi,
+): MateriGroup | undefined {
+  return getMateriGroupsByMateri(materi).find(isCheatSheetGroup)
+}
+
+/**
+ * Urutkan grup satu materi: cheat sheet (bila ada) paling depan,
+ * sisanya tetap pada urutan katalog. Sort stabil, jadi urutan
+ * non-cheat-sheet tidak berubah.
+ */
+export function sortGroupsCheatSheetFirst(
+  groups: MateriGroup[],
+): MateriGroup[] {
+  return [...groups].sort(
+    (a, b) => Number(isCheatSheetGroup(b)) - Number(isCheatSheetGroup(a)),
+  )
+}
+
+/**
  * Tampilan detail untuk satu id rute: grup dulu, lalu dokumen lama
  * sebagai grup satu dokumen (judul dibersihkan). Jadi tautan lama
  * ke dokumen yang kini tergabung tetap bisa dibuka.
@@ -384,14 +421,14 @@ export function resolveMateriView(id: string | undefined): MateriGroup | undefin
   }
 }
 
-/** Seluruh seksi grup, urut dokumen lalu urut seksi. */
+/** Seluruh bagian grup, urut dokumen lalu urut bagian. */
 export function groupSections(group: MateriGroup): SectionEntry[] {
   return group.docs.flatMap((doc) =>
     doc.sections.map((section) => ({ doc, section })),
   )
 }
 
-/** Kelompokkan entri seksi per subtopik, urutan kemunculan pertama. */
+/** Kelompokkan entri bagian per subtopik, urutan kemunculan pertama. */
 export function groupEntriesBySubtopik(
   entries: SectionEntry[],
 ): SubtopikEntryGroup[] {
@@ -414,9 +451,9 @@ export function groupEntriesBySubtopik(
 /* ------------------------------------------------------------------ */
 
 /**
- * Tabel pangkat untuk sebuah seksi, bila seksi tersebut memang
+ * Tabel pangkat untuk sebuah bagian, bila bagian tersebut memang
  * menampilkan tabel (judulnya mengandung "Pangkat 2/3/4" dan dokumen
- * punya field `tabel`). Mengembalikan `null` untuk seksi lain.
+ * punya field `tabel`). Mengembalikan `null` untuk bagian lain.
  */
 export function getTabelForSection(
   doc: MateriDoc,
@@ -431,9 +468,9 @@ export function getTabelForSection(
 }
 
 /**
- * Hapus blok contoh (1–10) dari konten seksi tabel. Contoh tersebut
+ * Hapus blok contoh (1–10) dari konten bagian tabel. Contoh tersebut
  * redundan karena tabel lengkapnya sudah dirender sebagai tabel rapi.
- * Konten seksi lain tidak disentuh.
+ * Konten bagian lain tidak disentuh.
  */
 export function stripTabelContoh(konten: string): string {
   return konten
@@ -467,7 +504,7 @@ function toReadSet(readSections: Iterable<string>): Set<string> {
     : new Set(readSections)
 }
 
-/** Jumlah seksi satu dokumen yang sudah dibaca. */
+/** Jumlah bagian satu dokumen yang sudah dibaca. */
 export function countReadSections(
   doc: MateriDoc,
   readSections: Iterable<string>,
@@ -518,7 +555,7 @@ export function overallReadProgress(
   return toProgress(done, TOTAL_SECTIONS)
 }
 
-/** Seksi pertama yang belum dibaca dalam satu dokumen. */
+/** Bagian pertama yang belum dibaca dalam satu dokumen. */
 export function getNextUnreadSection(
   doc: MateriDoc,
   readSections: Iterable<string>,
@@ -542,7 +579,7 @@ export function groupReadProgress(
   return toProgress(done, total)
 }
 
-/** Seksi pertama yang belum dibaca dalam satu grup, beserta dokumennya. */
+/** Bagian pertama yang belum dibaca dalam satu grup, beserta dokumennya. */
 export function groupNextUnreadSection(
   group: MateriGroup,
   readSections: Iterable<string>,

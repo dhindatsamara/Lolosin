@@ -4,7 +4,7 @@
  * ink 2-3px, badan hijau terang #2FBF71 + amber #F59E0B.
  *
  * Sejak v2.1 maskot adalah wajah brand: tampil besar di landing (hero
- * dan seksi kenalan) dan di dashboard, selalu dengan namanya yang
+ * dan bagian kenalan) dan di dashboard, selalu dengan namanya yang
  * terlihat. Identitas karakternya JANGAN digambar ulang jadi karakter
  * lain; variasi hanya lewat mood, ukuran, dan outfit peliharaan.
  *

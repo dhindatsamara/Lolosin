@@ -117,7 +117,7 @@ function checkBadges(): void {
 
 /**
  * Coba pulihkan streak putus (mekanik "Bujuk Osi"). Dipanggil di akhir
- * drill dan baca seksi; hanya memulihkan bila user sudah mengetuk
+ * drill dan baca bagian; hanya memulihkan bila user sudah mengetuk
  * "Bujuk Osi". Bila streak pulih ke angka milestone, rayakan juga.
  * Dipanggil sebelum `checkBadges` supaya lencana streak melihat angka
  * yang sudah dipulihkan.
@@ -287,10 +287,10 @@ export function completeTryout(score: TryoutScore): void {
 }
 
 /**
- * Seksi materi ditandai dibaca: +5 XP sekali per seksi (aturan lama),
+ * Bagian materi ditandai dibaca: +5 XP sekali per bagian (aturan lama),
  * majukan misi baca, catat aktivitas, pulihkan streak putus bila
  * user sudah membujuk Osi, cek naik level dan lencana.
- * Mengembalikan `false` bila seksi sudah pernah ditandai.
+ * Mengembalikan `false` bila bagian sudah pernah ditandai.
  */
 export function completeSectionRead(
   sectionId: string,

@@ -1,10 +1,12 @@
 /**
  * Foto profil dan avatar maskot (v2.2.1).
  *
- * Foto yang diunggah dan pilihan avatar disimpan di localStorage
- * dengan namespacing per user lewat helper di lib/storage.ts, jadi
- * dua akun yang login bergantian di browser yang sama tidak saling
- * melihat foto atau avatar satu sama lain:
+ * Foto yang diunggah dan pilihan avatar disimpan dengan namespacing
+ * per user lewat helper di lib/storage.ts, jadi dua akun yang login
+ * bergantian di browser yang sama tidak saling melihat foto atau avatar
+ * satu sama lain. User login memakai localStorage; tamu (v2.5) hanya
+ * memakai memori, jadi foto/avatar tamu hilang saat halaman dimuat
+ * ulang:
  *
  * - foto:    `lolosin:profil-foto:<userId>` (atau `:guest` untuk tamu)
  * - avatar:  `lolosin:profil-avatar:<userId>` (atau `:guest`)
@@ -32,8 +34,12 @@ import type { MascotMood } from '../components/Mascot'
 import { PET_STAGES, type PetOutfit } from './pet'
 import {
   getCurrentNamespace,
+  getScopedItem,
+  isGuestScope,
   migrateLegacyKey,
+  removeScopedItem,
   scopedKey,
+  setScopedItem,
 } from './storage'
 
 /** Key dasar foto profil (ditambah namespace user lewat scopedKey). */
@@ -252,11 +258,11 @@ function loadFromStorage(): ProfileAvatarState {
   try {
     migrateLegacyKey(PROFILE_PHOTO_KEY)
     migrateLegacyKey(PROFILE_AVATAR_KEY)
-    const rawPhoto = localStorage.getItem(scopedKey(PROFILE_PHOTO_KEY))
+    const rawPhoto = getScopedItem(PROFILE_PHOTO_KEY)
     if (rawPhoto && rawPhoto.startsWith('data:image/')) {
       photo = rawPhoto
     }
-    const rawVariant = localStorage.getItem(scopedKey(PROFILE_AVATAR_KEY))
+    const rawVariant = getScopedItem(PROFILE_AVATAR_KEY)
     if (isAvatarVariantId(rawVariant)) {
       variantId = rawVariant
     }
@@ -289,7 +295,7 @@ export function useProfileAvatar(): ProfileAvatarState {
 /** Simpan pilihan avatar, lalu beri tahu semua subscriber. */
 export function setProfileAvatarVariant(variantId: AvatarVariantId): void {
   try {
-    localStorage.setItem(scopedKey(PROFILE_AVATAR_KEY), variantId)
+    setScopedItem(PROFILE_AVATAR_KEY, variantId)
   } catch {
     // Gagal simpan (penyimpanan penuh atau tidak tersedia): pilihan
     // tetap tampil sampai reload, jangan crash.
@@ -303,7 +309,13 @@ export function setProfileAvatarVariant(variantId: AvatarVariantId): void {
  */
 export function setProfilePhoto(dataUrl: string): void {
   try {
-    localStorage.setItem(scopedKey(PROFILE_PHOTO_KEY), dataUrl)
+    // Tamu (v2.5): foto hanya di memori. User login tetap
+    // localStorage langsung supaya error kuota masih terdeteksi.
+    if (isGuestScope()) {
+      setScopedItem(PROFILE_PHOTO_KEY, dataUrl)
+    } else {
+      localStorage.setItem(scopedKey(PROFILE_PHOTO_KEY), dataUrl)
+    }
   } catch (err) {
     if (err instanceof DOMException && err.name === 'QuotaExceededError') {
       throw new Error(PHOTO_TOO_BIG_MESSAGE)
@@ -316,7 +328,7 @@ export function setProfilePhoto(dataUrl: string): void {
 /** Hapus foto profil, kembali ke avatar maskot. */
 export function removeProfilePhoto(): void {
   try {
-    localStorage.removeItem(scopedKey(PROFILE_PHOTO_KEY))
+    removeScopedItem(PROFILE_PHOTO_KEY)
   } catch {
     // Abaikan, foto sudah tidak terbaca juga.
   }

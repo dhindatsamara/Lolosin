@@ -12,9 +12,10 @@ import { CheckIcon, TargetIcon, ZapIcon } from '../icons'
  * Kartu misi harian: 3 misi yang sama untuk semua pengguna di hari yang
  * sama, dengan progress bar dan tombol klaim reward XP saat selesai.
  *
- * Meregang setinggi kolomnya (v2.4): seksi ini mengisi tinggi baris
- * grid dashboard, dan ketiga kartu misi membagi sisa ruang supaya
- * tepi bawah kolom misi sejajar dengan kolom streak di kirinya.
+ * Dipadatkan (v2.6): peregangan setinggi kolom dari v2.4 dilepas
+ * (tanpa h-full / flex-1), padding kartu misi dan ikon dikecilkan,
+ * supaya section streak beranda lebih pendek. Tepi bawah kolom misi
+ * boleh tidak sejajar dengan kolom streak.
  */
 export function DailyMissions() {
   const { missions } = useStore()
@@ -25,11 +26,11 @@ export function DailyMissions() {
   const selesaiCount = statuses.filter((s) => s.done).length
 
   return (
-    <section aria-label="Misi harian" className="flex h-full flex-col">
-      <div className="mb-2.5 flex items-end justify-between gap-3">
+    <section aria-label="Misi harian" className="flex flex-col">
+      <div className="mb-2 flex items-end justify-between gap-3">
         <div>
           <p className="kicker">tantangan kecil, hadiah nyata</p>
-          <h2 className="mt-1 font-display text-xl font-extrabold">
+          <h2 className="mt-1 font-display text-lg font-extrabold">
             Misi hari ini
           </h2>
         </div>
@@ -38,13 +39,13 @@ export function DailyMissions() {
         </Badge>
       </div>
 
-      <div className="flex flex-1 flex-col gap-2.5">
+      <div className="flex flex-col gap-2">
         {statuses.map(({ def, progress, done, claimed }) => (
-          <Card key={def.id} className="flex flex-1 flex-col justify-center p-3.5">
+          <Card key={def.id} className="flex flex-col justify-center p-3">
             <div className="flex items-start gap-3">
               <span
                 className={cx(
-                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
+                  'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl',
                   claimed
                     ? 'bg-primary-100 text-primary-700'
                     : done
@@ -82,7 +83,7 @@ export function DailyMissions() {
                     {progress}/{def.target}
                   </span>
                 </div>
-                <div className="mt-2">
+                <div className="mt-1.5">
                   {claimed ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-primary-100 px-3 py-1 text-xs font-extrabold text-primary-700">
                       <CheckIcon width={12} height={12} />

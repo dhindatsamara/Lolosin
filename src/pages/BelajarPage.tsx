@@ -1,17 +1,24 @@
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Badge } from '../components/ui/Badge'
 import { Card } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { GuestProgressWarning } from '../components/GuestProgressWarning'
-import { CheckIcon } from '../components/icons'
+import { Mascot } from '../components/Mascot'
+import { StickyBackButton } from '../components/belajar/StickyBackButton'
+import { CheckIcon, ChevronRightIcon } from '../components/icons'
 import { MateriMotifMini, MateriWatermark } from '../components/motifs'
 import {
+  getCheatSheetGroupByMateri,
   getMateriGroupsByMateri,
   groupReadProgress,
+  isCheatSheetGroup,
   materiReadProgress,
+  sortGroupsCheatSheetFirst,
   type MateriGroup,
 } from '../lib/materi'
 import { MATERI_LIST, MATERI_META, type Materi } from '../lib/questions'
+import { MASCOT_NAME } from '../lib/mascot'
 import { useStore } from '../lib/store'
 import { cx } from '../lib/utils'
 
@@ -78,6 +85,20 @@ const DESKRIPSI_GRUP: Record<string, string> = {
 const DESKRIPSI_DEFAULT =
   'Materi buat persiapan SKD, baca dikit-dikit tiap hari.'
 
+/**
+ * Deskripsi satu grup: entri khusus dulu, lalu deskripsi generik
+ * untuk cheat sheet baru yang belum punya entri (mis. TIU), lalu
+ * deskripsi default.
+ */
+function deskripsiGrup(group: MateriGroup): string {
+  const khusus = DESKRIPSI_GRUP[group.id]
+  if (khusus) return khusus
+  if (isCheatSheetGroup(group)) {
+    return `Kartu ringkas ${group.materi} buat hafalan kilat sebelum ujian.`
+  }
+  return DESKRIPSI_DEFAULT
+}
+
 /** Status baca dalam bentuk teks, bukan angka. */
 function statusBaca(percent: number): string {
   if (percent >= 100) return 'Selesai dibaca'
@@ -110,40 +131,151 @@ function MotifStrip({ materi }: { materi: Materi }) {
 }
 
 /**
- * Kartu satu grup materi: nama + satu baris deskripsi + bar progres
- * visual tanpa angka. Kartu satu tujuan (single-destination): satu
- * Link membungkus satu <article>, tanpa tombol atau tautan lain di
- * dalamnya.
+ * Kartu utama satu subtes di halaman Belajar: nama + deskripsi +
+ * bar progres visual tanpa angka + petunjuk cheat sheet bila ada.
+ * Kartu satu tujuan (single-destination): satu Link membungkus satu
+ * <article>, tanpa tombol atau tautan lain di dalamnya.
  */
-function GroupCard({
-  group,
+function SubtesCard({
+  materi,
   readSections,
 }: {
-  group: MateriGroup
+  materi: Materi
   readSections: string[]
 }) {
-  const progress = groupReadProgress(group, readSections)
-  const selesai = progress.percent === 100
-  const deskripsi = DESKRIPSI_GRUP[group.id] ?? DESKRIPSI_DEFAULT
+  const progress = materiReadProgress(materi, readSections)
+  const motif = MATERI_MOTIF[materi]
+  const cheatSheet = getCheatSheetGroupByMateri(materi)
 
   return (
-    <Link to={`/belajar/${group.id}`} className="block h-full">
+    <Link
+      to={`/belajar?subtes=${materi.toLowerCase()}`}
+      className="block h-full"
+    >
       <article className="card-lift reveal relative h-full overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
         <span
           className={cx(
             'absolute inset-x-0 top-0 h-1',
-            MATERI_STRIP[group.materi],
+            MATERI_STRIP[materi],
+          )}
+          aria-hidden="true"
+        />
+        <MateriWatermark
+          materi={materi}
+          className={cx(
+            'absolute -right-1 bottom-1 h-20 w-28 text-5xl opacity-10',
+            MATERI_WATERMARK[materi],
+          )}
+        />
+        <div className="relative z-10 flex h-full flex-col p-5 lg:p-6">
+          <MotifStrip materi={materi} />
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="font-display text-2xl font-extrabold">
+              {materi}
+            </span>
+            <Badge tone={MATERI_TONE[materi]}>
+              {MATERI_META[materi].nama}
+            </Badge>
+            <span
+              className={cx(
+                'rounded-full px-2.5 py-0.5 text-xs font-extrabold',
+                motif.pillClass,
+              )}
+            >
+              {motif.pill}
+            </span>
+          </div>
+          <p className="mt-1.5 text-sm leading-relaxed text-ink/60">
+            {MATERI_META[materi].deskripsi}
+          </p>
+          {cheatSheet && (
+            <p className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-accent-700">
+              <span aria-hidden="true" className="text-base text-accent-500">
+                ★
+              </span>
+              Termasuk {cheatSheet.judul}
+            </p>
+          )}
+          <div className="mt-auto pt-5">
+            <div className="flex items-center gap-3">
+              <ProgressBar
+                value={progress.read}
+                max={progress.total}
+                tone={MATERI_TONE[materi]}
+                label={`Progres baca ${materi}`}
+                className="flex-1"
+              />
+              <span className="shrink-0 text-xs font-extrabold text-ink/60">
+                {statusBaca(progress.percent)}
+              </span>
+            </div>
+            <p className="mt-3 flex items-center gap-1 text-sm font-bold text-primary-600">
+              Lihat materi
+              <ChevronRightIcon width={16} height={16} aria-hidden="true" />
+            </p>
+          </div>
+        </div>
+      </article>
+    </Link>
+  )
+}
+
+/**
+ * Kartu satu grup materi: nama + satu baris deskripsi + bar progres
+ * visual tanpa angka. Kartu satu tujuan (single-destination): satu
+ * Link membungkus satu <article>, tanpa tombol atau tautan lain di
+ * dalamnya.
+ *
+ * `featured` dipakai untuk cheat sheet: kartu lebih besar, aksen
+ * amber hemat (border, latar lembut, badge bintang), dan judul
+ * lebih besar. Di grid drill-down, kartu featured membentang
+ * selebar penuh lewat `className`.
+ */
+function GroupCard({
+  group,
+  readSections,
+  featured = false,
+  className,
+}: {
+  group: MateriGroup
+  readSections: string[]
+  featured?: boolean
+  className?: string
+}) {
+  const progress = groupReadProgress(group, readSections)
+  const selesai = progress.percent === 100
+  const deskripsi = deskripsiGrup(group)
+
+  return (
+    <Link to={`/belajar/${group.id}`} className={cx('block h-full', className)}>
+      <article
+        className={cx(
+          'card-lift reveal relative h-full overflow-hidden rounded-2xl border shadow-soft',
+          featured ? 'border-accent-300 bg-accent-50' : 'border-line bg-white',
+        )}
+      >
+        <span
+          className={cx(
+            'absolute inset-x-0 top-0',
+            featured ? 'h-1.5 bg-accent-400' : 'h-1',
+            !featured && MATERI_STRIP[group.materi],
           )}
           aria-hidden="true"
         />
         <MateriWatermark
           materi={group.materi}
           className={cx(
-            'absolute -right-1 bottom-1 h-16 w-24 text-4xl opacity-10',
+            'absolute -right-1 bottom-1 text-4xl opacity-10',
+            featured ? 'h-20 w-28' : 'h-16 w-24',
             MATERI_WATERMARK[group.materi],
           )}
         />
-        <div className="relative z-10 flex h-full flex-col p-4 lg:p-5">
+        <div
+          className={cx(
+            'relative z-10 flex h-full flex-col',
+            featured ? 'p-5 lg:p-6' : 'p-4 lg:p-5',
+          )}
+        >
           <div className="flex items-start justify-between gap-3">
             <span className="flex items-center gap-2">
               <span
@@ -160,18 +292,30 @@ function GroupCard({
                 className={MATERI_WATERMARK[group.materi]}
               />
             </span>
-            {selesai ? (
-              <Badge tone="green">
-                <CheckIcon width={12} height={12} className="mr-1" />
-                Selesai
-              </Badge>
-            ) : (
-              <span className="mt-1 shrink-0 text-xs font-bold text-ink/50">
-                {progress.read > 0 ? 'Lanjut baca' : 'Mulai baca'}
-              </span>
-            )}
+            <span className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+              {featured && (
+                <Badge tone="amber">
+                  <span aria-hidden="true">★</span> Bintang utama
+                </Badge>
+              )}
+              {selesai ? (
+                <Badge tone="green">
+                  <CheckIcon width={12} height={12} className="mr-1" />
+                  Selesai
+                </Badge>
+              ) : (
+                <span className="mt-1 shrink-0 text-xs font-bold text-ink/50">
+                  {progress.read > 0 ? 'Lanjut baca' : 'Mulai baca'}
+                </span>
+              )}
+            </span>
           </div>
-          <h3 className="mt-3 font-display font-extrabold leading-snug">
+          <h3
+            className={cx(
+              'mt-3 font-display font-extrabold leading-snug',
+              featured && 'text-lg lg:text-xl',
+            )}
+          >
             {group.judul}
           </h3>
           <p className="mt-1 text-sm leading-relaxed text-ink/60">
@@ -191,84 +335,179 @@ function GroupCard({
   )
 }
 
+/**
+ * Tampilan drill-down satu subtes: header subtes + daftar dokumennya.
+ * Cheat sheet (bila ada) tampil pertama, membentang selebar penuh,
+ * dengan kartu featured. Subtes tanpa cheat sheet tampil biasa saja.
+ */
+function SubtesView({
+  materi,
+  readSections,
+}: {
+  materi: Materi
+  readSections: string[]
+}) {
+  const groups = sortGroupsCheatSheetFirst(getMateriGroupsByMateri(materi))
+  const progress = materiReadProgress(materi, readSections)
+  const motif = MATERI_MOTIF[materi]
+
+  return (
+    <div className="flex flex-col gap-6">
+      <StickyBackButton to="/belajar" />
+
+      <Card className="reveal relative overflow-hidden">
+        <MateriWatermark
+          materi={materi}
+          className={cx(
+            'absolute -top-1 right-2 h-24 w-36 text-6xl opacity-10 lg:h-28 lg:w-44',
+            MATERI_WATERMARK[materi],
+            materi === 'TWK' && 'motif-melayang',
+          )}
+        />
+        <div className="relative">
+          <MotifStrip materi={materi} />
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="font-display text-xl font-extrabold">
+              {materi}
+            </span>
+            <Badge tone={MATERI_TONE[materi]}>
+              {MATERI_META[materi].nama}
+            </Badge>
+            <span
+              className={cx(
+                'rounded-full px-2.5 py-0.5 text-xs font-extrabold',
+                motif.pillClass,
+              )}
+            >
+              {motif.pill}
+            </span>
+          </div>
+          <p className="mt-1.5 text-sm leading-relaxed text-ink/60">
+            {MATERI_META[materi].deskripsi}
+          </p>
+          <div className="mt-3 flex items-center gap-3">
+            <ProgressBar
+              value={progress.read}
+              max={progress.total}
+              tone={MATERI_TONE[materi]}
+              label={`Progres baca ${materi}`}
+              className="flex-1"
+            />
+            <span className="shrink-0 text-xs font-extrabold text-ink/60">
+              {statusBaca(progress.percent)}
+            </span>
+          </div>
+        </div>
+      </Card>
+
+      <div className="grid gap-3 lg:grid-cols-2">
+        {groups.map((group) => {
+          const featured = isCheatSheetGroup(group)
+          return (
+            <GroupCard
+              key={group.id}
+              group={group}
+              readSections={readSections}
+              featured={featured}
+              className={featured ? 'lg:col-span-2' : undefined}
+            />
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Halaman Belajar v2.6: tiga kartu utama subtes dulu (TWK, TIU, TKP).
+ * Ketuk satu kartu untuk masuk ke daftar dokumen subtes itu.
+ *
+ * Drill-down memakai query param `?subtes=twk` (bukan rute baru):
+ * rute `/belajar/:materiId` sudah dipakai halaman detail materi, dan
+ * App.tsx di luar cakupan worker ini. Query param tetap memberi
+ * deep-link yang bisa dibagikan, dan tombol back browser kembali ke
+ * tiga kartu karena perpindahan ini tercatat di history. Nilai
+ * param yang tidak dikenal kembali ke tampilan tiga kartu.
+ */
 export function BelajarPage() {
   const { readSections } = useStore()
+  const [searchParams] = useSearchParams()
+  const subtesParam = searchParams.get('subtes')?.toUpperCase()
+  const subtes = MATERI_LIST.includes(subtesParam as Materi)
+    ? (subtesParam as Materi)
+    : undefined
+
+  // ScrollToTop di App hanya bereaksi ke pathname; perubahan
+  // ?subtes= tidak mengganti pathname, jadi scroll manual ke atas
+  // setiap kali tampilan berubah.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [subtes])
 
   return (
     <div className="flex flex-col gap-6">
       <GuestProgressWarning />
 
-      <header>
-        <p className="kicker">baca dikit-dikit, lama-lama lolos</p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold">Belajar</h1>
-        <p className="mt-1 text-sm leading-relaxed text-ink/60">
-          Materi SKD yang sudah dirapikan per topik. Tiap bagian yang
-          selesai dibaca dapat 5 XP.
-        </p>
-      </header>
+      {subtes ? (
+        <SubtesView materi={subtes} readSections={readSections} />
+      ) : (
+        <>
+          <header>
+            <p className="kicker">baca dikit-dikit, lama-lama lolos</p>
+            <h1 className="mt-1 font-display text-3xl font-extrabold">
+              Belajar
+            </h1>
+            <p className="mt-1 text-sm leading-relaxed text-ink/60">
+              Materi SKD yang sudah dirapikan per topik. Tiap bagian yang
+              selesai dibaca dapat 5 XP.
+            </p>
+          </header>
 
-      {MATERI_LIST.map((materi) => {
-        const groups = getMateriGroupsByMateri(materi)
-        const progress = materiReadProgress(materi, readSections)
-        const motif = MATERI_MOTIF[materi]
-        return (
-          <section key={materi} aria-label={MATERI_META[materi].nama}>
-            <Card className="reveal relative mb-3 overflow-hidden">
-              <MateriWatermark
-                materi={materi}
-                className={cx(
-                  'absolute -top-1 right-2 h-24 w-36 text-6xl opacity-10 lg:h-28 lg:w-44',
-                  MATERI_WATERMARK[materi],
-                  materi === 'TWK' && 'motif-melayang',
-                )}
-              />
-              <div className="relative">
-                <MotifStrip materi={materi} />
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <span className="font-display text-xl font-extrabold">
-                    {materi}
-                  </span>
-                  <Badge tone={MATERI_TONE[materi]}>
-                    {MATERI_META[materi].nama}
-                  </Badge>
-                  <span
-                    className={cx(
-                      'rounded-full px-2.5 py-0.5 text-xs font-extrabold',
-                      motif.pillClass,
-                    )}
-                  >
-                    {motif.pill}
-                  </span>
+          {/* Banner Tips & Trik Jawab (v2.8.2): satu-satunya entry
+              point halaman /tips-trik. Gaya kartu konsisten dengan
+              kartu subtes di bawahnya, dengan Osi sebagai pemandu.
+              aria-label eksplisit: link membungkus <article> + <h2>,
+              dan Chromium menghitung nama aksesibel link seperti itu
+              sebagai KOSONG (pembaca layar mendengar link tanpa nama).
+              Label ini juga yang dipakai QA getByRole. */}
+          <Link
+            to="/tips-trik"
+            className="block"
+            aria-label="Tips & Trik Jawab: strategi menjawab soal TWK, TIU, dan TKP"
+          >
+            <article className="card-lift reveal relative overflow-hidden rounded-2xl border border-primary-200 bg-primary-50/60 shadow-soft">
+              <div className="flex items-center gap-4 p-4 lg:p-5">
+                <Mascot mood="kagum" size={56} className="shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <h2 className="font-display text-lg font-extrabold leading-snug">
+                    Tips &amp; Trik Jawab
+                  </h2>
+                  <p className="mt-0.5 text-sm leading-relaxed text-ink/60">
+                    Strategi menjawab soal TWK, TIU, dan TKP yang
+                    praktis, dibawakan {MASCOT_NAME} di tiap kartunya.
+                  </p>
                 </div>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink/60">
-                  {MATERI_META[materi].deskripsi}
-                </p>
-                <div className="mt-3 flex items-center gap-3">
-                  <ProgressBar
-                    value={progress.read}
-                    max={progress.total}
-                    tone={MATERI_TONE[materi]}
-                    label={`Progres baca ${materi}`}
-                    className="flex-1"
-                  />
-                  <span className="shrink-0 text-xs font-extrabold text-ink/60">
-                    {statusBaca(progress.percent)}
-                  </span>
-                </div>
-              </div>
-            </Card>
-            <div className="grid gap-3 lg:grid-cols-2">
-              {groups.map((group) => (
-                <GroupCard
-                  key={group.id}
-                  group={group}
-                  readSections={readSections}
+                <ChevronRightIcon
+                  width={20}
+                  height={20}
+                  className="shrink-0 text-primary-600"
+                  aria-hidden="true"
                 />
-              ))}
-            </div>
-          </section>
-        )
-      })}
+              </div>
+            </article>
+          </Link>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            {MATERI_LIST.map((materi) => (
+              <SubtesCard
+                key={materi}
+                materi={materi}
+                readSections={readSections}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }

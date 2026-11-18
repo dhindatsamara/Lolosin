@@ -7,7 +7,8 @@
  * diutamakan supaya belakang kartu tidak kosong.
  *
  * Satu sesi berisi 20 kartu (atau semua kartu yang tersedia bila kurang
- * dari 20). Kartu yang ditandai "Hafal" tersimpan di localStorage dan
+ * dari 20). Kartu yang ditandai "Hafal" tersimpan (localStorage
+ * untuk user login, memori saja untuk tamu sejak v2.5) dan
  * dikeluarkan dari rotasi sesi berikutnya, sampai user menekan
  * "Ulang dari awal" (pakai konfirmasi, karena menghapus progres lokal).
  *
@@ -26,8 +27,15 @@ import {
 } from '../lib/questions'
 import { shuffle, visibleOptions } from '../lib/quiz'
 import { addXp, markSeen, recordActivity } from '../lib/store'
-import { migrateLegacyKey, scopedKey } from '../lib/storage'
+import {
+  getScopedItem,
+  migrateLegacyKey,
+  removeScopedItem,
+  setScopedItem,
+} from '../lib/storage'
+import { MathText } from '../components/MathText'
 import { MASCOT_NAME } from '../lib/mascot'
+import { useAuthUser } from '../lib/auth'
 import { InteractiveMascot } from '../components/InteractiveMascot'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -68,7 +76,7 @@ function loadHafal(): Set<string> {
     // Migrasi sekali: daftar hafal lama di key tanpa namespace pindah
     // ke namespace aktif sebelum dibaca.
     migrateLegacyKey(KARTU_KILAT_HAFAL_KEY)
-    const raw = localStorage.getItem(scopedKey(KARTU_KILAT_HAFAL_KEY))
+    const raw = getScopedItem(KARTU_KILAT_HAFAL_KEY)
     if (!raw) return new Set()
     const parsed = JSON.parse(raw) as unknown
     if (!Array.isArray(parsed)) return new Set()
@@ -82,10 +90,7 @@ function loadHafal(): Set<string> {
 
 function saveHafal(hafal: Set<string>): void {
   try {
-    localStorage.setItem(
-      scopedKey(KARTU_KILAT_HAFAL_KEY),
-      JSON.stringify([...hafal]),
-    )
+    setScopedItem(KARTU_KILAT_HAFAL_KEY, JSON.stringify([...hafal]))
   } catch {
     // Penyimpanan tidak tersedia: abaikan diam-diam.
   }
@@ -135,6 +140,7 @@ function prefersReducedMotion(): boolean {
 }
 
 export function KartuKilatPage() {
+  const { user } = useAuthUser()
   const [phase, setPhase] = useState<Phase>('idle')
   const [filter, setFilter] = useState<DeckFilter>('TWK')
   const [hafal, setHafal] = useState<Set<string>>(() => loadHafal())
@@ -206,7 +212,7 @@ export function KartuKilatPage() {
     setShowResetConfirm(false)
     setHafal(new Set())
     try {
-      localStorage.removeItem(scopedKey(KARTU_KILAT_HAFAL_KEY))
+      removeScopedItem(KARTU_KILAT_HAFAL_KEY)
     } catch {
       // Penyimpanan tidak tersedia: abaikan diam-diam.
     }
@@ -289,9 +295,9 @@ export function KartuKilatPage() {
                 height={18}
                 className="mt-0.5 shrink-0 text-primary-600"
               />
-              Kartu yang sudah Hafal tidak muncul lagi di sesi
-              berikutnya. Progres tersimpan di perangkat ini, main
-              tanpa login, gratis.
+              {user
+                ? 'Kartu yang sudah Hafal tidak muncul lagi di sesi berikutnya. Progres tersimpan di perangkat ini.'
+                : 'Kartu yang sudah Hafal tidak muncul lagi selama halaman ini terbuka. Daftar gratis biar progresmu kesimpan.'}
             </p>
           )}
 
@@ -487,7 +493,7 @@ export function KartuKilatPage() {
               Pertanyaan
             </p>
             <p className="text-lg leading-relaxed font-semibold whitespace-pre-line">
-              {question.soal}
+              <MathText text={question.soal} />
             </p>
             <p className="mt-2 text-center text-sm font-medium text-primary-700">
               Ketuk kartu untuk melihat jawaban
@@ -505,11 +511,11 @@ export function KartuKilatPage() {
               Jawaban{kunci !== null ? ` (${kunci})` : ''}
             </p>
             <p className="text-lg leading-relaxed font-bold">
-              {jawabanKunci || 'Jawaban tidak tersedia.'}
+              <MathText text={jawabanKunci || 'Jawaban tidak tersedia.'} />
             </p>
             {pembahasan.length > 0 && (
               <p className="line-clamp-2 text-sm leading-relaxed text-ink/70">
-                {truncate(pembahasan, PEMBAHASAN_MAX_CHARS)}
+                <MathText text={truncate(pembahasan, PEMBAHASAN_MAX_CHARS)} />
               </p>
             )}
             <p className="mt-2 text-center text-sm font-medium text-primary-700">

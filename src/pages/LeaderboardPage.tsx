@@ -167,8 +167,8 @@ export function LeaderboardPage() {
           </p>
           <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-ink/60">
             Leaderboard muncul otomatis setelah setup Supabase selesai.
-            Skormu tetap tersimpan di perangkat ini, jadi tetap bisa
-            latihan dan tryout seperti biasa.
+            Latihan dan tryout tetap bisa dipakai seperti biasa, tapi
+            skormu hanya dicatat selama halaman ini terbuka.
           </p>
           <Link to="/tryout" className="mt-4 inline-block">
             <Button>

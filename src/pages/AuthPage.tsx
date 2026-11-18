@@ -282,8 +282,9 @@ export default function AuthPage() {
             bisa daftar atau masuk dulu.
           </p>
           <p className="text-sm leading-relaxed text-ink/70">
-            Tenang, belajar dan tryout tetap bisa dipakai tanpa akun. Semua
-            progresmu tersimpan di perangkat ini.
+            Tenang, belajar dan tryout tetap bisa dipakai tanpa akun.
+            Progresmu hanya tersimpan selama halaman ini terbuka, karena
+            fitur akun belum aktif.
           </p>
           <Button
             variant="outline"

@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -10,9 +10,12 @@ import {
   CheckIcon,
   ClockIcon,
   FlameIcon,
+  GamepadIcon,
   RankingIcon,
+  SwordsIcon,
   TargetIcon,
   TrophyIcon,
+  UsersIcon,
   ZapIcon,
 } from '../components/icons'
 import { BADGES } from '../lib/badges'
@@ -28,6 +31,12 @@ import {
   SIMULASI_TIME_LIMIT_MINUTES,
   SIMULASI_TOTAL_QUESTIONS,
 } from '../lib/quiz'
+import {
+  fetchLeaderboard,
+  formatWeekRange,
+  getCurrentWeekStart,
+  type LeaderboardEntry,
+} from '../lib/leaderboard'
 import { cx } from '../lib/utils'
 
 const FITUR = [
@@ -87,10 +96,53 @@ const FITUR_FREE = [
 ] as const
 
 /* ------------------------------------------------------------------ */
+/* Sorotan game (v2.6): lima game yang BENAR-BENAR ada di /main.      */
+/* Tanpa angka atau skor apa pun; catatan login di bawah grid jujur:   */
+/* Battle dan Sesi butuh login, tiga game kilat bisa langsung main.    */
+/* ------------------------------------------------------------------ */
+const GAME = [
+  {
+    icon: SwordsIcon,
+    tone: 'bg-primary-100 text-primary-700',
+    judul: 'Battle 1v1',
+    deskripsi:
+      'Adu cepat jawab soal lawan teman. Yang paling cepat dan tepat, dia yang menang.',
+  },
+  {
+    icon: UsersIcon,
+    tone: 'bg-tiu-soft text-tiu',
+    judul: 'Sesi Bareng',
+    deskripsi:
+      'Main bareng satu sesi, host yang pegang kendali. Cocok buat belajar kelompok.',
+  },
+  {
+    icon: ZapIcon,
+    tone: 'bg-accent-100 text-accent-700',
+    judul: 'Kuis Kilat',
+    deskripsi:
+      'Jawab secepat mungkin, kejar skor terbaikmu sendiri. Bisa dimainkan tanpa daftar.',
+  },
+  {
+    icon: BookIcon,
+    tone: 'bg-tkp-soft text-tkp',
+    judul: 'Kartu Kilat',
+    deskripsi:
+      'Hafalan bolak-balik buat materi yang susah nempel. Bisa dimainkan tanpa daftar.',
+  },
+  {
+    icon: TargetIcon,
+    tone: 'bg-twk-soft text-twk',
+    judul: 'Benar/Salah Kilat',
+    deskripsi:
+      'Nilai pernyataan benar atau salah, secepat kilat. Bisa dimainkan tanpa daftar.',
+  },
+] as const
+
+/* ------------------------------------------------------------------ */
 /* Data contoh untuk preview gamifikasi. Angka-angka ini dihitung      */
 /* dari fungsi dan data nyata app (level, gelar, lencana, misi,        */
 /* jadwal ulas) supaya preview tidak ngawur; yang fiktif hanya        */
-/* progres contohnya, dan seksi ini diberi label "Contoh tampilan".    */
+/* progres contohnya, dan bagian ini diberi label "Contoh tampilan".    */
 /* ------------------------------------------------------------------ */
 
 /** XP contoh: 2.150 XP = Level 7, gelar "Ksatria SKD". */
@@ -136,18 +188,171 @@ const SIMULASI_SEKSI = [
   { materi: 'TKP', tone: 'bg-tkp', soft: 'bg-tkp-soft text-tkp' },
 ] as const
 
+/* ------------------------------------------------------------------ */
+/* Papan Peringkat landing (v2.5, poin 4b)                             */
+/* ------------------------------------------------------------------ */
+
+/** Hadiah juara leaderboard mingguan: premium + lencana prestise. */
+const HADIAH_PERINGKAT = [
+  { juara: 1, medali: '🥇', premium: '7 hari' },
+  { juara: 2, medali: '🥈', premium: '5 hari' },
+  { juara: 3, medali: '🥉', premium: '3 hari' },
+] as const
+
+/** Warna lingkaran peringkat: 1 emas, 2 perak, 3 perunggu. */
+function rankCircleClass(rank: number): string {
+  if (rank === 1) return 'bg-accent-400 text-ink'
+  if (rank === 2) return 'bg-white text-ink'
+  if (rank === 3) return 'bg-orange-200 text-orange-800'
+  return 'bg-ink/5 text-ink/70'
+}
+
+/**
+ * Bagian "Papan Peringkat" di landing: tiga besar minggu berjalan dari
+ * leaderboard Supabase. Hanya data ASLI yang ditampilkan; bila minggu
+ * ini belum ada skor, fetch gagal, atau Supabase belum aktif,
+ * tampilkan struktur hadiah + ajakan jadi yang pertama. Tidak pernah
+ * menampilkan nama atau skor palsu.
+ */
+function PapanPeringkatSection() {
+  // null = masih mengambil data; [] = minggu ini kosong / fetch gagal.
+  const [top3, setTop3] = useState<LeaderboardEntry[] | null>(null)
+  const weekStart = getCurrentWeekStart()
+
+  useEffect(() => {
+    let cancelled = false
+    void fetchLeaderboard(weekStart)
+      .then((entries) => {
+        if (!cancelled) setTop3(entries.slice(0, 3))
+      })
+      .catch(() => {
+        // fetchLeaderboard tidak pernah melempar, tapi jaga-jaga:
+        // gagal fetch tampilkan fallback hadiah, jangan crash.
+        if (!cancelled) setTop3([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [weekStart])
+
+  return (
+    <section aria-label="Papan peringkat minggu ini">
+      <p className="kicker">Papan Peringkat</p>
+      <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold lg:text-4xl">
+        Siapa yang paling siap minggu ini?
+      </h2>
+      <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink/70">
+        Skor simulasi CAT terbaik tiap minggu masuk papan peringkat. Tiga
+        besar dapat premium gratis plus lencana prestise. Minggu ini (
+        {formatWeekRange(weekStart)}):
+      </p>
+
+      {top3 === null ? (
+        <Card className="mt-8 p-6 text-center lg:p-8">
+          <p className="text-sm font-bold text-ink/60">
+            Lagi ngambil peringkat minggu ini...
+          </p>
+        </Card>
+      ) : top3.length > 0 ? (
+        <>
+          <ol className="mt-8 space-y-3">
+            {top3.map((entry) => (
+              <li key={entry.userId}>
+                <Card className="py-3">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={cx(
+                        'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line font-display text-base font-extrabold',
+                        rankCircleClass(entry.rank),
+                      )}
+                    >
+                      {entry.rank}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-display text-base font-extrabold">
+                        {entry.username}
+                      </p>
+                      <p className="mt-0.5 truncate text-xs font-medium text-ink/60">
+                        {entry.formasi ?? 'Formasi belum diisi'}
+                      </p>
+                      <p className="mt-0.5 text-xs font-semibold text-ink/60">
+                        TWK {entry.twk} · TIU {entry.tiu} · TKP {entry.tkp}
+                      </p>
+                    </div>
+                    <p className="shrink-0 text-right font-display text-xl font-extrabold">
+                      {entry.total}
+                      <span className="block text-[11px] font-semibold text-ink/50">
+                        dari 550
+                      </span>
+                    </p>
+                  </div>
+                </Card>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-4 text-sm leading-relaxed font-medium text-ink/70">
+            Juara 1 dapat premium 7 hari, juara 2 premium 5 hari, juara 3
+            premium 3 hari, semuanya plus lencana prestise. Masih ada
+            waktu buat nyalip mereka minggu ini.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link to="/auth?mode=daftar">
+              <Button size="lg">Daftar gratis</Button>
+            </Link>
+            <Link to="/leaderboard">
+              <Button size="lg" variant="outline">
+                Lihat peringkat lengkap
+              </Button>
+            </Link>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3 lg:gap-6">
+            {HADIAH_PERINGKAT.map(({ juara, medali, premium }) => (
+              <Card key={juara} className="reveal card-lift p-5 text-center lg:p-6">
+                <p className="text-4xl" aria-hidden="true">
+                  {medali}
+                </p>
+                <h3 className="mt-3 font-display text-lg font-extrabold">
+                  Juara {juara}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink/70">
+                  Premium {premium} + lencana prestise yang bisa dipamerin.
+                </p>
+              </Card>
+            ))}
+          </div>
+          <p className="mt-4 text-sm leading-relaxed font-medium text-ink/70">
+            Minggu ini belum ada yang masuk papan peringkat. Kursinya
+            masih kosong semua.
+          </p>
+          <div className="mt-5">
+            <Link to="/auth?mode=daftar">
+              <Button size="lg">Daftar gratis, jadilah yang pertama</Button>
+            </Link>
+          </div>
+        </>
+      )}
+    </section>
+  )
+}
+
 /**
  * Beranda untuk pengunjung yang belum login: landing page marketing
  * yang mengajak daftar atau masuk. Muncul hanya saat Supabase
  * terkonfigurasi dan belum ada sesi login (lihat HomePage).
  *
  * v2.1: marketing-first dan gamified. Hero menampilkan maskot besar,
- * lalu seksi gamifikasi dengan preview visual (bar XP, lencana, misi,
+ * lalu bagian gamifikasi dengan preview visual (bar XP, lencana, misi,
  * streak, leaderboard, ulas soal, simulasi CAT) memakai data nyata
  * app dengan progres contoh yang diberi label jelas.
  *
  * v2.2: maskot hero interaktif (bisa ditekan, balon ucapan berganti)
  * dan kartu streak menampilkan teaser peliharaan.
+ *
+ * v2.5: bagian Papan Peringkat dengan tiga besar minggu berjalan dari
+ * Supabase (data asli saja; bila kosong tampilkan struktur hadiah).
  */
 export function LandingPage() {
   return (
@@ -659,6 +864,10 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* Papan Peringkat: tiga besar minggu berjalan (data asli) atau
+          struktur hadiah bila minggu ini masih kosong */}
+      <PapanPeringkatSection />
+
       {/* Kenalan dengan maskot */}
       <section
         aria-label={`Kenalan dengan ${MASCOT_NAME}`}
@@ -743,6 +952,60 @@ export function LandingPage() {
             </Card>
           ))}
         </div>
+      </section>
+
+      {/* Sorotan game (v2.6): game adalah daya jual utama app, jadi
+          dapat blok sendiri. Lima kartu game + satu kartu ajakan
+          yang mengisi grid 3x2. */}
+      <section aria-label="Game belajar">
+        <p className="kicker">Main game</p>
+        <h2 className="mt-2 max-w-2xl font-display text-3xl font-extrabold lg:text-4xl">
+          Belajar nggak melulu baca materi
+        </h2>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink/70">
+          Capek baca modul? Pindah ke game dulu. Soalnya tetap soal
+          CPNS, suasananya aja yang beda.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {GAME.map(({ icon: Icon, tone, judul, deskripsi }) => (
+            <Card key={judul} className="reveal card-lift p-5 lg:p-6">
+              <span
+                className={`flex h-12 w-12 items-center justify-center rounded-xl ${tone}`}
+              >
+                <Icon width={24} height={24} />
+              </span>
+              <h3 className="mt-4 font-display text-lg font-extrabold">
+                {judul}
+              </h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-ink/70">
+                {deskripsi}
+              </p>
+            </Card>
+          ))}
+          <Link to="/main">
+            <Card className="reveal card-lift flex h-full flex-col justify-between border-primary-200 bg-primary-50 p-5 lg:p-6">
+              <div>
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600 text-white">
+                  <GamepadIcon width={24} height={24} />
+                </span>
+                <h3 className="mt-4 font-display text-lg font-extrabold">
+                  Main sekarang
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink/70">
+                  Lima game, satu tempat. Pilih yang paling kamu suka.
+                </p>
+              </div>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-extrabold text-primary-700">
+                Lihat semua game
+                <span aria-hidden="true">→</span>
+              </span>
+            </Card>
+          </Link>
+        </div>
+        <p className="mt-4 text-sm font-medium text-ink/60">
+          Battle 1v1 dan Sesi Bareng butuh login. Tiga game kilat bisa
+          langsung dimainkan tanpa daftar.
+        </p>
       </section>
 
       {/* Cara pakai */}

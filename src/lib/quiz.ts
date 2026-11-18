@@ -4,7 +4,7 @@
  * Semua pool berasal dari `getQuestions()`. Soal tanpa kunci sudah
  * dikecualikan di lapisan itu.
  *
- * Penskoran tryout mini (30 soal, maks 50 per seksi):
+ * Penskoran tryout mini (30 soal, maks 50 per bagian):
  * - TWK/TIU: jawaban benar = 5 poin, salah/kosong = 0.
  * - TKP: nilai = bobot opsi (1–5). Kalau bobot tidak ada, fallback:
  *   opsi terbaik (kunci) = 5, opsi lain = 1, kosong = 0.
@@ -18,7 +18,7 @@
  * - TWK: 65/150 × 50 ≈ 21,7 → 22
  * - TIU: 80/175 × 50 ≈ 22,9 → 23
  * - TKP: 156/225 × 50 ≈ 34,7 → 35
- * Lulus keseluruhan = ketiga seksi lulus.
+ * Lulus keseluruhan = ketiga bagian lulus.
  */
 import {
   getQuestions,
@@ -33,14 +33,14 @@ import type { TryoutRecord } from './store'
 /* Konstanta (diekspor agar halaman UI memakai nilai yang sama)         */
 /* ------------------------------------------------------------------ */
 
-/** Jumlah soal per seksi dalam satu tryout mini. */
+/** Jumlah soal per bagian dalam satu tryout mini. */
 export const TRYOUT_QUESTIONS_PER_SECTION = 10
 /** Total soal tryout mini (10 TWK + 10 TIU + 10 TKP). */
 export const TRYOUT_TOTAL_QUESTIONS = 30
 /** Batas waktu tryout mini. */
 export const TRYOUT_TIME_LIMIT_MINUTES = 27
 export const TRYOUT_TIME_LIMIT_SECONDS = TRYOUT_TIME_LIMIT_MINUTES * 60
-/** Jumlah soal per seksi dalam satu simulasi CAT lengkap. */
+/** Jumlah soal per bagian dalam satu simulasi CAT lengkap. */
 export const SIMULASI_QUESTIONS_PER_SECTION: Record<Materi, number> = {
   TWK: 30,
   TIU: 35,
@@ -53,9 +53,9 @@ export const SIMULASI_TIME_LIMIT_MINUTES = 100
 export const SIMULASI_TIME_LIMIT_SECONDS = SIMULASI_TIME_LIMIT_MINUTES * 60
 /** Jumlah soal default satu sesi drill. */
 export const DRILL_DEFAULT_COUNT = 10
-/** Skor maksimum per seksi dalam skala mini. */
+/** Skor maksimum per bagian dalam skala mini. */
 export const TRYOUT_MAX_PER_SECTION = 50
-/** Passing grade mini per seksi (skala maks 50). */
+/** Passing grade mini per bagian (skala maks 50). */
 export const TRYOUT_PASSING_MINI: Record<Materi, number> = {
   TWK: 22,
   TIU: 23,
@@ -73,7 +73,7 @@ export const ORIGINAL_PASSING: Record<Materi, number> = {
   TIU: 80,
   TKP: 156,
 }
-/** Skor maksimum asli CAT per seksi. */
+/** Skor maksimum asli CAT per bagian. */
 export const ORIGINAL_MAX: Record<Materi, number> = {
   TWK: 150,
   TIU: 175,
@@ -104,22 +104,22 @@ export interface DrillPick {
 
 export interface TryoutPick {
   questions: Question[]
-  /** `true` bila ada seksi yang pool soal barunya habis. */
+  /** `true` bila ada bagian yang pool soal barunya habis. */
   rotated: boolean
 }
 
 export interface TryoutScore {
   /** Mode tryout: 'mini' atau simulasi lengkap 'full'. */
   mode: TryoutMode
-  /** Skor per seksi: mini maks 50, simulasi maks asli (150/175/225). */
+  /** Skor per bagian: mini maks 50, simulasi maks asli (150/175/225). */
   scores: Record<Materi, number>
   /** Skor terskala ke nilai asli CAT (simulasi: sama dengan `scores`). */
   scaled: Record<Materi, number>
-  /** Lulus per seksi (mini: passing grade mini, simulasi: passing asli). */
+  /** Lulus per bagian (mini: passing grade mini, simulasi: passing asli). */
   passed: Record<Materi, boolean>
-  /** Lulus keseluruhan: ketiga seksi lulus. */
+  /** Lulus keseluruhan: ketiga bagian lulus. */
   passedOverall: boolean
-  /** Jumlah jawaban benar (TKP: opsi terbaik) per seksi. Opsional saat skor direkonstruksi dari riwayat lama. */
+  /** Jumlah jawaban benar (TKP: opsi terbaik) per bagian. Opsional saat skor direkonstruksi dari riwayat lama. */
   correct?: Record<Materi, number>
   /** Total skor (mini maks 150, simulasi maks 550). */
   total: number
@@ -206,8 +206,8 @@ export function pickDrillQuestions(
 
 /**
  * Pilih soal tryout: mini 30 soal (10 TWK + 10 TIU + 10 TKP) atau
- * simulasi lengkap 110 soal (30 TWK + 35 TIU + 45 TKP), urutan per seksi.
- * Mengutamakan soal yang belum dilihat di tiap seksi.
+ * simulasi lengkap 110 soal (30 TWK + 35 TIU + 45 TKP), urutan per bagian.
+ * Mengutamakan soal yang belum dilihat di tiap bagian.
  * @param mode - 'mini' (default) atau 'full'
  */
 export function pickTryoutQuestions(
@@ -251,8 +251,8 @@ export function scoreQuestion(
 
 /**
  * Nilai satu set jawaban tryout.
- * - Mini (default): skor maks 50 per seksi, diskalakan ke nilai asli,
- *   lulus per seksi vs passing grade mini.
+ * - Mini (default): skor maks 50 per bagian, diskalakan ke nilai asli,
+ *   lulus per bagian vs passing grade mini.
  * - Simulasi ('full'): skor sudah skala asli (maks 150/175/225),
  *   `scaled` sama dengan `scores`, lulus vs passing grade asli.
  */
