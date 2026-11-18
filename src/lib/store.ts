@@ -1,9 +1,15 @@
 /**
- * Store progres pengguna di localStorage, di-namespace per user
- * (v2.2.1, lihat lib/storage.ts): login memakai key
- * `lolosin:v1:<userId>`, tamu memakai `lolosin:v1:guest`. Key lama
- * tanpa namespace (`lolosin:v1`) dimigrasi sekali ke namespace aktif
- * saat store dimuat (lihat migrateLegacyKey).
+ * Store progres pengguna, di-namespace per user (v2.2.1, lihat
+ * lib/storage.ts): login memakai key `lolosin:v1:<userId>` di
+ * localStorage, tamu memakai `lolosin:v1:guest` di MEMORI saja
+ * (v2.5, poin 8: progres tamu tidak lagi disimpan, hilang saat
+ * refresh atau tutup tab). Key lama tanpa namespace (`lolosin:v1`)
+ * dimigrasi sekali ke namespace aktif saat store dimuat (lihat
+ * migrateLegacyKey). Baca/tulis store lewat getScopedItem/setScopedItem
+ * supaya pemisah memori vs localStorage terpusat di lib/storage.
+ * Pengecualian: getProgressRepairOffer sengaja membaca localStorage
+ * langsung, karena alur "Pindahkan progres lamamu?" menyangkut data
+ * tamu pra-v2.5 yang tersimpan di localStorage.
  *
  * Semua tanggal aktivitas memakai zona waktu Asia/Makassar (WITA),
  * diformat `YYYY-MM-DD` lewat Intl.DateTimeFormat.
@@ -13,7 +19,7 @@
  * - +50 menyelesaikan satu sesi drill       (XP_DRILL_COMPLETE)
  * - +100 menyelesaikan satu tryout          (XP_TRYOUT_COMPLETE)
  * - +300 menyelesaikan satu simulasi CAT    (XP_SIMULASI_COMPLETE)
- * - +5 per seksi materi yang dibaca         (XP_SECTION_READ, sekali per seksi)
+ * - +5 per bagian materi yang dibaca         (XP_SECTION_READ, sekali per bagian)
  *
  * Level: level = floor(sqrt(xp / 50)) + 1
  *
@@ -21,7 +27,7 @@
  * saat store dimuat dan aktivitas terakhir sudah 2+ hari lalu,
  * streak yang putus disimpan di `streakBroken` (bukan hilang begitu
  * saja) supaya user bisa memulihkannya dengan menyelesaikan 1 drill
- * atau membaca 1 seksi materi setelah mengetuk "Bujuk Osi".
+ * atau membaca 1 bagian materi setelah mengetuk "Bujuk Osi".
  * Lihat `normalizeStreak`, `armRevive`, dan `maybeReviveStreak`.
  *
  * Komponen React memakai hook `useStore()` agar tampilan (mis. top bar)
@@ -33,6 +39,7 @@ import type { TryoutMode } from './quiz'
 import {
   declineProgressRepair as declineRepairFlag,
   getCurrentUserId,
+  getScopedItem,
   GUEST_NAMESPACE,
   hasDeclinedProgressRepair,
   migrateLegacyKey,
@@ -40,6 +47,7 @@ import {
   scopedKey,
   setAuthResolved,
   setCurrentUserId,
+  setScopedItem,
 } from './storage'
 
 /**
@@ -65,13 +73,13 @@ export interface TryoutRecord {
   date: string
   /** Mode tryout: 'mini' atau simulasi lengkap 'full'. Riwayat lama tidak punya (dianggap mini). */
   mode?: TryoutMode
-  /** Skor per seksi: mini maks 50, simulasi maks asli (150/175/225). */
+  /** Skor per bagian: mini maks 50, simulasi maks asli (150/175/225). */
   twk: number
   tiu: number
   tkp: number
-  /** Lulus keseluruhan (ketiga seksi melewati passing grade mode-nya). */
+  /** Lulus keseluruhan (ketiga bagian melewati passing grade mode-nya). */
   passed: boolean
-  /** Jumlah jawaban benar per seksi (opsional; riwayat lama tidak punya). */
+  /** Jumlah jawaban benar per bagian (opsional; riwayat lama tidak punya). */
   correct?: { TWK: number; TIU: number; TKP: number }
 }
 
@@ -139,10 +147,21 @@ export interface StoreState {
   streakBroken: { lostStreak: number } | null
   /**
    * User sudah mengetuk "Bujuk Osi" untuk kejadian putus ini.
-   * Hanya bermakna bila `streakBroken` tidak null; tanpa broken
+   * Hanya berlaku bila `streakBroken` tidak null; tanpa broken
    * state yang pending, field ini dinormalisasi ke false.
    */
   reviveArmed: boolean
+  /**
+   * Tanggal kedaluwarsa premium dari juara mingguan atau redeem code
+   * (ISO timestamptz), atau null bila tidak punya premium dari jalur
+   * itu. Dipakai tampilan; penegakan premium membaca profiles.
+   */
+  premiumUntil: string | null
+  /**
+   * Kemenangan mingguan yang sudah diproses ("week_start|scope"),
+   * supaya gift juara mingguan tidak muncul dua kali.
+   */
+  seenWeeklyWins: string[]
   seenQuestionIds: string[]
   readSections: string[]
   tryoutHistory: TryoutRecord[]
@@ -167,6 +186,8 @@ function freshState(): StoreState {
     lastActivityDate: null,
     streakBroken: null,
     reviveArmed: false,
+    premiumUntil: null,
+    seenWeeklyWins: [],
     seenQuestionIds: [],
     readSections: [],
     tryoutHistory: [],
@@ -240,14 +261,16 @@ export function xpProgress(xp: number): {
 let cached: StoreState | null = null
 const listeners = new Set<() => void>()
 
-function loadFromStorage(): StoreState {
+/**
+ * Parse string JSON menjadi StoreState dengan validasi per field
+ * (nilai yang tidak valid diabaikan, diganti default). Dipakai
+ * loadFromStorage untuk data lokal dan lib/sync.ts untuk data dari
+ * server, supaya kedua sisi divalidasi dengan aturan yang sama.
+ * Tidak pernah melempar: data rusak menghasilkan state kosong.
+ */
+export function parseStoreState(raw: string): StoreState {
   const state = freshState()
   try {
-    // Migrasi sekali: progres lama di key tanpa namespace pindah ke
-    // namespace aktif (user yang login atau tamu) sebelum dibaca.
-    migrateLegacyKey(STORE_KEY)
-    const raw = localStorage.getItem(scopedKey(STORE_KEY))
-    if (!raw) return state
     const parsed = JSON.parse(raw) as Partial<StoreState>
     if (typeof parsed.xp === 'number') state.xp = parsed.xp
     if (typeof parsed.streak === 'number') state.streak = parsed.streak
@@ -265,6 +288,17 @@ function loadFromStorage(): StoreState {
       }
     }
     if (parsed.reviveArmed === true) state.reviveArmed = true
+    if (
+      typeof parsed.premiumUntil === 'string' &&
+      !Number.isNaN(Date.parse(parsed.premiumUntil))
+    ) {
+      state.premiumUntil = parsed.premiumUntil
+    }
+    if (Array.isArray(parsed.seenWeeklyWins)) {
+      state.seenWeeklyWins = parsed.seenWeeklyWins.filter(
+        (id): id is string => typeof id === 'string',
+      )
+    }
     if (Array.isArray(parsed.seenQuestionIds)) {
       state.seenQuestionIds = parsed.seenQuestionIds.filter(
         (id): id is string => typeof id === 'string',
@@ -378,17 +412,30 @@ function loadFromStorage(): StoreState {
       state.topicStats = topicStats
     }
   } catch {
-    // localStorage tidak tersedia / data rusak: mulai dari state kosong.
+    // Data rusak: mulai dari state kosong.
   }
   return state
 }
 
-function persist(state: StoreState): void {
+function loadFromStorage(): StoreState {
   try {
-    localStorage.setItem(scopedKey(STORE_KEY), JSON.stringify(state))
+    // Migrasi sekali: progres lama di key tanpa namespace pindah ke
+    // namespace aktif (user yang login atau tamu) sebelum dibaca.
+    // Migrasi tetap lewat localStorage; pembacaan lewat adapter
+    // (memori untuk tamu, localStorage untuk user login).
+    migrateLegacyKey(STORE_KEY)
+    const raw = getScopedItem(STORE_KEY)
+    if (!raw) return freshState()
+    return parseStoreState(raw)
   } catch {
-    // Penyimpanan penuh atau tidak tersedia: abaikan diam-diam.
+    // localStorage tidak tersedia: mulai dari state kosong.
+    return freshState()
   }
+}
+
+function persist(state: StoreState): void {
+  // Lewat adapter: memori untuk tamu, localStorage untuk user login.
+  setScopedItem(STORE_KEY, JSON.stringify(state))
 }
 
 function emit(): void {
@@ -477,6 +524,18 @@ export function resolveAuth(userId: string | null): void {
   emit()
 }
 
+/**
+ * Muat ulang store dari penyimpanan (dipakai sinkronisasi setelah
+ * hasil gabung server ditulis ke localStorage): cache dibuang, state
+ * dibaca ulang dari namespace aktif (termasuk normalisasi streak),
+ * lalu semua listener diberi tahu supaya UI me-render data gabungan.
+ */
+export function reloadStore(): void {
+  cached = null
+  getStore()
+  emit()
+}
+
 /** Tawaran pindah progres tamu ke akun (perbaikan bug migrasi v2.2.1). */
 export interface ProgressRepairOffer {
   xp: number
@@ -502,6 +561,11 @@ function hasMeaningfulProgress(parsed: unknown): boolean {
  * dan namespace tamu punya progres yang berarti (korban bug migrasi
  * v2.2.1: progres akun lama tersalin ke tamu). Mengembalikan null
  * bila tidak ada tawaran.
+ *
+ * Sengaja membaca localStorage LANGSUNG (tidak lewat adapter
+ * in-memory v2.5): yang dicari adalah data tamu PRA-v2.5 yang
+ * tersimpan di localStorage. Progres tamu sesi berjalan hidup di
+ * memori dan tidak pernah ditawarkan untuk dipindah.
  */
 export function getProgressRepairOffer(): ProgressRepairOffer | null {
   const userId = getCurrentUserId()
@@ -569,7 +633,7 @@ export function addXp(n: number): number {
  * belum membujuk, aktivitas ini menghabiskan kesempatan: broken state
  * dibersihkan dan streak mulai dari 1. Bila user sudah membujuk,
  * broken state dibiarkan supaya `maybeReviveStreak` di akhir drill
- * atau baca seksi bisa memulihkan streak.
+ * atau baca bagian bisa memulihkan streak.
  */
 export function recordActivity(date = new Date()): {
   streak: number
@@ -619,7 +683,7 @@ export function armRevive(): boolean {
  * Pulihkan streak putus bila revive sudah dipersenjatai ("Bujuk Osi").
  * Dipanggil dari `completeDrill` dan `completeSectionRead` di
  * `lib/gamification.ts` saat user menyelesaikan 1 sesi drill atau
- * selesai membaca 1 seksi materi. Bila berhasil: streak kembali ke
+ * selesai membaca 1 bagian materi. Bila berhasil: streak kembali ke
  * angka sebelum putus, hari ini ditandai aktif, dan broken state
  * beserta flag armed dibersihkan (satu revive per kejadian putus,
  * tidak bisa di-farm). Bila tidak ada broken state pending atau
@@ -666,9 +730,9 @@ export function isSeen(id: string): boolean {
 }
 
 /**
- * Tandai seksi materi sebagai sudah dibaca.
+ * Tandai bagian materi sebagai sudah dibaca.
  * Mengembalikan `true` hanya saat pertama kali ditandai. XP +5
- * (`XP_SECTION_READ`) hanya diberikan sekali per seksi.
+ * (`XP_SECTION_READ`) hanya diberikan sekali per bagian.
  */
 export function markRead(sectionId: string): boolean {
   const state = getStore()
@@ -755,6 +819,34 @@ export function updateMissions(
 ): MissionProgressState {
   const state = getStore()
   return update({ missions: { ...state.missions, ...patch } }).missions
+}
+
+/**
+ * Simpan tanggal kedaluwarsa premium (dari juara mingguan atau redeem
+ * code). Hanya memajukan: tanggal yang sudah tersimpan tidak pernah
+ * dimundurkan. Nilai null atau tanggal tidak valid diabaikan.
+ */
+export function extendPremiumUntil(until: string | null): void {
+  if (!until) return
+  const next = Date.parse(until)
+  if (Number.isNaN(next)) return
+  const current = getStore().premiumUntil
+  if (current && Date.parse(current) >= next) return
+  update({ premiumUntil: until })
+}
+
+/** Tandai kemenangan mingguan sebagai sudah diproses (tidak tampil lagi). */
+export function markWeeklyWinsSeen(keys: string[]): void {
+  const state = getStore()
+  const set = new Set(state.seenWeeklyWins)
+  let added = 0
+  for (const key of keys) {
+    if (!set.has(key)) {
+      set.add(key)
+      added += 1
+    }
+  }
+  if (added > 0) update({ seenWeeklyWins: [...set] })
 }
 
 /** Hapus seluruh progres (dipakai untuk debugging / reset akun). */

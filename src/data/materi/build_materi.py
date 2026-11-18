@@ -19,7 +19,10 @@ import json, os, re, zipfile
 from collections import Counter
 
 SRC = os.path.expanduser("~/workspace/cpns/materi")
-OUT = os.path.expanduser("~/workspace/lolosin/src/data/materi")
+# OUT mengikuti lokasi skrip ini (bukan path absolut ke working tree
+# utama), supaya rebuild dari worktree mana pun menulis ke worktree itu
+# sendiri. Di working tree utama hasilnya sama seperti sebelumnya.
+OUT = os.path.dirname(os.path.abspath(__file__))
 os.makedirs(OUT, exist_ok=True)
 
 # ---------------------------------------------------------------- helpers
@@ -995,7 +998,7 @@ DOCS = [
          catatan_kualitas="DOCX; rangkuman catatan dari soal-soal tryout (materi, bukan bank soal)."),
     dict(id="twk-keyword-bela-negara", judul="Implementasi Keyword: Bela Negara, Patriotisme, Nasionalisme",
          materi="TWK", kind="pdf", file="skd_cpns_1/skd cpns 1/ImplementasiKeyword_penerapan_Bela_Negara,_Patriotisme,_Nasionalisme.pdf", halaman=2,
-         deskripsi="Infografis pembeda empat konsep yang sering tertukar: bela negara, nasionalisme, patriotisme, dan cinta tanah air.",
+         deskripsi="Bela negara lengkap: pembeda empat konsep yang sering tertukar, dasar hukum dan lima nilai dasar, bentuk partisipasi warga, dan jenis ancaman terhadap negara.",
          subtopik=["Bela Negara","Patriotisme","Nasionalisme","Cinta Tanah Air","Perbedaan keyword keempat konsep"],
          catatan_kualitas="PDF 2 hal bergaya infografis; sebagian isi berupa gambar/tabel sehingga teks terekstrak hanya sebagian."),
     dict(id="tiu-modul", judul="Ringkasan Materi TIU CPNS (Modul TIU)",
@@ -1355,8 +1358,12 @@ def process_kartu_sakti():
         definisi = " ".join(e["definisi"]).strip()
         if definisi:
             parts.append(f"Definisi: {definisi}")
-        lv = "\n".join(f"- Level {n}: {e['level'][n]}" for n in sorted(e["level"]) if e["level"][n])
-        parts.append(lv)
+        # v2.5: deskripsi level dirender sebagai tabel beneran
+        # (MarkdownLite sudah mendukung tabel markdown).
+        lv_rows = ["| Level | Deskripsi |", "|---|---|"]
+        lv_rows += [f"| {n} | {e['level'][n]} |"
+                    for n in sorted(e["level"]) if e["level"][n]]
+        parts.append("\n".join(lv_rows))
         kw = " ".join(e["katakunci"]).strip()
         if kw:
             parts.append(f"Kata kunci: {kw}")
@@ -1412,7 +1419,7 @@ def process_bang_arya():
                sumber="skd_cpns_2/skd cpns 2/TWK BANG ARYA.pdf", halaman=121,
                subtopik=["Pancasila","Bela Negara","Pilar Negara","Integritas",
                          "Nasionalisme dan Bhinneka Tunggal Ika","Bahasa Indonesia"],
-               catatan_kualitas="PDF berteks, kualitas ekstraksi baik. Hanya 6 rangkuman yang dipertahankan; soal latihan dan pembahasan dikeluarkan dari Belajar. Isi 6 seksi dikurasi tulis-ulang terstruktur (v2.3.3) karena ekstraksi mind-map/tabel aslinya tidak berurutan.")
+               catatan_kualitas="PDF berteks, kualitas ekstraksi baik. Hanya 6 rangkuman yang dipertahankan; soal latihan dan pembahasan dikeluarkan dari Belajar. Isi 6 bagian dikurasi tulis-ulang terstruktur (v2.3.3) karena ekstraksi mind-map/tabel aslinya tidak berurutan.")
     pages = extract_pdf_pages(os.path.join(SRC, cfg["sumber"]))
     assert len(pages) == 121, f"Bang Arya: {len(pages)} halaman, perkiraan 121"
     sections = []
@@ -1549,10 +1556,10 @@ _BARU_FORBIDDEN_RES = [
 ]
 
 def _convert_table_block(rows):
-    """Baris tabel markdown (| A | B |) -> daftar bullet '- **A**: B'.
-    Baris header + pemisah (|---|---|) dibuang; tiap baris data jadi satu
-    bullet. Renderer app (MarkdownLite) tidak mendukung tabel, jadi tabel
-    satu-satunya (dasar hukum di tkp-integritas.md) dikonversi begini."""
+    """Dulu: baris tabel markdown (| A | B |) -> daftar bullet.
+    v2.5: tidak dipakai lagi, MarkdownLite sudah merender tabel markdown
+    apa adanya (lihat parse_baru_markdown). Dipertahankan supaya riwayat
+    konversi lama tetap terbaca; jangan dipakai untuk konten baru."""
     data = []
     for r in rows:
         cells = [c.strip() for c in r.strip().strip("|").split("|")]
@@ -1572,9 +1579,10 @@ def _convert_table_block(rows):
 def parse_baru_markdown(path):
     """Satu file .md baru -> konten bersih (markdown ringan app).
     Membuang: judul H1, header sumber (blockquote awal / seksi '## Sumber'
-    + paragraf Catatan), garis '---'. Tabel markdown dikonversi ke bullet,
-    quote konten ('> ...' sesudah konten dimulai) dibuka jadi paragraf
-    biasa. Em-dash dibersihkan via clean_materi_text."""
+    + paragraf Catatan), garis '---'. Tabel markdown diteruskan apa adanya
+    (v2.5: MarkdownLite merender tabel), quote konten ('> ...' sesudah
+    konten dimulai) dibuka jadi paragraf biasa. Em-dash dibersihkan via
+    clean_materi_text."""
     lines = open(path, encoding="utf-8").read().splitlines()
     out = []
     i = 0
@@ -1618,13 +1626,14 @@ def parse_baru_markdown(path):
                 out.append(text)
             i += 1
             continue
-        # tabel markdown: kumpulkan blok baris '|' berurutan, konversi
+        # tabel markdown: kumpulkan blok baris '|' berurutan, teruskan
+        # apa adanya (v2.5: MarkdownLite merender tabel markdown).
         if stripped.startswith("|"):
             block = []
             while i < len(lines) and lines[i].strip().startswith("|"):
                 block.append(lines[i].strip())
                 i += 1
-            out.extend(_convert_table_block(block))
+            out.extend(block)
             continue
         if stripped.startswith("## "):
             seen_content_heading = True
@@ -1662,6 +1671,49 @@ BARU_TKP = [
 BARU_TWK = [
     ("twk-integritas.md", "Integritas", "Integritas"),
     ("twk-pilar-negara.md", "Pilar Negara", "Pilar Negara"),
+    # v2.6 (poin 8): penebalan Integritas, s01 sudah membahas 9 nilai KPK
+    # secara mendalam, jadi dua seksi baru ini tidak mengulanginya.
+    ("twk-gratifikasi-suap-pemerasan.md", "Gratifikasi, Suap, dan Pemerasan", "Integritas"),
+    ("twk-lhkpn-whistleblowing.md", "LHKPN dan Jalur Pelaporan", "Integritas"),
+]
+
+# Cheat sheet TIU baru (v2.6, poin 6): 6 seksi rumus cepat + trik,
+# mengikuti pola cheat sheet TWK/TKP (6 seksi per dokumen).
+BARU_TIU_CHEAT = [
+    ("tiu-cheat-sheet-hitung-cepat.md", "Hitung Cepat dan Persen", "Hitung cepat dan persen"),
+    ("tiu-cheat-sheet-deret.md", "Deret dan Barisan", "Deret dan barisan"),
+    ("tiu-cheat-sheet-soal-cerita.md", "Soal Cerita Numerik", "Soal cerita numerik"),
+    ("tiu-cheat-sheet-analogi-verbal.md", "Analogi dan Sinonim-Antonim Verbal", "Analogi dan sinonim-antonim verbal"),
+    ("tiu-cheat-sheet-silogisme-logika.md", "Silogisme dan Logika", "Silogisme dan logika"),
+    ("tiu-cheat-sheet-figural.md", "Figural", "Figural"),
+    ("tiu-cheat-sheet-kecukupan-data.md", "Kecukupan Data", "Kecukupan data"),
+]
+
+# Penebalan Bela Negara (v2.6, poin 8): 3 seksi baru di dokumen
+# twk-keyword-bela-negara (s01 pembeda empat konsep dipertahankan;
+# seksi baru tidak mengulang isi s01). Ditambahkan lewat
+# append_baru_bela_negara() seperti append_baru_tiu().
+BARU_BELA_NEGARA = [
+    ("twk-bela-negara-dasar-hukum.md", "Dasar Hukum dan Pengertian Bela Negara", "Bela Negara"),
+    ("twk-bela-negara-partisipasi.md", "Bentuk Partisipasi Warga dalam Bela Negara", "Bela Negara"),
+    ("twk-bela-negara-ancaman.md", "Ancaman terhadap Negara dan Sikap Bela Negara", "Bela Negara"),
+]
+
+# UUD 1945 per kelompok pasal (v2.9-parse, 2026-11-18): 12 seksi
+# orisinal Lolosin, teknik hafalan per kelompok pasal.
+BARU_TWK_UUD = [
+    ("twk-uud-1945-s01.md", "Cara menghafal UUD 1945 per kelompok pasal", "UUD 1945"),
+    ("twk-uud-1945-s02.md", "Pasal 1-3: Bentuk negara dan MPR", "UUD 1945"),
+    ("twk-uud-1945-s03.md", "Pasal 4-16: Presiden dan Wakil Presiden", "UUD 1945"),
+    ("twk-uud-1945-s04.md", "Pasal 17-18B: Kementerian dan pemerintahan daerah", "UUD 1945"),
+    ("twk-uud-1945-s05.md", "Pasal 19-22B: DPR dan pembentukan undang-undang", "UUD 1945"),
+    ("twk-uud-1945-s06.md", "Pasal 22C-22E: DPD dan pemilihan umum", "UUD 1945"),
+    ("twk-uud-1945-s07.md", "Pasal 23-23G: Keuangan negara dan BPK", "UUD 1945"),
+    ("twk-uud-1945-s08.md", "Pasal 24-25A: Kekuasaan kehakiman dan wilayah negara", "UUD 1945"),
+    ("twk-uud-1945-s09.md", "Pasal 26-28J: Warga negara dan hak asasi manusia", "UUD 1945"),
+    ("twk-uud-1945-s10.md", "Pasal 29-34: Agama, pertahanan, pendidikan, ekonomi, kesejahteraan", "UUD 1945"),
+    ("twk-uud-1945-s11.md", "Pasal 35-36C: Identitas negara", "UUD 1945"),
+    ("twk-uud-1945-s12.md", "Pasal 37: Perubahan UUD dan angka-angka kunci", "UUD 1945"),
 ]
 
 def _baru_section(doc_id, n, fname, judul, subtopik):
@@ -1674,7 +1726,9 @@ def _baru_section(doc_id, n, fname, judul, subtopik):
             "kata": len(konten.split())}
 
 def process_baru_docs():
-    """Dua dokumen baru dari riset 2026-11-15 (TKP 12 aspek + TWK 2 subtopik).
+    """Dokumen baru dari riset 2026-11-15 (TKP 12 aspek + TWK + cheat
+    sheet TIU). TWK kini 4 seksi (2 awal + gratifikasi/suap/pemerasan +
+    LHKPN, v2.6 poin 8). Cheat sheet TIU 6 seksi (v2.6 poin 6).
     Analogi tiga kata (TIU) bukan dokumen baru: ditambahkan sebagai seksi
     ke tiu-analogi-verbal di append_baru_tiu() (satu subtopik pelengkap di
     tempatnya). Dokumen baru tampil sebagai entri sendiri di Belajar
@@ -1700,13 +1754,42 @@ def process_baru_docs():
         "id": "twk-integritas-pilar",
         "judul": "Integritas dan Pilar Negara",
         "materi": "TWK",
-        "deskripsi": "Pendalaman dua subtopik TWK: sembilan nilai integritas versi KPK, korupsi dan gratifikasi, serta Empat Pilar MPR RI sebagai satu kesatuan.",
-        "sumber": "baru/twk-integritas.md + baru/twk-pilar-negara.md (riset free-access, 2026-11-15)",
+        "deskripsi": "Pendalaman integritas dan pilar negara: sembilan nilai integritas versi KPK, pembeda gratifikasi, suap, dan pemerasan, LHKPN dan jalur pelaporan, serta Empat Pilar MPR RI sebagai satu kesatuan.",
+        "sumber": "baru/twk-integritas.md + baru/twk-pilar-negara.md + baru/twk-gratifikasi-suap-pemerasan.md + baru/twk-lhkpn-whistleblowing.md (riset free-access, 2026-11-15)",
         "halaman": 0,  # riset web, tanpa halaman sumber (lihat SCHEMA.md)
         "kata": sum(s["kata"] for s in twk_sections),
-        "subtopik": [row[2] for row in BARU_TWK],
+        # dedupe: 3 dari 4 seksi bersubtopik "Integritas"
+        "subtopik": list(dict.fromkeys(row[2] for row in BARU_TWK)),
         "sections": twk_sections,
         "catatan_kualitas": "Materi disusun dari sumber free-access (artikel web dan situs resmi KPK/MPR) pada 2026-11-15 untuk menutup gap audit isi materi; sumber tiap subtopik tercatat di file .md internal.",
+    })
+    tiu_sections = [_baru_section("tiu-cheat-sheet", i + 1, *row)
+                    for i, row in enumerate(BARU_TIU_CHEAT)]
+    docs.append({
+        "id": "tiu-cheat-sheet",
+        "judul": "Cheat Sheet TIU",
+        "materi": "TIU",
+        "deskripsi": "Kartu ringkas TIU: rumus hitung cepat dan persen, pola deret, trik soal cerita numerik, analogi verbal, silogisme dan logika, pola gambar figural, dan strategi soal kecukupan data.",
+        "sumber": "baru/tiu-cheat-sheet-*.md (7 file riset, 2026-11-15 dan 2026-11-16)",
+        "halaman": 0,  # riset web, tanpa halaman sumber (lihat SCHEMA.md)
+        "kata": sum(s["kata"] for s in tiu_sections),
+        "subtopik": [row[2] for row in BARU_TIU_CHEAT],
+        "sections": tiu_sections,
+        "catatan_kualitas": "Materi disusun dari rumus dan kaidah standar pada 2026-11-15, bagian Kecukupan Data ditambahkan 2026-11-16; semua contoh hitung diverifikasi ulang dengan perhitungan mandiri; sumber tiap bagian tercatat di file .md internal.",
+    })
+    uud_sections = [_baru_section("twk-uud-1945-kelompok-pasal", i + 1, *row)
+                    for i, row in enumerate(BARU_TWK_UUD)]
+    docs.append({
+        "id": "twk-uud-1945-kelompok-pasal",
+        "judul": "UUD 1945 per Kelompok Pasal: Hafalan Pasal 1-37",
+        "materi": "TWK",
+        "deskripsi": "Cara menghafal UUD 1945 per kelompok pasal, bukan satu per satu: peta 11 kelompok pasal 1-37, isi pokok tiap pasal, dan angka-angka kunci yang sering keluar di ujian.",
+        "sumber": "baru/twk-uud-1945-s*.md (12 file orisinal Lolosin, 2026-11-18)",
+        "halaman": 0,  # orisinal, tanpa halaman sumber (lihat SCHEMA.md)
+        "kata": sum(s["kata"] for s in uud_sections),
+        "subtopik": ["UUD 1945"],
+        "sections": uud_sections,
+        "catatan_kualitas": "Materi orisinal Lolosin, ditulis dari naskah UUD 1945 (domain publik) pada 2026-11-18; teknik hafalan per kelompok pasal diadaptasi dari ide umum, wording orisinal; isi tiap pasal diverifikasi terhadap naskah resmi MPR.",
     })
     return docs
 
@@ -1734,11 +1817,41 @@ def append_baru_tiu(docs):
         return
     raise SystemExit("append_baru_tiu: dokumen tiu-analogi-verbal tidak ditemukan")
 
+def append_baru_bela_negara(docs):
+    """Tiga seksi baru (riset 2026-11-15, v2.6 poin 8) di dokumen keyword
+    bela negara yang sudah ada (s01 pembeda empat konsep dipertahankan).
+    ID melanjutkan nomor seksi terakhir (s02-s04 saat ini); subtopik
+    "Bela Negara" sudah ada di daftar dokumen."""
+    for doc in docs:
+        if doc["id"] != "twk-keyword-bela-negara":
+            continue
+        max_n = max(int(s["id"].rsplit("-s", 1)[1]) for s in doc["sections"])
+        for j, (fname, judul, subtopik) in enumerate(BARU_BELA_NEGARA):
+            konten = parse_baru_markdown(os.path.join(BARU_DIR, fname))
+            n = max_n + 1 + j
+            if len(konten.split()) < 50:
+                raise SystemExit(f"materi baru {fname}: konten kosong/terlalu "
+                                 f"pendek setelah parse ({len(konten.split())} kata)")
+            doc["sections"].append({
+                "id": f"twk-keyword-bela-negara-s{n:02d}",
+                "subtopik": subtopik,
+                "judul": judul,
+                "konten": konten,
+                "kata": len(konten.split()),
+            })
+            print(f"  twk-keyword-bela-negara: +1 seksi {judul} "
+                  f"(s{n:02d}, {len(konten.split())} kata)")
+        doc["kata"] = sum(s["kata"] for s in doc["sections"])
+        return
+    raise SystemExit("append_baru_bela_negara: dokumen twk-keyword-bela-negara "
+                     "tidak ditemukan")
+
 def verify_baru_content(docs):
     """Gagalkan build bila konten baru mengandung atribusi/URL/em-dash/soal.
     Hanya memeriksa dokumen/seksi baru (tkp-karakter-perilaku,
-    twk-integritas-pilar, tiu-analogi-verbal-s04)."""
-    baru_ids = {"tkp-karakter-perilaku", "twk-integritas-pilar"}
+    twk-integritas-pilar, tiu-cheat-sheet, tiu-analogi-verbal-s04,
+    twk-keyword-bela-negara-s02 ke atas)."""
+    baru_ids = {"tkp-karakter-perilaku", "twk-integritas-pilar", "tiu-cheat-sheet"}
     errors = []
     for doc in docs:
         secs = []
@@ -1750,6 +1863,9 @@ def verify_baru_content(docs):
                         errors.append(f"{doc['id']}.{field}: cocok {rx.pattern!r}")
         elif doc["id"] == "tiu-analogi-verbal":
             secs = [s for s in doc["sections"] if s["id"] == "tiu-analogi-verbal-s04"]
+        elif doc["id"] == "twk-keyword-bela-negara":
+            secs = [s for s in doc["sections"]
+                    if int(s["id"].rsplit("-s", 1)[1]) >= 2]
         for s in secs:
             for field in ("judul", "konten"):
                 for rx in _BARU_FORBIDDEN_RES:
@@ -2343,107 +2459,78 @@ BANG_ARYA_SALVAGE = {
 BANG_ARYA_REWRITE = {
     "twk-bang-arya-s02": '''Setiap sila Pancasila punya nilai intinya masing-masing. Ini ringkasannya:
 
-1. **Ketuhanan Yang Maha Esa**: Nilai ketuhanan. Saling toleransi dan menghormati keyakinan, ketuhanan, dan peribadahan orang lain.
-2. **Kemanusiaan yang adil dan beradab**: Nilai kemanusiaan. Manusia diperlakukan sesuai harkat dan martabatnya, tanpa diskriminasi dan tanpa menghina fisik.
-3. **Persatuan Indonesia**: Nilai persatuan. Keragaman bangsa dan negara justru menyatukan, bukan memecah belah.
-4. **Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan**: Nilai musyawarah mufakat. Tidak boleh memaksakan kehendak, dan keputusan bersama harus dihormati.
-5. **Keadilan sosial bagi seluruh rakyat Indonesia**: Nilai keadilan. Hak pribadi ada batasnya: tidak boleh merugikan orang lain.''',
+| Sila | Nilai inti | Poinnya |
+|---|---|---|
+| 1. Ketuhanan Yang Maha Esa | Ketuhanan | Saling toleransi dan menghormati keyakinan, ketuhanan, dan peribadahan orang lain. |
+| 2. Kemanusiaan yang adil dan beradab | Kemanusiaan | Manusia diperlakukan sesuai harkat dan martabatnya, tanpa diskriminasi dan tanpa menghina fisik. |
+| 3. Persatuan Indonesia | Persatuan | Keragaman bangsa dan negara justru menyatukan, bukan memecah belah. |
+| 4. Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan | Musyawarah mufakat | Tidak boleh memaksakan kehendak, dan keputusan bersama harus dihormati. |
+| 5. Keadilan sosial bagi seluruh rakyat Indonesia | Keadilan | Hak pribadi ada batasnya: tidak boleh merugikan orang lain.''',
 
-    "twk-bang-arya-s08": '''## UUD 1945 (18 Agustus 1945 - 27 Desember 1949)
+    "twk-bang-arya-s08": '''Perjalanan konstitusi Indonesia dari proklamasi sampai amandemen, diringkas per periode:
 
-- UUD 1945 disahkan **PPKI** pada 18 Agustus 1945, sehari setelah proklamasi.
-- MPR dan DPR belum terbentuk, jadi kekuasaan legislatif diserahkan kepada **KNIP** (Komite Nasional Indonesia Pusat).
-- 14 November 1945: sistem pemerintahan berubah menjadi **parlementer**. Kabinet bertanggung jawab kepada KNIP, bukan lagi hanya kepada presiden.
-
-## Konstitusi RIS 1949 (27 Desember 1949 - 17 Agustus 1950)
-
-- Sistem pemerintahan **parlementer**.
-- Bentuk negara **federasi**: Republik Indonesia Serikat (RIS), yang terdiri dari negara-negara bagian.
-
-## UUDS 1950 (17 Agustus 1950 - 5 Juli 1959)
-
-- Berlaku sistem **Demokrasi Parlementer**, yang sering disebut **Demokrasi Liberal**.
-- Ciri khas periode ini: kabinet **silih berganti** karena sering jatuh lewat mosi tidak percaya.
-
-## Kembali ke UUD 1945 (5 Juli 1959 - 11 Maret 1966)
-
-- 5 Juli 1959: Presiden Soekarno mengeluarkan **Dekret Presiden** yang memberlakukan kembali UUD 1945 dan membubarkan Konstituante.
-- UUDS 1950 tidak berlaku lagi.
-
-## UUD 1945 masa Orde Baru (11 Maret 1966 - 21 Mei 1998)
-
-- Periode ini dimulai dengan Surat Perintah 11 Maret (**Supersemar**) 1966.
-- Pemerintah menyatakan akan melaksanakan UUD 1945 dan Pancasila secara **murni dan konsekuen**.
-- Dalam praktiknya, kekuasaan presiden sangat besar dan MPR memegang **kekuasaan tertinggi**.
-
-## Masa transisi (21 Mei 1998 - 19 Oktober 1999)
-
-- Presiden Soeharto digantikan oleh **B.J. Habibie**.
-- Periode ini berakhir setelah **Timor Timur** lepas dari NKRI.
-
-## Periode perubahan UUD 1945 (1999 - 2002)
-
-- Tuntutan perubahan muncul karena pasal-pasal UUD 1945 dinilai terlalu **luwes**, sehingga memberi ruang kekuasaan yang sangat besar kepada presiden.
-- UUD 1945 **diamandemen empat kali**: 1999, 2000, 2001, dan 2002. Yang diubah hanya batang tubuhnya; Pembukaan UUD 1945 tidak boleh diubah.''',
+| Periode | Konstitusi | Sistem dan catatan penting |
+|---|---|---|
+| 18 Agustus 1945 - 27 Desember 1949 | UUD 1945 | Disahkan **PPKI** sehari setelah proklamasi. MPR dan DPR belum terbentuk, jadi kekuasaan legislatif diserahkan kepada **KNIP** (Komite Nasional Indonesia Pusat). 14 November 1945: sistem pemerintahan berubah menjadi **parlementer**, kabinet bertanggung jawab kepada KNIP. |
+| 27 Desember 1949 - 17 Agustus 1950 | Konstitusi RIS 1949 | Sistem **parlementer**. Bentuk negara **federasi**: Republik Indonesia Serikat (RIS), yang terdiri dari negara-negara bagian. |
+| 17 Agustus 1950 - 5 Juli 1959 | UUDS 1950 | Berlaku **Demokrasi Parlementer**, yang sering disebut **Demokrasi Liberal**. Kabinet **silih berganti** karena sering jatuh lewat mosi tidak percaya. |
+| 5 Juli 1959 - 11 Maret 1966 | Kembali ke UUD 1945 | 5 Juli 1959: Presiden Soekarno mengeluarkan **Dekret Presiden** yang memberlakukan kembali UUD 1945 dan membubarkan Konstituante. UUDS 1950 tidak berlaku lagi. |
+| 11 Maret 1966 - 21 Mei 1998 | UUD 1945 masa Orde Baru | Dimulai dengan Surat Perintah 11 Maret (**Supersemar**) 1966. Pemerintah menyatakan akan melaksanakan UUD 1945 dan Pancasila secara **murni dan konsekuen**. Dalam praktiknya, kekuasaan presiden sangat besar dan MPR memegang **kekuasaan tertinggi**. |
+| 21 Mei 1998 - 19 Oktober 1999 | Masa transisi | Presiden Soeharto digantikan oleh **B.J. Habibie**. Periode ini berakhir setelah **Timor Timur** lepas dari NKRI. |
+| 1999 - 2002 | Periode perubahan UUD 1945 | Tuntutan perubahan muncul karena pasal-pasal UUD 1945 dinilai terlalu **luwes**, sehingga memberi ruang kekuasaan yang sangat besar kepada presiden. UUD 1945 **diamandemen empat kali**: 1999, 2000, 2001, dan 2002. Yang diubah hanya batang tubuhnya; Pembukaan UUD 1945 tidak boleh diubah.''',
 
     "twk-bang-arya-s17": '''KPK merumuskan sembilan nilai integritas sebagai tameng dari perilaku koruptif. Gampang diingat lewat akronim **JUMAT BERSEPEDA KK**: Jujur, Mandiri, Tanggung jawab, Berani, Sederhana, Peduli, Disiplin, Adil, Kerja Keras.
 
-## Nilai inti
+| Nilai | Kelompok | Artinya |
+|---|---|---|
+| Jujur | Nilai inti | Lurus hati, tidak berbohong dan tidak curang. Laporan ditulis sesuai kenyataan, kesalahan diakui, bukan ditutupi. |
+| Disiplin | Nilai inti | Melakukan yang seharusnya pada waktu yang tepat, dan taat pada peraturan yang berlaku. |
+| Tanggung jawab | Nilai inti | Siap menanggung akibat perbuatannya, menuntaskan kewajiban, dan memperbaiki kesalahan. |
+| Berani | Nilai sikap | Berani berkata benar dan menolak yang salah, tidak gentar menghadapi ancaman atau bahaya. Misalnya berani menolak suap. |
+| Adil | Nilai sikap | Memperlakukan semua pihak secara setara, bertindak sesuai kewenangan, dan tidak sewenang-wenang. |
+| Peduli | Nilai sikap | Memperhatikan orang lain dan lingkungan sekitar, termasuk berani menegur atau melaporkan penyimpangan. |
+| Mandiri | Nilai etos kerja | Berusaha dengan kemampuan sendiri, tidak bergantung pada bantuan yang tidak semestinya dan tidak memakai "orang dalam". |
+| Kerja keras | Nilai etos kerja | Gigih dan fokus sampai tujuan tercapai, tidak asal-asalan. |
+| Sederhana | Nilai etos kerja | Hidup sesuai kebutuhan, bersahaja, dan tidak berlebih-lebihan.''',
 
-- **Jujur**: Lurus hati, tidak berbohong dan tidak curang. Laporan ditulis sesuai kenyataan, kesalahan diakui, bukan ditutupi.
-- **Disiplin**: Melakukan yang seharusnya pada waktu yang tepat, dan taat pada peraturan yang berlaku.
-- **Tanggung jawab**: Siap menanggung akibat perbuatannya, menuntaskan kewajiban, dan memperbaiki kesalahan.
+    "twk-bang-arya-s25": '''Kapan huruf kapital dipakai dan kapan tidak, diringkas dalam satu tabel:
 
-## Nilai sikap
-
-- **Berani**: Berani berkata benar dan menolak yang salah, tidak gentar menghadapi ancaman atau bahaya. Misalnya berani menolak suap.
-- **Adil**: Memperlakukan semua pihak secara setara, bertindak sesuai kewenangan, dan tidak sewenang-wenang.
-- **Peduli**: Memperhatikan orang lain dan lingkungan sekitar, termasuk berani menegur atau melaporkan penyimpangan.
-
-## Nilai etos kerja
-
-- **Mandiri**: Berusaha dengan kemampuan sendiri, tidak bergantung pada bantuan yang tidak semestinya dan tidak memakai "orang dalam".
-- **Kerja keras**: Gigih dan fokus sampai tujuan tercapai, tidak asal-asalan.
-- **Sederhana**: Hidup sesuai kebutuhan, bersahaja, dan tidak berlebih-lebihan.''',
-
-    "twk-bang-arya-s25": '''## Huruf kapital di awal
-
-- **Awal kalimat.** Contoh: `Kita harus belajar.`
-- **Awal petikan langsung.** Contoh: Kakak bertanya, “Jam berapa acaranya?”
-- **Kata sapaan.** Contoh: `Besok Adik akan pulang.` dan `Siapa nama Anda?`
-
-## Kapital kalau diikuti nama
-
-- **Nama orang.** Contoh: Adam Malik.
-- **Gelar yang diikuti nama orang.** Contoh: Tuanku Imam Bonjol, Imam Syafi’i.
-- **Nama jabatan yang diikuti nama orang, instansi, atau tempat.** Contoh: Presiden Republik Indonesia, Sultan Hamengkubuwono X.
-- **Nama negara atau instansi.** Contoh: Republik Indonesia, Kementerian Luar Negeri.
-- **Nama peristiwa sejarah.** Contoh: Perang Dingin, Perang Dunia II.
-- **Nama diri geografi.** Contoh: Asia Tenggara, Amerika Utara, Danau Singkarak, Sungai Citarum.
-- **Nama bangsa, suku, dan bahasa.** Kata awalnya huruf kecil, namanya kapital. Contoh: bangsa Indonesia, suku Indian, bahasa Inggris.
-- **Nama tahun, bulan, hari, dan hari raya.** Kata awalnya huruf kecil, namanya kapital. Contoh: tahun Hijriah, hari Selasa, bulan Juli, hari raya Idul Fitri.
-- **Gambaran khas daerah atau suku.** Contoh: ukiran Jepara, tari Melayu.
-
-## Tidak kapital
-
-- **Jabatan tanpa nama orang.** Contoh: `Beliau baru saja diangkat menjadi gubernur.`
-- **Peristiwa tanpa nama.** Contoh: `Nuklir dapat menyebabkan terjadinya perang dunia.`
-- **Nama geografi tanpa nama diri.** Contoh: `berenang di laut`, `menyeberangi sungai`.''',
+| Kategori | Aturan | Contoh |
+|---|---|---|
+| Kapital di awal | Awal kalimat | `Kita harus belajar.` |
+| Kapital di awal | Awal petikan langsung | Kakak bertanya, “Jam berapa acaranya?” |
+| Kapital di awal | Kata sapaan | `Besok Adik akan pulang.` dan `Siapa nama Anda?` |
+| Kapital kalau diikuti nama | Nama orang | Adam Malik. |
+| Kapital kalau diikuti nama | Gelar yang diikuti nama orang | Tuanku Imam Bonjol, Imam Syafi’i. |
+| Kapital kalau diikuti nama | Nama jabatan yang diikuti nama orang, instansi, atau tempat | Presiden Republik Indonesia, Sultan Hamengkubuwono X. |
+| Kapital kalau diikuti nama | Nama negara atau instansi | Republik Indonesia, Kementerian Luar Negeri. |
+| Kapital kalau diikuti nama | Nama peristiwa sejarah | Perang Dingin, Perang Dunia II. |
+| Kapital kalau diikuti nama | Nama diri geografi | Asia Tenggara, Amerika Utara, Danau Singkarak, Sungai Citarum. |
+| Kapital kalau diikuti nama | Nama bangsa, suku, dan bahasa (kata awalnya huruf kecil, namanya kapital) | bangsa Indonesia, suku Indian, bahasa Inggris. |
+| Kapital kalau diikuti nama | Nama tahun, bulan, hari, dan hari raya (kata awalnya huruf kecil, namanya kapital) | tahun Hijriah, hari Selasa, bulan Juli, hari raya Idul Fitri. |
+| Kapital kalau diikuti nama | Gambaran khas daerah atau suku | ukiran Jepara, tari Melayu. |
+| Tidak kapital | Jabatan tanpa nama orang | `Beliau baru saja diangkat menjadi gubernur.` |
+| Tidak kapital | Peristiwa tanpa nama | `Nuklir dapat menyebabkan terjadinya perang dunia.` |
+| Tidak kapital | Nama geografi tanpa nama diri | `berenang di laut`, `menyeberangi sungai`.''',
 
     "twk-bang-arya-s32": '''## Lima prinsip nasionalisme
 
-- **Kesatuan**: Satu dalam wilayah, bangsa, bahasa, ideologi, dan sistem politik.
-- **Kebebasan**: Bebas beragama, berbicara, berpendapat, berkelompok, dan berorganisasi.
-- **Kesamaan**: Sama dalam kedudukan hukum, hak, dan kewajiban.
-- **Kepribadian**: Punya harga diri, rasa bangga, dan rasa sayang terhadap kepribadian dan identitas bangsa.
-- **Prestasi**: Bercita-cita mewujudkan kesejahteraan, kebesaran, dan kemanusiaan bangsanya.
+| Prinsip | Artinya |
+|---|---|
+| Kesatuan | Satu dalam wilayah, bangsa, bahasa, ideologi, dan sistem politik. |
+| Kebebasan | Bebas beragama, berbicara, berpendapat, berkelompok, dan berorganisasi. |
+| Kesamaan | Sama dalam kedudukan hukum, hak, dan kewajiban. |
+| Kepribadian | Punya harga diri, rasa bangga, dan rasa sayang terhadap kepribadian dan identitas bangsa. |
+| Prestasi | Bercita-cita mewujudkan kesejahteraan, kebesaran, dan kemanusiaan bangsanya. |
 
 ## Istilah yang sering tertukar
 
-- **Nasionalisme**: Paham yang menempatkan kesetiaan tertinggi kepada bangsa dan negara, diwujudkan lewat sikap dan tindakan untuk identitas negara.
-- **Patriotisme**: Sikap rela mengorbankan segalanya demi negara dan bangsa.
-- **Cinta tanah air**: Cara berpikir dan berbuat yang menunjukkan cinta terhadap tanah air.
-- **Bela negara**: Sikap dan tindakan setiap warga sesuai kewajibannya untuk mendukung tujuan negara.
+| Istilah | Artinya |
+|---|---|
+| Nasionalisme | Paham yang menempatkan kesetiaan tertinggi kepada bangsa dan negara, diwujudkan lewat sikap dan tindakan untuk identitas negara. |
+| Patriotisme | Sikap rela mengorbankan segalanya demi negara dan bangsa. |
+| Cinta tanah air | Cara berpikir dan berbuat yang menunjukkan cinta terhadap tanah air. |
+| Bela negara | Sikap dan tindakan setiap warga sesuai kewajibannya untuk mendukung tujuan negara.
 
 ## Bhinneka Tunggal Ika
 
@@ -2451,27 +2538,15 @@ Bhinneka Tunggal Ika berarti berbeda-beda tetapi tetap satu. Keberagaman tidak m
 
 Prinsipnya adalah *common denominator*: menerima dan terbuka terhadap perbedaan.''',
 
-    "twk-bang-arya-s37": '''## Pasal 1 ayat 1: bentuk negara
+    "twk-bang-arya-s37": '''Pasal-pasal kunci tentang NKRI dalam UUD 1945, diringkas dalam satu tabel:
 
-"Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik."
-
-Artinya bentuk negara Indonesia adalah **kesatuan**, sedangkan bentuk pemerintahannya adalah **republik**. Kekuasaan tertinggi ada di pemerintah pusat, dan kepala negara adalah presiden yang dipilih.
-
-## Pasal 18 ayat 1: wilayah NKRI
-
-NKRI dibagi atas **daerah provinsi**, dan provinsi dibagi atas **kabupaten dan kota**. Masing-masing punya pemerintahan daerah sendiri.
-
-## Pasal 37 ayat 5: NKRI tidak bisa diubah
-
-Khusus mengenai bentuk Negara Kesatuan Republik Indonesia, **tidak dapat dilakukan perubahan**. Inilah yang membuat NKRI disebut final dan harga mati.
-
-## Alinea keempat Pembukaan UUD 1945
-
-Alinea keempat memuat dasar negara **Pancasila** dan menyatakan bahwa negara Indonesia disusun sebagai Negara Republik Indonesia yang **berkedaulatan rakyat**. Di sinilah ditegaskan bahwa bangsa Indonesia hidup, tumbuh, dan berkembang dalam satu wilayah kesatuan yang saling terintegrasi.
-
-## Pasal 31 ayat 1: hak atas pendidikan
-
-"Setiap warga negara berhak mendapat pendidikan."''',
+| Pasal | Isi dan maknanya |
+|---|---|
+| Pasal 1 ayat 1: bentuk negara | "Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik." Artinya bentuk negara Indonesia adalah **kesatuan**, sedangkan bentuk pemerintahannya adalah **republik**. Kekuasaan tertinggi ada di pemerintah pusat, dan kepala negara adalah presiden yang dipilih. |
+| Pasal 18 ayat 1: wilayah NKRI | NKRI dibagi atas **daerah provinsi**, dan provinsi dibagi atas **kabupaten dan kota**. Masing-masing punya pemerintahan daerah sendiri. |
+| Pasal 37 ayat 5: NKRI tidak bisa diubah | Khusus mengenai bentuk Negara Kesatuan Republik Indonesia, **tidak dapat dilakukan perubahan**. Inilah yang membuat NKRI disebut final dan harga mati. |
+| Alinea keempat Pembukaan UUD 1945 | Alinea keempat memuat dasar negara **Pancasila** dan menyatakan bahwa negara Indonesia disusun sebagai Negara Republik Indonesia yang **berkedaulatan rakyat**. Di sinilah ditegaskan bahwa bangsa Indonesia hidup, tumbuh, dan berkembang dalam satu wilayah kesatuan yang saling terintegrasi. |
+| Pasal 31 ayat 1: hak atas pendidikan | "Setiap warga negara berhak mendapat pendidikan."''',
 }
 
 # ------------------------------------------------------- Tulis ulang keterbacaan (v2.5)
@@ -3063,19 +3138,21 @@ Aturan perkalian dan pembagian tanda: tanda sama menghasilkan positif, tanda bed
 
 Konversi berikut sebaiknya dikuasai di luar kepala:
 
-- 1/2 = 0,5 = 50%
-- 1/3 = 0,333... = 33 1/3%
-- 2/3 = 0,666... = 66 2/3%
-- 1/4 = 0,25 = 25%
-- 3/4 = 0,75 = 75%
-- 1/5 = 0,2 = 20%
-- 2/5 = 0,4 = 40%
-- 3/5 = 0,6 = 60%
-- 4/5 = 0,8 = 80%
-- 1/8 = 0,125 = 12,5%
-- 3/8 = 0,375 = 37,5%
-- 5/8 = 0,625 = 62,5%
-- 7/8 = 0,875 = 87,5%
+| Pecahan | Desimal | Persen |
+|---|---|---:|
+| 1/2 | 0,5 | 50% |
+| 1/3 | 0,333... | 33 1/3% |
+| 2/3 | 0,666... | 66 2/3% |
+| 1/4 | 0,25 | 25% |
+| 3/4 | 0,75 | 75% |
+| 1/5 | 0,2 | 20% |
+| 2/5 | 0,4 | 40% |
+| 3/5 | 0,6 | 60% |
+| 4/5 | 0,8 | 80% |
+| 1/8 | 0,125 | 12,5% |
+| 3/8 | 0,375 | 37,5% |
+| 5/8 | 0,625 | 62,5% |
+| 7/8 | 0,875 | 87,5% |
 
 **Trik persen bolak-balik:** a% dari b sama dengan b% dari a, karena keduanya sama dengan ab/100. Contoh: 16% dari 25 bisa diubah menjadi 25% dari 16, yaitu 1/4 × 16 = 4.
 
@@ -4160,17 +4237,57 @@ Berapa perbedaan suhu kedua daerah tersebut?
 Jawab: cari selisih suhu keduanya, suhu yang tinggi dikurangi suhu yang rendah. Suhu di Kota Semarang 24 derajat Celsius. Suhu di Dieng -1 derajat Celsius. Maka selisih suhu kedua daerah tersebut adalah `24 - (-1) = 25` derajat Celsius.''',
     "tiu-hitung-cepat-s05": '''Pecahan istimewa adalah pecahan yang sering digunakan dalam soal. Hafalkan nilai desimal dan persennya agar hitungan menjadi lebih cepat.
 
+![Lingkaran dibagi tiga bagian sama besar: satu bagian diarsir berarti 1/3, dua bagian diarsir berarti 2/3](gambar:pecahan)
+
 ## Nilai Desimal dan Persen yang Sering Muncul
 
-- **Penyebut 2:** 1/2 = 0,5 = 50%.
-- **Penyebut 3:** 1/3 = 0,333 = 33,3%; 2/3 = 0,667 = 66,7%.
-- **Penyebut 4:** 1/4 = 0,25 = 25%; 2/4 = 0,5 = 50%; 3/4 = 0,75 = 75%.
-- **Penyebut 5:** 1/5 = 0,2 = 20%; 2/5 = 0,4 = 40%; 3/5 = 0,6 = 60%; 4/5 = 0,8 = 80%.
-- **Penyebut 6:** 1/6 = 0,167 = 16,7%; 2/6 = 0,333 = 33,3%; 3/6 = 0,5 = 50%; 4/6 = 0,667 = 66,7%; 5/6 = 0,833 = 83,3%.
-- **Penyebut 7:** 1/7 = 0,143 = 14,3%; 2/7 = 0,286 = 28,6%; 3/7 = 0,429 = 42,9%; 4/7 = 0,571 = 57,1%; 5/7 = 0,714 = 71,4%; 6/7 = 0,857 = 85,7%.
-- **Penyebut 8:** 1/8 = 0,125 = 12,5%; 2/8 = 0,25 = 25%; 3/8 = 0,375 = 37,5%; 4/8 = 0,5 = 50%; 5/8 = 0,625 = 62,5%; 6/8 = 0,75 = 75%; 7/8 = 0,875 = 87,5%.
-- **Penyebut 9:** 1/9 = 0,111 = 11,1%; 2/9 = 0,222 = 22,2%; 3/9 = 0,333 = 33,3%; 4/9 = 0,444 = 44,4%; 5/9 = 0,556 = 55,6%; 6/9 = 0,667 = 66,7%; 7/9 = 0,778 = 77,8%; 8/9 = 0,889 = 88,9%.
-- **Penyebut 10:** 1/10 = 0,1 = 10%; 2/10 = 0,2 = 20%; dan seterusnya sampai 9/10 = 0,9 = 90%.
+| Pecahan | Desimal | Persen |
+|---|---|---:|
+| 1/2 | 0,5 | 50% |
+| 1/3 | 0,333 | 33,3% |
+| 2/3 | 0,667 | 66,7% |
+| 1/4 | 0,25 | 25% |
+| 2/4 | 0,5 | 50% |
+| 3/4 | 0,75 | 75% |
+| 1/5 | 0,2 | 20% |
+| 2/5 | 0,4 | 40% |
+| 3/5 | 0,6 | 60% |
+| 4/5 | 0,8 | 80% |
+| 1/6 | 0,167 | 16,7% |
+| 2/6 | 0,333 | 33,3% |
+| 3/6 | 0,5 | 50% |
+| 4/6 | 0,667 | 66,7% |
+| 5/6 | 0,833 | 83,3% |
+| 1/7 | 0,143 | 14,3% |
+| 2/7 | 0,286 | 28,6% |
+| 3/7 | 0,429 | 42,9% |
+| 4/7 | 0,571 | 57,1% |
+| 5/7 | 0,714 | 71,4% |
+| 6/7 | 0,857 | 85,7% |
+| 1/8 | 0,125 | 12,5% |
+| 2/8 | 0,25 | 25% |
+| 3/8 | 0,375 | 37,5% |
+| 4/8 | 0,5 | 50% |
+| 5/8 | 0,625 | 62,5% |
+| 6/8 | 0,75 | 75% |
+| 7/8 | 0,875 | 87,5% |
+| 1/9 | 0,111 | 11,1% |
+| 2/9 | 0,222 | 22,2% |
+| 3/9 | 0,333 | 33,3% |
+| 4/9 | 0,444 | 44,4% |
+| 5/9 | 0,556 | 55,6% |
+| 6/9 | 0,667 | 66,7% |
+| 7/9 | 0,778 | 77,8% |
+| 8/9 | 0,889 | 88,9% |
+| 1/10 | 0,1 | 10% |
+| 2/10 | 0,2 | 20% |
+| 3/10 | 0,3 | 30% |
+| 4/10 | 0,4 | 40% |
+| 5/10 | 0,5 | 50% |
+| 6/10 | 0,6 | 60% |
+| 7/10 | 0,7 | 70% |
+| 8/10 | 0,8 | 80% |
+| 9/10 | 0,9 | 90% |
 
 Catatan: nilai pecahan berpenyebut 3, 6, 7, dan 9 sebenarnya berulang tak berujung, angka di atas dibulatkan ke 3 desimal.
 
@@ -4247,9 +4364,9 @@ Akar pangkat dua adalah nilai suatu bilangan yang berpangkat 1/2. Sementara akar
 
 ## Contoh Soal Akar
 
-**1. Jika akar a ditambah akar b = 8 dan akar a dikurangi akar b = 9, tentukan nilai a - b!**
+**1. Jika akar a ditambah akar b = 9 dan akar a dikurangi akar b = 8, tentukan nilai a - b!**
 
-Jawab: `a - b = (akar a + akar b) x (akar a - akar b) = 8 x 9 = 72`.
+Jawab: `a - b = (akar a + akar b) x (akar a - akar b) = 9 x 8 = 72`.
 
 **2. Nilai x = (2 pangkat 2 x 2 pangkat 3 x 2 pangkat 5) pangkat 1/2 dan y = akar pangkat tiga dari 8 pangkat 2. Tentukan hubungan x dan y!**
 
@@ -5203,8 +5320,8 @@ Pembagian dapat diartikan sebagai lawan dari perkalian. Notasinya adalah tanda `
 Sifat-sifat pembagian:
 
 - Setiap bilangan dibagi 1 hasilnya bilangan itu sendiri: `a : 1 = a`
-- Setiap bilangan dibagi dengan bilangan itu sendiri sama dengan 1: `a : a = 1`
-- Bilangan nol dibagi bilangan berapa saja sama dengan 0: `0 : a = 0`
+- Setiap bilangan dibagi dengan bilangan itu sendiri sama dengan 1: `a : a = 1`, dengan `a` bukan nol
+- Bilangan nol dibagi bilangan berapa saja sama dengan 0: `0 : a = 0`, dengan `a` bukan nol
 - Bilangan berapa saja dibagi nol sama dengan tidak terdefinisi: `a : 0 = tidak terdefinisi`
 
 ## Aturan tanda pada perkalian dan pembagian
@@ -6290,9 +6407,7 @@ Contoh:
 - Titik C(0, -3) artinya memiliki absis 0 dan ordinat -3.
 - Titik D(-6, -4) artinya memiliki absis -6 dan ordinat -4.
 
-Contoh: tuliskan koordinat titik A, B, C, D, dan E pada gambar!
-
-Jawab:
+Contoh membaca koordinat: lima titik berikut ditulis lengkap dengan absis dan ordinatnya.
 
 - Titik A(4, 4), absis = 4 dan ordinat = 4
 - Titik B(-5, 2), absis = -5 dan ordinat = 2
@@ -6350,7 +6465,15 @@ Contoh: Amin mengumpulkan data hasil panen palawija di Desa Suka Makmur selama 4
 
 ## Tabel
 
-Data di atas dapat disajikan dalam tabel dengan kolom tahun dan kolom hasil panen (dalam ton): 2005 menghasilkan 25 ton, 2006 menghasilkan 30 ton, 2007 menghasilkan 45 ton, 2008 menghasilkan 40 ton, dengan jumlah 140 ton.
+Data di atas dapat disajikan dalam tabel dengan kolom tahun dan kolom hasil panen (dalam ton):
+
+| Tahun | Hasil panen (ton) |
+|---|---:|
+| 2005 | 25 |
+| 2006 | 30 |
+| 2007 | 45 |
+| 2008 | 40 |
+| Jumlah | 140 |
 
 ## Diagram batang
 
@@ -6366,7 +6489,7 @@ Titik-titik data dihubungkan dengan garis sehingga terlihat naik turunnya hasil 
 
 Diagram lingkaran adalah diagram yang disajikan menggunakan lingkaran yang dibagi menjadi beberapa bagian.
 
-Jumlah sudut dalam satu lingkaran adalah 360 derajat. Besar sudut untuk masing-masing data dapat dihitung dengan cara membagi data dengan jumlah seluruh data, lalu dikali 360 derajat.
+Jumlah sudut dalam satu lingkaran adalah 360 derajat. Besar sudut untuk masing-masing data dapat dihitung dengan cara membagi data dengan jumlah seluruh data, lalu dikali 360 derajat. Hasilnya di bawah ini dibulatkan ke derajat terdekat.
 
 - Hasil panen tahun 2005: `(25/140) x 360 derajat = 64 derajat`
 - Hasil panen tahun 2006: `(30/140) x 360 derajat = 77 derajat`
@@ -7036,39 +7159,45 @@ Kerangka berpikirnya: **Peduli → Bertanggung Jawab → Hemat → Teladan → B
 
 Definisi: Kemampuan menggunakan berbagai sudut pandang dalam menghadapi tuntutan perubahan.
 
-- Level 0: Mengetahui adanya perbedaan sudut pandang.
-- Level 1: Mengenali sudut pandang orang lain yang berbeda.
-- Level 2: Menyadari sudut pandang orang lain yang berbeda.
-- Level 3: Menyelaraskan sudut pandang pribadinya dengan sudut pandang orang lain.
-- Level 4: Mengakui kebenaran sudut pandang orang lain.
-- Level 5: Mengakomodasi berbagai perbedaan sudut pandang sesuai dengan tuntutan perubahan.
-- Level 6: Mendayagunakan berbagai sudut pandang orang lain untuk mengoptimalkan kemampuan berpikir.
+| Level | Deskripsi |
+|---|---|
+| 0 | Mengetahui adanya perbedaan sudut pandang. |
+| 1 | Mengenali sudut pandang orang lain yang berbeda. |
+| 2 | Menyadari sudut pandang orang lain yang berbeda. |
+| 3 | Menyelaraskan sudut pandang pribadinya dengan sudut pandang orang lain. |
+| 4 | Mengakui kebenaran sudut pandang orang lain. |
+| 5 | Mengakomodasi berbagai perbedaan sudut pandang sesuai dengan tuntutan perubahan. |
+| 6 | Mendayagunakan berbagai sudut pandang orang lain untuk mengoptimalkan kemampuan berpikir. |
 
 Kata kunci: Mampu menggunakan berbagai sudut pandang.''',
     "tkp-kartu-sakti-s02": '''Kelompok: Kemampuan Berpikir (KB)
 
 Definisi: Kemampuan memunculkan ide, gagasan dan pemikiran baru dalam rangka meningkatkan efektivitas kerja.
 
-- Level 0: Menggunakan gagasan / pemikiran yang sudah ada.
-- Level 1: Mengenali adanya gagasan baru.
-- Level 2: Mengidentifikasi alternatif ide dan gagasan baru yang mungkin dapat diterapkan.
-- Level 3: Menentukan alternatif ide yang mungkin dapat diterapkan.
-- Level 4: Mengadopsi ide / pemikiran yang cocok diterapkan dalam lingkungan kerja.
-- Level 5: Mengadaptasi ide / pemikiran untuk efektivitas organisasi.
-- Level 6: Menciptakan ide pemikiran yang orisinil yang bermanfaat bagi organisasi.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menggunakan gagasan / pemikiran yang sudah ada. |
+| 1 | Mengenali adanya gagasan baru. |
+| 2 | Mengidentifikasi alternatif ide dan gagasan baru yang mungkin dapat diterapkan. |
+| 3 | Menentukan alternatif ide yang mungkin dapat diterapkan. |
+| 4 | Mengadopsi ide / pemikiran yang cocok diterapkan dalam lingkungan kerja. |
+| 5 | Mengadaptasi ide / pemikiran untuk efektivitas organisasi. |
+| 6 | Menciptakan ide pemikiran yang orisinil yang bermanfaat bagi organisasi. |
 
 Kata kunci: Mampu membuat ide / gagasan dan pemikiran baru.''',
     "tkp-kartu-sakti-s03": '''Kelompok: Kemampuan Berpikir (KB)
 
 Definisi: Kemampuan menguraikan permasalahan berdasarkan informasi yang relevan dari berbagai sumber secara komprehensif untuk mengidentifikasi penyebab dan dampak terhadap organisasi.
 
-- Level 0: Mengetahui permasalahan yang terjadi dalam pekerjaan.
-- Level 1: Memahami permasalahan yang terjadi dalam pekerjaannya.
-- Level 2: Menguraikan faktor-faktor penyebab dan dampak dari permasalahan terkait dengan pekerjaannya.
-- Level 3: Mengidentifikasi faktor-faktor potensial permasalahan yang berdampak kepada keberlangsungan organisasi.
-- Level 4: Menguraikan dampak jangka panjang dari permasalahan yang muncul terhadap kelangsungan kegiatan organisasi.
-- Level 5: Merumuskan pendekatan komprehensif yang dapat dilakukan organisasi untuk mengatasi permasalahan organisasi.
-- Level 6: Memproyeksikan situasi / dampak jangka panjang dari suatu fenomena umum dari sudut pandang kepentingan organisasi.
+| Level | Deskripsi |
+|---|---|
+| 0 | Mengetahui permasalahan yang terjadi dalam pekerjaan. |
+| 1 | Memahami permasalahan yang terjadi dalam pekerjaannya. |
+| 2 | Menguraikan faktor-faktor penyebab dan dampak dari permasalahan terkait dengan pekerjaannya. |
+| 3 | Mengidentifikasi faktor-faktor potensial permasalahan yang berdampak kepada keberlangsungan organisasi. |
+| 4 | Menguraikan dampak jangka panjang dari permasalahan yang muncul terhadap kelangsungan kegiatan organisasi. |
+| 5 | Merumuskan pendekatan komprehensif yang dapat dilakukan organisasi untuk mengatasi permasalahan organisasi. |
+| 6 | Memproyeksikan situasi / dampak jangka panjang dari suatu fenomena umum dari sudut pandang kepentingan organisasi. |
 
 Kata kunci: Mampu menganalisis permasalahan atau mengurai permasalahan.''',
     "tkp-kartu-sakti-s04": '''Kelompok: Kemampuan Berpikir (KB)
@@ -7077,253 +7206,293 @@ Definisi: Kemampuan mengidentifikasi pola atau hubungan dalam suatu rangkaian in
 
 Pola atau hubungan itu dikenali dari data atau informasi yang sudah tersedia berdasarkan suatu konsep yang konkret dan sederhana, lalu disimpulkan menjadi suatu rumusan yang jelas dan komprehensif.
 
-- Level 0: Membuat kesimpulan dari suatu hal berdasarkan informasi parsial.
-- Level 3: Mengkaji proses pengambilan kesimpulan / formulasi-formulasi pola hubungan informasi.
-- Level 4: Merumuskan konsep berdasarkan pola hubungan informasi yang ada.
-- Level 5: Mengembangkan suatu konsep baru sesuai dengan kebutuhan nyata organisasi.
-- Level 6: Mengembangkan suatu konsep baru sesuai dengan kebutuhan organisasi ke depan.
+| Level | Deskripsi |
+|---|---|
+| 0 | Membuat kesimpulan dari suatu hal berdasarkan informasi parsial. |
+| 3 | Mengkaji proses pengambilan kesimpulan / formulasi-formulasi pola hubungan informasi. |
+| 4 | Merumuskan konsep berdasarkan pola hubungan informasi yang ada. |
+| 5 | Mengembangkan suatu konsep baru sesuai dengan kebutuhan nyata organisasi. |
+| 6 | Mengembangkan suatu konsep baru sesuai dengan kebutuhan organisasi ke depan. |
 
 Kata kunci: Mampu menghubungkan pola menjadi hubungan suatu informasi.''',
     "tkp-kartu-sakti-s05": '''Kelompok: Mengelola Diri (MD)
 
 Definisi: Kemampuan menyesuaikan diri terhadap perubahan sehingga tetap dapat mempertahankan efektivitas kerja.
 
-- Level 0: Menganggap perubahan bukan suatu hal yang penting.
-- Level 1: Mengikuti perubahan sesuai dengan tuntutan kebijakan organisasi.
-- Level 2: Menyesuaikan diri terhadap perubahan yang terjadi atas kesadaran dan inisiatif sendiri.
-- Level 3: Mencari alternatif dan pendekatan diri untuk memenuhi kebutuhan dari situasi yang berbeda dan baru.
-- Level 4: Mengembangkan kemampuan diri untuk menghadapi tuntutan atau dinamika perubahan.
-- Level 5: Mengantisipasi perubahan dan membuat penyesuaian jangka panjang dalam organisasi sebagai respon terhadap situasi.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menganggap perubahan bukan suatu hal yang penting. |
+| 1 | Mengikuti perubahan sesuai dengan tuntutan kebijakan organisasi. |
+| 2 | Menyesuaikan diri terhadap perubahan yang terjadi atas kesadaran dan inisiatif sendiri. |
+| 3 | Mencari alternatif dan pendekatan diri untuk memenuhi kebutuhan dari situasi yang berbeda dan baru. |
+| 4 | Mengembangkan kemampuan diri untuk menghadapi tuntutan atau dinamika perubahan. |
+| 5 | Mengantisipasi perubahan dan membuat penyesuaian jangka panjang dalam organisasi sebagai respon terhadap situasi. |
 
 Kata kunci: Mampu menyesuaikan terhadap perubahan situasi dalam lingkungan kerja. Membuat pola-pola atau pendekatan baru dalam penyesuaian dirinya dengan dinamika tuntutan perubahan baik jangka pendek maupun jangka panjang.''',
     "tkp-kartu-sakti-s06": '''Kelompok: Mengelola Diri (MD)
 
 Definisi: Kemampuan bertindak secara konsisten dan transparan dalam segala situasi dan kondisi sesuai dengan nilai-nilai, norma atau etika yang berlaku di lingkungan kerja.
 
-- Level 0: Menyadari tentang pentingnya norma dan etika bagi organisasi.
-- Level 1: Menerapkan norma dan etika organisasi sebatas memenuhi kewajiban.
-- Level 2: Menerapkan norma dan etika organisasi sebatas pada dirinya dalam segala situasi dan kondisi.
-- Level 3: Mengingatkan dan mengupayakan orang lain untuk bertindak sesuai dengan nilai, norma dan etika organisasi dalam segala situasi dan kondisi.
-- Level 5: Menciptakan situasi kerja yang membuat rekan kerja mematuhi nilai, norma dan etika organisasi dalam segala situasi dan kondisi.
-- Level 6: Memberi teladan dalam menerapkan nilai, norma dan etika organisasi pada segala situasi dan kondisi.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menyadari tentang pentingnya norma dan etika bagi organisasi. |
+| 1 | Menerapkan norma dan etika organisasi sebatas memenuhi kewajiban. |
+| 2 | Menerapkan norma dan etika organisasi sebatas pada dirinya dalam segala situasi dan kondisi. |
+| 3 | Mengingatkan dan mengupayakan orang lain untuk bertindak sesuai dengan nilai, norma dan etika organisasi dalam segala situasi dan kondisi. |
+| 5 | Menciptakan situasi kerja yang membuat rekan kerja mematuhi nilai, norma dan etika organisasi dalam segala situasi dan kondisi. |
+| 6 | Memberi teladan dalam menerapkan nilai, norma dan etika organisasi pada segala situasi dan kondisi. |
 
 Kata kunci: Mampu bertindak secara konsisten.''',
     "tkp-kartu-sakti-s11": '''Kelompok: Mengelola Diri (MD)
 
 Definisi: Kemampuan untuk selalu meningkatkan kinerja dengan lebih baik di atas standar secara terus-menerus.
 
-- Level 0: Melaksanakan tugas tanpa mempertimbangkan tuntutan standar.
-- Level 1: Menyelesaikan tugas berdasarkan standar rata-rata.
-- Level 2: Menyelesaikan tugas dengan standar di atas rata-rata.
-- Level 3: Melakukan pembelajaran terhadap proses dan hasil pekerjaan untuk pencapaian hasil kerja lebih baik.
-- Level 4: Melakukan langkah-langkah perbaikan untuk mencapai kinerja yang optimal.
-- Level 5: Melakukan monitoring terhadap proses kerja untuk pencapaian efektivitas kerja.
-- Level 6: Membuat cara atau pendekatan baru dalam meningkatkan kualitas dan kuantitas hasil pekerjaan.
+| Level | Deskripsi |
+|---|---|
+| 0 | Melaksanakan tugas tanpa mempertimbangkan tuntutan standar. |
+| 1 | Menyelesaikan tugas berdasarkan standar rata-rata. |
+| 2 | Menyelesaikan tugas dengan standar di atas rata-rata. |
+| 3 | Melakukan pembelajaran terhadap proses dan hasil pekerjaan untuk pencapaian hasil kerja lebih baik. |
+| 4 | Melakukan langkah-langkah perbaikan untuk mencapai kinerja yang optimal. |
+| 5 | Melakukan monitoring terhadap proses kerja untuk pencapaian efektivitas kerja. |
+| 6 | Membuat cara atau pendekatan baru dalam meningkatkan kualitas dan kuantitas hasil pekerjaan. |
 
 Kata kunci: Mampu meningkatkan kinerja.''',
     "tkp-kartu-sakti-s14": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan meyakinkan, mempengaruhi dan memotivasi orang lain dengan tujuan agar mereka mengikuti dan melaksanakan rencana kerja unit / organisasi.
 
-- Level 0: Membiarkan keadaan setiap orang bekerja tanpa pengarahan.
-- Level 1: Meyakinkan orang lain tentang pentingnya pencapaian tujuan organisasi.
-- Level 2: Membina bawahan dalam penyelesaian pekerjaan.
-- Level 3: Mendelegasikan pekerjaan dan wewenang sesuai kompetensi dan potensi bawahan.
-- Level 4: Mengorganisir sumber daya yang tersedia untuk optimalisasi pencapaian tujuan organisasi.
-- Level 5: Membangun situasi kerja yang kondusif.
-- Level 6: Menggunakan strategi atau perilaku tertentu yang dapat mempengaruhi orang lain untuk mencapai tujuan.
+| Level | Deskripsi |
+|---|---|
+| 0 | Membiarkan keadaan setiap orang bekerja tanpa pengarahan. |
+| 1 | Meyakinkan orang lain tentang pentingnya pencapaian tujuan organisasi. |
+| 2 | Membina bawahan dalam penyelesaian pekerjaan. |
+| 3 | Mendelegasikan pekerjaan dan wewenang sesuai kompetensi dan potensi bawahan. |
+| 4 | Mengorganisir sumber daya yang tersedia untuk optimalisasi pencapaian tujuan organisasi. |
+| 5 | Membangun situasi kerja yang kondusif. |
+| 6 | Menggunakan strategi atau perilaku tertentu yang dapat mempengaruhi orang lain untuk mencapai tujuan. |
 
 Kata kunci: Mampu meyakinkan, mempengaruhi dan memotivasi orang.''',
     "tkp-kartu-sakti-s15": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan memberikan bimbingan dan umpan balik secara teratur terhadap bawahan agar bekerja secara terarah sesuai dengan rencana.
 
-- Level 0: Menginformasikan tugas-tugas yang harus dilakukan oleh bawahan secara tersirat.
-- Level 1: Menjelaskan tugas secara rinci agar bawahan dapat melakukan tugas-tugasnya dengan baik.
-- Level 2: Menentukan target kerja yang harus dicapai oleh bawahan.
-- Level 3: Mengkomunikasikan hal-hal yang harus dilakukan bawahan agar target kerja yang telah ditentukan dapat tercapai.
-- Level 4: Membantu bawahan saat menghadapi kendala sehingga pelaksanaan tugas dapat berjalan optimal.
-- Level 5: Memberikan umpan balik terhadap hasil pekerjaan bawahan sebagai upaya untuk meningkatkan kinerja.
-- Level 6: Menentukan faktor-faktor potensial yang berpengaruh pada pencapaian dan kegagalan pekerjaan.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menginformasikan tugas-tugas yang harus dilakukan oleh bawahan secara tersirat. |
+| 1 | Menjelaskan tugas secara rinci agar bawahan dapat melakukan tugas-tugasnya dengan baik. |
+| 2 | Menentukan target kerja yang harus dicapai oleh bawahan. |
+| 3 | Mengkomunikasikan hal-hal yang harus dilakukan bawahan agar target kerja yang telah ditentukan dapat tercapai. |
+| 4 | Membantu bawahan saat menghadapi kendala sehingga pelaksanaan tugas dapat berjalan optimal. |
+| 5 | Memberikan umpan balik terhadap hasil pekerjaan bawahan sebagai upaya untuk meningkatkan kinerja. |
+| 6 | Menentukan faktor-faktor potensial yang berpengaruh pada pencapaian dan kegagalan pekerjaan. |
 
 Kata kunci: Mampu membimbing dan memberikan umpan balik kepada bawahan.''',
     "tkp-kartu-sakti-s16": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan melakukan upaya untuk mengetahui, memahami, dan memenuhi kebutuhan pelanggan dalam setiap aktivitas pekerjaannya.
 
-- Level 0: Memberikan pelayanan tergantung pada situasi dan kondisi pribadinya.
-- Level 1: Mengidentifikasi faktor-faktor yang menjadi kebutuhan pelanggan.
-- Level 2: Memenuhi kebutuhan pelanggan sesuai sumber daya organisasi yang tersedia.
-- Level 3: Meningkatkan kemampuan organisasi untuk memenuhi kebutuhan pelanggan.
-- Level 4: Melakukan upaya perbaikan pelayanan kepada pelanggan secara terus menerus.
-- Level 5: Mencari alternatif pelayanan terbaik untuk memuaskan kebutuhan pelanggan.
-- Level 6: Menginternalisasikan nilai dan semangat pelayanan ke setiap individu di lingkungan organisasi.
+| Level | Deskripsi |
+|---|---|
+| 0 | Memberikan pelayanan tergantung pada situasi dan kondisi pribadinya. |
+| 1 | Mengidentifikasi faktor-faktor yang menjadi kebutuhan pelanggan. |
+| 2 | Memenuhi kebutuhan pelanggan sesuai sumber daya organisasi yang tersedia. |
+| 3 | Meningkatkan kemampuan organisasi untuk memenuhi kebutuhan pelanggan. |
+| 4 | Melakukan upaya perbaikan pelayanan kepada pelanggan secara terus menerus. |
+| 5 | Mencari alternatif pelayanan terbaik untuk memuaskan kebutuhan pelanggan. |
+| 6 | Menginternalisasikan nilai dan semangat pelayanan ke setiap individu di lingkungan organisasi. |
 
 Kata kunci: Mampu memberikan kepuasan pelanggan.''',
     "tkp-kartu-sakti-s17": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan untuk sadar dan tanggap, serta peduli terhadap kondisi-kondisi yang dapat mempengaruhi keselamatan pegawai.
 
-- Level 0: Menentukan pentingnya faktor dan prosedur keselamatan kerja.
-- Level 1: Mematuhi prosedur K3 karena adanya tuntutan dari organisasi.
-- Level 2: Mematuhi prosedur K3 atas kesadaran diri sendiri.
-- Level 3: Menggunakan peralatan atau perlengkapan K3 tambahan yang dirasakan perlu.
-- Level 4: Melaporkan kondisi-kondisi yang berpengaruh terhadap keselamatan kerja.
-- Level 5: Mengajak orang lain untuk bekerja sesuai dengan prosedur keselamatan kerja.
-- Level 6: Mengusulkan sistem keselamatan kerja yang sesuai dengan kondisi dan lingkungan kerja.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menentukan pentingnya faktor dan prosedur keselamatan kerja. |
+| 1 | Mematuhi prosedur K3 karena adanya tuntutan dari organisasi. |
+| 2 | Mematuhi prosedur K3 atas kesadaran diri sendiri. |
+| 3 | Menggunakan peralatan atau perlengkapan K3 tambahan yang dirasakan perlu. |
+| 4 | Melaporkan kondisi-kondisi yang berpengaruh terhadap keselamatan kerja. |
+| 5 | Mengajak orang lain untuk bekerja sesuai dengan prosedur keselamatan kerja. |
+| 6 | Mengusulkan sistem keselamatan kerja yang sesuai dengan kondisi dan lingkungan kerja. |
 
 Kata kunci: Mampu untuk tanggap, sadar dan peduli terhadap keselamatan kerja.''',
     "tkp-kartu-sakti-s19": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan untuk menemukan berbagai alternatif dalam rangka membuat kesepakatan dengan mengakomodasi kepentingan semua pihak.
 
-- Level 0: Menerima tawaran apa adanya sesuai dengan usulan pihak lain.
-- Level 1: Menerima tawaran kerjasama berdasarkan informasi parsial.
-- Level 2: Mengumpulkan informasi yang relevan terkait dengan tujuan yang ingin dicapai dengan pihak-pihak yang terlibat.
-- Level 3: Mengajukan alternatif penawaran dengan mempelajari risiko yang mungkin timbul.
-- Level 4: Melakukan tawar menawar kepentingan dengan mempertimbangkan fakta, data, dan risiko.
-- Level 5: Membangun dukungan bagi alternatif pilihan dengan cara bertukar pikiran dan menggunakan strategi yang relevan / tertentu.
-- Level 6: Membuat kesepakatan yang saling menguntungkan dan mengakomodasi kepentingan semua pihak.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menerima tawaran apa adanya sesuai dengan usulan pihak lain. |
+| 1 | Menerima tawaran kerjasama berdasarkan informasi parsial. |
+| 2 | Mengumpulkan informasi yang relevan terkait dengan tujuan yang ingin dicapai dengan pihak-pihak yang terlibat. |
+| 3 | Mengajukan alternatif penawaran dengan mempelajari risiko yang mungkin timbul. |
+| 4 | Melakukan tawar menawar kepentingan dengan mempertimbangkan fakta, data, dan risiko. |
+| 5 | Membangun dukungan bagi alternatif pilihan dengan cara bertukar pikiran dan menggunakan strategi yang relevan / tertentu. |
+| 6 | Membuat kesepakatan yang saling menguntungkan dan mengakomodasi kepentingan semua pihak. |
 
 Kata kunci: Mampu membuat kesepakatan yang menguntungkan.''',
     "tkp-kartu-sakti-s20": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan mencari, menciptakan serta menerapkan cara kerja, teknologi dan produk baru untuk memberdayakan organisasi dalam rangka meningkatkan kualitas pelayanan.
 
-- Level 0: Menerima kondisi organisasi apa adanya.
-- Level 1: Mempelajari setiap kondisi untuk melihat kemungkinan optimalisasi organisasi.
-- Level 2: Memanfaatkan peluang dalam rangka optimalisasi organisasi.
-- Level 3: Merumuskan konsep dasar optimalisasi organisasi.
-- Level 4: Mendorong dan mengembangkan sumber daya yang ada untuk mendukung konsep optimalisasi organisasi.
-- Level 5: Melakukan upaya untuk mencari sumber daya yang dibutuhkan guna mewujudkan idenya.
-- Level 6: Membangun budaya kemandirian dalam organisasi.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menerima kondisi organisasi apa adanya. |
+| 1 | Mempelajari setiap kondisi untuk melihat kemungkinan optimalisasi organisasi. |
+| 2 | Memanfaatkan peluang dalam rangka optimalisasi organisasi. |
+| 3 | Merumuskan konsep dasar optimalisasi organisasi. |
+| 4 | Mendorong dan mengembangkan sumber daya yang ada untuk mendukung konsep optimalisasi organisasi. |
+| 5 | Melakukan upaya untuk mencari sumber daya yang dibutuhkan guna mewujudkan idenya. |
+| 6 | Membangun budaya kemandirian dalam organisasi. |
 
 Kata kunci: Mampu memberdayakan organisasi.''',
     "tkp-kartu-sakti-s21": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan mengumpulkan data / informasi yang dibutuhkan secara sistematik untuk menunjang kelancaran pelaksanaan pekerjaan dan pengambilan keputusan.
 
-- Level 0: Mengumpulkan data / informasi tanpa mempertimbangkan kesahihannya.
-- Level 1: Mengumpulkan informasi dari orang lain atau berbagai media yang terpercaya. Menggali informasi lewat pertanyaan kepada orang yang terlibat, langsung maupun tidak langsung, untuk menemukan akar permasalahan.
-- Level 3: Menguji kesahihan data / informasi yang terkumpul.
-- Level 4: Menyusun data atau informasi dalam suatu paparan informasi yang baru.
-- Level 5: Menentukan data / informasi yang relevan untuk mendukung pengambilan kesimpulan maupun penyelesaian pekerjaan.
-- Level 6: Membuat kesimpulan berdasarkan informasi yang relevan dan akurat.
+| Level | Deskripsi |
+|---|---|
+| 0 | Mengumpulkan data / informasi tanpa mempertimbangkan kesahihannya. |
+| 1 | Mengumpulkan informasi dari orang lain atau berbagai media yang terpercaya. Menggali informasi lewat pertanyaan kepada orang yang terlibat, langsung maupun tidak langsung, untuk menemukan akar permasalahan. |
+| 3 | Menguji kesahihan data / informasi yang terkumpul. |
+| 4 | Menyusun data atau informasi dalam suatu paparan informasi yang baru. |
+| 5 | Menentukan data / informasi yang relevan untuk mendukung pengambilan kesimpulan maupun penyelesaian pekerjaan. |
+| 6 | Membuat kesimpulan berdasarkan informasi yang relevan dan akurat. |
 
 Kata kunci: Mampu menggali berbagai data / informasi secara sistematik.''',
     "tkp-kartu-sakti-s22": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan untuk memastikan / mengurangi ketidakpastian khususnya berkaitan dengan penugasan, kualitas, dan ketepatan / ketelitian data serta informasi di tempat kerja.
 
-- Level 0: Mengabaikan pelaksanaan tugas sesuai dengan standar pelaksanaan pekerjaan.
-- Level 1: Mempelajari prosedur kerja yang terkait dengan pelaksanaan pekerjaan diri sendiri.
-- Level 2: Memelihara lingkungan kerja seperti meja, berkas-berkas, perkakas, dan lain-lain dalam susunan yang baik dan teratur.
-- Level 3: Memeriksa ulang akurasi pelaksanaan tugas dan hasil yang diharapkan dan standar yang ditetapkan.
-- Level 4: Menggunakan sistem untuk mengelola dan melacak setiap informasi secara sistematis.
-- Level 5: Memantau kualitas pekerjaan untuk meyakinkan bahwa pelaksanaan tugas telah sesuai prosedur.
+| Level | Deskripsi |
+|---|---|
+| 0 | Mengabaikan pelaksanaan tugas sesuai dengan standar pelaksanaan pekerjaan. |
+| 1 | Mempelajari prosedur kerja yang terkait dengan pelaksanaan pekerjaan diri sendiri. |
+| 2 | Memelihara lingkungan kerja seperti meja, berkas-berkas, perkakas, dan lain-lain dalam susunan yang baik dan teratur. |
+| 3 | Memeriksa ulang akurasi pelaksanaan tugas dan hasil yang diharapkan dan standar yang ditetapkan. |
+| 4 | Menggunakan sistem untuk mengelola dan melacak setiap informasi secara sistematis. |
+| 5 | Memantau kualitas pekerjaan untuk meyakinkan bahwa pelaksanaan tugas telah sesuai prosedur. |
 
 Kata kunci: Mampu melaksanakan keteraturan sesuai dengan standar pekerjaan. Mengembangkan suatu sistem yang baru untuk meningkatkan keteraturan untuk meningkatkan kualitas pelaksanaan pekerjaan.''',
     "tkp-kartu-sakti-s23": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan menyampaikan pendapat / ide / informasi secara lisan dengan menggunakan kata / kalimat yang mudah dimengerti.
 
-- Level 0: Menanggapi secara pasif kegiatan komunikasi lisan / diskusi.
-- Level 1: Menjelaskan suatu hal / permasalahan dengan bahasa yang kurang runtut / sistematis.
-- Level 2: Memberikan tanggapan atas pertanyaan orang lain dengan menggunakan kalimat sederhana.
-- Level 3: Mengungkapkan pendapat / ide / informasi dengan kalimat yang sistematis dan dimengerti orang lain.
-- Level 4: Mengajukan pertanyaan untuk menggali informasi dari orang lain.
-- Level 5: Menggunakan gaya bahasa yang dapat dimengerti orang lain secara sistematis kepada orang lain yang berbeda latar belakangnya.
-- Level 6: Mengarahkan orang lain untuk memahami maksud pembicaraan agar mendukung idenya.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menanggapi secara pasif kegiatan komunikasi lisan / diskusi. |
+| 1 | Menjelaskan suatu hal / permasalahan dengan bahasa yang kurang runtut / sistematis. |
+| 2 | Memberikan tanggapan atas pertanyaan orang lain dengan menggunakan kalimat sederhana. |
+| 3 | Mengungkapkan pendapat / ide / informasi dengan kalimat yang sistematis dan dimengerti orang lain. |
+| 4 | Mengajukan pertanyaan untuk menggali informasi dari orang lain. |
+| 5 | Menggunakan gaya bahasa yang dapat dimengerti orang lain secara sistematis kepada orang lain yang berbeda latar belakangnya. |
+| 6 | Mengarahkan orang lain untuk memahami maksud pembicaraan agar mendukung idenya. |
 
 Kata kunci: Mampu berkomunikasi lisan yang mudah dimengerti.''',
     "tkp-kartu-sakti-s24": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan menyampaikan pendapat / ide / informasi secara jelas dengan menggunakan tulisan dan tata bahasa dengan baik dan benar.
 
-- Level 0: Menuangkan ide dan gagasan dalam bentuk tulisan yang susah dipahami.
-- Level 1: Menyampaikan ide dan gagasan dengan menerapkan kaidah atau tatacara menulis dengan benar dan terstruktur.
-- Level 2: Menuangkan ide dan gagasan ke dalam bentuk tulisan dengan alur berpikir yang logis.
-- Level 3: Menyederhanakan permasalahan yang rumit dengan menggunakan bahasa tulis yang efisien.
-- Level 4: Mengontekstualisasikan gagasan dan ide dalam bentuk tulisan dengan data dan contoh yang aplikatif.
-- Level 5: Membuat tulisan yang dapat dijadikan rujukan bagi penyelesaian permasalahan.
-- Level 6: Membuat tulisan yang dapat menginspirasi orang untuk mengikuti gagasannya.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menuangkan ide dan gagasan dalam bentuk tulisan yang susah dipahami. |
+| 1 | Menyampaikan ide dan gagasan dengan menerapkan kaidah atau tatacara menulis dengan benar dan terstruktur. |
+| 2 | Menuangkan ide dan gagasan ke dalam bentuk tulisan dengan alur berpikir yang logis. |
+| 3 | Menyederhanakan permasalahan yang rumit dengan menggunakan bahasa tulis yang efisien. |
+| 4 | Mengontekstualisasikan gagasan dan ide dalam bentuk tulisan dengan data dan contoh yang aplikatif. |
+| 5 | Membuat tulisan yang dapat dijadikan rujukan bagi penyelesaian permasalahan. |
+| 6 | Membuat tulisan yang dapat menginspirasi orang untuk mengikuti gagasannya. |
 
 Kata kunci: Mampu menyampaikan gagasan yang mudah diterima pembaca.''',
     "tkp-kartu-sakti-s25": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan mengambil tindakan secara cepat dan tepat dengan mempertimbangkan dampak serta bertanggung jawab dengan keputusannya.
 
-- Level 0: Membuat keputusan yang bersifat subjektif.
-- Level 1: Mengidentifikasi permasalahan yang terjadi sebelum pengambilan keputusan.
-- Level 2: Membuat keputusan yang responsif berdasarkan data / informasi dan sesuai keadaan lingkungan.
-- Level 3: Membuat keputusan yang dapat mengakomodasi kepentingan semua pihak.
-- Level 4: Membuat keputusan yang sulit / dilematis dan cepat dengan mempertimbangkan konsekuensinya.
-- Level 5: Memastikan pelaksanaan keputusan dengan memantau hasilnya dengan membuat penyesuaian-penyesuaian yang diperlukan.
-- Level 6: Membuat keputusan strategis dan berdampak jangka panjang dengan didukung data informasi yang komprehensif dan akurat.
+| Level | Deskripsi |
+|---|---|
+| 0 | Membuat keputusan yang bersifat subjektif. |
+| 1 | Mengidentifikasi permasalahan yang terjadi sebelum pengambilan keputusan. |
+| 2 | Membuat keputusan yang responsif berdasarkan data / informasi dan sesuai keadaan lingkungan. |
+| 3 | Membuat keputusan yang dapat mengakomodasi kepentingan semua pihak. |
+| 4 | Membuat keputusan yang sulit / dilematis dan cepat dengan mempertimbangkan konsekuensinya. |
+| 5 | Memastikan pelaksanaan keputusan dengan memantau hasilnya dengan membuat penyesuaian-penyesuaian yang diperlukan. |
+| 6 | Membuat keputusan strategis dan berdampak jangka panjang dengan didukung data informasi yang komprehensif dan akurat. |
 
 Kata kunci: Mampu bertindak cepat dan tepat dalam keputusan.''',
     "tkp-kartu-sakti-s26": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan mengkoordinasikan pelaksanaan pekerjaan agar berjalan sesuai dengan rencana yang telah ditetapkan.
 
-- Level 0: Menyerahkan penyelesaian pekerjaan kepada orang lain.
-- Level 1: Membagi tugas sesuai kemampuan pegawai.
-- Level 2: Melakukan monitoring dan evaluasi secara berkala selama kegiatan berlangsung.
-- Level 3: Mengkoordinasikan penggunaan sumber daya yang terbatas secara efektif.
-- Level 4: Mengkoordinasikan aktivitas yang beragam antar unit kerja / kelompok kerja secara berkala.
-- Level 5: Menyiapkan penyelesaian permasalahan secara efisien sesuai dengan prediksi permasalahan yang mungkin timbul dalam pelaksanaan suatu kegiatan / program.
-- Level 6: Menentukan sumber daya yang dibutuhkan dalam jangka panjang sesuai dengan rencana strategis organisasi.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menyerahkan penyelesaian pekerjaan kepada orang lain. |
+| 1 | Membagi tugas sesuai kemampuan pegawai. |
+| 2 | Melakukan monitoring dan evaluasi secara berkala selama kegiatan berlangsung. |
+| 3 | Mengkoordinasikan penggunaan sumber daya yang terbatas secara efektif. |
+| 4 | Mengkoordinasikan aktivitas yang beragam antar unit kerja / kelompok kerja secara berkala. |
+| 5 | Menyiapkan penyelesaian permasalahan secara efisien sesuai dengan prediksi permasalahan yang mungkin timbul dalam pelaksanaan suatu kegiatan / program. |
+| 6 | Menentukan sumber daya yang dibutuhkan dalam jangka panjang sesuai dengan rencana strategis organisasi. |
 
 Kata kunci: Mampu mengkoordinasikan kegiatan.''',
     "tkp-kartu-sakti-s27": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan menyusun rencana kerja yang spesifik, realistis, dan terukur sesuai dengan visi, misi dan tujuan jangka panjang organisasi.
 
-- Level 0: Melaksanakan kegiatan kerja tanpa perencanaan.
-- Level 1: Mengidentifikasi efektivitas pelaksanaan tugas sebagai bahan perencanaan ke depan.
-- Level 2: Menyusun rencana kegiatan sesuai dengan rencana operasional.
-- Level 3: Menyusun rencana operasional sesuai program kerja.
-- Level 4: Menyusun program kerja sesuai dengan rencana strategis.
-- Level 5: Menyusun rencana strategis sesuai dengan visi, misi, nilai-nilai dan tujuan organisasi.
-- Level 6: Menyusun visi, misi, nilai-nilai dan tujuan unit kerja / organisasi.
+| Level | Deskripsi |
+|---|---|
+| 0 | Melaksanakan kegiatan kerja tanpa perencanaan. |
+| 1 | Mengidentifikasi efektivitas pelaksanaan tugas sebagai bahan perencanaan ke depan. |
+| 2 | Menyusun rencana kegiatan sesuai dengan rencana operasional. |
+| 3 | Menyusun rencana operasional sesuai program kerja. |
+| 4 | Menyusun program kerja sesuai dengan rencana strategis. |
+| 5 | Menyusun rencana strategis sesuai dengan visi, misi, nilai-nilai dan tujuan organisasi. |
+| 6 | Menyusun visi, misi, nilai-nilai dan tujuan unit kerja / organisasi. |
 
 Kata kunci: Mampu menyusun rencana kerja.''',
     "tkp-kartu-sakti-s28": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan mengelola sumber daya untuk menghadapi tuntutan perubahan dalam rangka mencapai tujuan organisasi dengan kinerja yang lebih baik.
 
-- Level 0: Melakukan pekerjaan tanpa mempertimbangkan dinamika tuntutan perubahan.
-- Level 1: Mengidentifikasi tuntutan perubahan yang dihadapi organisasi.
-- Level 2: Mengkomunikasikan perubahan yang terjadi kepada seluruh komponen organisasi.
-- Level 3: Melakukan berbagai upaya yang dibutuhkan organisasi dalam menghadapi perubahan.
-- Level 4: Mengevaluasi pelaksanaan program-program perubahan organisasi untuk jangka panjang.
-- Level 5: Menanamkan nilai-nilai, sikap dan budaya sesuai dengan dinamika perubahan.
-- Level 6: Mengembangkan sistem nilai dan budaya organisasi sesuai dengan kecenderungan tuntutan organisasi ke depan.
+| Level | Deskripsi |
+|---|---|
+| 0 | Melakukan pekerjaan tanpa mempertimbangkan dinamika tuntutan perubahan. |
+| 1 | Mengidentifikasi tuntutan perubahan yang dihadapi organisasi. |
+| 2 | Mengkomunikasikan perubahan yang terjadi kepada seluruh komponen organisasi. |
+| 3 | Melakukan berbagai upaya yang dibutuhkan organisasi dalam menghadapi perubahan. |
+| 4 | Mengevaluasi pelaksanaan program-program perubahan organisasi untuk jangka panjang. |
+| 5 | Menanamkan nilai-nilai, sikap dan budaya sesuai dengan dinamika perubahan. |
+| 6 | Mengembangkan sistem nilai dan budaya organisasi sesuai dengan kecenderungan tuntutan organisasi ke depan. |
 
 Kata kunci: Mampu merespon dinamika perubahan.''',
     "tkp-kartu-sakti-s29": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan melaksanakan tugas-tugas dengan mempertimbangkan semua aspek pekerjaan secara detil untuk mencapai mutu yang lebih baik.
 
-- Level 0: Melaksanakan pekerjaan dengan mengabaikan prosedur yang ditentukan.
-- Level 1: Melakukan pelaksanaan tugas sesuai prosedur dan sumberdaya yang standar.
-- Level 2: Mengamati proses kerja untuk mengantisipasi masalah yang tidak sesuai standar kerja.
-- Level 3: Memperbaiki / menelaah ulang proses kerja untuk mendapatkan hasil kerja lebih baik. Melakukan penelaahan terhadap seluruh sumber daya dan standar yang ada serta aspek lain yang terkait secara komprehensif untuk hasil kerja yang inovatif.
-- Level 5: Menentukan sumberdaya dan standar yang sesuai untuk mendapatkan mutu kerja yang diharapkan.
-- Level 6: Menentukan proses kerja dan standar kerja baru sesuai dengan kecenderungan tuntutan mutu ke depan.
+| Level | Deskripsi |
+|---|---|
+| 0 | Melaksanakan pekerjaan dengan mengabaikan prosedur yang ditentukan. |
+| 1 | Melakukan pelaksanaan tugas sesuai prosedur dan sumberdaya yang standar. |
+| 2 | Mengamati proses kerja untuk mengantisipasi masalah yang tidak sesuai standar kerja. |
+| 3 | Memperbaiki / menelaah ulang proses kerja untuk mendapatkan hasil kerja lebih baik. Melakukan penelaahan terhadap seluruh sumber daya dan standar yang ada serta aspek lain yang terkait secara komprehensif untuk hasil kerja yang inovatif. |
+| 5 | Menentukan sumberdaya dan standar yang sesuai untuk mendapatkan mutu kerja yang diharapkan. |
+| 6 | Menentukan proses kerja dan standar kerja baru sesuai dengan kecenderungan tuntutan mutu ke depan. |
 
 Kata kunci: Mampu mencapai mutu pada semua aspek pekerjaan.''',
     "tkp-kartu-sakti-s30": '''Kelompok: Mengelola Orang Lain (MO)
 
 Definisi: Kemampuan mengambil langkah-langkah untuk mengelola perselisihan menuju arah yang produktif.
 
-- Level 0: Menghindari konflik dan menganggap konflik sebagai sesuatu yang negatif.
-- Level 1: Mengidentifikasi sumber-sumber konflik berdasarkan jenis konflik.
-- Level 2: Meletakan berbagai sudut pandang / kepentingan dalam konteks yang tepat.
-- Level 3: Mengupayakan berbagai pihak untuk bersikap terbuka dan objektif dalam penyelesaian konflik.
-- Level 4: Memberikan alternatif solusi dengan berbagai konsekuensinya.
-- Level 5: Menyelesaikan konflik menjadi hal yang positif dan produktif.
-- Level 6: Menumbuhkan kondisi yang kondusif untuk berbagi pandangan yang terbuka dan objektif serta kreatif.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menghindari konflik dan menganggap konflik sebagai sesuatu yang negatif. |
+| 1 | Mengidentifikasi sumber-sumber konflik berdasarkan jenis konflik. |
+| 2 | Meletakan berbagai sudut pandang / kepentingan dalam konteks yang tepat. |
+| 3 | Mengupayakan berbagai pihak untuk bersikap terbuka dan objektif dalam penyelesaian konflik. |
+| 4 | Memberikan alternatif solusi dengan berbagai konsekuensinya. |
+| 5 | Menyelesaikan konflik menjadi hal yang positif dan produktif. |
+| 6 | Menumbuhkan kondisi yang kondusif untuk berbagi pandangan yang terbuka dan objektif serta kreatif. |
 
 Kata kunci: Mampu penyelesaian konflik.''',
     "tkp-kartu-sakti-s31": '''Kelompok: Mengelola Sosial dan Budaya (SB)
@@ -7332,11 +7501,13 @@ Definisi: Kemampuan menghargai keragaman budaya dan perbedaannya yang menjadi la
 
 Perbedaan budaya dapat mempengaruhi efektivitas pencapaian tujuan organisasi dan harmoni masyarakat.
 
-- Level 0: Menganggap perbedaan latar belakang budaya dan hidup berdampingan dengan masyarakat tidak memiliki relevansi dengan keberhasilan organisasi.
-- Level 2: Menghimpun masukan berbagai sudut pandang yang berbeda sesuai dengan latar belakang budaya yang ada.
-- Level 3: Melakukan tindakan yang sesuai dengan norma budaya yang berlaku.
-- Level 4: Mengarahkan orang lain untuk menghargai perbedaan budaya.
-- Level 5: Mendayagunakan perbedaan budaya untuk menunjang kelancaran pencapaian tujuan organisasi dan penerimaan organisasi di lingkungan masyarakat sekitarnya.
+| Level | Deskripsi |
+|---|---|
+| 0 | Menganggap perbedaan latar belakang budaya dan hidup berdampingan dengan masyarakat tidak memiliki relevansi dengan keberhasilan organisasi. |
+| 2 | Menghimpun masukan berbagai sudut pandang yang berbeda sesuai dengan latar belakang budaya yang ada. |
+| 3 | Melakukan tindakan yang sesuai dengan norma budaya yang berlaku. |
+| 4 | Mengarahkan orang lain untuk menghargai perbedaan budaya. |
+| 5 | Mendayagunakan perbedaan budaya untuk menunjang kelancaran pencapaian tujuan organisasi dan penerimaan organisasi di lingkungan masyarakat sekitarnya. |
 
 Kata kunci: Mampu menghargai keragaman budaya pegawai dan lingkungan masyarakat.
 
@@ -7345,26 +7516,30 @@ Menciptakan suasana interaksi setiap individu untuk bekerjasama dalam lingkungan
 
 Definisi: Kemampuan untuk mendengarkan dan memahami pikiran, perasaan, atau masalah orang lain yang tidak terucapkan atau tidak sepenuhnya disampaikan.
 
-- Level 0: Mengabaikan pikiran, perasaan, dan permasalahan orang lain.
-- Level 1: Mendengarkan keluhan / ungkapan perasaan orang lain.
-- Level 2: Menyediakan diri untuk selalu mendengarkan keluhan / ungkapan perasaan orang lain.
-- Level 3: Merasakan perasaan dan permasalahan orang lain yang tidak terungkapkan.
-- Level 4: Menolong orang lain pada saat seseorang mengalami kesulitan / kesusahan.
-- Level 5: Mengajak orang lain untuk turut serta dalam membantu orang lain yang dalam kesusahan.
-- Level 6: Melakukan tindakan secara aktif untuk membantu orang-orang yang berkesusahan dan kurang beruntung.
+| Level | Deskripsi |
+|---|---|
+| 0 | Mengabaikan pikiran, perasaan, dan permasalahan orang lain. |
+| 1 | Mendengarkan keluhan / ungkapan perasaan orang lain. |
+| 2 | Menyediakan diri untuk selalu mendengarkan keluhan / ungkapan perasaan orang lain. |
+| 3 | Merasakan perasaan dan permasalahan orang lain yang tidak terungkapkan. |
+| 4 | Menolong orang lain pada saat seseorang mengalami kesulitan / kesusahan. |
+| 5 | Mengajak orang lain untuk turut serta dalam membantu orang lain yang dalam kesusahan. |
+| 6 | Melakukan tindakan secara aktif untuk membantu orang-orang yang berkesusahan dan kurang beruntung. |
 
 Kata kunci: Mampu peduli terhadap orang lain.''',
     "tkp-kartu-sakti-s33": '''Kelompok: Mengelola Sosial dan Budaya (SB)
 
 Definisi: Kemampuan membangun kontak atau hubungan timbal balik yang menghasilkan suatu proses saling mempengaruhi, antarindividu, antarkelompok, atau antara individu dan kelompok.
 
-- Level 0: Mengabaikan hubungan dengan lingkungan sekitar.
-- Level 1: Menerima perbedaan adanya pola pikir, perilaku adat yang berbeda.
-- Level 2: Membangun keterbukaan dalam menjalin hubungan antar individu maupun kelompok.
-- Level 3: Menghargai dengan melakukan toleransi antar individu maupun antar kelompok.
-- Level 4: Menyesuaikan diri dengan pola pikir, perilaku dan adat yang berbeda dengan dirinya.
-- Level 5: Membangun keterikatan atas dasar saling percaya antar individu maupun kelompok.
-- Level 6: Memadukan perbedaan dengan membentuk kebiasaan baru tanpa menghilangkan ciri kepribadian / adat masing-masing.
+| Level | Deskripsi |
+|---|---|
+| 0 | Mengabaikan hubungan dengan lingkungan sekitar. |
+| 1 | Menerima perbedaan adanya pola pikir, perilaku adat yang berbeda. |
+| 2 | Membangun keterbukaan dalam menjalin hubungan antar individu maupun kelompok. |
+| 3 | Menghargai dengan melakukan toleransi antar individu maupun antar kelompok. |
+| 4 | Menyesuaikan diri dengan pola pikir, perilaku dan adat yang berbeda dengan dirinya. |
+| 5 | Membangun keterikatan atas dasar saling percaya antar individu maupun kelompok. |
+| 6 | Memadukan perbedaan dengan membentuk kebiasaan baru tanpa menghilangkan ciri kepribadian / adat masing-masing. |
 
 Kata kunci: Mampu membangun keterikatan dan hubungan timbal balik.''',
     "tkp-modul-s01": '''## Apa Itu TKP
@@ -8038,8 +8213,8 @@ Tiga konsep ini sering tertukar. Bedanya:
 ## Lima unsur bela negara
 
 1. **Cinta tanah air:** menghargai tanah air dan budayanya.
-2. **Kesadaran berbangsa dan bernegara:** sadar akan pentingnya menjaga keutuhan NKRI.
-3. **Yakin akan Pancasila sebagai ideologi negara:** Pancasila sebagai dasar dan panduan hidup bernegara.
+2. **Sadar berbangsa dan bernegara:** sadar akan pentingnya menjaga keutuhan NKRI.
+3. **Setia pada Pancasila sebagai ideologi negara:** Pancasila sebagai dasar dan panduan hidup bernegara.
 4. **Rela berkorban:** siap berkorban demi bangsa dan negara.
 5. **Kemampuan awal bela negara:** kesiapan fisik dan mental untuk mempertahankan NKRI.
 
@@ -11178,6 +11353,25 @@ POIN_INTI = {
     'tiu-analogi-verbal-s02': ['Analogi dua kata meminta kita mencari pasangan kata lain dengan hubungan yang sama.', 'Pada analogi kalimat, fokuslah pada hubungan subjek dan objek di dalam kalimat.', 'Objek biasanya berada setelah predikat atau kata kerja di dalam kalimat.', 'Jawaban benar adalah pasangan yang hubungannya sama persis dengan soal, bukan sekadar mirip.'],
     'tiu-analogi-verbal-s03': ['Delapan pola analogi yang sering muncul meliputi fungsi, sinonim, antonim, dan sebab akibat.', 'Pola umum dan khusus membandingkan kelompok besar dengan salah satu anggotanya.', 'Pola benda dan bagian membandingkan suatu benda dengan salah satu bagiannya.', 'Kenali dulu jenis hubungannya sebelum memilih pasangan jawaban yang sepadan.'],
     'tiu-analogi-verbal-s04': ['Analogi tiga kata berbentuk A : B : C = D : E : F.', 'Rumuskan hubungan ketiga kata soal dalam satu kalimat sebelum menilai kelompok pembanding.', 'Pola yang sering muncul antara lain hierarki, bagian ke keseluruhan, dan kategori dengan anggotanya.', 'Urutan kata adalah bagian dari pola, jadi kelompok dengan urutan tertukar adalah jawaban salah.', 'Jebakan paling umum adalah kelompok yang hanya dua katanya cocok dengan pola soal.'],
+    'tiu-cheat-sheet-s01': ['Kerjakan dalam kurung dulu, lalu kali dan bagi, terakhir tambah dan kurang.', 'Hafalkan pasangan persen cepat seperti 25 persen sama dengan 1/4 dan 12,5 persen sama dengan 1/8.', 'Untuk diskon, hitung persen yang dibayar, bukan besar diskonnya.', 'Rata-rata gabungan memakai bobot jumlah siswa, bukan rata-rata dari dua rata-rata.', 'Trik kali 25 adalah bagi 4 lalu kali 100, dan kuadrat bilangan berakhir 5 memakai pola n kali n tambah 1 lalu tempel 25.'],
+    'tiu-cheat-sheet-s02': ['Deret aritmetika punya selisih tetap: Un = a + (n - 1) x b, dan jumlahnya Sn = n/2 x (a + Un).', 'Deret geometri punya rasio tetap: Un = a x r^(n - 1), dan jumlahnya Sn = a x (r^n - 1)/(r - 1).', 'Pola umum lain meliputi selisih bertingkat, kuadrat, Fibonacci, dan operasi berulang.', 'Hitung selisih antar suku dulu, lalu selisih dari selisihnya bila belum tetap.', 'Uji pola pada tiga suku pertama sebelum dipakai.'],
+    'tiu-cheat-sheet-s03': ['Jarak sama dengan kecepatan kali waktu, dan kecepatan sama dengan jarak dibagi waktu.', 'Berpapasan menjumlah kecepatan, menyusul mengurang kecepatan.', 'Kerja bersama dua orang selesai dalam (a x b)/(a + b) hari.', 'Soal umur diselesaikan dengan peubah lalu digeser bersama, dan hasilnya dicek ulang.', 'Perbandingan senilai makin banyak makin banyak, berbalik nilai makin banyak pekerja makin cepat selesai.'],
+    'tiu-cheat-sheet-s04': ['Rumuskan hubungan dua kata pertama dalam satu kalimat sebelum menilai pasangan pembanding.', 'Pola hubungan yang sering muncul meliputi pelaku dan alat, sebab dan akibat, serta bagian dan keseluruhan.', 'Efektif soal tepat sasaran, sedangkan efisien soal hemat sumber daya.', 'Buang dulu pasangan yang hubungannya jelas beda, biasanya dua atau tiga opsi langsung gugur.', 'Periksa arah hubungan bila dua opsi tampak sama.'],
+    'tiu-cheat-sheet-s05': ['Silogisme dasar: semua A adalah B dan semua B adalah C, maka semua A adalah C.', 'Arah silogisme tidak bisa dibalik: semua A adalah B tidak berarti semua B adalah A.', 'Negasi semua A adalah B adalah ada A yang bukan B.', 'Modus ponens: P benar maka Q benar; modus tollens: Q salah maka P salah.', 'Q benar tidak membuktikan P benar, itu jebakan paling umum pada soal jika-maka.'],
+    'tiu-cheat-sheet-s06': ['Cari dulu apa yang berubah: bentuk, jumlah, posisi, arah, atau warna.', 'Pola umum meliputi rotasi, pencerminan, penambahan dan pengurangan elemen, serta pergeseran posisi.', 'Pada analogi gambar, tentukan aturan perubahan pasangan pertama lalu terapkan sama persis.', 'Pada ketidaksamaan, cari ciri mayoritas dulu lalu temukan satu pelanggarnya.', 'Bandingkan dua gambar berurutan, catat satu perubahan, lalu uji ke pasangan berikutnya.'],
+    'tiu-cheat-sheet-s07': ['Soal kecukupan data menanyakan apakah data yang diberi sudah cukup untuk menjawab pertanyaan, bukan sekadar jawaban akhirnya.', '"Cukup" berarti nilai yang ditanya ditentukan secara unik, hanya ada satu jawaban yang mungkin.', 'Uji pernyataan (1) sendiri, lalu (2) sendiri, baru gabungkan keduanya kalau belum ada yang cukup.', 'Persamaan kuadrat bisa memberi dua nilai, dan persen tanpa nilai dasar tidak memberi nilai mutlak.', 'Satu contoh penyangkal sudah cukup untuk menyatakan sebuah pernyataan tidak cukup.'],
+    'twk-uud-1945-kelompok-pasal-s01': ['UUD 1945 lebih gampang dihafal per kelompok pasal daripada satu per satu, karena pasal-pasalnya tersusun rapi per tema.', 'Pasal 26-34 adalah narasi kehidupan warga: kewarganegaraan, hak asasi, agama, pertahanan, pendidikan, kebudayaan, ekonomi, dan kesejahteraan.', 'Pasal 35-36C adalah identitas negara: bendera, bahasa, lambang, dan lagu kebangsaan.', 'Pasal 37 adalah satu-satunya pasal yang mengatur cara mengubah UUD 1945.'],
+    'twk-uud-1945-kelompok-pasal-s02': ['Pasal 1: Indonesia adalah negara kesatuan berbentuk republik, kedaulatan di tangan rakyat, dan Indonesia adalah negara hukum.', 'Pasal 2: MPR terdiri atas anggota DPR dan DPD yang dipilih lewat pemilu, bersidang sedikitnya sekali dalam lima tahun.', 'Pasal 3: MPR berwenang mengubah dan menetapkan UUD, melantik Presiden dan Wakil Presiden, dan memberhentikan keduanya menurut UUD.', 'Setelah amandemen, MPR bukan lagi lembaga tertinggi; semua lembaga tinggi negara sederajat.'],
+    'twk-uud-1945-kelompok-pasal-s03': ['Pasal 4: Presiden memegang kekuasaan pemerintahan, dibantu satu orang Wakil Presiden.', 'Pasal 6A dan 7: Presiden dan Wakil Presiden dipilih langsung oleh rakyat, masa jabatan lima tahun, dapat dipilih kembali hanya satu kali.', 'Pasal 7A dan 7B: pemberhentian Presiden melewati DPR, MK, lalu MPR, dengan angka kunci 2/3, 90 hari, 30 hari, dan 3/4.', 'Pasal 14: grasi dan rehabilitasi dengan pertimbangan MA, amnesti dan abolisi dengan pertimbangan DPR.', 'Pasal 7C: Presiden tidak dapat membekukan dan/atau membubarkan DPR.'],
+    'twk-uud-1945-kelompok-pasal-s04': ['Pasal 17: menteri diangkat dan diberhentikan oleh Presiden, dan tiap menteri membidangi urusan tertentu.', 'Pasal 18: NKRI dibagi atas provinsi, lalu kabupaten dan kota, masing-masing punya pemerintahan daerah dan DPRD.', 'Pasal 18: daerah menjalankan otonomi seluas-luasnya, kecuali urusan yang ditentukan sebagai urusan Pemerintah Pusat.', 'Pasal 18B: negara mengakui daerah khusus atau istimewa dan kesatuan masyarakat hukum adat.'],
+    'twk-uud-1945-kelompok-pasal-s05': ['Pasal 20: DPR memegang kekuasaan membentuk undang-undang, dan rancangan yang tidak disahkan Presiden dalam 30 hari tetap sah menjadi undang-undang.', 'Pasal 20A: DPR punya fungsi legislasi, anggaran, dan pengawasan, serta hak interpelasi, angket, dan menyatakan pendapat.', 'Pasal 22: Perpu ditetapkan Presiden dalam hal ihwal kegentingan yang memaksa dan harus mendapat persetujuan DPR.', 'Pasal 19: anggota DPR dipilih melalui pemilihan umum dan DPR bersidang sedikitnya sekali dalam setahun.'],
+    'twk-uud-1945-kelompok-pasal-s06': ['Pasal 22C: anggota DPD dipilih dari setiap provinsi, jumlah tiap provinsi sama, dan totalnya tidak lebih dari 1/3 jumlah anggota DPR.', 'Pasal 22D: DPD mengurusi rancangan undang-undang soal daerah, sumber daya alam, dan perimbangan keuangan, serta mengawasi pelaksanaannya.', 'Pasal 22E: pemilu dilaksanakan secara langsung, umum, bebas, rahasia, jujur, dan adil setiap lima tahun sekali.', 'Peserta pemilu DPD adalah perseorangan, sedangkan peserta pemilu DPR dan DPRD adalah partai politik.'],
+    'twk-uud-1945-kelompok-pasal-s07': ['Pasal 23: APBN ditetapkan tiap tahun dengan undang-undang, dan kalau DPR tidak menyetujui, Pemerintah menjalankan APBN tahun lalu.', 'Pasal 23A sampai 23D: pajak, mata uang, hal keuangan lain, dan bank sentral diatur dengan undang-undang.', 'Pasal 23E: BPK adalah lembaga bebas dan mandiri yang memeriksa pengelolaan dan tanggung jawab keuangan negara.', 'Pasal 23F dan 23G: anggota BPK dipilih DPR dengan pertimbangan DPD, dan BPK punya perwakilan di setiap provinsi.'],
+    'twk-uud-1945-kelompok-pasal-s08': ['Pasal 24: kekuasaan kehakiman merdeka, dilakukan oleh MA beserta badan peradilan di bawahnya dan oleh MK.', 'Pasal 24A: MA mengadili tingkat kasasi dan menguji peraturan di bawah undang-undang terhadap undang-undang.', 'Pasal 24C: MK menguji undang-undang terhadap UUD dan putusannya bersifat final, dengan sembilan hakim konstitusi.', 'Pasal 24B: KY mengusulkan pengangkatan hakim agung dan menjaga kehormatan serta perilaku hakim.', 'Pasal 25A: NKRI adalah negara kepulauan yang berciri Nusantara.'],
+    'twk-uud-1945-kelompok-pasal-s09': ['Pasal 26: warga negara adalah orang Indonesia asli dan orang bangsa lain yang disahkan dengan undang-undang; penduduk juga mencakup orang asing yang tinggal di Indonesia.', 'Pasal 27: semua warga negara sama kedudukannya di dalam hukum dan pemerintahan, berhak atas pekerjaan dan penghidupan yang layak, dan wajib ikut bela negara.', 'Pasal 28A sampai 28J memuat sepuluh pasal HAM, dari hak hidup sampai kewajiban menghormati HAM orang lain.', 'Pasal 28I: ada hak asasi yang tidak dapat dikurangi dalam keadaan apa pun, antara lain hak hidup dan hak beragama.', 'Pasal 28J: setiap orang wajib menghormati HAM orang lain dan tunduk pada pembatasan yang ditetapkan dengan undang-undang.'],
+    'twk-uud-1945-kelompok-pasal-s10': ['Pasal 29: negara berdasar atas Ketuhanan Yang Maha Esa dan menjamin kemerdekaan tiap penduduk untuk memeluk agama dan beribadat.', 'Pasal 30: pertahanan dan keamanan memakai sistem rakyat semesta, TNI dan Polri sebagai kekuatan utama, rakyat sebagai kekuatan pendukung.', 'Pasal 31: setiap warga negara berhak mendapat pendidikan, dan anggaran pendidikan sekurang-kurangnya 20% dari APBN dan APBD.', 'Pasal 33: perekonomian disusun sebagai usaha bersama berdasar asas kekeluargaan, dan kekayaan alam dikuasai negara untuk kemakmuran rakyat.', 'Pasal 34: fakir miskin dan anak terlantar dipelihara oleh negara, dengan sistem jaminan sosial bagi seluruh rakyat.'],
+    'twk-uud-1945-kelompok-pasal-s11': ['Pasal 35: bendera negara ialah Sang Merah Putih.', 'Pasal 36: bahasa negara ialah Bahasa Indonesia.', 'Pasal 36A: lambang negara ialah Garuda Pancasila dengan semboyan Bhinneka Tunggal Ika.', 'Pasal 36B: lagu kebangsaan ialah Indonesia Raya.', 'Pasal 36C: ketentuan lebih lanjut tentang identitas negara diatur dengan undang-undang.'],
+    'twk-uud-1945-kelompok-pasal-s12': ['Pasal 37 ayat 1: usul perubahan UUD diajukan sekurang-kurangnya 1/3 anggota MPR.', 'Pasal 37 ayat 3 dan 4: sidang perubahan dihadiri sekurang-kurangnya 2/3 anggota MPR dan putusannya disetujui sekurang-kurangnya 50% ditambah satu anggota.', 'Pasal 37 ayat 5: bentuk Negara Kesatuan Republik Indonesia tidak dapat dilakukan perubahan.', 'Angka kunci lain: 30 hari untuk pengesahan RUU, 60 hari untuk kekosongan Wakil Presiden, 90 hari untuk putusan MK, dan 20% untuk anggaran pendidikan.'],
     'tiu-handbook-figural-s02': ['Gambar adalah kumpulan data, bukan satu objek visual utuh.', 'Satu gambar bisa menyimpan banyak variabel sekaligus, seperti jumlah, bentuk, rotasi, posisi, dan arsiran.', 'Rotasi mengubah orientasi, pencerminan membalik hubungan kiri-kanan, dan perpindahan hanya mengubah letak.', 'Nyatakan pola secara spesifik, misalnya berputar 90 derajat searah jarum jam setiap tahap.', 'Gunakan J-R-A-P untuk memeriksa jumlah, rotasi, arsiran, dan posisi secara berurutan.'],
     'tiu-handbook-figural-s03': ['Analogi meminta kita menemukan transformasi dari A ke B lalu menerapkannya pada C.', 'Tugasnya bukan mencari gambar yang mirip B, melainkan menemukan hubungan A terhadap B.', 'Fokus dulu pada A ke B, nyatakan transformasinya, lalu prediksi D sebelum melihat opsi.', 'Soal kompleks bisa memakai transformasi gabungan, jadi pecah menjadi variabel dan analisis satu per satu.', 'Pengecoh sering hanya melanggar satu aturan, jadi tanyakan variabel apa yang salah pada tiap pilihan.'],
     'tiu-handbook-figural-s04': ['Ketidaksamaan meminta kita mencari satu gambar yang melanggar karakteristik mayoritas.', 'Carilah persamaan mayoritas dulu, jangan mencari gambar yang terlihat paling aneh.', 'Pembeda bisa berupa jumlah, relasi dalam-luar, simetri, atau hasil pencerminan.', 'Aturan yang baik harus menjelaskan seluruh anggota kelompok secara konsisten.', 'Pola 4:1 adalah petunjuk kuat, bukan aturan mutlak, dan variabel kedua bisa mengubahnya.'],
@@ -11371,13 +11565,18 @@ POIN_INTI = {
     'twk-bang-arya-s37': ['Pasal 1 ayat 1 UUD 1945 menegaskan bentuk negara Indonesia adalah kesatuan dan bentuk pemerintahannya republik.', 'NKRI dibagi atas daerah provinsi, dan provinsi dibagi atas kabupaten dan kota.', 'Pasal 37 ayat 5 menegaskan bentuk NKRI tidak dapat dilakukan perubahan.', 'Alinea keempat Pembukaan UUD 1945 memuat dasar negara Pancasila.', 'Pasal 31 ayat 1 menegaskan setiap warga negara berhak mendapat pendidikan.'],
     'twk-cheat-sheet-s01': ['Nasionalisme adalah rasa cinta dan kebanggaan terhadap tanah air serta kesadaran akan identitas nasional.', 'Tujuan nasionalisme adalah menjaga persatuan, membangun negara yang kuat, dan melindungi kedaulatan.', 'Implementasinya meliputi partisipasi aktif, mempertahankan budaya, dan menjaga keutuhan bangsa.', 'Kata kuncinya antara lain persatuan, kesatuan, kedaulatan, dan cinta tanah air.', 'Dalam soal, fokus pada konteks persatuan atau kedaulatan lalu eliminasi pilihan yang tidak sesuai.'],
     'twk-cheat-sheet-s02': ['Empat pilar negara adalah Pancasila, UUD 1945, NKRI, dan Bhinneka Tunggal Ika.', 'Pancasila adalah dasar negara, sedangkan UUD 1945 adalah konstitusi yang mengatur tatanan bernegara.', 'Setiap sila Pancasila punya nilai yang harus diamalkan dalam kehidupan sehari-hari.', 'Dalam soal, identifikasi dulu pilar yang dimaksud sebelum memilih jawaban.'],
-    'twk-cheat-sheet-s03': ['Bela negara adalah sikap dan perilaku warga yang dijiwai kecintaan pada NKRI berdasarkan Pancasila dan UUD 1945.', 'Patriotisme adalah aktif membela negara, cinta tanah air adalah bangga pada budaya, dan rela berkorban adalah siap berkorban demi negara.', 'Lima unsur bela negara meliputi cinta tanah air, kesadaran berbangsa dan bernegara, dan keyakinan pada Pancasila.', 'Dalam soal, kenali dulu konsepnya dari kata kunci seperti membela, bangga terhadap, atau siap berkorban.'],
+    'twk-cheat-sheet-s03': ['Bela negara adalah sikap dan perilaku warga yang dijiwai kecintaan pada NKRI berdasarkan Pancasila dan UUD 1945.', 'Patriotisme adalah aktif membela negara, cinta tanah air adalah bangga pada budaya, dan rela berkorban adalah siap berkorban demi negara.', 'Lima unsur bela negara meliputi cinta tanah air, sadar berbangsa dan bernegara, dan setia pada Pancasila.', 'Dalam soal, kenali dulu konsepnya dari kata kunci seperti membela, bangga terhadap, atau siap berkorban.'],
     'twk-cheat-sheet-s04': ['Integritas adalah konsistensi antara ucapan dan tindakan berdasarkan nilai moral dan etika.', 'Core value BERAKHLAK terdiri dari tujuh nilai, dari berorientasi pelayanan sampai kolaboratif.', 'Pencegahan KKN dilakukan lewat transparansi, pelaporan dan pengawasan, serta sanksi tegas.', 'Dalam soal, pilih jawaban yang mencerminkan tindakan jujur, bertanggung jawab, dan transparan.'],
     'twk-cheat-sheet-s05': ['Kalimat efektif memiliki enam ciri, yaitu kesatuan, kepaduan, keparalelan, kelogisan, kehematan, dan ketepatan diksi.', 'EYD mengatur penggunaan huruf, tanda baca, dan penulisan kata dalam bahasa Indonesia.', 'Pemahaman bacaan meliputi gagasan utama, simpulan, informasi tersurat, dan informasi tersirat.', 'Untuk gambar, tabel, dan grafik, perhatikan judul, label, legenda, dan keterangan tambahannya.'],
     'twk-cheat-sheet-s06': ['Bagi hari belajar per subtes TWK, TIU, dan TKP, dan sisihkan satu hari untuk full tryout.', 'Kerjakan tryout minimal 2 sampai 3 kali dalam seminggu dan evaluasi hasilnya.', 'Buat strategi pengelolaan waktu agar terbiasa dengan batas waktu ujian SKD.', 'Pasang target skor di atas 400 agar belajar lebih terarah dan progresnya mudah diukur.', 'Gunakan cheat sheet untuk mempelajari cara menjawab soal dengan lebih cepat dan akurat.'],
     'twk-integritas-pilar-s01': ['Integritas berarti ucapan sama dengan perbuatan dan tetap bertindak benar meski tidak diawasi.', 'KPK merumuskan sembilan nilai integritas yang mudah diingat lewat akronim JUMAT BERSEPEDA KK.', 'Gratifikasi yang berhubungan dengan jabatan dan berlawanan dengan kewajiban dianggap suap.', 'Gratifikasi yang dilaporkan ke KPK paling lambat 30 hari kerja sejak diterima tidak dipidana.', 'Bila menghadapi pelanggaran, jalur yang benar adalah pelaporan resmi, bukan diam atau main hakim sendiri.'],
     'twk-integritas-pilar-s02': ['Empat Pilar MPR RI adalah Pancasila, UUD 1945, NKRI, dan Bhinneka Tunggal Ika.', 'Pancasila adalah dasar negara, bukan salah satu pilar yang setara dengan tiga lainnya.', 'Pembukaan UUD 1945 tidak boleh diubah, sedangkan batang tubuhnya sudah diamandemen empat kali.', 'Bhinneka Tunggal Ika berasal dari Kakawin Sutasoma karya Mpu Tantular dan berarti berbeda-beda tetapi tetap satu.', 'Pancasila memberi nilai, UUD 1945 memberi aturan, NKRI memberi wadah, dan Bhinneka Tunggal Ika memberi semangat persatuan.'],
+    'twk-integritas-pilar-s03': ['Gratifikasi adalah pemberian terkait jabatan yang tidak selalu diawali kesepakatan.', 'Suap bersifat transaksional untuk mempengaruhi keputusan, pemberi dan penerima sama-sama dapat dipidana.', 'Pemerasan adalah pejabat yang memaksa, dan pihak yang dipaksa berposisi sebagai korban.', 'Gratifikasi yang dilaporkan ke KPK dalam 30 hari kerja tidak dipidana, tetapi suap tidak punya jalan lapor aman.', 'Tolak pemberian terkait jabatan sejak awal dengan sopan dan tegas.'],
+    'twk-integritas-pilar-s04': ['LHKPN adalah laporan harta kekayaan penyelenggara negara untuk transparansi dan akuntabilitas.', 'LHKPN disampaikan saat pertama menjabat, saat berubah jabatan, setelah berakhir, dan berkala tiap tahun.', 'KPK menyediakan Whistleblowing System sebagai saluran pelaporan dugaan tindak pidana korupsi.', 'Pelapor yang beriktikad baik tidak dapat dituntut pidana maupun perdata atas laporannya.', 'Laporan yang baik berisi fakta dan bukti, disampaikan lewat jalur resmi, bukan disebar ke media sosial.'],
     'twk-keyword-bela-negara-s01': ['Bela negara berpusat pada kesadaran melindungi NKRI dari ancaman.', 'Nasionalisme berpusat pada kesetiaan memelihara dan menghormati bangsa.', 'Patriotisme adalah rela berkorban dengan pantang menyerah demi negara.', 'Cinta tanah air mencakup semua contoh bela negara, nasionalisme, dan patriotisme.'],
+    'twk-keyword-bela-negara-s02': ['Bela negara adalah tekad, sikap, dan tindakan warga menjaga kedaulatan, keutuhan wilayah, dan keselamatan bangsa.', 'Dasar hukumnya antara lain UUD 1945 Pasal 27 ayat (3) dan Pasal 30 ayat (1), serta UU 3/2002 dan UU 23/2019.', 'Lima nilai dasar bela negara meliputi cinta tanah air, sadar berbangsa dan bernegara, dan setia pada Pancasila.', 'Rela berkorban dan kemampuan awal bela negara melengkapi lima nilai dasar tersebut.', 'Bela negara bukan hanya urusan tentara, setiap warga punya peran sesuai kedudukannya.'],
+    'twk-keyword-bela-negara-s03': ['UU 3/2002 menyebut empat jalur bela negara, termasuk pendidikan kewarganegaraan dan pengabdian sesuai profesi.', 'Komponen Utama adalah TNI, Komponen Cadangan dikerahkan lewat mobilisasi, Komponen Pendukung meningkatkan kekuatan keduanya.', 'Keikutsertaan warga sebagai Komponen Cadangan bersifat sukarela lewat seleksi dan pelatihan dasar kemiliteran.', 'Indonesia tidak menerapkan wajib militer.', 'Sebagian besar bela negara warga sipil tidak melibatkan senjata.'],
+    'twk-keyword-bela-negara-s04': ['Ancaman terbagi tiga: militer, nonmiliter, dan hibrida.', 'Ancaman militer dihadapi TNI sebagai komponen utama, ancaman nonmiliter oleh lembaga pemerintah di luar pertahanan.', 'Ancaman nonmiliter antara lain perang informasi, ancaman siber, dan penyelundupan narkoba.', 'Warga berperan lewat kewaspadaan sehari-hari, bukan mengambil alih tugas aparat.', 'Bela negara masa kini termasuk memeriksa kebenaran informasi sebelum membagikannya.'],
     'twk-modul-ringkasan-s01': ['TWK mengukur pemahaman peserta tentang Negara Kesatuan Republik Indonesia.', 'Ideologi adalah seperangkat prinsip yang memberi arah dan tujuan berbangsa dan bernegara.', 'Kata ideologi berasal dari idea yang artinya gagasan dan logos yang artinya pengetahuan.', 'Ideologi menjadi pedoman hidup ideal yang ingin diwujudkan bersama dalam masyarakat.'],
     'twk-modul-ringkasan-s02': ['Pancasila sebagai dasar negara tercantum dalam Pembukaan UUD 1945 alinea ke-4.', 'Pancasila sebagai ideologi negara adalah sistem nilai yang menjadi prinsip hidup ideal.', 'Pancasila sebagai pandangan hidup bangsa menjadi pedoman berbangsa dan bernegara.', 'Nilai Pancasila memberi arah menuju masyarakat yang adil dan makmur.'],
     'twk-modul-ringkasan-s03': ['Muh. Yamin mengusulkan dasar negara pada 29 Mei 1945 dalam sidang BPUPKI.', 'Soepomo mengusulkan dasar negara pada 31 Mei 1945 dengan lima gagasan.', 'Soekarno mengusulkan lima rumusan dasar negara pada 1 Juni 1945.', 'Panitia Sembilan menyusun Piagam Jakarta yang memuat rumusan awal Pancasila.', 'Sila pertama Piagam Jakarta diubah menjadi Ketuhanan Yang Maha Esa sebelum pengesahan.'],
@@ -11484,6 +11683,24 @@ def clean_bang_arya_content(t):
         t = t[m.end():]
     return re.sub(r"[ \t]{2,}", " ", t)
 
+# ------------------------------------------------------- Diagram per seksi (v2.5)
+# Diagram ilustrasi yang dipasang di bagian materi (field `gambar` di
+# JSON, dirender SectionDetailPage di atas isi). Nilai berupa kunci
+# gambar built-in (`gambar:<nama>`, lihat src/lib/materiGambar.ts) atau
+# URL http(s). Hanya tiga titik paling berharga yang dipasangi diagram.
+SECTION_GAMBAR = {
+    # Sudut jarum jam: contoh pukul 02.20 di bagian ini.
+    "tiu-modul-s32": "gambar:jam",
+    # Pengertian pecahan: roti dibagi 3, tiap bagian 1/3.
+    "tiu-modul-s23": "gambar:pecahan",
+    # Teorema Pythagoras: tripel 3-4-5.
+    "tiu-modul-s38": "gambar:pythagoras",
+}
+
+# Kunci gambar built-in yang dikenal app (harus sama dengan
+# GAMBAR_BUILTIN di src/lib/materiGambar.ts).
+GAMBAR_BUILTIN_KEYS = {"jam", "pecahan", "pythagoras"}
+
 def filter_doc_sections(doc):
     """Terapkan kebijakan isi Belajar pada satu dokumen yang sudah dibangun.
     ID seksi dipertahankan (tidak dinomori ulang) supaya progres baca lama
@@ -11499,6 +11716,9 @@ def filter_doc_sections(doc):
         # supaya kedua jalur (kurasi dan biasa) sama-sama membawanya.
         if sid in POIN_INTI:
             sec["poin_inti"] = POIN_INTI[sid]
+        # v2.5: diagram ilustrasi per seksi (field `gambar`).
+        if sid in SECTION_GAMBAR:
+            sec["gambar"] = SECTION_GAMBAR[sid]
         if sid in READABILITY_REWRITE:
             # v2.5: isi kurasi keterbacaan menggantikan hasil ekstraksi PDF
             # (tembok teks / artefak layout). Lewati strip/clean/drop:
@@ -11657,6 +11877,43 @@ def verify_poin_inti(docs):
         raise SystemExit("verifikasi poin-inti GAGAL:\n  " + "\n  ".join(errors))
     print(f"  verifikasi poin-inti: OK ({n} seksi, semua punya 3-5 butir)")
 
+def verify_gambar(docs):
+    """Gagalkan build bila diagram per seksi tidak terpasang dengan benar
+    (v2.5): setiap id di SECTION_GAMBAR harus ada sebagai seksi dan
+    membawa field `gambar` yang sama; nilai `gambar:` harus memakai kunci
+    built-in yang dikenal app, URL http(s) dipakai apa adanya."""
+    by_id = {}
+    for doc in docs:
+        for s in doc["sections"]:
+            by_id[s["id"]] = s
+    errors = []
+    for sid, gambar in SECTION_GAMBAR.items():
+        s = by_id.get(sid)
+        if s is None:
+            errors.append(f"{sid}: seksi tidak ditemukan")
+            continue
+        if s.get("gambar") != gambar:
+            errors.append(f"{sid}: gambar {s.get('gambar')!r}, harap {gambar!r}")
+        if gambar.startswith("gambar:"):
+            key = gambar[len("gambar:"):]
+            if key not in GAMBAR_BUILTIN_KEYS:
+                errors.append(f"{sid}: kunci gambar built-in tidak dikenal: {key!r}")
+        elif not gambar.startswith(("http://", "https://")):
+            errors.append(f"{sid}: gambar bukan kunci built-in maupun URL: {gambar!r}")
+    # Sintaks gambar inline di konten kurasi juga harus memakai kunci
+    # built-in yang dikenal (URL dilarang di konten kurasi).
+    for sid, konten in list(READABILITY_REWRITE.items()) + list(BANG_ARYA_REWRITE.items()):
+        for m in re.finditer(r"!\[[^\]]*\]\(([^)\s]+)\)", konten):
+            src = m.group(1)
+            if src.startswith("gambar:"):
+                if src[len("gambar:"):] not in GAMBAR_BUILTIN_KEYS:
+                    errors.append(f"{sid}: kunci gambar inline tidak dikenal: {src!r}")
+            else:
+                errors.append(f"{sid}: gambar inline bukan kunci built-in: {src!r}")
+    if errors:
+        raise SystemExit("verifikasi gambar GAGAL:\n  " + "\n  ".join(errors))
+    print(f"  verifikasi gambar: OK ({len(SECTION_GAMBAR)} seksi bergambar)")
+
 # ---------------------------------------------------------------- main
 def main():
     import shutil
@@ -11678,11 +11935,13 @@ def main():
         docs.append(doc)
         print(f"{doc['id']}: {len(doc['sections'])} sections, {doc['kata']} kata")
 
-    # materi baru (riset 2026-11-15): 2 dokumen baru + 1 seksi TIU
+    # materi baru (riset 2026-11-15): 3 dokumen baru + 1 seksi TIU
+    # + 3 seksi bela negara (v2.6)
     for doc in process_baru_docs():
         docs.append(doc)
         print(f"{doc['id']}: {len(doc['sections'])} sections, {doc['kata']} kata (baru)")
     append_baru_tiu(docs)
+    append_baru_bela_negara(docs)
 
     # filter isi: buang seksi soal/pengantar/duplikat, strip zona soal dari
     # seksi campuran (audit 2026-11-15). Berjalan setelah semua ID ditetapkan.
@@ -11700,6 +11959,9 @@ def main():
 
     # verifikasi poin inti: setiap seksi wajib punya 3-5 butir (v2.5)
     verify_poin_inti(docs)
+
+    # verifikasi diagram per seksi (v2.5)
+    verify_gambar(docs)
 
     order = ["TWK", "TIU", "TKP"]
     docs.sort(key=lambda d: (order.index(d["materi"]), d["id"]))
