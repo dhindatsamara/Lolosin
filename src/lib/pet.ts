@@ -12,7 +12,7 @@
  */
 import { useSyncExternalStore } from 'react'
 import { MASCOT_NAME } from './mascot'
-import { getCurrentNamespace, scopedKey } from './storage'
+import { getCurrentNamespace, getScopedItem, setScopedItem } from './storage'
 
 /** Aksesori yang bisa dipakai maskot (dirender Mascot lewat prop outfit). */
 export type PetOutfit = 'none' | 'syal' | 'kacamata' | 'mahkota' | 'jubah'
@@ -161,7 +161,7 @@ let cachedOutfit: PetOutfit | null = null
 
 function loadChosenOutfit(): PetOutfit | null {
   try {
-    const raw = localStorage.getItem(scopedKey(PET_OUTFIT_KEY))
+    const raw = getScopedItem(PET_OUTFIT_KEY)
     return isPetOutfit(raw) ? raw : null
   } catch {
     return null
@@ -196,7 +196,7 @@ export function useChosenOutfit(): PetOutfit | null {
 /** Simpan pilihan outfit, lalu beri tahu semua subscriber. */
 export function setChosenOutfit(outfit: PetOutfit): void {
   try {
-    localStorage.setItem(scopedKey(PET_OUTFIT_KEY), outfit)
+    setScopedItem(PET_OUTFIT_KEY, outfit)
   } catch {
     // Gagal simpan (penyimpanan penuh atau tidak tersedia): pilihan
     // tetap tampil sampai reload, jangan crash.
