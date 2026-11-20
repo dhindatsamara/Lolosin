@@ -12,6 +12,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { GuestProgressWarning } from '../components/GuestProgressWarning'
+import { StickyBackButton } from '../components/belajar/StickyBackButton'
 import { WeaknessMap } from '../components/WeaknessMap'
 import { CrownIcon } from '../components/icons'
 
@@ -66,6 +67,9 @@ export function PetaKelemahanPage() {
   return (
     <div className="flex flex-col gap-5">
       <GuestProgressWarning />
+
+      {/* Tombol back (v2.9): halaman ini dicapai dari Latihan. */}
+      <StickyBackButton to="/latihan" />
 
       <header>
         <p className="kicker">biar latihannya tepat sasaran</p>

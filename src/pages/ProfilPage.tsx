@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import {
   AUTH_NOT_CONFIGURED_MESSAGE,
   getMyProfile,
@@ -12,6 +12,7 @@ import {
   USERNAME_TAKEN_MESSAGE,
   type Profile,
 } from '../lib/auth'
+import { getAdminStatus } from '../lib/admin'
 import { MASCOT_NAME } from '../lib/mascot'
 import {
   getProfileAvatar,
@@ -35,14 +36,21 @@ import {
 } from '../lib/redeem'
 import {
   getPremiumStatus,
+  isBetaActive,
   type PremiumStatus,
 } from '../lib/premium'
+import {
+  getMyPendingClaim,
+  type PaymentClaim,
+} from '../lib/payments'
+import { formatRupiah, getPackage } from '../lib/pricing'
 import { useSyncStatus, type SyncStatus } from '../lib/sync'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { AvatarPicker } from '../components/AvatarPicker'
 import { Mascot } from '../components/Mascot'
 import { ConfirmModal } from '../components/quiz/ConfirmModal'
+import { StickyBackButton } from '../components/belajar/StickyBackButton'
 import { XIcon } from '../components/icons'
 
 const INPUT_CLASS =
@@ -214,6 +222,13 @@ export default function ProfilPage() {
     null,
   )
 
+  // Klaim pembayaran pending (v2.15): bila user sudah tap "Saya
+  // sudah bayar" di /premium dan admin belum memprosesnya, Profil
+  // menampilkan statusnya di blok Premium.
+  const [pendingClaim, setPendingClaim] = useState<PaymentClaim | null>(
+    null,
+  )
+
   // Redeem code (semua user) + generator kode (hanya akun Dhinda).
   const [redeemInput, setRedeemInput] = useState('')
   const [redeemLoading, setRedeemLoading] = useState(false)
@@ -229,6 +244,25 @@ export default function ProfilPage() {
 
   const syncStatus = useSyncStatus()
   const isDev = isDevRedeemUser(profile?.username, user?.email)
+
+  // Status admin (v2.14): tampilkan tautan panel admin hanya untuk
+  // akun admin. Pengecekan ini hanya untuk tampilan; halaman /admin
+  // dan Edge Function mengecek lagi di sisi server.
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    if (!user) {
+      setIsAdmin(false)
+      return
+    }
+    let cancelled = false
+    getAdminStatus(user.id).then((status) => {
+      if (!cancelled) setIsAdmin(status.isAdmin)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (authLoading) return
@@ -278,6 +312,15 @@ export default function ProfilPage() {
       })
       .catch(() => {
         // Abaikan, premiumUntil cukup tidak tampil.
+      })
+    // Klaim pembayaran pending (v2.15): gagal baca juga bukan
+    // error fatal, statusnya cukup tidak tampil.
+    getMyPendingClaim(user.id)
+      .then((result) => {
+        if (!cancelled) setPendingClaim(result.claim)
+      })
+      .catch(() => {
+        // Abaikan, status klaim cukup tidak tampil.
       })
     return () => {
       cancelled = true
@@ -555,8 +598,11 @@ export default function ProfilPage() {
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-3">
       {/* Header ringkas (v2.6): judul + deskripsi sebaris, tanpa
           kicker, supaya halaman muat satu layar. Chip status sync
-          (v2.7) duduk sebaris di kanan, tanpa biaya vertikal. */}
-      <header className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          (v2.7) duduk sebaris di kanan, tanpa biaya vertikal.
+          Tombol back (v2.9) duduk SEBARIS di header, bukan baris
+          baru, supaya tinggi halaman tetap muat satu layar. */}
+      <header className="flex flex-wrap items-center gap-x-4 gap-y-1">
+        <StickyBackButton to="/" />
         <h1 className="font-display text-2xl font-extrabold">Profil</h1>
         <p className="text-sm leading-relaxed text-ink/60">
           Atur username, formasi yang kamu tuju, dan avatar-mu.
@@ -685,9 +731,10 @@ export default function ProfilPage() {
           {/* Keluar pindah ke kolom identitas (v2.6): kolom akun
               adalah yang tertinggi, jadi tombol keluar ditaruh di
               kolom yang lebih pendek supaya ketiga kolom seimbang. */}
+          {/* Tombol Keluar merah (v2.9): varian danger. */}
           <Button
             size="sm"
-            variant="outline"
+            variant="danger"
             onClick={() => setShowLogoutConfirm(true)}
             disabled={signingOut}
             className="self-start"
@@ -790,34 +837,63 @@ export default function ProfilPage() {
                 bawah toggle tanpa judul bagian sendiri supaya
                 halaman tetap muat satu layar. */}
             <div className="border-t border-line pt-3">
-              <label
-                htmlFor="profil-premium-beta"
-                className="flex cursor-pointer items-center justify-between gap-3"
-              >
-                <span>
-                  <span className="block font-display text-sm font-extrabold">
-                    Premium Beta
+              {/* Toggle Premium Beta hanya selama beta (v2.15.2):
+                  sesudah 13 Desember 2026 toggle diganti catatan
+                  dan is_premium tidak lagi memberi premium. */}
+              {isBetaActive() ? (
+                <label
+                  htmlFor="profil-premium-beta"
+                  className="flex cursor-pointer items-center justify-between gap-3"
+                >
+                  <span>
+                    <span className="block font-display text-sm font-extrabold">
+                      Premium Beta
+                    </span>
+                    <span className="mt-0.5 block text-sm leading-relaxed text-ink/60">
+                      Gratis selama beta, termasuk jadi host sesi.
+                    </span>
                   </span>
-                  <span className="mt-0.5 block text-sm leading-relaxed text-ink/60">
-                    Gratis selama beta, termasuk jadi host sesi.
-                  </span>
-                </span>
-                <input
-                  id="profil-premium-beta"
-                  name="premium-beta"
-                  type="checkbox"
-                  checked={profile.is_premium ?? false}
-                  disabled={premiumSaving}
-                  onChange={(e) => void handlePremiumChange(e.target.checked)}
-                  className="h-5 w-5 shrink-0 accent-primary-600 disabled:opacity-50"
-                />
-              </label>
+                  <input
+                    id="profil-premium-beta"
+                    name="premium-beta"
+                    type="checkbox"
+                    checked={profile.is_premium ?? false}
+                    disabled={premiumSaving}
+                    onChange={(e) => void handlePremiumChange(e.target.checked)}
+                    className="h-5 w-5 shrink-0 accent-primary-600 disabled:opacity-50"
+                  />
+                </label>
+              ) : (
+                <p className="text-sm font-medium text-ink/60">
+                  Masa beta sudah berakhir 13 Desember 2026. Premium
+                  Beta tidak aktif lagi.
+                </p>
+              )}
               {premiumStatus?.premiumUntil && (
                 <p className="mt-1.5 text-sm font-semibold text-primary-700">
                   Premium aktif sampai{' '}
                   {formatTanggalIndonesia(premiumStatus.premiumUntil)}.
                 </p>
               )}
+              {/* Klaim pembayaran pending (v2.15): status verifikasi
+                  pembayaran QRIS dari halaman /premium. */}
+              {pendingClaim && (
+                <p className="mt-1.5 rounded-xl bg-accent-50 px-3.5 py-2.5 text-sm font-semibold text-ink/80">
+                  Pembayaran{' '}
+                  {getPackage(pendingClaim.package)?.label ??
+                    pendingClaim.package}{' '}
+                  {formatRupiah(pendingClaim.amount)} sedang
+                  diverifikasi.
+                </p>
+              )}
+              {/* Tautan ke halaman paket Premium (v2.15). */}
+              <div className="mt-2">
+                <Link to="/premium">
+                  <Button size="sm" variant="outline">
+                    Lihat paket Premium
+                  </Button>
+                </Link>
+              </div>
               {premiumError && (
                 <p
                   role="alert"
@@ -878,6 +954,27 @@ export default function ProfilPage() {
                 </p>
               )}
             </div>
+
+            {/* Tautan panel admin (v2.14, HANYA akun admin):
+                tidak ada sama sekali di DOM untuk user lain. */}
+            {isAdmin && (
+              <div className="border-t border-line pt-3">
+                <h2 className="font-display text-sm font-extrabold">
+                  Panel admin
+                </h2>
+                <p className="mt-0.5 text-sm leading-relaxed text-ink/60">
+                  Kelola user, premium, kode, pembayaran, juara, dan
+                  bank soal.
+                </p>
+                <div className="mt-2">
+                  <Link to="/admin">
+                    <Button size="sm" variant="outline">
+                      Buka panel admin
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            )}
 
             {/* Generator kode redeem (v2.7, HANYA akun Dhinda):
                 tidak ada sama sekali di DOM untuk user lain. */}

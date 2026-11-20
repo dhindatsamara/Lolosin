@@ -23,6 +23,7 @@ import { cx } from '../lib/utils'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { Mascot } from '../components/Mascot'
+import { StickyBackButton } from '../components/belajar/StickyBackButton'
 import {
   CheckIcon,
   CrownIcon,
@@ -302,6 +303,9 @@ export default function AuthPage() {
   if (confirmationEmail) {
     return (
       <div className="mx-auto flex w-full max-w-md flex-col gap-5">
+        {/* Tombol back (v2.9): kembali ke Beranda. */}
+        <StickyBackButton to="/" />
+
         <header>
           <p className="kicker">hampir jadi, satu langkah lagi</p>
           <h1 className="mt-1 font-display text-3xl font-extrabold">
@@ -354,6 +358,9 @@ export default function AuthPage() {
   if (needsProfile) {
     return (
       <div className="mx-auto flex w-full max-w-md flex-col gap-5">
+        {/* Tombol back (v2.9): kembali ke Beranda. */}
+        <StickyBackButton to="/" />
+
         <header className="flex flex-col items-center text-center">
           <span className="blob-soft flex h-28 w-28 items-center justify-center bg-primary-100">
             <Mascot mood="kagum" size={88} className="float-soft" />
@@ -434,6 +441,9 @@ export default function AuthPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-5">
+      {/* Tombol back (v2.9): kembali ke Beranda. */}
+      <StickyBackButton to="/" />
+
       <header className="flex flex-col items-center text-center">
         <span className="blob-soft flex h-28 w-28 items-center justify-center bg-primary-100">
           <Mascot

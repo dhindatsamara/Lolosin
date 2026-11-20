@@ -86,7 +86,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ink/5 text-xs font-bold">
                   {opsi}
                 </span>
-                <span className="min-w-0 flex-1 leading-relaxed font-medium">
+                <span className="min-w-0 flex-1 leading-relaxed font-medium break-words">
                   {question.pilihan[opsi]}
                 </span>
                 <span
@@ -121,7 +121,7 @@ export function ExplanationPanel({ question, selected }: ExplanationPanelProps) 
           Pembahasan
         </p>
         {pembahasan ? (
-          <p className="text-sm leading-relaxed whitespace-pre-line text-ink/80">
+          <p className="text-sm leading-relaxed whitespace-pre-line break-words text-ink/80">
             <MathText text={pembahasan} />
           </p>
         ) : (

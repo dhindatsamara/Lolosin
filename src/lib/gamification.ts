@@ -13,6 +13,7 @@ import { checkNewBadges, type BadgeDef } from './badges'
 import { getDailyMissions, type MissionKind } from './missions'
 import { getRankTitle } from './ranks'
 import { reviewCountDue } from './review'
+import type { TryoutAttempt } from './attempts'
 import type { Materi } from './questions'
 import type { TryoutScore } from './quiz'
 import {
@@ -259,18 +260,29 @@ export function completeReview(): void {
  * (mini +100, simulasi +300, aturan lama untuk mini), hitung jawaban
  * benar, majukan misi tryout (mini) atau misi simulasi (full), catat
  * aktivitas, cek naik level dan lencana.
+ *
+ * `extra.date` (v2.12.1): stempel selesai yang sama dengan yang
+ * dikirim ke leaderboard + state hasil, supaya tanggal riwayat
+ * lokal sama persis dengan finished_at di tryout_results (dipakai
+ * mengambil jawaban attempt dari server). `extra.attempt`:
+ * jawaban attempt untuk "Lihat hasil" dari riwayat.
  */
-export function completeTryout(score: TryoutScore): void {
+export function completeTryout(
+  score: TryoutScore,
+  extra?: { date?: string; attempt?: TryoutAttempt },
+): void {
   const xpBefore = getStore().xp
   const { stats } = getStore()
   const full = score.mode === 'full'
   recordTryout({
+    date: extra?.date,
     mode: score.mode,
     twk: score.scores.TWK,
     tiu: score.scores.TIU,
     tkp: score.scores.TKP,
     passed: score.passedOverall,
     correct: score.correct,
+    attempt: extra?.attempt,
   })
   addXp(full ? XP_SIMULASI_COMPLETE : XP_TRYOUT_COMPLETE)
   const correctTotal = score.correct

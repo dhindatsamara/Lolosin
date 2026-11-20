@@ -21,18 +21,27 @@
  * tipis juga diganti karena dinilai suspicious bila dipasangkan
  * dengan mata terbuka. 'Kagum' ikut bermata merem (alis naik +
  * senyum terbuka kecil). 'Marah' tetap hanya untuk streak putus.
+ *
+ * v2.11.2: mood baru 'tekad' untuk state tidak lulus di halaman hasil
+ * tryout (user minta Osi jangan sedih saat gagal, tapi membangun biar
+ * mau belajar lagi). Mata tetap merem bahagia (^ ^); tekad ditunjukkan
+ * lewat alis yang sedikit miring fokus (turun ke arah tengah tapi
+ * jauh lebih landai dari 'marah') + senyum terbuka kecil yang terisi.
  */
 import { MASCOT_NAME } from '../lib/mascot'
 import type { PetOutfit } from '../lib/pet'
 
-export type MascotMood = 'senang' | 'semangat' | 'sedih' | 'kagum' | 'marah'
+export type MascotMood = 'senang' | 'semangat' | 'sedih' | 'kagum' | 'marah' | 'tekad'
 
 interface MascotProps {
   /** Ekspresi: senang (default, mata merem + senyum terbuka), semangat
       (mata merem + mulut terbuka lebar), sedih (alis turun, mulut
       cemberut ringan), kagum (mata merem + alis naik + senyum terbuka
       kecil, untuk momen perkenalan atau kejutan seru), marah (cute
-      marah: alis miring + cemberut kecil, HANYA untuk streak putus). */
+      marah: alis miring + cemberut kecil, HANYA untuk streak putus),
+      tekad (mata merem + alis sedikit miring fokus + senyum terbuka
+      kecil, untuk state tidak lulus: bertekad dan menyemangati, bukan
+      sedih). */
   mood?: MascotMood
   /** Ukuran kotak SVG dalam px (default 64). */
   size?: number
@@ -96,6 +105,31 @@ function Eyes({ mood }: { mood: MascotMood }) {
         <g stroke="#1B1E1C" strokeWidth="2.5" strokeLinecap="round">
           <path d="M29 43 L42 48" />
           <path d="M67 43 L54 48" />
+        </g>
+      </g>
+    )
+  }
+  if (mood === 'tekad') {
+    // Tekad (v2.11.2, state tidak lulus): mata MEREM bahagia yang
+    // sama seperti 'senang', alis sedikit miring fokus ke arah tengah
+    // (ujung dalam turun ~2.5px, jauh lebih landai dari 'marah' yang
+    // 5px + lurus, dan berlawanan arah dari 'sedih' yang ujung
+    // dalamnya naik). Kesan: fokus dan percaya diri, "yuk coba lagi",
+    // bukan marah dan bukan sedih.
+    return (
+      <g>
+        <g
+          stroke="#1B1E1C"
+          strokeWidth="3.2"
+          strokeLinecap="round"
+          fill="none"
+        >
+          <path d="M29 53 Q36 45 43 53" />
+          <path d="M53 53 Q60 45 67 53" />
+        </g>
+        <g stroke="#1B1E1C" strokeWidth="2.5" strokeLinecap="round" fill="none">
+          <path d="M29 42 Q35.5 40.8 42 44.5" />
+          <path d="M67 42 Q60.5 40.8 54 44.5" />
         </g>
       </g>
     )
@@ -173,6 +207,12 @@ function Mouth({ mood }: { mood: MascotMood }) {
         strokeLinecap="round"
       />
     )
+  }
+  if (mood === 'tekad') {
+    // Senyum terbuka kecil yang terisi, sedikit lebih lebar dari
+    // 'kagum' supaya terbaca percaya diri ("yuk bisa"), bukan
+    // garis tipis (dinilai suspicious) dan bukan cemberut.
+    return <path d="M41 61.5 Q48 70.5 55 61.5 Z" fill="#1B1E1C" />
   }
   if (mood === 'kagum') {
     // Senyum terbuka kecil (bukan lingkaran "o").

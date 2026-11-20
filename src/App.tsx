@@ -27,6 +27,7 @@ import {
   useGiftNotices,
   type GiftNotice,
 } from './lib/leaderboard'
+import { AdminPage } from './pages/AdminPage'
 import AuthPage from './pages/AuthPage'
 import { BattlePage } from './pages/BattlePage'
 import { BelajarPage } from './pages/BelajarPage'
@@ -41,6 +42,7 @@ import { LeaderboardPage } from './pages/LeaderboardPage'
 import { MainHubPage } from './pages/MainHubPage'
 import { MateriDetailPage } from './pages/MateriDetailPage'
 import { PetaKelemahanPage } from './pages/PetaKelemahanPage'
+import { PremiumPage } from './pages/PremiumPage'
 import ProfilPage from './pages/ProfilPage'
 import { SectionDetailPage } from './pages/SectionDetailPage'
 import { SessionHostPage } from './pages/SessionHostPage'
@@ -387,6 +389,11 @@ export default function App() {
         </Routes>
       ) : (
         <Routes>
+          {/* v2.14.4: /admin di luar Layout — full admin shell tanpa
+              header nav dan footer situs. Jalur masuknya tidak
+              berubah: tautan "Buka panel admin" di Profil tetap
+              mengarah ke sini untuk akun admin. */}
+          <Route path="admin" element={<AdminPage />} />
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="belajar" element={<BelajarPage />} />
@@ -410,6 +417,7 @@ export default function App() {
             <Route path="formasi" element={<FormasiPage />} />
             <Route path="auth" element={<AuthPage />} />
             <Route path="profil" element={<ProfilPage />} />
+            <Route path="premium" element={<PremiumPage />} />
             <Route path="main" element={<MainHubPage />} />
             <Route path="main/battle" element={<BattlePage />} />
             <Route path="main/battle/:code" element={<BattlePage />} />

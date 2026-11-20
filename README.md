@@ -1,187 +1,118 @@
-# Lolosin — Belajar CPNS Jadi Menyenangkan
+# Lolosin
 
-Web app belajar CPNS all-in-one: materi SKD terstruktur, latihan soal
-anti-ulang, dan tryout mini bergaya CAT. Dibangun sebagai PWA
-offline-first — sekali dimuat, bisa dipakai tanpa internet.
+Studying for the CPNS exam is a grind. Lolosin makes it feel like a game
+you actually want to open every day.
 
-**Stack:** Vite + React 19 + TypeScript + Tailwind CSS v4 + PWA
-(`vite-plugin-pwa`). Routing memakai `HashRouter` agar aman di hosting
-statis apa pun. UI berbahasa Indonesia.
+Lolosin is a gamified study app for Indonesia's civil service entrance
+exam (CPNS). It packs everything you need in one place: readable study
+material, thousands of practice questions with clear explanations, and
+full exam simulations with the real passing grades. Streaks, a mascot
+companion, battles, and a weekly leaderboard keep you going when
+motivation runs out.
 
-## Menjalankan lokal
+**Try it live:** https://lolosin.netlify.app/ (works as a PWA, and works
+offline once loaded)
+
+## Why people stick with it
+
+Most CPNS apps are question banks with a login screen. Lolosin is built
+around one idea: you learn more when you actually show up every day. So
+everything is designed to make showing up easy and fun.
+
+- **Material that reads well.** 21 study documents, 308 sections, about
+  87,000 words, written to be read, not skimmed. Every section ends with
+  key takeaways, and each subtest has a cheat sheet up front.
+- **Questions that teach, not just test.** 9,247 questions, and every
+  quiz-usable one explains each option, so you understand why an answer
+  is right and why the others are wrong. Questions never repeat until
+  you have seen the whole pool.
+- **Real exam practice.** Full CAT simulation (110 questions, 100
+  minutes) scored against the official passing grades, plus a weekly
+  live tryout every Sunday morning.
+- **Game mechanics that work.** Daily streaks, XP and levels, badges, a
+  mascot pet that grows with your streak, 1v1 battles against friends,
+  and a weekly leaderboard.
+- **Study help that adapts to you.** Wrong answers come back on a spaced
+  schedule, a personal study plan points at your weak spots, and an
+  interactive weakness map shows exactly where to focus next.
+
+## Features
+
+- Belajar: structured SKD material (TWK, TIU, TKP) with key takeaways,
+  tables, and diagrams
+- Latihan: per-topic drills with per-option explanations, no repeats
+- Tryout: mini CAT (30 questions) and full simulation (110 questions),
+  weekly Tryout Akbar
+- Gamification: streaks, XP, levels, badges, mascot pet (Osi), weekly
+  leaderboard with champion rewards
+- Play: real-time 1v1 battles, Quizizz-style group sessions, five solo
+  mini-games, discussion on every question
+- Planning: spaced repetition, personal study plan, pass prediction,
+  weakness map
+- Formasi browser: browse CPNS formations with official SSCASN links
+  (sample data, clearly labeled)
+
+## Built with
+
+Vite, React 19, TypeScript, Tailwind CSS v4, PWA. Backend on Supabase
+(Auth, Postgres, Realtime, Edge Functions, scheduled jobs). Hosted on
+Netlify.
+
+AI-assisted development: the author makes the product, design, content,
+and quality calls, and works with an AI coding assistant on
+implementation. Every release passes a 796-check local QA suite before
+it ships.
+
+## Run it locally
 
 ```bash
 npm install
-npm run dev        # server dev di http://localhost:5173
+npm run dev        # dev server at http://localhost:5173
 ```
 
-## Build & preview
+For auth, leaderboard, and progress sync, add your Supabase credentials
+to `.env` (see `.env.contoh`). Without them the app runs in local-only
+mode.
 
 ```bash
-npm run build      # type-check (tsc) + build production ke dist/
-npm run preview    # sajikan hasil build lokal
+npm run build      # type-check + production build to dist/
+npm run preview    # serve the production build locally
 ```
 
-## Deploy (Netlify)
-
-Live di Netlify (URL `*.netlify.app`). Setiap push ke `main` otomatis
-men-deploy: Netlify membaca `netlify.toml` (build `npm run build`,
-publish `dist`, Node 20). Deploy target utama adalah Netlify karena
-gratis untuk repo privat — tidak seperti GitHub Pages yang butuh
-repo publik atau GitHub Pro.
-
-Base path diputuskan dari env saat build (`VITE_BASE_PATH` di
-`vite.config.ts`, default `/` untuk Netlify/root domain). Untuk
-GitHub Pages project site, build dengan `VITE_BASE_PATH='/Lolosin/'`
-(workflow-nya ada di `.github/workflows/deploy.yml`, tapi file itu
-tidak bisa di-push lewat konektor GitHub — harus dibuat manual di web
-GitHub karena App Muse tidak punya izin workflows).
-
-Ikon PWA saat ini memakai SVG (`public/icons/icon.svg`,
-`maskable.svg`) karena konektor GitHub hanya bisa push file teks — ikon
-PNG (`icon-192.png`, `icon-512.png`, `maskable-512.png`) bisa di-upload
-manual lewat web GitHub, lalu entri PNG-nya ditambahkan lagi ke manifest
-di `vite.config.ts`.
-
-## Struktur proyek
+## Project layout
 
 ```
 src/
   data/
-    questions/       # bank soal, dipecah jadi chunk maks 1,5 MB
-                     # (lihat "Update bank soal")
-    materi/          # 17 dokumen materi belajar, 319 seksi, 124.163 kata
-                     # (index.json, inventaris.json, SCHEMA.md, build_materi.py)
-  lib/
-    questions.ts     # loader & filter bank soal
-    materi.ts        # loader konten materi (index + dokumen)
-    quiz.ts          # mesin kuis: pick drill/tryout + penskoran
-    store.ts         # progres pengguna (localStorage, key "lolosin:v1")
-    utils.ts         # helper kecil (cx)
-  components/
-    Layout.tsx       # top bar (XP/level/streak) + bottom nav mobile
-    icons.tsx        # ikon SVG garis
-    ui/              # primitif bersama: Button, Card, ProgressBar, Badge
-    belajar/         # MarkdownLite, ProgressRing, PangkatTable
-    quiz/            # QuestionCard, OptionButton, ExplanationPanel,
-                     # TryoutPalette, TimerDisplay
-  pages/             # Home, Belajar, MateriDetail, SectionDetail,
-                     # Latihan, LatihanJalan, Tryout, TryoutHasil
-  App.tsx            # definisi rute
-  main.tsx           # HashRouter + registrasi service worker
-public/
-  icons/             # ikon PWA (192/512 + maskable 512)
+    questions/       # question bank, split into chunks
+    materi/          # study material (index + documents + build script)
+  lib/               # question loader, quiz engine, store, sync, auth,
+                     # redeem codes, battle logic, gamification
+  components/        # layout, quiz UI, mascot, share cards, notifications
+  pages/             # Home, Belajar, Latihan, Tryout, games, leaderboard,
+                     # formations, profile, weakness map, tips
+supabase/
+  migrations/        # profiles, leaderboard, battles, premium, redeem
+                     # codes, progress sync, discussions, winner emails
+  functions/         # winner-code email (Resend)
 ```
 
-Rute: `/` (Beranda), `/belajar`, `/belajar/:materiId`,
-`/belajar/:materiId/:sectionId`, `/latihan`, `/latihan/jalan`, `/tryout`,
-`/tryout/hasil`.
+## Question bank notes
 
-## Update bank soal
+- The bank is split into chunks and loaded with `import.meta.glob`, so
+  chunk names and counts can change without touching code. It ships as a
+  separate `questions-[hash].js` chunk, precached by the service worker.
+- Questions without a verified key (`kunci: null`) never appear in
+  quizzes. Defective questions are removed, not kept.
+- Sources are free-access materials. Keys and explanations are verified
+  before they ship.
 
-Bank soal disimpan sebagai chunk-chunk kecil di `src/data/questions/`
-(maks 1,5 MB per file — satu file 7,9 MB tidak bisa di-push lewat
-konektor GitHub). Untuk memperbarui, jalankan script pemecah dari root
-repo, lalu `npm run build`:
+## Roadmap
 
-```bash
-python3 scripts/split-questions.py [path/bank-soal.json]
-```
+- Admin panel (users, redeem codes, weekly winners, bank summary)
+- Your own rank on the leaderboard page
+- SKB material (final phase)
 
-Loader (`src/lib/questions.ts`) memakai `import.meta.glob` sehingga
-jumlah dan nama chunk boleh berubah tanpa mengubah kode. Bank soal
-dibundel ke chunk terpisah (`questions-[hash].js`) dan di-precache oleh
-service worker, jadi pengguna mendapat data baru begitu service worker
-memperbarui diri (`registerType: autoUpdate`).
+## License
 
-Skema soal:
-
-```json
-{
-  "id": "hots-1",
-  "materi": "TWK",
-  "subtopik": "Pancasila",
-  "soal": "...",
-  "pilihan": { "A": "...", "B": "...", "C": "...", "D": "...", "E": "..." },
-  "kunci": "D",
-  "pembahasan": "...",
-  "sumber": "...",
-  "bobot": { "A": 1, "B": 2, "C": 3, "D": 4, "E": 5 }
-}
-```
-
-`bobot` opsional (hanya sebagian soal TKP). `kunci` boleh `null` —
-soal seperti itu otomatis dikecualikan dari kuis (lihat caveat di bawah).
-
-## API singkat untuk pengembang UI
-
-### `src/lib/questions.ts`
-
-- `getQuestions(materi, subtopik?)` → soal kuis (selalu berkunci)
-- `getTopics(materi)` → daftar subtopik terurut
-- `countByTopic(materi)` → jumlah soal per subtopik
-- `countNewByTopic(materi, seenIds)` → sisa soal baru per subtopik
-- `countTotalByMateri(materi)`, `countSeenByMateri(seenIds)`
-- `TOTAL_QUESTIONS`, `TOTAL_QUIZABLE`, `MATERI_META`, `isMateri()`
-
-### `src/lib/quiz.ts`
-
-- `pickDrillQuestions(materi, subtopik | null, n = 10, seenIds)` →
-  `{ questions, rotated }` (utamakan soal baru; `rotated=true` bila pool
-  baru habis)
-- `pickTryoutQuestions(seenIds)` → 30 soal (10 TWK + 10 TIU + 10 TKP)
-- `scoreTryout(questions, answers)` → `{ scores, scaled, passed,
-  passedOverall, correct, total, scaledTotal }`
-- `scoreQuestion(question, answer)` → skor satu soal
-- Konstanta: `TRYOUT_TIME_LIMIT_MINUTES` (27),
-  `TRYOUT_PASSING_MINI` ({ TWK: 22, TIU: 23, TKP: 35 }),
-  `TRYOUT_SCALE_TO_ORIGINAL` ({ TWK: 3, TIU: 3.5, TKP: 4.5 }),
-  `ORIGINAL_PASSING` ({ TWK: 65, TIU: 80, TKP: 156 })
-
-### `src/lib/store.ts` (localStorage key `lolosin:v1`)
-
-- `useStore()` — hook React reaktif (dipakai top bar & halaman)
-- `getStore()` — baca state mentah
-- `addXp(n)` — tambah XP
-- `recordActivity()` — catat aktivitas hari ini, perbarui streak
-  (zona Asia/Makassar)
-- `markSeen(ids)` / `isSeen(id)` — soal sudah dilihat
-- `markRead(sectionId)` — tandai seksi dibaca (+5 XP, sekali per seksi)
-- `recordTryout({ twk, tiu, tkp, passed, correct? })` — simpan hasil
-- `getLevel(xp)`, `xpProgress(xp)` — level = floor(sqrt(xp/50)) + 1
-- Aturan XP: benar drill +10, selesai drill +50, selesai tryout +100,
-  baca seksi +5
-
-## Caveat data
-
-- **621 soal tanpa kunci** (`kunci: null`) difilter dari semua
-  pool kuis: CATBKN 2024 (102), CATBKN.com (422), Portal CASN (85),
-  komunitasbelajar (11), kidocp (1). Soal-soal itu tetap ada di
-  `questions.json` dan tidak pernah muncul di drill/tryout.
-  Soal yang bisa dipakai kuis: 8.451 dari 9.072.
-- **2 kunci HOTS Konstitusi ditentukan dari analisis isi, belum
-  terverifikasi manual:** Q13 = C, Q50 = A. Perlu dicek manusia sebelum
-  dipakai sebagai acuan.
-- **Bank soal akan membesar.** Jalur update sudah terdokumentasi di
-  atas (ganti satu file + rebuild). Chunk soal saat ini ~7,9 MB
-  (bank 9.072 soal, update 2026-11-13) dan batas precache workbox
-  dinaikkan ke 10 MB di `vite.config.ts` — kalau bank soal melewati
-  itu, naikkan `maximumFileSizeToCacheInBytes`.
-
-## Berikutnya (Fase 3 — jangan dibangun sekarang)
-
-- Leaderboard mingguan + badge prestise juara 1–3
-- Spaced repetition (pengulangan soal yang salah)
-- Battle 1v1
-- Tryout live mingguan
-- Prediksi kelolosan
-- Rencana belajar personal
-- Diskusi per soal
-
-## Desain
-
-Token desain di `src/index.css` (`@theme` Tailwind v4): font
-Plus Jakarta Sans (UI) + Sora (display), latar kertas hangat `#FAF7F2`,
-tinta `#1B1E1C`, primer hijau tua `#0E5C43`, aksen amber `#F2A900`,
-warna seksi TWK terracotta `#C2410C`, TIU biru `#1E40AF`, TKP plum
-`#7E22CE`. Tanpa gradient ungu generik.
+Proprietary. All rights reserved. This code is not open source.

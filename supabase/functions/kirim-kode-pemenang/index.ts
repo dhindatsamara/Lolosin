@@ -44,9 +44,9 @@ const DEFAULT_FROM = 'Lolosin <hadiah@lolosin.app>'
 
 /** Hadiah premium per peringkat juara global (hari). */
 function premiumDaysForRank(rank: number): number {
-  if (rank === 1) return 7
-  if (rank === 2) return 5
-  return 3
+  if (rank === 1) return 30
+  if (rank === 2) return 14
+  return 7
 }
 
 /** Label rentang minggu dari Senin week_start, misal "10 Nov - 16 Nov 2026". */

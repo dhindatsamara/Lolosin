@@ -1,16 +1,23 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthUser } from '../lib/auth'
+import { getPremiumStatus } from '../lib/premium'
 import { SIMULASI_TIME_LIMIT_MINUTES, SIMULASI_TOTAL_QUESTIONS } from '../lib/quiz'
 import { isSupabaseConfigured } from '../lib/supabase'
 import {
+  AKBAR_LIVE_POLL_MS,
   countdownParts,
   currentEventWindow,
   fetchAkbarLeaderboard,
+  fetchMyAkbarCount,
+  formatBoardUnlockHour,
   formatEventHours,
   formatEventLabel,
+  FREE_AKBAR_LIMIT,
+  isAkbarBoardLockedForFree,
   isEventWindowOpen,
   nextEventStart,
+  subscribeAkbarResults,
   type LeaderboardEntry,
 } from '../lib/tryoutAkbar'
 import { cx } from '../lib/utils'
@@ -18,6 +25,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { GuestProgressWarning } from '../components/GuestProgressWarning'
+import { StickyBackButton } from '../components/belajar/StickyBackButton'
 import { ChevronRightIcon, ClockIcon, TrophyIcon } from '../components/icons'
 
 /** Warna lingkaran peringkat (sama seperti halaman Peringkat). */
@@ -41,23 +49,39 @@ function CountdownUnit({ value, label }: { value: number; label: string }) {
 }
 
 /**
- * Halaman Tryout Akbar: event simulasi CAT bareng tiap Minggu
- * 09:00-11:00 WITA. Hitung mundur live ke event berikutnya, tombol
- * mulai yang aktif hanya saat jendela event terbuka, dan papan
- * peringkat khusus event minggu berjalan/terakhir.
+ * Halaman Tryout Akbar: satu-satunya simulasi CAT lengkap di Lolosin
+ * (v2.11), event bareng tiap Minggu 09:00-11:00 WIB. Hitung mundur
+ * live ke event berikutnya, tombol mulai yang aktif hanya saat
+ * jendela event terbuka, dan papan peringkat khusus event minggu
+ * berjalan/terakhir.
+ *
+ * Aturan akses (v2.11, keputusan Dhinda 2026-11-19):
+ * - Akbar WAJIB login bila Supabase terkonfigurasi (partisipasi
+ *   dihitung per akun); tamu mendapat ajakan login. Bila Supabase
+ *   BELUM terkonfigurasi (mode lokal/QA placeholder), tidak ada
+ *   yang bisa dihitung atau diranking, jadi event jalan sebagai
+ *   simulasi lokal dan tamu boleh mulai.
+ * - User gratis dapat 2x ikut Akbar seumur akun; setelah itu ikut
+ *   Akbar butuh premium. Premium tanpa batas. Cek client-side saja.
+ * - Papan live realtime = premium selama event (Realtime +
+ *   polling fallback). User gratis: papan terkunci sampai jam
+ *   16:00 WIB di hari event.
  *
  * Tombol mulai memakai alur simulasi yang sudah ada: diarahkan ke
  * halaman Tryout dengan state startMode 'full', lalu halaman Tryout
- * membuka modal konfirmasi dan menjalankan simulasi CAT lengkap.
+ * membuka modal konfirmasi dan menjalankan simulasi 110 soal.
  * Hasilnya tersimpan normal sebagai tryout mode 'full'.
  */
 export function TryoutAkbarPage() {
   const navigate = useNavigate()
-  const { user } = useAuthUser()
+  const { user, loading: authLoading } = useAuthUser()
   const [now, setNow] = useState(() => new Date())
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
   const [loadingEntries, setLoadingEntries] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  // Status premium + hitungan partisipasi (null = belum terbaca).
+  const [premium, setPremium] = useState<boolean | null>(null)
+  const [akbarCount, setAkbarCount] = useState<number | null>(null)
   const configured = isSupabaseConfigured()
 
   // Hitung mundur live, tick tiap detik.
@@ -66,10 +90,53 @@ export function TryoutAkbarPage() {
     return () => window.clearInterval(id)
   }, [])
 
+  // Status premium + partisipasi, dibaca saat user berubah.
+  useEffect(() => {
+    if (!configured || !user) {
+      setPremium(null)
+      setAkbarCount(null)
+      return
+    }
+    let cancelled = false
+    void getPremiumStatus(user.id).then((status) => {
+      if (!cancelled) setPremium(status.premium)
+    })
+    void fetchMyAkbarCount(user.id).then((count) => {
+      if (!cancelled) setAkbarCount(count)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [configured, user])
+
   const windowOpen = isEventWindowOpen(now)
   const eventWindow = currentEventWindow(now)
   const countdownTarget = windowOpen ? eventWindow.end : nextEventStart(now)
   const countdown = countdownParts(countdownTarget, now)
+
+  const isPremiumUser = premium === true
+  // Tamu jelas bukan premium; user login menunggu hasil cek.
+  const premiumKnown = user === null || premium !== null
+  const accessKnown =
+    !configured || user === null || (premium !== null && akbarCount !== null)
+  const freeChancesLeft =
+    akbarCount === null
+      ? FREE_AKBAR_LIMIT
+      : Math.max(0, FREE_AKBAR_LIMIT - akbarCount)
+  const freeLimitReached =
+    configured &&
+    user !== null &&
+    !isPremiumUser &&
+    akbarCount !== null &&
+    akbarCount >= FREE_AKBAR_LIMIT
+  // Papan terkunci untuk non-premium selama Minggu 09:00-16:00 WIB.
+  const boardLocked =
+    configured &&
+    premiumKnown &&
+    !isPremiumUser &&
+    isAkbarBoardLockedForFree(now)
+  // Papan live: premium + jendela terbuka (Realtime + polling).
+  const liveEnabled = configured && isPremiumUser && windowOpen
 
   const loadEntries = useCallback(async () => {
     if (!configured) {
@@ -82,8 +149,27 @@ export function TryoutAkbarPage() {
   }, [configured])
 
   useEffect(() => {
+    if (boardLocked) {
+      setLoadingEntries(false)
+      return
+    }
     void loadEntries()
-  }, [loadEntries])
+  }, [loadEntries, boardLocked])
+
+  // Live board premium: subscribe INSERT tryout_results + polling
+  // fallback tiap AKBAR_LIVE_POLL_MS selama event berlangsung.
+  useEffect(() => {
+    if (!liveEnabled) return
+    const refresh = () => {
+      void loadEntries()
+    }
+    const unsubscribe = subscribeAkbarResults(refresh)
+    const id = window.setInterval(refresh, AKBAR_LIVE_POLL_MS)
+    return () => {
+      window.clearInterval(id)
+      unsubscribe?.()
+    }
+  }, [liveEnabled, loadEntries])
 
   async function handleRefresh() {
     if (refreshing) return
@@ -92,9 +178,16 @@ export function TryoutAkbarPage() {
     setRefreshing(false)
   }
 
+  function handleStart() {
+    navigate('/tryout', { state: { startMode: 'full' } })
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <GuestProgressWarning />
+
+      {/* Tombol back (v2.9): halaman ini dicapai dari Tryout. */}
+      <StickyBackButton to="/tryout" />
 
       <header>
         <p className="kicker">event mingguan, bareng-bareng</p>
@@ -102,7 +195,7 @@ export function TryoutAkbarPage() {
           Tryout Akbar
         </h1>
         <p className="mt-1 max-w-2xl text-sm leading-relaxed text-ink/60">
-          Simulasi CAT 110 soal bareng semua pejuang, tiap Minggu{' '}
+          Tryout Akbar 110 soal bareng semua pejuang, tiap Minggu{' '}
           {formatEventHours()}. Kerjakan di dalam jendela event biar
           skormu masuk papan peringkat minggu ini.
         </p>
@@ -120,7 +213,7 @@ export function TryoutAkbarPage() {
               </p>
               <p className="mt-1 text-xs leading-relaxed font-medium text-ink/60">
                 {windowOpen
-                  ? 'Jendela event tutup pukul 11:00 WITA. Mulai sekarang biar sempat selesai.'
+                  ? 'Jendela event tutup pukul 11:00 WIB. Mulai sekarang biar sempat selesai.'
                   : `Jendela event ${formatEventHours()}. Tombol mulai aktif saat event dibuka.`}
               </p>
             </div>
@@ -142,21 +235,64 @@ export function TryoutAkbarPage() {
           </div>
 
           <div>
-            <Button
-              size="lg"
-              fullWidth
-              disabled={!windowOpen}
-              onClick={() =>
-                navigate('/tryout', { state: { startMode: 'full' } })
-              }
-            >
-              <TrophyIcon width={18} height={18} />
-              {windowOpen ? 'Mulai Tryout Akbar' : 'Ikut Tryout Akbar'}
-            </Button>
-            <p className="mt-2 text-center text-xs font-medium text-ink/60">
-              {SIMULASI_TOTAL_QUESTIONS} soal · {SIMULASI_TIME_LIMIT_MINUTES}{' '}
-              menit · suasana ujian beneran
-            </p>
+            {configured && authLoading ? (
+              <Button size="lg" fullWidth disabled>
+                <TrophyIcon width={18} height={18} />
+                Memeriksa...
+              </Button>
+            ) : configured && user === null ? (
+              <>
+                <Link to="/auth" className="block">
+                  <Button size="lg" fullWidth>
+                    <TrophyIcon width={18} height={18} />
+                    Login dulu untuk ikut
+                  </Button>
+                </Link>
+                <p className="mt-2 text-center text-xs font-medium text-ink/60">
+                  Tryout Akbar butuh akun, biar skormu masuk papan
+                  peringkat dan kesempatan gratisnya kehitung.
+                </p>
+              </>
+            ) : configured && !accessKnown ? (
+              <Button size="lg" fullWidth disabled>
+                <TrophyIcon width={18} height={18} />
+                Memeriksa akses...
+              </Button>
+            ) : freeLimitReached ? (
+              <>
+                <Link to="/profil" className="block">
+                  <Button size="lg" fullWidth>
+                    <TrophyIcon width={18} height={18} />
+                    Jadi premium untuk ikut lagi
+                  </Button>
+                </Link>
+                <p className="mt-2 text-center text-xs font-medium text-ink/60">
+                  Kamu sudah memakai {FREE_AKBAR_LIMIT}x kesempatan
+                  gratis ikut Tryout Akbar. Jadi premium biar bisa
+                  ikut tiap minggu tanpa batas.
+                </p>
+              </>
+            ) : (
+              <>
+                <Button
+                  size="lg"
+                  fullWidth
+                  disabled={!windowOpen}
+                  onClick={handleStart}
+                >
+                  <TrophyIcon width={18} height={18} />
+                  {windowOpen ? 'Mulai Tryout Akbar' : 'Ikut Tryout Akbar'}
+                </Button>
+                <p className="mt-2 text-center text-xs font-medium text-ink/60">
+                  {SIMULASI_TOTAL_QUESTIONS} soal · {SIMULASI_TIME_LIMIT_MINUTES}{' '}
+                  menit · suasana ujian beneran
+                  {configured &&
+                    user !== null &&
+                    !isPremiumUser &&
+                    ` · kesempatan gratis tersisa ${freeChancesLeft} dari ${FREE_AKBAR_LIMIT}`}
+                </p>
+              </>
+            )}
           </div>
         </div>
       </Card>
@@ -169,11 +305,11 @@ export function TryoutAkbarPage() {
           <Card className="p-4">
             <p className="text-sm font-extrabold">1. Datang pas jamnya</p>
             <p className="mt-1 text-xs leading-relaxed font-medium text-ink/60">
-              Event dibuka Minggu 09:00 WITA dan ditutup 11:00 WITA.
+              Event dibuka Minggu 09:00 WIB dan ditutup 11:00 WIB.
             </p>
           </Card>
           <Card className="p-4">
-            <p className="text-sm font-extrabold">2. Kerjakan simulasi CAT</p>
+            <p className="text-sm font-extrabold">2. Kerjakan 110 soal</p>
             <p className="mt-1 text-xs leading-relaxed font-medium text-ink/60">
               110 soal, 100 menit, passing grade asli seperti SKD.
             </p>
@@ -193,18 +329,32 @@ export function TryoutAkbarPage() {
           <h2 className="font-display text-base font-extrabold">
             Hasil Tryout Akbar minggu ini
           </h2>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => void handleRefresh()}
-            disabled={!configured || refreshing}
-          >
-            {refreshing ? 'Memuat...' : 'Muat ulang'}
-          </Button>
+          <div className="flex items-center gap-2">
+            {liveEnabled && (
+              <Badge tone="green">
+                <span className="mr-1 inline-block h-2 w-2 animate-pulse rounded-full bg-primary-600" />
+                Live
+              </Badge>
+            )}
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => void handleRefresh()}
+              disabled={!configured || refreshing || boardLocked}
+            >
+              {refreshing ? 'Memuat...' : 'Muat ulang'}
+            </Button>
+          </div>
         </div>
         <p className="mb-3 text-xs leading-relaxed font-medium text-ink/60">
           Event {formatEventLabel(eventWindow.start)} ·{' '}
-          {formatEventHours()} · skor terbaik tiap peserta
+          {formatEventHours()} · skor terbaik tiap peserta ·{' '}
+          <Link
+            to="/leaderboard"
+            className="font-bold text-primary-700 hover:underline"
+          >
+            Lihat papan lengkap di Peringkat
+          </Link>
         </p>
 
         {!configured ? (
@@ -216,6 +366,24 @@ export function TryoutAkbarPage() {
               Hasil Tryout Akbar baru bisa ditampilkan kalau leaderboard
               online sudah aktif.
             </p>
+          </Card>
+        ) : boardLocked ? (
+          <Card className="p-6 text-center">
+            <p className="font-display text-base font-bold">
+              Papan peringkat terbuka jam {formatBoardUnlockHour()}
+            </p>
+            <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-ink/60">
+              Skor live selama event hanya untuk user premium. Sabar
+              ya, papan peringkat minggu ini terbuka untuk semua jam{' '}
+              {formatBoardUnlockHour()}.
+            </p>
+            <Link
+              to="/profil"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary-700 hover:underline"
+            >
+              Lihat premium
+              <ChevronRightIcon width={16} height={16} />
+            </Link>
           </Card>
         ) : loadingEntries ? (
           <Card className="p-6 text-center">
@@ -230,14 +398,14 @@ export function TryoutAkbarPage() {
             </p>
             <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-ink/60">
               Belum ada yang menyelesaikan simulasi di jendela event ini.
-              Ikut Minggu 09:00 WITA dan jadilah yang pertama masuk
+              Ikut Minggu 09:00 WIB dan jadilah yang pertama masuk
               papan peringkat.
             </p>
             <Link
               to="/tryout"
               className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary-700 hover:underline"
             >
-              Latihan simulasi dulu
+              Latihan tryout kilat dulu
               <ChevronRightIcon width={16} height={16} />
             </Link>
           </Card>

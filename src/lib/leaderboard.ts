@@ -1,15 +1,21 @@
 /**
- * Leaderboard mingguan Lolosin (Supabase): pengiriman skor simulasi CAT,
- * antrean percobaan ulang, dan pengambilan ranking.
+ * Leaderboard Lolosin (Supabase): pengiriman skor Tryout Akbar,
+ * antrean percobaan ulang, dan util ranking.
  *
- * Aturan main:
- * - Hanya simulasi CAT lengkap (mode 'full', 110 soal) yang masuk
- *   leaderboard. Tryout kilat (mode 'mini') tidak diranking.
+ * Aturan main (v2.11):
+ * - Hanya Tryout Akbar (mode 'full', 110 soal, tiap Minggu
+ *   09:00-11:00 WIB) yang masuk leaderboard. Tryout kilat (mode
+ *   'mini') tidak diranking. Simulasi CAT mandiri dihapus v2.11.
+ * - Papan peringkat menampilkan hasil jendela event Akbar minggu
+ *   berjalan/terakhir (lihat fetchAkbarLeaderboard di
+ *   lib/tryoutAkbar.ts), bukan lagi seluruh hasil minggu itu.
  * - Email user harus sudah terkonfirmasi; skor dari user yang belum
  *   verifikasi tidak dikirim dan masuk antrean, lalu dicoba lagi
  *   otomatis setelah email terverifikasi.
- * - Satu user satu skor per minggu: skor TERBAIK yang tampil.
- * - Minggu berjalan Senin sampai Minggu, zona Asia/Makassar (WITA).
+ * - Satu user satu skor per event: skor TERBAIK yang tampil.
+ * - Minggu berjalan Senin sampai Minggu, zona Asia/Makassar (WITA);
+ *   kolom week_start tetap ditulis saat submit (dipakai SQL juara
+ *   mingguan untuk menemukan minggu yang belum diumumkan).
  * - Semua fungsi aman saat Supabase belum terkonfigurasi (client null):
  *   submit mengembalikan status 'not-configured', fetch mengembalikan [].
  * - Fungsi di sini tidak pernah melempar error ke pemanggil. Kegagalan
@@ -28,6 +34,7 @@
 import type { User } from '@supabase/supabase-js'
 import { useSyncExternalStore } from 'react'
 import { getCurrentUser } from './auth'
+import type { TryoutAttempt } from './attempts'
 import { isSupabaseConfigured, supabase } from './supabase'
 import { getScopedItem, migrateLegacyKey, setScopedItem } from './storage'
 import {
@@ -98,6 +105,13 @@ export interface TryoutResultRow {
   tkp: number
   total: number
   passed: boolean
+  /**
+   * Waktu selesai simulasi (ISO). Opsional di tipe karena baris lama
+   * atau mock bisa tidak memilikinya; dipakai pemutus seri (yang
+   * paling awal selesai menang). Baris tanpa finished_at dianggap
+   * paling akhir saat membandingkan.
+   */
+  finished_at?: string
 }
 
 /** Baris mentah dari tabel profiles (kolom yang kita select). */
@@ -138,16 +152,6 @@ export function getMondayWITA(date: Date | string): string {
   const dayOfWeek = new Date(Date.UTC(y, m - 1, d)).getUTCDay()
   const daysSinceMonday = (dayOfWeek + 6) % 7
   return shiftDate(iso, -daysSinceMonday)
-}
-
-/** Senin minggu berjalan (Asia/Makassar). */
-export function getCurrentWeekStart(): string {
-  return getMondayWITA(new Date())
-}
-
-/** Senin minggu lalu (Asia/Makassar). */
-export function getPreviousWeekStart(): string {
-  return shiftDate(getCurrentWeekStart(), -7)
 }
 
 /* ------------------------------------------------------------------ */
@@ -296,7 +300,13 @@ async function submitInner(
 
   try {
     // Kolom total sengaja tidak dikirim: generated di database.
-    const { error } = await supabase.from('tryout_results').insert({
+    // Jawaban attempt (v2.12.1, kolom JSONB `answers`, migrasi 007)
+    // ikut dikirim supaya riwayat Akbar bisa dibuka lengkap dari
+    // server walau jawaban lokalnya sudah dipangkas atau hilang.
+    // Payload dianotasi eksplisit (bukan literal inline) supaya
+    // `tsc -b` tidak menolak key `answers` sebagai excess property
+    // pada client Supabase yang tidak bertipe.
+    const base = {
       user_id: user.id,
       mode: 'full',
       twk: record.twk,
@@ -308,7 +318,16 @@ async function submitInner(
       correct_tkp: record.correct?.TKP ?? null,
       finished_at: record.date,
       week_start: getMondayWITA(record.date),
-    })
+    }
+    const payload: typeof base & { answers?: TryoutAttempt } =
+      record.attempt ? { ...base, answers: record.attempt } : base
+    let { error } = await supabase.from('tryout_results').insert(payload)
+    if (error && error.message.includes('answers')) {
+      // Kolom answers belum ada (migrasi 007 belum jalan): kirim
+      // ulang tanpa jawaban supaya skor tetap masuk leaderboard.
+      // Jawaban attempt ini tetap tersimpan lokal di riwayat.
+      ;({ error } = await supabase.from('tryout_results').insert(base))
+    }
     if (error) {
       enqueuePending(record, user.id)
       return FAILED_RESULT(
@@ -388,10 +407,34 @@ export async function retryPendingSubmissions(): Promise<{
 /* ------------------------------------------------------------------ */
 
 /**
- * Gabung baris tryout_results dengan profiles menjadi ranking: skor
- * TERBAIK per user (baris pertama per user, karena rows sudah urut
- * total desc), filter per formasi bila diminta, lalu peringkat 1..n.
- * Fungsi murni, dipakai fetchLeaderboard dan bisa diuji tanpa Supabase.
+ * Urutan ranking leaderboard, aturan seri yang diputuskan Dhinda
+ * 2026-11-15 (sama persis dengan SQL announce_weekly_winners):
+ * (1) total tertinggi dulu; (2) kalau total seri, yang lolos ketiga
+ * ambang (passed) menang; (3) kalau masih seri, yang paling awal
+ * selesai menang (finished_at terkecil). Baris tanpa finished_at
+ * dianggap selesai paling akhir. Dipakai buildLeaderboardEntries
+ * supaya urutan benar apa pun urutan baris yang datang dari query.
+ */
+export function compareTryoutRows(
+  a: TryoutResultRow,
+  b: TryoutResultRow,
+): number {
+  if (b.total !== a.total) return b.total - a.total
+  if (a.passed !== b.passed) return a.passed ? -1 : 1
+  const aFinished = a.finished_at ?? '9999-12-31T23:59:59.999Z'
+  const bFinished = b.finished_at ?? '9999-12-31T23:59:59.999Z'
+  if (aFinished < bFinished) return -1
+  if (aFinished > bFinished) return 1
+  return 0
+}
+
+/**
+ * Gabung baris tryout_results dengan profiles menjadi ranking: baris
+ * diurut dulu dengan aturan seri (total desc, passed desc,
+ * finished_at asc), lalu skor TERBAIK per user diambil (baris
+ * pertama per user setelah diurut), filter per formasi bila diminta,
+ * lalu peringkat 1..n. Fungsi murni, dipakai fetchLeaderboard dan
+ * fetchAkbarLeaderboard, dan bisa diuji tanpa Supabase.
  */
 export function buildLeaderboardEntries(
   rows: readonly TryoutResultRow[],
@@ -404,7 +447,7 @@ export function buildLeaderboardEntries(
   }
   const wanted = formasi ? normalizeFormasi(formasi) : ''
   const bestByUser = new Map<string, LeaderboardEntry>()
-  for (const row of rows) {
+  for (const row of [...rows].sort(compareTryoutRows)) {
     if (bestByUser.has(row.user_id)) continue
     const profile = profileMap.get(row.user_id)
     const entryFormasi = profile?.formasi ?? null
@@ -427,52 +470,6 @@ export function buildLeaderboardEntries(
   }))
 }
 
-/**
- * Ranking satu minggu (skor terbaik per user, total tertinggi dulu).
- * Bila `formasi` diisi, hanya entri formasi itu yang tampil.
- * Aman saat Supabase belum terkonfigurasi: mengembalikan [].
- * Panggil isSupabaseConfigured() untuk membedakan "belum
- * terkonfigurasi" dari "belum ada data".
- */
-export async function fetchLeaderboard(
-  weekStart: string,
-  formasi?: string,
-): Promise<LeaderboardEntry[]> {
-  if (!isSupabaseConfigured() || !supabase) return []
-  try {
-    const { data: rows, error } = await supabase
-      .from('tryout_results')
-      .select('user_id, twk, tiu, tkp, total, passed')
-      .eq('week_start', weekStart)
-      .eq('mode', 'full')
-      .order('total', { ascending: false })
-      .limit(500)
-    if (error || !rows) return []
-    const typedRows = rows as TryoutResultRow[]
-    if (typedRows.length === 0) return []
-
-    const userIds = [...new Set(typedRows.map((r) => r.user_id))]
-    const { data: profiles, error: profileError } = await supabase
-      .from('profiles')
-      .select('id, username, formasi')
-      .in('id', userIds)
-    const typedProfiles =
-      !profileError && profiles ? (profiles as ProfileRow[]) : []
-    return buildLeaderboardEntries(typedRows, typedProfiles, formasi)
-  } catch {
-    return []
-  }
-}
-
-/**
- * Tiga besar minggu lalu (global, skor terbaik per user). Dihitung
- * live dari tryout_results, tanpa cron atau tabel weekly_winners.
- */
-export async function fetchLastWeekTop3(): Promise<LeaderboardEntry[]> {
-  const entries = await fetchLeaderboard(getPreviousWeekStart())
-  return entries.slice(0, 3)
-}
-
 /* ------------------------------------------------------------------ */
 /* Juara mingguan: baca hadiah dari weekly_winners (v2.7, diperbaiki  */
 /* v2.8 jadi code-only: premium HANYA aktif lewat redeem kode, tidak  */
@@ -482,9 +479,9 @@ export async function fetchLastWeekTop3(): Promise<LeaderboardEntry[]> {
 
 /** Hadiah premium juara global per peringkat (hari). */
 export function weeklyWinnerPremiumDays(rank: number): number {
-  if (rank === 1) return 7
-  if (rank === 2) return 5
-  return 3
+  if (rank === 1) return 30
+  if (rank === 2) return 14
+  return 7
 }
 
 /** Satu baris kemenangan user dari tabel weekly_winners. */
@@ -576,7 +573,7 @@ function winKey(win: WeeklyWin): string {
  * Pesan gift untuk satu kemenangan. Juara global mendapat kode hadiah
  * (ditampilkan beserta tombol salin di banner, lihat App.tsx): pesan
  * ini menyebut peringkat, minggu, jumlah hari premium dari rank
- * (1 jadi 7 hari, 2 jadi 5 hari, 3 jadi 3 hari), dan mengingatkan
+ * (1 jadi 30 hari, 2 jadi 14 hari, 3 jadi 7 hari), dan mengingatkan
  * untuk cek email. Juara per formasi (tanpa kode) hanya mendapat
  * lencana. Sengaja TIDAK ada kalimat "Premium sudah aktif": sejak
  * v2.8 premium baru aktif setelah kode ditebus di Profil.

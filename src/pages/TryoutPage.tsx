@@ -14,7 +14,6 @@ import {
   pickTryoutQuestions,
   scoreFromRecord,
   scoreTryout,
-  SIMULASI_QUESTIONS_PER_SECTION,
   SIMULASI_TIME_LIMIT_MINUTES,
   SIMULASI_TIME_LIMIT_SECONDS,
   SIMULASI_TOTAL_QUESTIONS,
@@ -31,6 +30,8 @@ import {
   type TryoutAnswers,
   type TryoutMode,
 } from '../lib/quiz'
+import { useAuthUser } from '../lib/auth'
+import { buildAttempt, reconstructAttempt } from '../lib/attempts'
 import {
   getStore,
   markSeen,
@@ -50,10 +51,20 @@ import {
   type LeaderboardSubmitStatus,
 } from '../lib/leaderboard'
 import {
+  eventWindowOfWeek,
+  fetchMyAkbarRank,
   formatEventLabel,
+  FREE_AKBAR_LIMIT,
   isEventWindowOpen,
   nextEventStart,
+  type EventRank,
+  type TryoutAkbarWindow,
 } from '../lib/tryoutAkbar'
+import {
+  checkTryoutAccess,
+  FREE_KILAT_LIMIT_MONTH,
+  type TryoutAccess,
+} from '../lib/tryoutLimits'
 import { cx } from '../lib/utils'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -74,7 +85,10 @@ import {
   ZapIcon,
 } from '../components/icons'
 import { MateriMotifMini } from '../components/motifs'
-import type { TryoutResultState } from './TryoutHasilPage'
+import type {
+  TryoutHistoryRefState,
+  TryoutResultState,
+} from './TryoutHasilPage'
 
 /** Ikon bendera kecil (gaya garis Lucide) untuk tombol ragu-ragu. */
 function FlagIcon({ width = 24, height = 24 }: { width?: number; height?: number }) {
@@ -111,20 +125,30 @@ type Mode = 'info' | 'running'
 /** Label mode yang tampil di kartu pilihan dan header sesi jalan. */
 const MODE_LABEL: Record<TryoutMode, string> = {
   mini: 'Tryout kilat',
-  full: 'Simulasi CAT',
+  full: 'Tryout Akbar',
 }
 
-/** Label mode di tengah kalimat (akronim CAT tetap kapital). */
+/** Label mode di tengah kalimat. */
 const MODE_LABEL_KALIMAT: Record<TryoutMode, string> = {
   mini: 'tryout kilat',
-  full: 'simulasi CAT',
+  full: 'tryout akbar',
 }
 
-/** Label mode di riwayat (riwayat lama disebut tryout mini). */
+/** Label mode di riwayat (sama dengan label mode di kartu). */
 const HISTORY_LABEL: Record<TryoutMode, string> = {
-  mini: 'Tryout mini',
-  full: 'Simulasi CAT',
+  mini: 'Tryout kilat',
+  full: 'Tryout Akbar',
 }
+
+/** Filter daftar riwayat: semua, atau satu mode saja. */
+type HistoryFilter = 'semua' | TryoutMode
+
+/** Pilihan chip filter riwayat (v2.12.1). */
+const HISTORY_FILTERS: { value: HistoryFilter; label: string }[] = [
+  { value: 'semua', label: 'Semua' },
+  { value: 'full', label: 'Tryout Akbar' },
+  { value: 'mini', label: 'Tryout Kilat' },
+]
 
 /** Total maksimum satu mode: 150 untuk mini, 550 untuk simulasi. */
 const MODE_MAX_TOTAL: Record<TryoutMode, number> = {
@@ -146,6 +170,42 @@ function xpForMode(mode: TryoutMode): number {
 /** Mode satu entri riwayat; riwayat lama (tanpa field mode) = mini. */
 function recordMode(record: TryoutRecord): TryoutMode {
   return record.mode ?? 'mini'
+}
+
+/**
+ * State halaman hasil untuk satu entri riwayat (v2.12.1). Bila
+ * jawaban attempt tersimpan lokal dan semua soalnya masih ada di
+ * bank, kembalikan state penuh (breakdown langsung tampil). Bila
+ * tidak, kembalikan state referensi: halaman hasil mengambil
+ * jawabannya dari server (Akbar, kolom `answers`) atau tampil skor
+ * saja (attempt lama). `finishedAt` selalu tanggal selesai
+ * attempt, supaya gating unlock Senin tetap berlaku.
+ */
+function historyResultState(
+  record: TryoutRecord,
+  eventRank?: EventRank | null,
+): TryoutResultState | TryoutHistoryRefState {
+  const score = scoreFromRecord(record)
+  const rank = eventRank ?? undefined
+  const rebuilt = record.attempt
+    ? reconstructAttempt(record.attempt)
+    : null
+  if (rebuilt) {
+    return {
+      score,
+      questions: rebuilt.questions,
+      answers: rebuilt.answers,
+      finishedAt: record.date,
+      fromHistory: true,
+      eventRank: rank,
+    }
+  }
+  return {
+    score,
+    recordDate: record.date,
+    fromHistory: true,
+    eventRank: rank,
+  }
 }
 
 /** Satu baris passing grade per bagian, dipakai kedua kelompok. */
@@ -218,12 +278,14 @@ function RuleCard({
 }
 
 /**
- * Halaman tryout: mode info (pilih mode, aturan, passing grade,
- * riwayat) dan mode jalan (timer, palet navigator, navigasi bebas)
- * dalam satu halaman. Dua mode tryout: kilat (30 soal, 27 menit)
- * dan simulasi CAT (110 soal, 100 menit). Sesi jalan
- * diparameterisasi dari mode yang dipilih, tanpa duplikasi logika.
- * Saat selesai, hasilnya dikirim ke `/tryout/hasil`.
+ * Halaman tryout: mode info (pilih tryout kilat, aturan, passing
+ * grade, riwayat) dan mode jalan (timer, palet navigator, navigasi
+ * bebas) dalam satu halaman. Tryout kilat (30 soal, 27 menit) bisa
+ * dimulai langsung dari sini; mode full (110 soal, 100 menit) hanya
+ * bisa dimulai lewat Tryout Akbar (halaman Akbar mengarahkan ke sini
+ * dengan state startMode 'full'). Sesi jalan diparameterisasi dari
+ * mode yang dipilih, tanpa duplikasi logika. Saat selesai, hasilnya
+ * dikirim ke `/tryout/hasil`.
  */
 export function TryoutPage() {
   const navigate = useNavigate()
@@ -233,6 +295,9 @@ export function TryoutPage() {
   const [startError, setStartError] = useState<string | null>(null)
   // Mode yang menunggu konfirmasi di modal "Mulai sekarang?".
   const [pendingMode, setPendingMode] = useState<TryoutMode | null>(null)
+  // Penolakan batas gratis (v2.15.2): kartu kunci tampil di halaman
+  // info bila user mengetuk Mulai tapi jatahnya sudah habis.
+  const [limitBlock, setLimitBlock] = useState<TryoutAccess | null>(null)
 
   // Mulai otomatis dari halaman Tryout Akbar (v2.8): halaman Akbar
   // mengarahkan ke sini dengan state startMode 'full'. Modal
@@ -249,6 +314,50 @@ export function TryoutPage() {
     setPendingMode(state.startMode)
     navigate('/tryout', { replace: true })
   }, [location.state, navigate])
+
+  // Peringkat per event Akbar (v2.12.1): untuk tiap minggu event
+  // yang ada di riwayat, ambil peringkat user sekali lalu simpan
+  // di state (key = ISO awal jendela event). Tamu / Supabase belum
+  // aktif = tidak ada peringkat (riwayat Akbar butuh login).
+  const { user } = useAuthUser()
+  const [eventRanks, setEventRanks] = useState<
+    Map<string, EventRank | null>
+  >(new Map())
+  const fetchedWindowsRef = useRef<ReadonlySet<string>>(new Set())
+  useEffect(() => {
+    if (!user || !isSupabaseConfigured()) return
+    const windows = new Map<string, TryoutAkbarWindow>()
+    for (const record of tryoutHistory) {
+      if ((record.mode ?? 'mini') !== 'full') continue
+      const w = eventWindowOfWeek(new Date(record.date))
+      windows.set(w.start.toISOString(), w)
+    }
+    const missing = [...windows.entries()].filter(
+      ([key]) => !fetchedWindowsRef.current.has(key),
+    )
+    if (missing.length === 0) return
+    let cancelled = false
+    void (async () => {
+      const next = new Map<string, EventRank | null>()
+      for (const [key, w] of missing) {
+        const rank = await fetchMyAkbarRank(w, user.id)
+        if (cancelled) return
+        next.set(key, rank)
+      }
+      fetchedWindowsRef.current = new Set([
+        ...fetchedWindowsRef.current,
+        ...missing.map(([key]) => key),
+      ])
+      setEventRanks((prev) => new Map([...prev, ...next]))
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [tryoutHistory, user])
+
+  // Filter daftar riwayat (v2.12.1): default semua.
+  const [historyFilter, setHistoryFilter] =
+    useState<HistoryFilter>('semua')
 
   // State sesi jalan
   const [tryoutMode, setTryoutMode] = useState<TryoutMode>('mini')
@@ -281,7 +390,15 @@ export function TryoutPage() {
       const ans = answersRef.current
       const sessionMode = tryoutModeRef.current
       const score = scoreTryout(qs, ans, sessionMode)
-      completeTryout(score)
+      // Satu stempel waktu selesai untuk catatan riwayat + state
+      // hasil (v2.12: halaman hasil memakainya untuk menghitung
+      // Senin 00:00 WIB saat pembahasan Akbar kebuka untuk gratis).
+      const finishedAt = new Date().toISOString()
+      // Jawaban attempt (v2.12.1): disimpan ke riwayat lokal dan
+      // (Akbar) ke tryout_results, supaya "Lihat hasil" bisa
+      // membuka pembahasan per soal kapan saja.
+      const attempt = buildAttempt(qs, ans)
+      completeTryout(score, { date: finishedAt, attempt })
       markSeen(qs.map((q) => q.id))
       // Catat tiap jawaban untuk antrean ulas + tally per subtopik.
       // Benar = jawaban sama dengan kunci (TKP: opsi terbaik); soal
@@ -290,7 +407,7 @@ export function TryoutPage() {
         const answer = ans[q.id]
         recordAnswer(q, answer !== undefined && answer === q.kunci)
       }
-      // Kirim skor simulasi CAT ke leaderboard (fire-and-forget, tidak
+      // Kirim skor Tryout Akbar ke leaderboard (fire-and-forget, tidak
       // menghambat navigasi ke halaman hasil). Status awal dicatat di
       // state navigasi; bila masih 'sending', halaman hasil membaca
       // hasil akhirnya dari promise yang disimpan leaderboard.ts.
@@ -301,13 +418,14 @@ export function TryoutPage() {
         } else {
           leaderboardStatus = 'sending'
           const record: TryoutRecord = {
-            date: new Date().toISOString(),
+            date: finishedAt,
             mode: sessionMode,
             twk: score.scores.TWK,
             tiu: score.scores.TIU,
             tkp: score.scores.TKP,
             passed: score.passedOverall,
             correct: score.correct,
+            attempt,
           }
           void submitTryoutResult(record)
         }
@@ -319,6 +437,7 @@ export function TryoutPage() {
         xpEarned: xpForMode(sessionMode),
         timedOut,
         leaderboardStatus,
+        finishedAt,
       }
       navigate('/tryout/hasil', { state })
     },
@@ -342,7 +461,12 @@ export function TryoutPage() {
   }, [mode, secondsLeft, finish])
 
   function startTryout(sessionMode: TryoutMode) {
-    const pick = pickTryoutQuestions(getStore().seenQuestionIds, sessionMode)
+    const store = getStore()
+    const pick = pickTryoutQuestions(
+      store.seenQuestionIds,
+      sessionMode,
+      store.reviewQueue.map((e) => e.questionId),
+    )
     if (pick.questions.length === 0) {
       setStartError('Bank soalnya masih kosong, tryout belum bisa dimulai.')
       return
@@ -362,6 +486,30 @@ export function TryoutPage() {
     recordDailyActivity()
     setMode('running')
     window.scrollTo({ top: 0, behavior: 'instant' })
+  }
+
+  /**
+   * Konfirmasi mulai dari modal "Mulai sekarang?": cek dulu batas
+   * gratis (v2.15.2), baru mulai. Bila jatah habis, modal ditutup
+   * dan kartu kunci tampil di halaman info. Pengecekan ini
+   * backstop untuk gate di halaman Akbar: state startMode 'full'
+   * bisa sampai ke sini tanpa lewat gate itu.
+   */
+  async function handleConfirmStart() {
+    const sessionMode = pendingMode
+    if (!sessionMode) return
+    setPendingMode(null)
+    const access = await checkTryoutAccess(sessionMode, {
+      userId: user?.id ?? null,
+      history: tryoutHistory,
+    })
+    if (!access.allowed) {
+      setLimitBlock(access)
+      window.scrollTo({ top: 0, behavior: 'instant' })
+      return
+    }
+    setLimitBlock(null)
+    startTryout(sessionMode)
   }
 
   function cancelTryout() {
@@ -544,6 +692,12 @@ export function TryoutPage() {
   }
 
   const historyNewestFirst = [...tryoutHistory].reverse()
+  const historyFiltered =
+    historyFilter === 'semua'
+      ? historyNewestFirst
+      : historyNewestFirst.filter(
+          (record) => recordMode(record) === historyFilter,
+        )
 
   return (
     <div className="flex flex-col gap-5">
@@ -555,11 +709,11 @@ export function TryoutPage() {
         <div className="min-w-0">
           <p className="kicker">simulasi beneran, deg-degan beneran</p>
           <h1 className="mt-1 font-display text-3xl font-extrabold">
-            Tryout & Simulasi
+            Tryout
           </h1>
           <p className="mt-1 max-w-2xl text-sm leading-relaxed text-ink/60">
-            Dua mode, satu tujuan: lolos SKD. Pemanasan kilat 30 soal,
-            atau simulasi CAT 110 soal persis ujian beneran.
+            Pemanasan kilat 30 soal kapan aja, atau Tryout Akbar 110
+            soal tiap Minggu bareng semua pejuang.
           </p>
         </div>
         <Link to="/leaderboard" className="shrink-0">
@@ -570,8 +724,40 @@ export function TryoutPage() {
         </Link>
       </header>
 
-      {/* Tryout Akbar mingguan (v2.8): event simulasi CAT bareng
-          tiap Minggu 09:00-11:00 WITA. */}
+      {/* Kartu kunci batas gratis (v2.15.2): tampil bila user
+          mengetuk Mulai tapi jatah gratisnya sudah habis. */}
+      {limitBlock && (
+        <Card
+          aria-label="Jatah gratis habis"
+          className="border-accent-200 bg-accent-50 p-4"
+        >
+          <p className="text-sm font-extrabold">
+            {limitBlock.reason === 'kilat-limit'
+              ? 'Jatah tryout kilat gratis bulan ini sudah habis'
+              : 'Kesempatan gratis Tryout Akbar sudah habis'}
+          </p>
+          <p className="mt-1 text-xs leading-relaxed font-medium text-ink/60">
+            {limitBlock.reason === 'kilat-limit'
+              ? `Kamu sudah memakai ${limitBlock.used}x tryout kilat bulan ini (maks ${FREE_KILAT_LIMIT_MONTH}x untuk akun gratis). Jadi premium biar bisa latihan tanpa batas, atau lanjut lagi bulan depan.`
+              : `Kamu sudah memakai ${FREE_AKBAR_LIMIT}x kesempatan gratis ikut Tryout Akbar. Jadi premium biar bisa ikut tiap minggu tanpa batas.`}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Link to="/profil">
+              <Button size="sm">Lihat Premium</Button>
+            </Link>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setLimitBlock(null)}
+            >
+              Tutup
+            </Button>
+          </div>
+        </Card>
+      )}
+
+      {/* Tryout Akbar mingguan (v2.8, satu-satunya simulasi CAT sejak
+          v2.11): event 110 soal bareng tiap Minggu 09:00-11:00 WIB. */}
       <Link to="/tryout-akbar" className="block">
         <Card className="flex items-center gap-3 border-primary-200 bg-primary-50 p-4 transition-all hover:shadow-soft-lg active:scale-[0.98]">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
@@ -579,12 +765,12 @@ export function TryoutPage() {
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-extrabold">
-              Tryout Akbar tiap Minggu 09:00 WITA
+              Tryout Akbar tiap Minggu 09:00 WIB
             </p>
             <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
               {isEventWindowOpen()
                 ? 'Event sedang berlangsung, ikut sekarang!'
-                : `Berikutnya: ${formatEventLabel(nextEventStart())}. Simulasi CAT bareng, ada papan peringkat khususnya.`}
+                : `Berikutnya: ${formatEventLabel(nextEventStart())}. Adu skor bareng, ada papan peringkat khususnya.`}
             </p>
           </div>
           <ChevronRightIcon
@@ -595,11 +781,15 @@ export function TryoutPage() {
         </Card>
       </Link>
 
-      <section aria-label="Pilih mode tryout">
+      {/* Tryout kilat (v2.11): satu-satunya mode yang bisa dimulai
+          langsung dari sini. Mode full 110 soal hanya lewat Tryout
+          Akbar (kartu di atas); kartu Simulasi CAT dihapus supaya
+          tidak ada dua TO yang dobel. */}
+      <section aria-label="Tryout kilat">
         <h2 className="mb-2 font-display text-base font-extrabold">
-          Pilih modemu
+          Tryout kilat
         </h2>
-        <div className="grid gap-3 lg:grid-cols-2">
+        <div>
           <button
             type="button"
             onClick={() => setPendingMode('mini')}
@@ -650,60 +840,6 @@ export function TryoutPage() {
               </span>
             </div>
           </button>
-
-          <button
-            type="button"
-            onClick={() => setPendingMode('full')}
-            className="relative w-full overflow-hidden rounded-2xl border border-primary-200 bg-primary-50 p-4 text-left shadow-soft transition-all hover:shadow-soft-lg active:scale-[0.98]"
-          >
-            <span
-              aria-hidden="true"
-              className="absolute inset-x-0 top-0 flex h-1.5"
-            >
-              <span className="flex-1 bg-twk" />
-              <span className="flex-1 bg-tiu" />
-              <span className="flex-1 bg-tkp" />
-            </span>
-            <TrophyIcon
-              width={88}
-              height={88}
-              className="pointer-events-none absolute -right-3 -bottom-5 text-primary-600 opacity-15"
-            />
-            <div className="relative">
-              <div className="flex items-start gap-3">
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
-                  <TrophyIcon width={28} height={28} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="flex flex-wrap items-center gap-2 font-display text-lg font-extrabold">
-                    Simulasi CAT
-                    <span className="rounded-full bg-white px-2 py-0.5 font-sans text-[11px] font-extrabold text-ink shadow-soft">
-                      Suasana ujian beneran
-                    </span>
-                  </p>
-                  <p className="text-xs font-semibold text-ink/60">
-                    Jumlah soal dan waktu persis SKD asli
-                  </p>
-                  <p className="mt-1.5 text-sm font-bold">
-                    {SIMULASI_TOTAL_QUESTIONS} soal ·{' '}
-                    {SIMULASI_TIME_LIMIT_MINUTES} menit · +
-                    {XP_SIMULASI_COMPLETE} XP
-                  </p>
-                  <p className="mt-0.5 text-xs leading-relaxed font-medium text-ink/60">
-                    TWK {SIMULASI_QUESTIONS_PER_SECTION.TWK} · TIU{' '}
-                    {SIMULASI_QUESTIONS_PER_SECTION.TIU} · TKP{' '}
-                    {SIMULASI_QUESTIONS_PER_SECTION.TKP} soal · passing grade
-                    asli TWK ≥{ORIGINAL_PASSING.TWK} · TIU ≥
-                    {ORIGINAL_PASSING.TIU} · TKP ≥{ORIGINAL_PASSING.TKP}
-                  </p>
-                </div>
-              </div>
-              <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-ink px-4 py-2 text-sm font-extrabold text-white">
-                Mulai simulasi CAT
-                <ChevronRightIcon width={16} height={16} />
-              </span>
-            </div>
-          </button>
         </div>
         {startError && (
           <p className="mt-2 text-center text-sm font-medium text-red-700">
@@ -732,7 +868,7 @@ export function TryoutPage() {
             icon={<ClockIcon width={20} height={20} />}
             title="Timer jalan terus"
           >
-            Kilat {TRYOUT_TIME_LIMIT_MINUTES} menit, simulasi{' '}
+            Kilat {TRYOUT_TIME_LIMIT_MINUTES} menit, Akbar{' '}
             {SIMULASI_TIME_LIMIT_MINUTES} menit. Waktu habis, jawabanmu
             tersimpan otomatis.
           </RuleCard>
@@ -754,7 +890,7 @@ export function TryoutPage() {
             title="Dapat XP"
           >
             +{XP_TRYOUT_COMPLETE} XP kalau selesai kilat, +
-            {XP_SIMULASI_COMPLETE} XP kalau selesai simulasi CAT.
+            {XP_SIMULASI_COMPLETE} XP kalau selesai Tryout Akbar.
           </RuleCard>
         </div>
       </section>
@@ -766,7 +902,7 @@ export function TryoutPage() {
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
             <p className="mb-2 text-sm font-bold text-ink/70">
-              Tryout kilat (skor mini)
+              Tryout kilat (skor 30 soal)
             </p>
             <div className="flex flex-col gap-2">
               {MATERI_LIST.map((materi) => (
@@ -782,7 +918,7 @@ export function TryoutPage() {
           </div>
           <div>
             <p className="mb-2 text-sm font-bold text-ink/70">
-              Simulasi CAT (passing grade asli)
+              Tryout Akbar (passing grade asli)
             </p>
             <div className="flex flex-col gap-2">
               {MATERI_LIST.map((materi) => (
@@ -808,10 +944,51 @@ export function TryoutPage() {
           <h2 className="mb-2 font-display text-base font-extrabold">
             Riwayat tryout
           </h2>
+          <div
+            className="mb-2 flex flex-wrap gap-2"
+            role="group"
+            aria-label="Filter riwayat tryout"
+          >
+            {HISTORY_FILTERS.map((f) => (
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => setHistoryFilter(f.value)}
+                aria-pressed={historyFilter === f.value}
+                className={cx(
+                  'rounded-full border px-3 py-1.5 text-sm font-bold transition-all active:scale-[0.98]',
+                  historyFilter === f.value
+                    ? 'border-primary-600 bg-primary-600 text-white shadow-soft'
+                    : 'border-line bg-white text-ink/70 shadow-soft hover:bg-paper',
+                )}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+          {historyFiltered.length === 0 ? (
+            <p className="text-sm font-medium text-ink/60">
+              {historyFilter === 'full'
+                ? 'Belum ada Tryout Akbar di riwayatmu.'
+                : 'Belum ada Tryout Kilat di riwayatmu.'}
+            </p>
+          ) : (
           <div className="flex flex-col gap-2">
-            {historyNewestFirst.map((record, i) => {
+            {historyFiltered.map((record, i) => {
               const sessionMode = recordMode(record)
               const total = record.twk + record.tiu + record.tkp
+              // Peringkat user di event Akbar tempat attempt ini
+              // selesai (v2.12.1): undefined = belum dimuat, null =
+              // tidak berperingkat di event itu.
+              const rankKey =
+                sessionMode === 'full'
+                  ? eventWindowOfWeek(
+                      new Date(record.date),
+                    ).start.toISOString()
+                  : null
+              const eventRank = rankKey
+                ? eventRanks.get(rankKey)
+                : undefined
               return (
                 <Card key={`${record.date}-${i}`} className="py-3">
                   <div className="flex items-center justify-between gap-3">
@@ -837,6 +1014,12 @@ export function TryoutPage() {
                         {record.tkp} · total {total}/
                         {MODE_MAX_TOTAL[sessionMode]}
                       </p>
+                      {eventRank && (
+                        <p className="mt-0.5 text-xs font-bold text-primary-700">
+                          Peringkat #{eventRank.rank} dari{' '}
+                          {eventRank.total} peserta
+                        </p>
+                      )}
                     </div>
                     <Badge tone={record.passed ? 'green' : 'neutral'}>
                       {record.passed ? 'Lulus' : 'Belum lulus'}
@@ -844,7 +1027,7 @@ export function TryoutPage() {
                   </div>
                   <Link
                     to="/tryout/hasil"
-                    state={scoreFromRecord(record)}
+                    state={historyResultState(record, eventRank)}
                     className="mt-2 inline-block text-sm font-semibold text-primary-700 hover:underline"
                   >
                     Lihat hasil
@@ -853,6 +1036,7 @@ export function TryoutPage() {
               )
             })}
           </div>
+          )}
         </section>
       )}
 
@@ -867,9 +1051,7 @@ export function TryoutPage() {
             : `${TRYOUT_TOTAL_QUESTIONS} soal · ${TRYOUT_TIME_LIMIT_MINUTES} menit`
         }
         onConfirm={() => {
-          const sessionMode = pendingMode
-          setPendingMode(null)
-          if (sessionMode) startTryout(sessionMode)
+          void handleConfirmStart()
         }}
         onCancel={() => setPendingMode(null)}
       />

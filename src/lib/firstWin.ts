@@ -61,7 +61,7 @@ export function drillShareText(
 export function tryoutShareText(mode: TryoutMode, total: number): string {
   if (mode === 'full') {
     return (
-      `Aku baru selesai simulasi CAT di Lolosin dengan total ` +
+      `Aku baru selesai Tryout Akbar di Lolosin dengan total ` +
       `${total}/550! Yuk coba juga: ${LOLOSIN_URL}`
     )
   }

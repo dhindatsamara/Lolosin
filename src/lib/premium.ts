@@ -9,16 +9,35 @@
  * tidak ada (bukan premium dari jalur itu) dan pemanggil menampilkan
  * pesan ramah, bukan crash.
  *
- * Premium = is_premium true ATAU premium_until masih di masa depan.
- * is_premium diatur toggle "Premium Beta" di halaman Profil (gratis
- * selama beta); premium_until diisi redeem code dan hadiah juara
- * mingguan. Toggle beta tidak pernah menyentuh premium_until.
+ * Premium = (is_premium true SELAMA beta) ATAU premium_until masih
+ * di masa depan. is_premium diatur toggle "Premium Beta" di halaman
+ * Profil (gratis selama beta); premium_until diisi redeem code dan
+ * hadiah juara mingguan. Toggle beta tidak pernah menyentuh
+ * premium_until. Sejak v2.15.2, is_premium diabaikan setelah beta
+ * berakhir (BETA_END di bawah), supaya nilai toggle yang tertinggal
+ * tidak memberi premium selamanya; definisi yang sama dipakai
+ * policy tulis diskusi (migrasi 012).
  *
  * Selama beta, Premium diaktifkan manual dari halaman Profil
  * ("Premium Beta", gratis). Host sesi ala Quizizz wajib premium,
  * pemain yang ikut sesi tidak wajib.
  */
 import { isSupabaseConfigured, supabase } from './supabase'
+
+/**
+ * Akhir masa beta: Minggu 13 Desember 2026, akhir hari WITA.
+ * Disimpan sebagai UTC (Senin 14 Desember 2026 00:00 WITA =
+ * 13 Desember 2026 16:00 UTC). Dipakai getPremiumStatus dan
+ * halaman Profil (toggle beta disembunyikan sesudah tanggal
+ * ini). Nilai yang sama dipakai di SQL (migrasi 012); bila
+ * tanggal beta berubah, ubah di kedua tempat.
+ */
+export const BETA_END = new Date('2026-12-13T16:00:00Z')
+
+/** True bila `now` masih di dalam masa beta. */
+export function isBetaActive(now = new Date()): boolean {
+  return now.getTime() < BETA_END.getTime()
+}
 
 /** Pesan ramah saat host sesi belum premium. */
 export const PREMIUM_BETA_MESSAGE =
@@ -114,7 +133,8 @@ export async function getPremiumStatus(
         }
         const retryRow = retry.data as { is_premium?: unknown } | null
         return {
-          premium: retryRow?.is_premium === true,
+          premium:
+            retryRow?.is_premium === true && isBetaActive(),
           premiumUntil: null,
           columnMissing: false,
           checked: true,
@@ -137,8 +157,12 @@ export async function getPremiumStatus(
     const premiumUntil = isPremiumUntilActive(row?.premium_until)
       ? (row?.premium_until as string)
       : null
+    // is_premium hanya dihitung selama beta (v2.15.2): nilai toggle
+    // yang tertinggal setelah beta berakhir tidak memberi premium.
     return {
-      premium: row?.is_premium === true || premiumUntil !== null,
+      premium:
+        (row?.is_premium === true && isBetaActive()) ||
+        premiumUntil !== null,
       premiumUntil,
       columnMissing: false,
       checked: true,

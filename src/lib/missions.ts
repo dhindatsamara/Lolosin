@@ -3,6 +3,12 @@
  * tanggal WITA (seed dari tanggal), jadi semua pengguna mendapat set
  * misi yang sama di hari yang sama. Set berganti tiap tengah malam WITA.
  *
+ * Di hari Minggu, satu slot diisi misi Tryout Akbar (MISI_AKBAR_MINGGU,
+ * bukan bagian pool rotasi) supaya misi harian selalu bisa dikerjakan:
+ * Akbar hanya ada tiap Minggu 09:00-11:00 WIB, jadi misi Akbar tidak
+ * boleh muncul di hari lain (v2.11; sebelumnya misi 'simulasi-1'
+ * masuk rotasi harian padahal eventnya mingguan).
+ *
  * Progres misi disimpan di store (`missions`) dan di-reset saat tanggal
  * berganti. Reward XP diklaim manual lewat tombol klaim di dashboard
  * (lihat `claimMission` di `src/lib/gamification.ts`).
@@ -111,18 +117,56 @@ export const MISSION_POOL: MissionDef[] = [
     kind: 'tryout',
     target: 1,
     xp: 25,
-    judul: 'Selesaikan 1 tryout mini',
-    deskripsi: 'Rasain deg-degan tryout mini 30 soal.',
+    judul: 'Selesaikan 1 Tryout Kilat',
+    deskripsi: 'Rasain deg-degan Tryout Kilat 30 soal.',
   },
   {
-    id: 'simulasi-1',
-    kind: 'simulasi',
-    target: 1,
+    id: 'kilat-2',
+    kind: 'tryout',
+    target: 2,
     xp: 40,
-    judul: 'Selesaikan 1 simulasi CAT',
-    deskripsi: '110 soal, 100 menit. Rasain ujian beneran.',
+    judul: 'Selesaikan 2 Tryout Kilat',
+    deskripsi: 'Dua sesi Tryout Kilat 30 soal. Sehari dua kali, makin tajam.',
   },
 ]
+
+/**
+ * Misi Tryout Akbar, HANYA tampil di hari Minggu (bukan bagian pool
+ * rotasi). Kind 'simulasi' naik saat satu tryout mode 'full' selesai
+ * (lihat `completeTryout` di gamification.ts); karena mode 'full'
+ * hanya bisa dimulai lewat Tryout Akbar sejak v2.11, misi ini
+ * otomatis berarti "ikut Tryout Akbar".
+ */
+export const MISI_AKBAR_MINGGU: MissionDef = {
+  id: 'akbar-minggu',
+  kind: 'simulasi',
+  target: 1,
+  xp: 40,
+  judul: 'Ikut Tryout Akbar',
+  deskripsi: '110 soal bareng semua pejuang, Minggu 09:00-11:00 WIB.',
+}
+
+/**
+ * Tujuan tiap jenis misi (deep-link kartu misi di dashboard):
+ * drill/benar ke Latihan, baca ke Belajar (per subtes bila ada),
+ * tryout kilat ke Tryout, simulasi (Akbar) ke halaman Akbar.
+ */
+export function missionRoute(def: MissionDef): string {
+  switch (def.kind) {
+    case 'drill':
+    case 'drillMateri':
+    case 'benar':
+      return '/latihan'
+    case 'baca':
+      return '/belajar'
+    case 'bacaMateri':
+      return `/belajar?subtes=${(def.materi ?? '').toLowerCase()}`
+    case 'tryout':
+      return '/tryout'
+    case 'simulasi':
+      return '/tryout-akbar'
+  }
+}
 
 /** Hash FNV-1a 32-bit dari string tanggal, dipakai sebagai seed. */
 function hashDate(date: string): number {
@@ -147,7 +191,9 @@ function mulberry32(seed: number): () => number {
 
 /**
  * 3 misi untuk tanggal `YYYY-MM-DD` tertentu. Deterministik: tanggal
- * yang sama selalu menghasilkan set yang sama.
+ * yang sama selalu menghasilkan set yang sama. Di hari Minggu, misi
+ * Tryout Akbar mengisi slot pertama dan 2 slot sisanya dari rotasi
+ * pool (jadi total tetap 3).
  */
 export function getDailyMissions(date: string): MissionDef[] {
   const rand = mulberry32(hashDate(date))
@@ -159,7 +205,16 @@ export function getDailyMissions(date: string): MissionDef[] {
     pool[i] = pool[j]
     pool[j] = tmp
   }
-  return pool.slice(0, DAILY_MISSION_COUNT)
+  const picked = pool.slice(0, DAILY_MISSION_COUNT)
+  // Minggu (getUTCDay 0 atas tanggal kalender): misi Akbar di slot
+  // pertama. Tanggal diparse sebagai UTC murni supaya hari dalam
+  // minggu tidak bergeser zona waktu.
+  const [y, m, d] = date.split('-').map(Number)
+  const isSunday = new Date(Date.UTC(y, m - 1, d)).getUTCDay() === 0
+  if (isSunday) {
+    return [MISI_AKBAR_MINGGU, ...picked.slice(0, DAILY_MISSION_COUNT - 1)]
+  }
+  return picked
 }
 
 export interface MissionStatus {

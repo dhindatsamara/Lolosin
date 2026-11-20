@@ -37,6 +37,10 @@ import { useSyncExternalStore } from 'react'
 import { canonicalTopicDisplay, type Materi } from './questions'
 import type { TryoutMode } from './quiz'
 import {
+  isTryoutAttempt,
+  type TryoutAttempt,
+} from './attempts'
+import {
   declineProgressRepair as declineRepairFlag,
   getCurrentUserId,
   getScopedItem,
@@ -57,6 +61,8 @@ import {
  */
 export const STORE_KEY = 'lolosin:v1'
 export const MAKASSAR_TIME_ZONE = 'Asia/Makassar'
+/** Zona waktu Tryout Akbar (v2.11): event Minggu 09:00-11:00 WIB. */
+export const JAKARTA_TIME_ZONE = 'Asia/Jakarta'
 
 export const XP_DRILL_CORRECT = 10
 export const XP_DRILL_COMPLETE = 50
@@ -67,6 +73,17 @@ export const LEVEL_DIVISOR = 50
 
 /** Riwayat tanggal aktivitas yang disimpan (maks 60 hari terakhir). */
 export const ACTIVITY_HISTORY_LIMIT = 60
+
+/**
+ * Jumlah attempt terakhir yang menyimpan jawabannya di riwayat
+ * (v2.12.1). Satu attempt Akbar sekitar 2 KB (110 id soal + opsi);
+ * 30 attempt membatasi tambahan payload store + sync user_progress
+ * ke sekitar 60 KB. Attempt yang lebih lama tetap menyimpan
+ * skornya, hanya jawabannya yang dipangkas; attempt Akbar tetap
+ * bisa dibuka lengkap lewat kolom `answers` tryout_results
+ * (migrasi 007) selama user login.
+ */
+export const TRYOUT_ATTEMPT_KEEP = 30
 
 export interface TryoutRecord {
   /** Timestamp ISO saat tryout selesai. */
@@ -81,6 +98,13 @@ export interface TryoutRecord {
   passed: boolean
   /** Jumlah jawaban benar per bagian (opsional; riwayat lama tidak punya). */
   correct?: { TWK: number; TIU: number; TKP: number }
+  /**
+   * Jawaban attempt (v2.12.1): id soal + opsi yang dipilih, dipakai
+   * riwayat "Lihat hasil" untuk membuka pembahasan per soal.
+   * Opsional: riwayat lama dan attempt di luar 30 terakhir tidak
+   * punya (lihat TRYOUT_ATTEMPT_KEEP).
+   */
+  attempt?: TryoutAttempt
 }
 
 /** Satu lencana yang sudah diraih beserta tanggal raihnya. */
@@ -220,6 +244,16 @@ export function todayMakassar(date = new Date()): string {
   }).format(date)
 }
 
+/** Tanggal hari ini dalam format `YYYY-MM-DD` zona Asia/Jakarta (WIB). */
+export function todayJakarta(date = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: JAKARTA_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date)
+}
+
 /** Geser tanggal ISO `YYYY-MM-DD` sejauh `days` hari. */
 export function shiftDate(isoDate: string, days: number): string {
   const [y, m, d] = isoDate.split('-').map(Number)
@@ -310,23 +344,31 @@ export function parseStoreState(raw: string): StoreState {
       )
     }
     if (Array.isArray(parsed.tryoutHistory)) {
-      state.tryoutHistory = parsed.tryoutHistory.filter(
-        (r): r is TryoutRecord =>
-          typeof r === 'object' &&
-          r !== null &&
-          typeof r.date === 'string' &&
-          (r.mode === undefined || r.mode === 'mini' || r.mode === 'full') &&
-          typeof r.twk === 'number' &&
-          typeof r.tiu === 'number' &&
-          typeof r.tkp === 'number' &&
-          typeof r.passed === 'boolean' &&
-          (r.correct === undefined ||
-            (typeof r.correct === 'object' &&
-              r.correct !== null &&
-              typeof r.correct.TWK === 'number' &&
-              typeof r.correct.TIU === 'number' &&
-              typeof r.correct.TKP === 'number')),
-      )
+      state.tryoutHistory = parsed.tryoutHistory
+        .filter(
+          (r): r is TryoutRecord =>
+            typeof r === 'object' &&
+            r !== null &&
+            typeof r.date === 'string' &&
+            (r.mode === undefined || r.mode === 'mini' || r.mode === 'full') &&
+            typeof r.twk === 'number' &&
+            typeof r.tiu === 'number' &&
+            typeof r.tkp === 'number' &&
+            typeof r.passed === 'boolean' &&
+            (r.correct === undefined ||
+              (typeof r.correct === 'object' &&
+                r.correct !== null &&
+                typeof r.correct.TWK === 'number' &&
+                typeof r.correct.TIU === 'number' &&
+                typeof r.correct.TKP === 'number')),
+        )
+        // Attempt yang bentuknya tidak sah dibuang (skornya tetap):
+        // data lama/rusak tidak boleh membuat "Lihat hasil" crash.
+        .map((r) =>
+          r.attempt !== undefined && !isTryoutAttempt(r.attempt)
+            ? stripAttempt(r)
+            : r,
+        )
     }
     if (Array.isArray(parsed.activityDates)) {
       state.activityDates = parsed.activityDates
@@ -744,6 +786,12 @@ export function markRead(sectionId: string): boolean {
   return true
 }
 
+/** Buang `attempt` dari satu entri riwayat (skornya dipertahankan). */
+function stripAttempt(record: TryoutRecord): TryoutRecord {
+  const { attempt: _dropped, ...rest } = record
+  return rest
+}
+
 /** Simpan satu hasil tryout ke riwayat. */
 export function recordTryout(
   record: Omit<TryoutRecord, 'date'> & { date?: string },
@@ -753,7 +801,15 @@ export function recordTryout(
     date: record.date ?? new Date().toISOString(),
   }
   const state = getStore()
-  update({ tryoutHistory: [...state.tryoutHistory, entry] })
+  const history = [...state.tryoutHistory, entry]
+  // Pangkas jawaban attempt lama (v2.12.1): hanya 30 attempt
+  // terakhir yang menyimpan jawaban, supaya store + payload sync
+  // tidak membengkak. Skor attempt lama tidak disentuh.
+  const keepFrom = Math.max(0, history.length - TRYOUT_ATTEMPT_KEEP)
+  const trimmed = history.map((r, i) =>
+    i < keepFrom && r.attempt !== undefined ? stripAttempt(r) : r,
+  )
+  update({ tryoutHistory: trimmed })
   return entry
 }
 

@@ -343,7 +343,9 @@ function parseSyncedData(raw: unknown): SyncedData | null {
  * - seenQuestionIds, readSections, activityDates, seenWeeklyWins:
  *   union. activityDates dipotong 60 terakhir.
  * - tryoutHistory: union per tanggal selesai (bila tanggal sama,
- *   entri yang punya rincian benar menang, kalau tidak sisi lokal).
+ *   entri yang paling lengkap menang: yang punya jawaban attempt
+ *   mengalahkan yang hanya punya rincian benar; kalau tidak, sisi
+ *   lokal dipertahankan).
  * - badges: union per id, tanggal raih paling awal dipertahankan.
  * - missions: hari terbaru menang utuh; bila harinya sama, progres
  *   per misi ambil max dan klaim di-union.
@@ -385,12 +387,17 @@ export function mergeStoreStates(
   }
 
   const tryoutByDate = new Map<string, TryoutRecord>()
+  // Kelengkapan entri riwayat (v2.12.1): jawaban attempt lebih
+  // berharga dari rincian benar, karena tanpanya pembahasan per
+  // soal dari riwayat tidak bisa dibuka.
+  const tryoutCompleteness = (r: TryoutRecord): number =>
+    (r.attempt ? 2 : 0) + (r.correct ? 1 : 0)
   for (const record of [...local.tryoutHistory, ...server.tryoutHistory]) {
     const prev = tryoutByDate.get(record.date)
     if (!prev) {
       tryoutByDate.set(record.date, record)
-    } else if (!prev.correct && record.correct) {
-      // Tanggal sama: entri yang punya rincian benar lebih lengkap.
+    } else if (tryoutCompleteness(record) > tryoutCompleteness(prev)) {
+      // Tanggal sama: entri yang lebih lengkap menang.
       tryoutByDate.set(record.date, record)
     }
   }

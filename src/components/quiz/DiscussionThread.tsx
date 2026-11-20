@@ -34,7 +34,9 @@ const TEXTAREA_CLASS =
  * balasan satu tingkat.
  *
  * - Tamu bisa membaca; form tulis diganti ajakan login.
- * - User login bisa tulis komentar, balas komentar utama (balasan
+ * - Menulis (komentar + balasan) hanya untuk user Premium (v2.13);
+ *   user login non-premium melihat catatan + CTA Premium.
+ * - User Premium bisa tulis komentar, balas komentar utama (balasan
  *   tidak bisa dibalas lagi), dan hapus komentar sendiri.
  * - Dhinda bisa hapus komentar siapa pun.
  * - Setelah kirim/hapus, thread dimuat ulang dari server (tanpa
@@ -155,6 +157,9 @@ export function DiscussionThread({
     0,
   )
 
+  /** True bila viewer boleh menulis (login + Premium, v2.13). */
+  const canWrite = viewer !== null && viewer.isPremium
+
   // Mode tertutup (halaman hasil tryout): hanya tombol, tanpa query.
   if (mulaiTertutup && !terbuka) {
     return (
@@ -211,7 +216,9 @@ export function DiscussionThread({
         <>
           {comments.length === 0 ? (
             <p className="text-sm leading-relaxed text-ink/60">
-              Belum ada diskusi untuk soal ini. Jadilah yang pertama bertanya.
+              {viewer && !viewer.isPremium
+                ? 'Belum ada diskusi untuk soal ini.'
+                : 'Belum ada diskusi untuk soal ini. Jadilah yang pertama bertanya.'}
             </p>
           ) : (
             <ul className="flex flex-col gap-4">
@@ -221,11 +228,15 @@ export function DiscussionThread({
                     comment={comment}
                     viewer={viewer}
                     showReply={replyTo !== comment.id}
-                    onReply={() => {
-                      setReplyTo(comment.id)
-                      setReplyText('')
-                      setFormError(null)
-                    }}
+                    onReply={
+                      canWrite
+                        ? () => {
+                            setReplyTo(comment.id)
+                            setReplyText('')
+                            setFormError(null)
+                          }
+                        : undefined
+                    }
                     onDelete={
                       canDelete(comment)
                         ? () => setConfirmDelete(comment)
@@ -250,7 +261,7 @@ export function DiscussionThread({
                       ))}
                     </ul>
                   )}
-                  {replyTo === comment.id && viewer && (
+                  {replyTo === comment.id && canWrite && (
                     <div className="ml-5 flex flex-col gap-2 border-l-2 border-line pl-4">
                       <label
                         htmlFor={replyId}
@@ -313,7 +324,17 @@ export function DiscussionThread({
             </p>
           )}
 
-          {viewer ? (
+          {viewer === null ? (
+            <div className="flex flex-col items-start gap-2 rounded-xl bg-paper px-3 py-2.5">
+              <p className="text-sm leading-relaxed font-medium text-ink/70">
+                Punya pertanyaan soal soal ini? Login dulu biar bisa ikut
+                diskusi.
+              </p>
+              <Link to="/auth">
+                <Button size="sm">Login untuk ikut diskusi</Button>
+              </Link>
+            </div>
+          ) : viewer.isPremium ? (
             <div className="flex flex-col gap-2 border-t border-dashed border-line-strong pt-3">
               <label
                 htmlFor={composerId}
@@ -350,11 +371,11 @@ export function DiscussionThread({
           ) : (
             <div className="flex flex-col items-start gap-2 rounded-xl bg-paper px-3 py-2.5">
               <p className="text-sm leading-relaxed font-medium text-ink/70">
-                Punya pertanyaan soal soal ini? Login dulu biar bisa ikut
-                diskusi.
+                Menulis di diskusi itu fitur Premium. Aktifkan Premium biar
+                bisa ikut tanya dan jawab di sini.
               </p>
-              <Link to="/auth">
-                <Button size="sm">Login untuk ikut diskusi</Button>
+              <Link to="/premium">
+                <Button size="sm">Lihat Premium</Button>
               </Link>
             </div>
           )}

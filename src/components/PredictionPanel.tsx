@@ -31,10 +31,10 @@ const BAND_PILL: Record<PredictionBand, string> = {
 }
 
 const KALIMAT_JUJUR_MINI =
-  'Ini perkiraan dari tryout minimu, bukan jaminan lolos. Tryout mini hanya 30 soal, jadi angkanya masih kasar.'
+  'Ini perkiraan dari tryout kilatmu, bukan jaminan lolos. Tryout kilat hanya 30 soal, jadi angkanya masih kasar.'
 
 const KALIMAT_JUJUR_SIMULASI =
-  'Ini perkiraan dari simulasi CAT-mu, bukan jaminan lolos. Simulasi CAT pakai 110 soal dan passing grade asli, jadi angkanya lebih dekat ke ujian beneran.'
+  'Ini perkiraan dari Tryout Akbar-mu, bukan jaminan lolos. Tryout Akbar pakai 110 soal dan passing grade asli, jadi angkanya lebih dekat ke ujian beneran.'
 
 const BELUM_ADA_TREN =
   'Belum ada tren, ikut tryout lagi untuk melihat perkembanganmu.'
@@ -123,7 +123,7 @@ export function PredictionPanel({
             </p>
           )}
           <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-ink/60">
-            Ikut tryout kilat atau simulasi CAT dulu, nanti aku hitung
+            Ikut tryout kilat atau Tryout Akbar dulu, nanti aku hitung
             perkiraan kelolosanmu.
           </p>
           <Link to="/tryout" className="mt-4 inline-block">
@@ -144,10 +144,10 @@ export function PredictionPanel({
   const tanggalTerakhir = formatTanggalTryout(prediction.lastDate)
   const ringkasanRiwayat =
     simulasiCount > 0 && miniCount > 0
-      ? `Dari ${simulasiCount} simulasi CAT dan ${miniCount} tryout mini, terakhir ${tanggalTerakhir}`
+      ? `Dari ${simulasiCount} Tryout Akbar dan ${miniCount} tryout kilat, terakhir ${tanggalTerakhir}`
       : simulasiCount > 0
-        ? `Dari ${simulasiCount} simulasi CAT, terakhir ${tanggalTerakhir}`
-        : `Dari ${prediction.tryoutCount} tryout mini, terakhir ${tanggalTerakhir}`
+        ? `Dari ${simulasiCount} Tryout Akbar, terakhir ${tanggalTerakhir}`
+        : `Dari ${prediction.tryoutCount} tryout kilat, terakhir ${tanggalTerakhir}`
   const kalimatJujur =
     prediction.source === 'simulasi'
       ? KALIMAT_JUJUR_SIMULASI

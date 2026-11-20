@@ -117,7 +117,7 @@ export const TIPS_TRIK: TipsTrik[] = [
     id: 'umum-bagi-waktu',
     kategori: 'Umum',
     judul: 'Bagi waktu: sekitar 50 detik per soal',
-    isi: 'Simulasi CAT memberi 100 menit untuk 110 soal, jadi rata-rata kamu hanya punya kurang dari satu menit per soal. Latih dirimu dengan timer supaya terbiasa dengan ritme itu.',
+    isi: 'Tryout Akbar memberi 100 menit untuk 110 soal, jadi rata-rata kamu hanya punya kurang dari satu menit per soal. Latih dirimu dengan timer supaya terbiasa dengan ritme itu.',
     mood: 'semangat',
   },
   {

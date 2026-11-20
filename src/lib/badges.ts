@@ -63,8 +63,8 @@ export const BADGES: BadgeDef[] = [
   },
   {
     id: 'lulus-tryout',
-    nama: 'Lolos Mini',
-    deskripsi: 'Lulus satu tryout mini.',
+    nama: 'Lolos Kilat',
+    deskripsi: 'Lulus satu Tryout Kilat.',
     ikon: '🎓',
     check: (s) => s.tryoutHistory.some((r) => r.passed && r.mode !== 'full'),
   },
@@ -107,14 +107,14 @@ export const BADGES: BadgeDef[] = [
   {
     id: 'pejuang-cat',
     nama: 'Pejuang CAT',
-    deskripsi: 'Selesaikan satu simulasi CAT lengkap.',
+    deskripsi: 'Selesaikan satu Tryout Akbar.',
     ikon: '🏅',
     check: (s) => s.tryoutHistory.some((r) => r.mode === 'full'),
   },
   {
     id: 'lolos-simulasi',
     nama: 'Lolos Simulasi',
-    deskripsi: 'Lulus satu simulasi CAT lengkap.',
+    deskripsi: 'Lulus satu Tryout Akbar.',
     ikon: '👑',
     check: (s) =>
       s.tryoutHistory.some((r) => r.mode === 'full' && r.passed),

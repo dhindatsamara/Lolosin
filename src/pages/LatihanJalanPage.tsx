@@ -100,11 +100,13 @@ export function LatihanJalanPage({
   const [session, setSession] = useState<DrillPick | null>(() => {
     if (isReview) return pickReviewQuestions()
     if (!materi) return null
+    const store = getStore()
     return pickDrillQuestions(
       materi,
       subtopik,
       DRILL_DEFAULT_COUNT,
-      getStore().seenQuestionIds,
+      store.seenQuestionIds,
+      store.reviewQueue.map((e) => e.questionId),
     )
   })
   const [index, setIndex] = useState(0)
@@ -275,13 +277,15 @@ export function LatihanJalanPage({
   }
 
   function handleAgain() {
+    const store = getStore()
     const fresh = isReview
       ? pickReviewQuestions()
       : pickDrillQuestions(
           materi as Materi,
           subtopik,
           DRILL_DEFAULT_COUNT,
-          getStore().seenQuestionIds,
+          store.seenQuestionIds,
+          store.reviewQueue.map((e) => e.questionId),
         )
     setSession(fresh)
     setIndex(0)

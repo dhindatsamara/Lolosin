@@ -143,7 +143,7 @@ const NAV_TILES = [
   {
     to: '/tryout',
     label: 'Tryout',
-    deskripsi: 'Kilat dan simulasi CAT',
+    deskripsi: 'Kilat dan Tryout Akbar',
     icon: TrophyIcon,
     tone: 'bg-tkp-soft text-tkp',
     beta: false,
@@ -152,8 +152,8 @@ const NAV_TILES = [
 ] as const
 
 /**
- * Kartu tryout terakhir, mode-aware. Simulasi CAT: total /550, label
- * "Simulasi CAT 110 soal", passing grade asli, penyebut benar 30/35/45,
+ * Kartu tryout terakhir, mode-aware. Tryout Akbar: total /550, label
+ * "Tryout Akbar 110 soal", passing grade asli, penyebut benar 30/35/45,
  * dan ProgressBar maks 150/175/225. Tryout mini / riwayat lama: seperti
  * sebelumnya (total /150, passing grade mini, penyebut 10, maks 50).
  */
@@ -180,8 +180,8 @@ function TryoutTerakhirCard({ record }: { record: TryoutRecord }) {
           <p className="text-xs font-medium text-ink/60">
             {formatTanggalTryout(record.date)} ·{' '}
             {isFull
-              ? `Simulasi CAT ${SIMULASI_TOTAL_QUESTIONS} soal`
-              : `Tryout mini ${TRYOUT_TOTAL_QUESTIONS} soal`}
+              ? `Tryout Akbar ${SIMULASI_TOTAL_QUESTIONS} soal`
+              : `Tryout kilat ${TRYOUT_TOTAL_QUESTIONS} soal`}
           </p>
         </div>
         <Badge tone={record.passed ? 'green' : 'neutral'}>
@@ -623,7 +623,7 @@ function DashboardPage() {
                 {MASCOT_NAME}
               </p>
               <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed font-medium text-ink/70">
-                Ikut drill atau tryout mini dulu, nanti aku susun fokus
+                Ikut drill atau tryout kilat dulu, nanti aku susun fokus
                 belajarmu.
               </p>
               <Link to="/latihan" className="mt-3 inline-block">
@@ -784,11 +784,11 @@ function DashboardPage() {
                 Kamu belum pernah tryout nih
               </p>
               <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-ink/60">
-                Coba tryout mini dulu yuk: 30 soal (10 TWK, 10 TIU, 10
+                Coba tryout kilat dulu yuk: 30 soal (10 TWK, 10 TIU, 10
                 TKP) dalam 27 menit, lengkap dengan skor dan prediksi kelolosanmu.
               </p>
               <Link to="/tryout" className="mt-4 inline-block">
-                <Button>Mulai tryout mini</Button>
+                <Button>Mulai tryout kilat</Button>
               </Link>
             </Card>
           )}

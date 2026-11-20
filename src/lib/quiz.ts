@@ -167,19 +167,51 @@ function toSeenSet(seenIds: Iterable<string>): ReadonlySet<string> {
 }
 
 /**
+ * Urutan id soal yang sudah dilihat, pertama dilihat dulu. Array
+ * dipertahankan apa adanya (store menyimpan seenQuestionIds urut
+ * pertama dilihat); Set diubah jadi array dengan urutan sisipannya.
+ */
+function toSeenOrder(seenIds: Iterable<string>): readonly string[] {
+  return Array.isArray(seenIds) ? seenIds : [...seenIds]
+}
+
+/**
  * Ambil `n` soal dari pool: utamakan yang belum dilihat; kalau soal baru
- * tidak cukup, lengkapi dengan soal lama (diacak) dan tandai `rotated`.
+ * tidak cukup, lengkapi dengan soal lama dan tandai `rotated`.
+ *
+ * Aturan daur ulang (v2.11, keputusan Dhinda 2026-11-19): soal lama
+ * diambil urut, BUKAN acak: (1) yang pernah dijawab salah dulu
+ * (ada di `wrongIds`, nyambung ke antrean ulas spaced repetition),
+ * (2) di dalam tiap kelompok, yang terlama dilihat dulu (indeks
+ * terkecil di `seenOrder`, yaitu urutan pertama kali soal itu
+ * dilihat). Jadi pengulangan selalu mengarah ke soal yang paling
+ * layak diulas, bukan soal sembarang.
  */
 function pickFromPool(
   pool: Question[],
   n: number,
-  seen: ReadonlySet<string>,
+  seenOrder: readonly string[],
+  wrongIds: ReadonlySet<string>,
 ): DrillPick {
+  const seen = new Set(seenOrder)
   const unseen = shuffle(pool.filter((q) => !seen.has(q.id)))
   if (unseen.length >= n) {
     return { questions: unseen.slice(0, n), rotated: false }
   }
-  const seenPool = shuffle(pool.filter((q) => seen.has(q.id)))
+  const seenIndex = new Map<string, number>()
+  seenOrder.forEach((id, i) => {
+    if (!seenIndex.has(id)) seenIndex.set(id, i)
+  })
+  const seenPool = pool
+    .filter((q) => seen.has(q.id))
+    .sort((a, b) => {
+      const aWrong = wrongIds.has(a.id) ? 0 : 1
+      const bWrong = wrongIds.has(b.id) ? 0 : 1
+      if (aWrong !== bWrong) return aWrong - bWrong
+      const aIdx = seenIndex.get(a.id) ?? Number.MAX_SAFE_INTEGER
+      const bIdx = seenIndex.get(b.id) ?? Number.MAX_SAFE_INTEGER
+      return aIdx - bIdx
+    })
   return { questions: [...unseen, ...seenPool].slice(0, n), rotated: true }
 }
 
@@ -192,16 +224,25 @@ function pickFromPool(
  * @param materi - TWK | TIU | TKP
  * @param subtopik - subtopik tertentu, atau null untuk semua subtopik
  * @param n - jumlah soal (default 10)
- * @param seenIds - id soal yang sudah pernah dilihat
+ * @param seenIds - id soal yang sudah pernah dilihat, urut pertama
+ *   dilihat dulu (dipakai aturan daur ulang: terlama dulu)
+ * @param wrongIds - id soal yang pernah dijawab salah (dipakai
+ *   aturan daur ulang: yang pernah salah didahulukan)
  */
 export function pickDrillQuestions(
   materi: Materi,
   subtopik: string | null,
   n: number = DRILL_DEFAULT_COUNT,
   seenIds: Iterable<string> = [],
+  wrongIds: Iterable<string> = [],
 ): DrillPick {
   const pool = getQuestions(materi, subtopik)
-  return pickFromPool(pool, n, toSeenSet(seenIds))
+  return pickFromPool(
+    pool,
+    n,
+    toSeenOrder(seenIds),
+    toSeenSet(wrongIds),
+  )
 }
 
 /**
@@ -209,12 +250,16 @@ export function pickDrillQuestions(
  * simulasi lengkap 110 soal (30 TWK + 35 TIU + 45 TKP), urutan per bagian.
  * Mengutamakan soal yang belum dilihat di tiap bagian.
  * @param mode - 'mini' (default) atau 'full'
+ * @param wrongIds - id soal yang pernah dijawab salah (aturan daur
+ *   ulang v2.11: yang pernah salah didahulukan saat soal baru habis)
  */
 export function pickTryoutQuestions(
   seenIds: Iterable<string> = [],
   mode: TryoutMode = 'mini',
+  wrongIds: Iterable<string> = [],
 ): TryoutPick {
-  const seen = toSeenSet(seenIds)
+  const seenOrder = toSeenOrder(seenIds)
+  const wrong = toSeenSet(wrongIds)
   const questions: Question[] = []
   let rotated = false
   for (const materi of MATERI_LIST) {
@@ -222,7 +267,7 @@ export function pickTryoutQuestions(
       mode === 'full'
         ? SIMULASI_QUESTIONS_PER_SECTION[materi]
         : TRYOUT_QUESTIONS_PER_SECTION
-    const pick = pickFromPool(getQuestions(materi), n, seen)
+    const pick = pickFromPool(getQuestions(materi), n, seenOrder, wrong)
     questions.push(...pick.questions)
     rotated = rotated || pick.rotated
   }

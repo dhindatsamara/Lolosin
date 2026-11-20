@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from 'react'
 import { cx } from '../../lib/utils'
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 export interface ButtonProps
@@ -20,6 +20,8 @@ const VARIANTS: Record<ButtonVariant, string> = {
     'border border-line bg-white text-ink hover:border-primary-300 hover:text-primary-700',
   ghost:
     'bg-transparent text-primary-700 hover:bg-primary-50 active:scale-100',
+  danger:
+    'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
 }
 
 const SIZES: Record<ButtonSize, string> = {

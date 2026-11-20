@@ -389,7 +389,7 @@ export function Layout() {
               </span>
               <p className="mt-3 text-sm leading-relaxed font-medium text-white/70">
                 Belajar CPNS jadi menyenangkan: materi SKD, latihan per
-                topik, tryout mini, dan simulasi CAT dalam satu aplikasi,
+                topik, tryout kilat, dan Tryout Akbar dalam satu aplikasi,
                 ditemani maskot yang ikut tumbuh bareng streak-mu.
               </p>
               {/* Kirim saran: hanya tampil bila FEEDBACK_EMAIL sudah

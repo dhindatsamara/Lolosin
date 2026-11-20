@@ -3,6 +3,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { Mascot } from '../components/Mascot'
+import { StickyBackButton } from '../components/belajar/StickyBackButton'
 import { ChevronRightIcon, InfoIcon } from '../components/icons'
 import {
   FORMASI_CONTOH,
@@ -211,6 +212,9 @@ export function FormasiPage() {
 
   return (
     <div className="flex flex-col gap-5">
+      {/* Tombol back (v2.9): kembali ke Beranda. */}
+      <StickyBackButton to="/" />
+
       <header>
         <p className="kicker">cari formasi impianmu</p>
         <h1 className="mt-1 font-display text-3xl font-extrabold">

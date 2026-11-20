@@ -31,12 +31,12 @@ import {
   SIMULASI_TIME_LIMIT_MINUTES,
   SIMULASI_TOTAL_QUESTIONS,
 } from '../lib/quiz'
+import type { LeaderboardEntry } from '../lib/leaderboard'
 import {
-  fetchLeaderboard,
-  formatWeekRange,
-  getCurrentWeekStart,
-  type LeaderboardEntry,
-} from '../lib/leaderboard'
+  currentEventWindow,
+  fetchAkbarLeaderboard,
+  formatEventLabel,
+} from '../lib/tryoutAkbar'
 import { cx } from '../lib/utils'
 
 const FITUR = [
@@ -57,16 +57,16 @@ const FITUR = [
   {
     icon: TrophyIcon,
     tone: 'bg-accent-100 text-accent-700',
-    judul: 'Tryout mini',
+    judul: 'Tryout kilat',
     deskripsi:
       'Latihan cepat dengan suasana CAT, lengkap dengan skor dan prediksi kelolosanmu.',
   },
   {
     icon: ClockIcon,
     tone: 'bg-tkp-soft text-tkp',
-    judul: 'Simulasi CAT',
+    judul: 'Tryout Akbar',
     deskripsi:
-      'Rasakan ujian beneran dengan timer dan passing grade asli, biar hari-H nggak kaget.',
+      'Event 110 soal bareng semua pejuang tiap Minggu, lengkap dengan timer dan passing grade asli.',
   },
 ] as const
 
@@ -91,7 +91,7 @@ const LANGKAH = [
 const FITUR_FREE = [
   'Materi SKD lengkap',
   'Latihan per topik',
-  'Tryout mini dan simulasi CAT',
+  'Tryout kilat dan Tryout Akbar',
   'Misi harian, streak, dan lencana',
 ] as const
 
@@ -171,7 +171,7 @@ function misiById(id: string): MissionDef {
 const DEMO_MISI: { def: MissionDef; progress: number }[] = [
   { def: misiById('drill-1'), progress: 1 },
   { def: misiById('benar-10'), progress: 7 },
-  { def: misiById('simulasi-1'), progress: 0 },
+  { def: misiById('kilat-2'), progress: 0 },
 ]
 
 const DEMO_PODIUM = [
@@ -194,9 +194,9 @@ const SIMULASI_SEKSI = [
 
 /** Hadiah juara leaderboard mingguan: premium + lencana prestise. */
 const HADIAH_PERINGKAT = [
-  { juara: 1, medali: '🥇', premium: '7 hari' },
-  { juara: 2, medali: '🥈', premium: '5 hari' },
-  { juara: 3, medali: '🥉', premium: '3 hari' },
+  { juara: 1, medali: '🥇', premium: '30 hari' },
+  { juara: 2, medali: '🥈', premium: '14 hari' },
+  { juara: 3, medali: '🥉', premium: '7 hari' },
 ] as const
 
 /** Warna lingkaran peringkat: 1 emas, 2 perak, 3 perunggu. */
@@ -217,23 +217,23 @@ function rankCircleClass(rank: number): string {
 function PapanPeringkatSection() {
   // null = masih mengambil data; [] = minggu ini kosong / fetch gagal.
   const [top3, setTop3] = useState<LeaderboardEntry[] | null>(null)
-  const weekStart = getCurrentWeekStart()
+  const eventLabel = formatEventLabel(currentEventWindow().start)
 
   useEffect(() => {
     let cancelled = false
-    void fetchLeaderboard(weekStart)
+    void fetchAkbarLeaderboard(currentEventWindow())
       .then((entries) => {
         if (!cancelled) setTop3(entries.slice(0, 3))
       })
       .catch(() => {
-        // fetchLeaderboard tidak pernah melempar, tapi jaga-jaga:
+        // fetchAkbarLeaderboard tidak pernah melempar, tapi jaga-jaga:
         // gagal fetch tampilkan fallback hadiah, jangan crash.
         if (!cancelled) setTop3([])
       })
     return () => {
       cancelled = true
     }
-  }, [weekStart])
+  }, [])
 
   return (
     <section aria-label="Papan peringkat minggu ini">
@@ -242,9 +242,9 @@ function PapanPeringkatSection() {
         Siapa yang paling siap minggu ini?
       </h2>
       <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink/70">
-        Skor simulasi CAT terbaik tiap minggu masuk papan peringkat. Tiga
-        besar dapat premium gratis plus lencana prestise. Minggu ini (
-        {formatWeekRange(weekStart)}):
+        Skor Tryout Akbar terbaik tiap minggu masuk papan peringkat. Tiga
+        besar dapat premium gratis plus lencana prestise. Minggu ini
+        (event {eventLabel}):
       </p>
 
       {top3 === null ? (
@@ -291,8 +291,8 @@ function PapanPeringkatSection() {
             ))}
           </ol>
           <p className="mt-4 text-sm leading-relaxed font-medium text-ink/70">
-            Juara 1 dapat premium 7 hari, juara 2 premium 5 hari, juara 3
-            premium 3 hari, semuanya plus lencana prestise. Masih ada
+            Juara 1 dapat premium 30 hari, juara 2 premium 14 hari, juara 3
+            premium 7 hari, semuanya plus lencana prestise. Masih ada
             waktu buat nyalip mereka minggu ini.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
@@ -345,7 +345,7 @@ function PapanPeringkatSection() {
  *
  * v2.1: marketing-first dan gamified. Hero menampilkan maskot besar,
  * lalu bagian gamifikasi dengan preview visual (bar XP, lencana, misi,
- * streak, leaderboard, ulas soal, simulasi CAT) memakai data nyata
+ * streak, leaderboard, ulas soal, Tryout Akbar) memakai data nyata
  * app dengan progres contoh yang diberi label jelas.
  *
  * v2.2: maskot hero interaktif (bisa ditekan, balon ucapan berganti)
@@ -373,7 +373,7 @@ export function LandingPage() {
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-primary-100 lg:text-lg">
               Naik level, kumpulin lencana, kejar streak, dan adu skor di
               leaderboard mingguan. Materi SKD, latihan per topik, tryout
-              mini, sampai simulasi CAT yang rasanya kayak ujian beneran.
+              mini, sampai Tryout Akbar yang rasanya kayak ujian beneran.
               Semuanya dalam satu aplikasi, gratis buat mulai.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -713,8 +713,8 @@ export function LandingPage() {
               </h3>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-ink/70">
-              Adu skor simulasi CAT sama pejuang lain. Juara 1 dapat
-              premium 7 hari, juara 2 premium 5 hari, juara 3 premium 3
+              Adu skor Tryout Akbar sama pejuang lain. Juara 1 dapat
+              premium 30 hari, juara 2 premium 14 hari, juara 3 premium 7
               hari, semuanya plus lencana prestise.
             </p>
             <ol className="mt-4 space-y-2">
@@ -811,19 +811,20 @@ export function LandingPage() {
             </div>
           </Card>
 
-          {/* Simulasi CAT */}
+          {/* Tryout Akbar */}
           <Card className="reveal card-lift p-5 lg:col-span-3 lg:p-6">
             <div className="flex items-center gap-2">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
                 <TrophyIcon width={20} height={20} />
               </span>
               <h3 className="font-display text-lg font-extrabold">
-                Simulasi CAT {SIMULASI_TOTAL_QUESTIONS} soal
+                Tryout Akbar {SIMULASI_TOTAL_QUESTIONS} soal
               </h3>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-ink/70">
-              Ujian beneran, lengkap dengan timer {SIMULASI_TIME_LIMIT_MINUTES}{' '}
-              menit dan passing grade asli. Lulus di sini, pede di hari-H.
+              Event tiap Minggu 09:00-11:00 WIB. Ujian beneran, lengkap
+              dengan timer {SIMULASI_TIME_LIMIT_MINUTES} menit dan passing
+              grade asli. Lulus di sini, pede di hari-H.
             </p>
             <div className="mt-4 space-y-2.5 rounded-2xl bg-paper p-4">
               {SIMULASI_SEKSI.map(({ materi, tone, soft }) => {
@@ -909,7 +910,7 @@ export function LandingPage() {
                 },
                 {
                   judul: 'Nemenin sampai lulus',
-                  deskripsi: 'Dari drill pertama sampai simulasi CAT.',
+                  deskripsi: 'Dari drill pertama sampai Tryout Akbar.',
                 },
               ].map(({ judul, deskripsi }) => (
                 <li

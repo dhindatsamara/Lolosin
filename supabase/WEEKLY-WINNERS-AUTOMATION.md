@@ -15,29 +15,28 @@ dijalankan terpisah setelah ekstensi diaktifkan). Panduan menjalankan
 untuk Dhinda: `docs/PANDUAN-MIGRASI-004.md`. Dokumen ini tetap
 disimpan sebagai referensi desain dan aturan yang diputuskan.
 
-STATUS 2026-11-15 (v2.8, migrasi 005): DESAIN DIUBAH JADI CODE-ONLY.
-Pemberian premium langsung di 004 ternyata double-grant: juara
-mendapat premium langsung PLUS satu kode, sehingga premium bertumpuk
-bila kodenya di-redeem. Sejak v2.8, `announce_weekly_winners`
-(migrasi 005, nama + signature return sama, jadwal pg_cron lama
-tetap jalan) HANYA membuat satu kode single-use per juara global
-(7/5/3 hari sesuai rank, berlaku 30 hari) dan menyimpannya ke
-`weekly_winners.code`; `premium_until` di `weekly_winners` selalu
-NULL dan tidak ada lagi update `profiles.premium_until` di fungsi
-ini. Premium juara HANYA aktif lewat redeem kode di app (Profil,
-bagian Premium). Kode juga dikirim ke email juara oleh Edge Function
-`kirim-kode-pemenang` (Resend API, dipicu pg_cron + pg_net tiap
-Senin 09:05 WITA, 5 menit setelah pengumuman) dan ditampilkan di
-gift notice dalam app beserta tombol salin + CTA tebus. Email
-diambil dari `auth.users` lewat Admin API, karena tabel `profiles`
-tidak punya kolom email. Panduan menjalankan untuk Dhinda:
-`docs/PANDUAN-MIGRASI-005.md`.
+STATUS 2026-11-19 (v2.11, migrasi 006): JUARA HANYA DARI HASIL
+TRYOUT AKBAR. Simulasi CAT mandiri dihapus di v2.11; Tryout Akbar
+(tiap Minggu 09:00-11:00 WIB = 02:00-04:00 UTC) adalah satu-satunya
+simulasi CAT lengkap. `announce_weekly_winners` (migrasi 006, nama
++ signature return sama, jadwal pg_cron Senin 01:00 UTC tetap
+jalan) kini HANYA menghitung hasil mode 'full' yang finished_at-nya
+jatuh di dalam jendela event Akbar minggu itu (Minggu week_start
++ 6 hari, 02:00-04:00 UTC). Aturan seri tidak berubah (total desc,
+lolos semua ambang batas, paling dulu selesai) dan perilaku
+code-only dari 005 tidak berubah. Migrasi 006 juga menambahkan
+tabel `tryout_results` ke publikasi `supabase_realtime` supaya
+papan live premium bisa berlangganan skor baru selama event.
+Minggu yang sudah diumumkan sebelum 006 tidak diumumkan ulang
+(guard not exists). Panduan menjalankan untuk Dhinda:
+`docs/PANDUAN-MIGRASI-006.md`.
 
 ## Masalah yang diselesaikan
 
-Keputusan hadiah sudah dikunci 2026-11-13 dan DIPERBARUI 2026-11-15:
-juara 1 global dapat premium 7 hari + badge prestise, juara 2 premium
-5 hari + badge, juara 3 premium 3 hari + badge. Juara per formasi
+Keputusan hadiah sudah dikunci 2026-11-13, DIPERBARUI 2026-11-15, dan
+DIPERBARUI lagi 2026-11-20: juara 1 global dapat premium 30 hari +
+badge prestise, juara 2 premium 14 hari + badge, juara 3 premium 7
+hari + badge. Juara per formasi
 hanya dapat badge prestise, TANPA premium (keputusan 2026-11-15).
 Di v1 yang sudah dibangun, yang ada baru setengahnya:
 
@@ -87,8 +86,8 @@ celah itu.
   tambah 3 hari. SEJAK v2.8 (migrasi 005) kolom ini SELALU NULL:
   premium tidak lagi diberikan langsung, juara menebus kode
   hadiahnya di app dan premium aktif lewat `redeem_code`. Hadiah
-  per peringkat tetap sama (7/5/3 hari), hanya cara aktifnya yang
-  berubah. Hanya scope global yang dapat kode hadiah; juara per
+  per peringkat sejak 2026-11-20 adalah 30/14/7 hari (dari 7/5/3),
+  hanya cara aktifnya yang berubah. Hanya scope global yang dapat kode hadiah; juara per
   formasi `premium_until`-nya NULL dan `code`-nya NULL (badge saja).
 - Idempotent dan bisa mengejar ketertinggalan: fungsi memproses SEMUA
   minggu yang sudah selesai tapi belum diumumkan, bukan hanya minggu
@@ -320,6 +319,8 @@ Cek jadwal dan riwayat jalan di `select * from cron.job;` dan
 
 - Hadiah dibedakan per peringkat: juara 1 premium 7 hari, juara 2
   premium 5 hari, juara 3 premium 3 hari, semua plus badge prestise.
+- UPDATE 2026-11-20: hadiah dinaikkan jadi juara 1 premium 30 hari,
+  juara 2 premium 14 hari, juara 3 premium 7 hari (dari 7/5/3).
 - Juara per formasi: badge prestise saja, TANPA premium. Premium
   hanya untuk juara global.
 - Aturan seri DIPUTUSKAN 2026-11-15 20:52: total tertinggi, lalu yang

@@ -7,7 +7,13 @@
  *   body text, parent_id uuid null (references discussions, balasan
  *   satu tingkat), created_at timestamptz.
  * - RLS: baca publik (anon + authenticated), insert hanya user login
- *   (user_id = auth.uid()), delete hanya penulis sendiri atau Dhinda.
+ *   yang Premium (user_id = auth.uid() + is_premium true atau
+ *   premium_until masih aktif, migrasi 008), delete hanya penulis
+ *   sendiri atau Dhinda.
+ *
+ * Sejak v2.13, menulis di diskusi (komentar + balasan) adalah fitur
+ * Premium (keputusan Dhinda 19 Nov 2026, menggantikan "komunitas
+ * harus terbuka"): membaca tetap gratis untuk semua, termasuk tamu.
  *
  * Semua fungsi aman saat Supabase belum terkonfigurasi (client null)
  * dan tidak pernah melempar error: kegagalan dikembalikan sebagai
@@ -16,6 +22,7 @@
  * profil tidak ditemukan, tampil "Peserta".
  */
 import { getCurrentUser, getMyProfile } from './auth'
+import { getPremiumStatus } from './premium'
 import { isDevRedeemUser } from './redeem'
 import { isSupabaseConfigured, supabase } from './supabase'
 
@@ -71,13 +78,19 @@ export interface DiscussionWriteResult {
   error?: string
 }
 
-/** Info viewer untuk aturan tampil tombol hapus. */
+/** Info viewer untuk aturan tampil tombol hapus dan form tulis. */
 export interface DiscussionViewer {
   userId: string
   username: string | null
   email: string | null
   /** True bila viewer adalah Dhinda (boleh hapus komentar siapa pun). */
   isDev: boolean
+  /**
+   * True bila viewer Premium (boleh menulis). Dibaca lewat
+   * getPremiumStatus, pola yang sama seperti halaman lain, jadi
+   * toggle Premium Beta selama beta juga dihitung premium.
+   */
+  isPremium: boolean
 }
 
 /** True bila error PostgREST menandakan tabel discussions belum ada
@@ -89,6 +102,18 @@ function isTableMissingError(error: { code?: string; message?: string }): boolea
     message.includes('discussions') &&
     (message.includes('does not exist') || message.includes('could not find'))
   )
+}
+
+/** True bila error PostgREST menandakan insert ditolak policy RLS
+ *  (sejak migrasi 008: penulis bukan Premium). */
+function isRlsViolationError(error: {
+  code?: string
+  message?: string
+}): boolean {
+  if (error.code === '42501') return true
+  return (error.message ?? '')
+    .toLowerCase()
+    .includes('row-level security')
 }
 
 /** Validasi baris discussions mentah sebelum dipakai. */
@@ -224,8 +249,9 @@ function validateBody(rawBody: string): { body: string } | { error: string } {
 }
 
 /**
- * Kirim satu komentar utama ke soal ini. Hanya user login (RLS
- * menolak insert tamu). Tidak pernah melempar error.
+ * Kirim satu komentar utama ke soal ini. Hanya user login yang
+ * Premium (RLS menolak insert tamu dan non-premium sejak migrasi
+ * 008). Tidak pernah melempar error.
  */
 export async function postComment(
   questionId: string,
@@ -235,7 +261,8 @@ export async function postComment(
 }
 
 /**
- * Kirim satu balasan ke komentar utama. Balasan tidak bisa dibalas
+ * Kirim satu balasan ke komentar utama. Hanya user login yang
+ * Premium (sama seperti komentar). Balasan tidak bisa dibalas
  * lagi (ditegakkan di UI; database menerima parent_id apa pun).
  * Tidak pernah melempar error.
  */
@@ -276,6 +303,12 @@ async function postDiscussion(
     if (error) {
       if (isTableMissingError(error)) {
         return { ok: false, error: 'Diskusi belum aktif. Coba lagi nanti ya.' }
+      }
+      if (isRlsViolationError(error)) {
+        return {
+          ok: false,
+          error: 'Menulis di diskusi itu fitur Premium. Aktifkan Premium dulu ya.',
+        }
       }
       return { ok: false, error: 'Komentar gagal dikirim. Coba lagi ya.' }
     }
@@ -325,14 +358,19 @@ export async function deleteComment(
 /**
  * Info viewer saat ini (null untuk tamu). Username diambil dari
  * profil; bila profil belum ada, username null dan cek dev hanya
- * memakai email. Tidak pernah melempar error.
+ * memakai email. Status premium dibaca lewat getPremiumStatus
+ * (pola yang sama seperti halaman lain). Tidak pernah melempar
+ * error.
  */
 export async function getDiscussionViewer(): Promise<DiscussionViewer | null> {
   if (!isSupabaseConfigured() || !supabase) return null
   try {
     const user = await getCurrentUser()
     if (!user) return null
-    const profile = await getMyProfile()
+    const [profile, premiumStatus] = await Promise.all([
+      getMyProfile(),
+      getPremiumStatus(user.id),
+    ])
     const username = profile?.username ?? null
     const email = user.email ?? null
     return {
@@ -340,6 +378,7 @@ export async function getDiscussionViewer(): Promise<DiscussionViewer | null> {
       username,
       email,
       isDev: isDevRedeemUser(username, email),
+      isPremium: premiumStatus.premium,
     }
   } catch {
     return null

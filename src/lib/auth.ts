@@ -60,6 +60,10 @@ export const USERNAME_TAKEN_MESSAGE =
 export const PREMIUM_COLUMN_MISSING_MESSAGE =
   'Jalankan dulu migrasi 003 di SQL Editor'
 
+/** Pesan saat masa beta sudah berakhir dan toggle tidak bisa diubah. */
+export const BETA_ENDED_MESSAGE =
+  'Masa beta sudah berakhir, Premium Beta tidak bisa diubah lagi'
+
 /** Aturan username: 3-20 karakter, huruf kecil, angka, underscore. */
 export const USERNAME_MIN_LENGTH = 3
 export const USERNAME_MAX_LENGTH = 20
@@ -145,6 +149,19 @@ function isMissingColumnError(error: {
     error.code === '42703' ||
     (typeof error.message === 'string' &&
       error.message.includes('is_premium'))
+  )
+}
+
+/** True bila error PostgREST menandakan RPC belum ada di database. */
+function isFunctionMissingError(
+  functionName: string,
+  error: { code?: string; message?: string },
+): boolean {
+  if (error.code === '42883' || error.code === 'PGRST202') return true
+  const message = (error.message ?? '').toLowerCase()
+  return (
+    message.includes(functionName) &&
+    (message.includes('does not exist') || message.includes('could not find'))
   )
 }
 
@@ -341,6 +358,14 @@ export async function completeProfile(username: string): Promise<Profile> {
  * Beta). Formasi dinormalisasi: trim, huruf kecil, spasi ganda
  * dirapikan; string kosong disimpan sebagai null.
  *
+ * Premium Beta sejak v2.15.2 diubah lewat RPC `set_beta_premium`
+ * (migrasi 012), bukan PATCH langsung: trigger penjaga di
+ * profiles menolak PATCH is_premium dari client sesudah migrasi
+ * 012 jalan. Bila RPC belum ada (migrasi 012 belum dijalankan),
+ * jatuh kembali ke PATCH lama supaya toggle tetap jalan selama
+ * transisi. Sesudah beta berakhir, RPC menolak dan fungsi ini
+ * melempar BETA_ENDED_MESSAGE.
+ *
  * Bila update is_premium gagal karena kolomnya belum ada (migrasi
  * 003 belum dijalankan), melempar PREMIUM_COLUMN_MISSING_MESSAGE
  * supaya halaman Profil bisa menampilkan petunjuk yang jelas.
@@ -360,16 +385,45 @@ export async function updateMyProfile(patch: {
         : patch.formasi.trim().toLowerCase().replace(/\s+/g, ' ') || null
     updates.formasi = clean
   }
-  if (patch.is_premium !== undefined) updates.is_premium = patch.is_premium
-  const { error } = await supabase
-    .from('profiles')
-    .update(updates)
-    .eq('id', user.id)
-  if (error) {
-    if (isMissingColumnError(error)) {
-      throw new Error(PREMIUM_COLUMN_MISSING_MESSAGE)
+  if (patch.is_premium !== undefined) {
+    // Toggle Premium Beta lewat RPC server-side (migrasi 012).
+    const enabled = patch.is_premium
+    const { data, error: rpcError } = await supabase.rpc(
+      'set_beta_premium',
+      { p_enabled: enabled },
+    )
+    if (!rpcError) {
+      const result = data as { ok?: unknown; error?: unknown } | null
+      if (result?.ok === true) {
+        // Berhasil: tidak ada yang perlu di-PATCH untuk is_premium.
+      } else if (result?.error === 'beta_ended') {
+        throw new Error(BETA_ENDED_MESSAGE)
+      } else if (result?.error === 'no_profile') {
+        throw new Error('Profilmu belum ketemu, coba lagi ya.')
+      } else {
+        throw new Error('Ada yang salah, coba lagi ya.')
+      }
+    } else if (isFunctionMissingError('set_beta_premium', rpcError)) {
+      // Migrasi 012 belum jalan: PATCH langsung (perilaku lama).
+      updates.is_premium = enabled
+    } else {
+      throw new Error(friendlyAuthError(rpcError.message))
     }
-    throw new Error(friendlyAuthError(error.message))
+  }
+  // Bila hanya is_premium yang diubah dan RPC berhasil, tidak ada
+  // yang perlu di-PATCH: lewati update supaya tidak ada request
+  // kosong ke profiles.
+  if (Object.keys(updates).length > 0) {
+    const { error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id)
+    if (error) {
+      if (isMissingColumnError(error)) {
+        throw new Error(PREMIUM_COLUMN_MISSING_MESSAGE)
+      }
+      throw new Error(friendlyAuthError(error.message))
+    }
   }
   const profile = await selectProfileById(user.id)
   if (!profile) throw new Error('Profilmu belum ketemu, coba lagi ya.')

@@ -188,6 +188,15 @@ https://<PROJECT_REF>.supabase.co/functions/v1/kirim-kode-pemenang
 `<PROJECT_REF>` adalah bagian depan URL proyekmu, misal
 `abcdefghijklm` di `https://abcdefghijklm.supabase.co`.
 
+CATATAN DEPLOY NYATA (17 Nov 2026): deploy lewat dashboard
+memberi function ini slug acak `clever-action`, bukan
+`kirim-kode-pemenang` (nama tampilannya tetap
+`kirim-kode-pemenang`). URL live yang benar:
+`https://rhoyeloqiorbspsucljt.supabase.co/functions/v1/clever-action`.
+Pakai URL itu di perintah cron Langkah 7 dan tes curl Langkah 8.
+Terverifikasi 17 Nov 14:53: invoke mengembalikan HTTP 200
+`{"sent":0,"failed":0,"skipped":0,"results":[]}`.
+
 ## Langkah 7: aktifkan pg_net + jadwalkan pengiriman email
 
 Job pengumuman juara ('umumkan-juara-mingguan', Senin 09:00 WITA)
